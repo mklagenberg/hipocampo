@@ -1,6 +1,6 @@
 # Hipocampo — SPEC
 
-Versão: 1.0.0 · Segue [SemVer](https://semver.org/lang/pt-BR/)
+Versão: 1.1.0 · Segue [SemVer](https://semver.org/lang/pt-BR/)
 
 Este documento é a especificação normativa da metodologia Hipocampo: o schema de frontmatter, as regras de retrieval e as convenções que qualquer instância (repositório de conteúdo) precisa seguir para ser considerada compatível com uma versão do Hipocampo. Não é um manual de uso — para isso, ver [GETTING-STARTED.md](GETTING-STARTED.md). Não é um documento de limitações — para isso, ver [DISCLAIMER.md](DISCLAIMER.md).
 
@@ -30,8 +30,9 @@ superseded_by: ""
 revision: 1
 revision_note: ""
 visibility: "public | internal | confidential | restricted"
-author: "Nome Real - @usuario-github"    # sempre pessoa, nunca a IA
+author: "Nome Real - @usuario-github"    # sempre pessoa, nunca a IA — ou @nome-da-secao de CONTRIBUTORS.md, só em conteúdo histórico (ver decisions/0006)
 owner: ""                                 # nome da empresa, só quando nasce em contexto de trabalho
+license: ""                               # sempre derivado de `visibility`, nunca preenchido à mão (ver decisions/0007)
 ---
 ```
 
@@ -48,7 +49,10 @@ Cada edição de conteúdo (não wording trivial) incrementa `revision` e regist
 Resolve **só** quem, já tendo acesso ao repositório, pode usar o conteúdo sem restrição adicional: `public` (sem restrição, inclusive fora do repo), `internal` (uso interno da organização dona do repo), `confidential` (uso restrito a quem precisa saber, mesmo dentro do repo), `restricted` (uso individualizado, caso a caso). `visibility` **nunca decide exposição à internet** — isso é resolvido estruturalmente pela regra de que nenhum repositório de conhecimento é público (invariante, seção 8). Uma etiqueta `confidential` num repositório que o time inteiro acessa não impede ninguém desse time de ler o arquivo — permissão real do GitHub é granularidade de repositório, não de arquivo dentro de um repositório compartilhado. Conteúdo que precisa de enforcement técnico de fato vai para um repositório separado com permissão de acesso restrita, não para uma etiqueta `visibility` dentro de um repositório mais aberto.
 
 ### author / owner
-`author` é sempre uma pessoa (`Nome Real - @usuario-github`), nunca a IA — mesmo quando um agente escreve o texto sob direção de alguém, o autor é quem dirigiu. Campo obrigatório em qualquer documento, qualquer `visibility`. `owner` é sempre o nome de uma empresa, preenchido só quando o documento nasce em contexto de trabalho — ver a distinção completa de papéis e o que cada um pode fazer com o conteúdo no `DISCLAIMER.md` e nos Decision Records de licenciamento em `decisions/`.
+`author` é sempre uma pessoa (`Nome Real - @usuario-github`), nunca a IA — mesmo quando um agente escreve o texto sob direção de alguém, o autor é quem dirigiu. Campo obrigatório em qualquer documento, qualquer `visibility`. Exceção escopada só a conteúdo histórico/migrado, sem autoria individual rastreável na origem: `author`/`contributors` podem referenciar uma seção nomeada e datada de um arquivo `CONTRIBUTORS.md` via `@nome-da-secao`, em vez de uma pessoa — documento novo nunca usa essa exceção (ver `decisions/0006-creditos-de-contribuicao.md`). `owner` é sempre o nome de uma empresa, preenchido só quando o documento nasce em contexto de trabalho — ver a distinção completa de papéis e o que cada um pode fazer com o conteúdo no `DISCLAIMER.md` e nos Decision Records de licenciamento em `decisions/`.
+
+### license
+Sempre derivado mecanicamente de `visibility`, nunca definido à mão — evita divergência entre a camada de confidencialidade (`visibility`) e a camada jurídica (`license`). Usa o padrão SPDX `LicenseRef-<idstring>`, com o texto legal completo no arquivo `LICENSE` da raiz do repositório, nunca reescrito por documento. Ver `decisions/0007-licenciamento-repos-de-conteudo.md`.
 
 ## 3. `type` — enum e critério de expansão
 
@@ -125,7 +129,7 @@ O `CHANGELOG.md` de cada instância de conteúdo é estreito de escopo: só regi
 **Invariantes** — nenhuma instância sobrescreve, sob nenhuma circunstância:
 
 1. Nenhum repositório de conhecimento é público à internet.
-2. `author` é sempre uma pessoa, nunca a IA.
+2. `author` é sempre uma pessoa, nunca a IA (ver exceção escopada da seção 2 para conteúdo histórico).
 3. Documento nunca é apagado fisicamente — só arquivado ou superseded.
 4. Separação de acesso é sempre por repositório, nunca por etiqueta dentro de um repositório compartilhado.
 5. O agente nunca escreve sem pedido explícito do usuário.
