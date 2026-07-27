@@ -1,0 +1,150 @@
+# Hipocampo — SPEC
+
+Versão: 1.0.0 · Segue [SemVer](https://semver.org/lang/pt-BR/)
+
+Este documento é a especificação normativa da metodologia Hipocampo: o schema de frontmatter, as regras de retrieval e as convenções que qualquer instância (repositório de conteúdo) precisa seguir para ser considerada compatível com uma versão do Hipocampo. Não é um manual de uso — para isso, ver [GETTING-STARTED.md](GETTING-STARTED.md). Não é um documento de limitações — para isso, ver [DISCLAIMER.md](DISCLAIMER.md).
+
+## 1. Escopo
+
+Hipocampo é uma metodologia de second brain agêntico: git + markdown + rituais de IA. Este repositório (`hipocampo`) e o `hipocampo-toolkit` são os únicos dois repositórios públicos da metodologia — carregam spec e ferramental, nunca conteúdo real. Toda base de conhecimento que implementa o Hipocampo vive em repositórios privados, sem exceção (ver invariantes, seção 8).
+
+## 2. Frontmatter — schema unificado
+
+Todo documento de uma instância Hipocampo é um arquivo `.md` com este frontmatter YAML:
+
+```yaml
+---
+title: ""
+date: "YYYY-MM-DD"
+updated: "YYYY-MM-DD"
+source: "url | conversa | interno"
+tags: []
+type: "note | reference | decision | project | person | case | framework | company"
+category: ""                      # opcional, só quando a área já tem subpasta física por tema
+temporality: "evergreen | ephemeral | contextual | historical"
+ttl: "YYYY-MM-DD"                 # sempre data concreta — nunca o literal "evergreen"
+context_anchor: ""                # obrigatório só quando temporality: contextual
+status: "draft | active | stale | archived | superseded"
+related: []                       # "path/local.md" ou "$alias:path.md"
+superseded_by: ""
+revision: 1
+revision_note: ""
+visibility: "public | internal | confidential | restricted"
+author: "Nome Real - @usuario-github"    # sempre pessoa, nunca a IA
+owner: ""                                 # nome da empresa, só quando nasce em contexto de trabalho
+---
+```
+
+### title, date, updated, source, tags
+Uso descritivo padrão. `source` diferencia conhecimento que entrou por pesquisa externa (`url`), por diálogo (`conversa`) ou produzido internamente (`interno`).
+
+### status
+Ciclo de vida do documento: `draft` (ainda não é conhecimento consolidado) → `active` (em uso) → `stale` (sinalizado pela rotina de staleness, precisa revisão) → `archived` (retirado de circulação, mas preservado) → `superseded` (substituído por outro documento, ver `superseded_by`). Documento nunca é apagado fisicamente — só transita para `archived` ou `superseded` (invariante, ver seção 8).
+
+### revision, revision_note
+Cada edição de conteúdo (não wording trivial) incrementa `revision` e registra o motivo em `revision_note`. Histórico de por quê o documento mudou, não só quando.
+
+### visibility
+Resolve **só** quem, já tendo acesso ao repositório, pode usar o conteúdo sem restrição adicional: `public` (sem restrição, inclusive fora do repo), `internal` (uso interno da organização dona do repo), `confidential` (uso restrito a quem precisa saber, mesmo dentro do repo), `restricted` (uso individualizado, caso a caso). `visibility` **nunca decide exposição à internet** — isso é resolvido estruturalmente pela regra de que nenhum repositório de conhecimento é público (invariante, seção 8). Uma etiqueta `confidential` num repositório que o time inteiro acessa não impede ninguém desse time de ler o arquivo — permissão real do GitHub é granularidade de repositório, não de arquivo dentro de um repositório compartilhado. Conteúdo que precisa de enforcement técnico de fato vai para um repositório separado com permissão de acesso restrita, não para uma etiqueta `visibility` dentro de um repositório mais aberto.
+
+### author / owner
+`author` é sempre uma pessoa (`Nome Real - @usuario-github`), nunca a IA — mesmo quando um agente escreve o texto sob direção de alguém, o autor é quem dirigiu. Campo obrigatório em qualquer documento, qualquer `visibility`. `owner` é sempre o nome de uma empresa, preenchido só quando o documento nasce em contexto de trabalho — ver a distinção completa de papéis e o que cada um pode fazer com o conteúdo no `DISCLAIMER.md` e nos Decision Records de licenciamento em `decisions/`.
+
+## 3. `type` — enum e critério de expansão
+
+| Valor | Uso |
+|---|---|
+| `note` | observação atômica que não é nenhum dos outros |
+| `reference` | conceito despersonalizado e reutilizável (absorve o que seria "generic") |
+| `decision` | decisão de conteúdo/arquitetura de uma instância específica — distinto do Decision Record da metodologia, ver seção 5 |
+| `project` | iniciativa em andamento |
+| `person` | pessoa nomeada |
+| `company` | empresa nomeada (cliente, parceiro, concorrente, a própria empresa) |
+| `case` | case de cliente/trabalho entregue, com resultado quantificado |
+| `framework` | metodologia sujeita a regime de autoria/titularidade (ver DISCLAIMER.md) |
+
+`context` foi avaliado e descartado como valor de `type` — sobreposição grande com `reference`/`company`. Quando fizer sentido, vira tag (`contexto`), não classificação de retrieval.
+
+**Regra de expansão:** só criar um valor novo de `type` quando houver massa crítica de documentos que não encaixam em nenhum valor existente — o mesmo princípio que já se aplica às subpastas de `category` (seção 4). Um enum pequeno e sem sobreposição é o que sustenta a melhora de retrieval que motiva ter `type` como campo estruturado.
+
+## 4. `category`
+
+Campo opcional, string livre. Só é preenchido quando a área temática já acumulou massa crítica de documentos a ponto de justificar uma subpasta física dedicada — não é obrigatório desde o primeiro documento de um tema.
+
+**`category: frameworks` e `type: framework` coexistem e não são redundantes.** São eixos diferentes: `category` é sobre onde o documento mora fisicamente no repositório (só existe quando a área já tem massa crítica de subpastas); `type: framework` é sobre regime de autoria/titularidade, independente de pasta. Um documento pode ser `type: framework` sem `category: frameworks` — não ter atingido massa crítica pra virar subpasta física não muda o regime de titularidade do conteúdo. Ver `decisions/0005-category-vs-type-framework.md`.
+
+## 5. `temporality` e o ciclo de staleness
+
+Campo ortogonal a `type` — controla como a rotina de staleness (verificação periódica de conhecimento desatualizado) trata cada documento.
+
+| Valor | `ttl` sugerido | Comportamento da rotina de staleness |
+|---|---|---|
+| `evergreen` | data concreta, longa (+24 meses) | Checagem leve — "ainda é verdade?" |
+| `ephemeral` | data concreta, curta (+30 a 90 dias) | Agressiva — vencido sem renovação já entra pré-marcado "sugestão: arquivar/superseder", não só "revisar" |
+| `contextual` | data concreta, de segurança (+90 a 180 dias) | Dupla checagem: pelo `ttl` de segurança E pelo status do documento em `context_anchor` — se a âncora mudar para `archived`/`superseded`, o documento contextual é flaggeado imediatamente, independente do `ttl` ainda não ter vencido |
+| `historical` | data concreta, irrelevante na prática (pode ser bem longa) | Pulado por completo pela rotina de staleness — só sai desse estado via `superseded_by` |
+
+`ttl` é **sempre uma data concreta**, nunca o literal `"evergreen"` — isso é papel exclusivo de `temporality`. Um documento com `ttl: "evergreen"` no valor do campo é um erro de preenchimento, não uma convenção válida.
+
+`context_anchor` é obrigatório só quando `temporality: contextual`. Usa a mesma sintaxe de `related` (`path.md` local ou `$alias:path.md` cross-repo, ver seção 6), mas é valor único, não lista — precisa ser inequívoco qual documento governa a expiração.
+
+Precedentes: `evergreen`/`ephemeral` seguem Andy Matuschak, "Evergreen notes" (evergreen vs. transient). `contextual` segue a prática de records management (event-based retention vs. time-based retention). `historical` formaliza a convenção já em uso do sufixo "(histórico)" no título.
+
+## 6. `related` entre repositórios — o Registry
+
+Um documento em qualquer instância Hipocampo pode referenciar outro documento no mesmo repositório ou em um repositório diferente da mesma pessoa/organização. A sintaxe distingue os dois casos:
+
+- Sem prefixo (`"path/local.md"`) = mesmo repositório.
+- Com prefixo `$alias:` (`"$alias:path.md"`) = repositório diferente, resolvido via um arquivo `registry.md`.
+
+`$nome`, não `{{nome}}` — `{{nome}}` corre o risco de ser interpretado como sintaxe de motor de template (Jinja/Mustache) se o arquivo algum dia passar por um pipeline desse tipo; `$` não tem significado especial em YAML puro. Ver `decisions/0004-alias-sintaxe.md`.
+
+`registry.md` mora no repositório menos restrito de cada escopo (por exemplo, o repositório de conceitos de um escopo pessoal, ou o repositório principal de um escopo corporativo). Formato:
+
+```markdown
+| Alias | Repositório atual | Válido desde | Nota |
+|---|---|---|---|
+| $alias-exemplo | dono/repo-atual | YYYY-MM-DD | — |
+```
+
+**Nunca editar uma linha existente do registry.** Renomear um repositório = acrescentar linha nova com o nome novo e a data, preservando a linha antiga — o mesmo princípio de `superseded_by` (seção 2), aplicado a nome de repositório em vez de documento.
+
+Um documento `type: framework` isento de titularidade de empresa (ver DISCLAIMER.md) nunca migra entre repositórios — nesse sentido específico, `related` para ele nunca precisa de sintaxe cross-repo, porque ele não muda de endereço. O inverso é esperado e correto: um documento em qualquer repositório de conteúdo pode (e deve) ter `related` cross-repo apontando **para** um desses frameworks isentos. A isenção impede a cópia/duplicação do framework, não a referência a ele.
+
+## 7. Decision Record vs. `type: decision`
+
+Dois mecanismos com escopos diferentes — não confundir:
+
+- **Decision Record** (`decisions/NNNN-slug.md`) — só existe no repositório `hipocampo`. Decisão sobre a metodologia em si: schema, regra, rotina. Template: Contexto (dúvida central) → Decisão (escolha) → Racional (porquê) → Alternativas descartadas → Status.
+- **`type: decision`** — documento comum, existe em qualquer repositório de conteúdo. Decisão sobre conteúdo/arquitetura daquela instância específica (por exemplo, "por que esse cliente ficou em tal repositório e não em outro").
+
+O `CHANGELOG.md` de cada instância de conteúdo é estreito de escopo: só registra decisão estrutural local daquela instância. Mudança de regra/schema do Hipocampo em si vira uma linha de referência ("atualizado para Hipocampo vX.Y, ver CHANGELOG do hipocampo") em vez de reexplicada.
+
+## 8. Extensão/personalização e precedência do agente
+
+**Invariantes** — nenhuma instância sobrescreve, sob nenhuma circunstância:
+
+1. Nenhum repositório de conhecimento é público à internet.
+2. `author` é sempre uma pessoa, nunca a IA.
+3. Documento nunca é apagado fisicamente — só arquivado ou superseded.
+4. Separação de acesso é sempre por repositório, nunca por etiqueta dentro de um repositório compartilhado.
+5. O agente nunca escreve sem pedido explícito do usuário.
+
+**Ajustável por instância** — sempre documentado, nunca implícito, num bloco "Extensões locais a Hipocampo vX.Y" no `CLAUDE.md`/README daquele repositório: subpastas de `category`, `ttl` default sugerido por tipo de conteúdo, rituais extras específicos, nomenclatura de commit/branch.
+
+**Hierarquia de precedência do agente**, do mais específico para o mais geral:
+
+1. Pedido explícito do usuário na conversa atual — dentro dos limites dos invariantes.
+2. Extensão/override documentado localmente na instância.
+3. Regra base deste `SPEC.md`.
+4. Convenção default do `hipocampo-toolkit`, na ausência de tudo o resto.
+
+Nenhuma camada sobrescreve um invariante. Se um pedido violar um invariante, o agente segue o invariante e avisa isso explicitamente — nunca obedece nem recusa em silêncio.
+
+## 9. Versionamento
+
+A metodologia em si segue [SemVer](https://semver.org/lang/pt-BR/): MAJOR para mudança que quebra compatibilidade (exige migração ativa, ver `MIGRATIONS.md`), MINOR para capacidade nova compatível com o que já existe, PATCH para clarificação ou correção que não muda comportamento. Cada versão liberada é marcada com uma tag de git. Cada instância declara, no próprio `CLAUDE.md`/README, a versão ou faixa de compatibilidade que implementa (exemplo: "Segue Hipocampo ^1.0.0").
+
+## Histórico de versões
+
+Ver [CHANGELOG.md](CHANGELOG.md).
