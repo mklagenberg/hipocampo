@@ -1,6 +1,6 @@
 # Hipocampo — SPEC
 
-Versão: 1.1.0 · Segue [SemVer](https://semver.org/lang/pt-BR/)
+Versão: 1.2.0 · Segue [SemVer](https://semver.org/lang/pt-BR/)
 
 Este documento é a especificação normativa da metodologia Hipocampo: o schema de frontmatter, as regras de retrieval e as convenções que qualquer instância (repositório de conteúdo) precisa seguir para ser considerada compatível com uma versão do Hipocampo. Não é um manual de uso — para isso, ver [GETTING-STARTED.md](GETTING-STARTED.md). Não é um documento de limitações — para isso, ver [DISCLAIMER.md](DISCLAIMER.md).
 
@@ -60,7 +60,7 @@ Sempre derivado mecanicamente de `visibility`, nunca definido à mão — evita 
 |---|---|
 | `note` | observação atômica que não é nenhum dos outros |
 | `reference` | conceito despersonalizado e reutilizável (absorve o que seria "generic") |
-| `decision` | decisão de conteúdo/arquitetura de uma instância específica — distinto do Decision Record da metodologia, ver seção 5 |
+| `decision` | decisão de conteúdo/arquitetura de uma instância específica — distinto do Decision Record da metodologia, ver seção 7 |
 | `project` | iniciativa em andamento |
 | `person` | pessoa nomeada |
 | `company` | empresa nomeada (cliente, parceiro, concorrente, a própria empresa) |
@@ -93,6 +93,20 @@ Campo ortogonal a `type` — controla como a rotina de staleness (verificação 
 `context_anchor` é obrigatório só quando `temporality: contextual`. Usa a mesma sintaxe de `related` (`path.md` local ou `$alias:path.md` cross-repo, ver seção 6), mas é valor único, não lista — precisa ser inequívoco qual documento governa a expiração.
 
 Precedentes: `evergreen`/`ephemeral` seguem Andy Matuschak, "Evergreen notes" (evergreen vs. transient). `contextual` segue a prática de records management (event-based retention vs. time-based retention). `historical` formaliza a convenção já em uso do sufixo "(histórico)" no título.
+
+## 5-A. Ritual REM e camadas de memória
+
+A seção 5 formaliza como um documento *já existente* envelhece. Esta seção formaliza como um item *novo* — captura bruta, ainda não curada — entra no sistema e vira documento consolidado. Capacidade opcional por instância (ver decisions/0008-ritual-rem-e-camadas-de-memoria.md).
+
+Quatro estações e um ritual de consolidação:
+
+1. **Memória sensorial** — buffer bruto de percepção (ex.: a janela de conversa). Alta perda por design; não é papel do Hipocampo reter isso.
+2. **Gate de atenção** — mecanismo explícito que decide o que atravessa da sensorial pra curto prazo (ex.: um "check-in"/dump de sessão). Só entra no sistema canônico o que passa pelo gate.
+3. **Memória de curto prazo** — item já capturado no sistema canônico (git), ainda não curado. Mínimo viável: uma pasta `inbox/` versionada no próprio repositório — infraestrutura de nuvem (fila, banco de estado) é Extensão local opcional (seção 8), nunca linha de base.
+4. **Ritual REM (consolidação)** — lê só da memória de curto prazo, nunca direto da sensorial. Roda periodicamente ou sob pedido. Para cada item pendente, decide entre virar documento novo, fundir com um existente, ou descartar. O plano completo é sempre apresentado antes de qualquer execução (mesmo invariante "agente nunca escreve sem pedido explícito", seção 8, aplicado a este ritual).
+5. **Memória de longo prazo** — documento atômico, curado, frontmatter completo. É o corpo principal de qualquer repositório de conteúdo Hipocampo, já descrito desde a v1.0.0 — não é capacidade nova.
+
+Regras adicionais: atomicidade (documento consolidado = um conceito só; material bruto com N ideias vira N documentos); um `memory.md` de harness de agente (satélite pequeno e durável do próprio agente) e um snapshot de transferência (export imutável pra migração) não são memória sensorial nem passam pelo ritual REM — mecanismos distintos, não confundir; evolução de schema é reativa, só cresce por massa crítica (mesmo princípio da seção 4).
 
 ## 6. `related` entre repositórios — o Registry
 
@@ -134,7 +148,7 @@ O `CHANGELOG.md` de cada instância de conteúdo é estreito de escopo: só regi
 4. Separação de acesso é sempre por repositório, nunca por etiqueta dentro de um repositório compartilhado.
 5. O agente nunca escreve sem pedido explícito do usuário.
 
-**Ajustável por instância** — sempre documentado, nunca implícito, num bloco "Extensões locais a Hipocampo vX.Y" no `CLAUDE.md`/README daquele repositório: subpastas de `category`, `ttl` default sugerido por tipo de conteúdo, rituais extras específicos, nomenclatura de commit/branch.
+**Ajustável por instância** — sempre documentado, nunca implícito, num bloco "Extensões locais a Hipocampo vX.Y" no `CLAUDE.md`/README daquele repositório: subpastas de `category`, `ttl` default sugerido por tipo de conteúdo, rituais extras específicos (incluindo se/como o ritual REM da seção 5-A é adotado), nomenclatura de commit/branch.
 
 **Hierarquia de precedência do agente**, do mais específico para o mais geral:
 
