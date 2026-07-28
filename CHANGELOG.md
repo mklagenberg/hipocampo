@@ -2,6 +2,11 @@
 
 Histórico de versões da metodologia em si. Segue [SemVer](https://semver.org/lang/pt-BR/) — ver SPEC.md, seção 9.
 
+## [1.2.0] — 2026-07-28
+
+### Adicionado
+- Seção 5-A no SPEC.md: ritual REM e modelo de quatro estações de memória (sensorial → gate de atenção → curto prazo → consolidação REM → longo prazo), capacidade opcional por instância. Formaliza como um item novo (captura bruta) entra no sistema e vira documento consolidado — complementa a seção 5 (que trata de como um documento já existente envelhece). Ver `decisions/0008-ritual-rem-e-camadas-de-memoria.md`.
+
 ## [1.1.0] — 2026-07-27
 
 ### Adicionado
