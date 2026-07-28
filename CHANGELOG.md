@@ -2,6 +2,11 @@
 
 Histórico de versões da metodologia em si. Segue [SemVer](https://semver.org/lang/pt-BR/) — ver SPEC.md, seção 9.
 
+## [1.3.0] — 2026-07-28
+
+### Adicionado
+- Seção 2-A no SPEC.md: política de dados sensíveis por tipo de instância. Instância corporativa nunca armazena contrato/NDA, avaliação de desempenho, anotação de saúde, dado pessoal (senha, endereço/contato pessoal, nome de parente), ou valor de salário/fornecedor/projeto — exceto valor de resultado de negócio num `type: case`. Nome completo, cargo e contato profissional são permitidos com citação de ano. Detalhe técnico de vulnerabilidade/exploração ativa nunca é registrado verbatim, em nenhuma instância. Ver `decisions/0009-politica-de-privacidade-por-instancia.md`.
+
 ## [1.2.0] — 2026-07-28
 
 ### Adicionado

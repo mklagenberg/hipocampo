@@ -1,6 +1,6 @@
 # Hipocampo — SPEC
 
-Versão: 1.2.0 · Segue [SemVer](https://semver.org/lang/pt-BR/)
+Versão: 1.3.0 · Segue [SemVer](https://semver.org/lang/pt-BR/)
 
 Este documento é a especificação normativa da metodologia Hipocampo: o schema de frontmatter, as regras de retrieval e as convenções que qualquer instância (repositório de conteúdo) precisa seguir para ser considerada compatível com uma versão do Hipocampo. Não é um manual de uso — para isso, ver [GETTING-STARTED.md](GETTING-STARTED.md). Não é um documento de limitações — para isso, ver [DISCLAIMER.md](DISCLAIMER.md).
 
@@ -53,6 +53,20 @@ Resolve **só** quem, já tendo acesso ao repositório, pode usar o conteúdo se
 
 ### license
 Sempre derivado mecanicamente de `visibility`, nunca definido à mão — evita divergência entre a camada de confidencialidade (`visibility`) e a camada jurídica (`license`). Usa o padrão SPDX `LicenseRef-<idstring>`, com o texto legal completo no arquivo `LICENSE` da raiz do repositório, nunca reescrito por documento. Ver `decisions/0007-licenciamento-repos-de-conteudo.md`.
+
+## 2-A. Política de dados sensíveis por tipo de instância
+
+Instância corporativa (`owner` preenchido com o nome de uma organização) nunca armazena, em nenhum nível de `visibility` — mesmo `restricted`: conteúdo de contrato ou NDA; avaliação de desempenho de indivíduo identificável; anotação de saúde de qualquer pessoa (titular da instância ou terceiro); dado pessoal (senha, endereço pessoal, telefone ou e-mail pessoal, nome de parente); valor de salário, valor pago a fornecedor, ou valor de projeto/contrato. Exceção única pra valor absoluto: resultado de negócio entregue a um cliente num `type: case` (receita gerada, custo evitado) é o próprio produto do case, não exposição financeira interna. Aprendizado interno quantificado (ex.: economia de processo) é registrado como variação percentual, nunca valor absoluto.
+
+Dado financeiro sobre terceiro que não é fornecedor/parceiro comercial direto (ex.: inteligência de mercado sobre concorrente, extraída de fonte pública) não é abrangido por essa restrição — desde que a fonte pública seja citada explicitamente no documento.
+
+Nome completo, cargo, e-mail profissional, telefone ou endereço profissional — de colega ou de contato de cliente — são permitidos em instância corporativa, sempre acompanhados de citação de ano/data: o registro é uma fotografia datada, nunca um estado presumido atual.
+
+Questão pessoal de qualquer indivíduo (saúde, situação financeira pessoal) nunca vai pra instância corporativa — sempre pra instância pessoal do titular relevante, se existir uma.
+
+Detalhe técnico de vulnerabilidade ou exploração ativa (payload de ataque, query/dork que revela o comprometimento, credencial, endpoint explorável) nunca é registrado verbatim, em nenhuma instância, mesmo confidencial/restricted — registra-se o fato (existência da falha, categoria, data do achado) e a resposta dada, nunca o material que reproduziria ou confirmaria o ataque.
+
+Quando um documento inteiro depende estruturalmente de um tipo de dado banido (não dá pra adaptar removendo só o trecho problemático), o agente não decide sozinho entre publicar mesmo assim ou descartar — sinaliza a violação ao humano responsável pela instância e aguarda decisão explícita. Ver `decisions/0009-politica-de-privacidade-por-instancia.md`.
 
 ## 3. `type` — enum e critério de expansão
 
