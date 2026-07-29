@@ -2,6 +2,12 @@
 
 Histórico de versões da metodologia em si. Segue [SemVer](https://semver.org/lang/pt-BR/) — ver SPEC.md, seção 9.
 
+## [1.8.0] — 2026-07-29
+
+### Adicionado
+- `docs/FUNDAMENTOS.md` — passo a passo concreto de "Use this template" (onde clicar, o que preencher), pra quem nunca usou GitHub.
+- `docs/USO-MULTI-FERRAMENTA.md` — princípio comum de uso do Hipocampo (MCP do GitHub) e especificidades por ferramenta: Claude (Cowork, Code, API/Desktop), ChatGPT, Gemini, GitHub Copilot, Antigravity.
+
 ## [1.7.0] — 2026-07-29
 
 ### Adicionado
