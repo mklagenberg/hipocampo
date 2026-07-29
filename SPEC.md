@@ -1,8 +1,8 @@
 # Hipocampo — SPEC
 
-Versão: 1.3.0 · Segue [SemVer](https://semver.org/lang/pt-BR/)
+Versão: 1.4.0 · Segue [SemVer](https://semver.org/lang/pt-BR/)
 
-Este documento é a especificação normativa da metodologia Hipocampo: o schema de frontmatter, as regras de retrieval e as convenções que qualquer instância (repositório de conteúdo) precisa seguir para ser considerada compatível com uma versão do Hipocampo. Não é um manual de uso — para isso, ver [GETTING-STARTED.md](GETTING-STARTED.md). Não é um documento de limitações — para isso, ver [DISCLAIMER.md](DISCLAIMER.md).
+Este documento é a especificação normativa da metodologia Hipocampo: o schema de frontmatter, as regras de retrieval e as convenções que qualquer instância (repositório de conteúdo) precisa seguir para ser considerada compatível com uma versão do Hipocampo. Não é um manual de uso — para isso, ver [GETTING-STARTED.md](GETTING-STARTED.md). Não é um documento de limitações — para isso, ver [DISCLAIMER.md](DISCLAIMER.md). Não é um guia de boas práticas — para isso, ver [BEST-PRACTICES.md](BEST-PRACTICES.md).
 
 ## 1. Escopo
 
@@ -161,6 +161,8 @@ O `CHANGELOG.md` de cada instância de conteúdo é estreito de escopo: só regi
 3. Documento nunca é apagado fisicamente — só arquivado ou superseded.
 4. Separação de acesso é sempre por repositório, nunca por etiqueta dentro de um repositório compartilhado.
 5. O agente nunca escreve sem pedido explícito do usuário.
+
+O invariante 3 tem uma exceção formal e estreita, documentada em `decisions/0010-excecao-apagamento-obrigacao-legal.md`: apagamento físico do conteúdo pessoal específico é permitido quando, e somente quando, acionado por uma solicitação legítima de eliminação de dado pessoal de um titular identificável, com base legal real (LGPD Art. 16 / GDPR Art. 17). A legitimidade do pedido é sempre avaliada pelo humano responsável pela instância, nunca decidida pelo agente sozinho, e o conteúdo removido é substituído por um registro mínimo do fato ocorrido ("tombstone") — nunca simplesmente apagado sem rastro, e nunca uma porta aberta para apagamento por conveniência.
 
 **Ajustável por instância** — sempre documentado, nunca implícito, num bloco "Extensões locais a Hipocampo vX.Y" no `CLAUDE.md`/README daquele repositório: subpastas de `category`, `ttl` default sugerido por tipo de conteúdo, rituais extras específicos (incluindo se/como o ritual REM da seção 5-A é adotado), nomenclatura de commit/branch.
 
