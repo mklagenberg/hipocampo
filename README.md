@@ -13,7 +13,8 @@ Metodologia de second brain agêntico: git + markdown + rituais de IA. Este repo
 - [docs/MODELOS-DE-IA.md](docs/MODELOS-DE-IA.md) — o que importa num modelo/produto de IA pra operar o Hipocampo bem.
 - [docs/PERFORMANCE-E-GRAFO.md](docs/PERFORMANCE-E-GRAFO.md) — como o retrieval/grafo funciona, e a relação com o OKF da Google.
 - [docs/USO-MULTI-FERRAMENTA.md](docs/USO-MULTI-FERRAMENTA.md) — princípio comum e especificidades de uso em Claude, ChatGPT, Gemini, Copilot, Antigravity.
+- [docs/FAQ-E-ERROS-COMUNS.md](docs/FAQ-E-ERROS-COMUNS.md) — erros de instanciação já encontrados de verdade e perguntas frequentes.
 
 Para instanciar um repositório de conteúdo a partir desta metodologia, use o template em [hipocampo-toolkit](https://github.com/mklagenberg/hipocampo-toolkit).
 
-Versão atual: **1.8.0** ([SemVer](https://semver.org/lang/pt-BR/)).
+Versão atual: **1.9.0** ([SemVer](https://semver.org/lang/pt-BR/)).

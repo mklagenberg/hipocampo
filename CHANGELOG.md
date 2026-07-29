@@ -2,6 +2,11 @@
 
 Histórico de versões da metodologia em si. Segue [SemVer](https://semver.org/lang/pt-BR/) — ver SPEC.md, seção 9.
 
+## [1.9.0] — 2026-07-29
+
+### Adicionado
+- `docs/FAQ-E-ERROS-COMUNS.md` — erros de instanciação já encontrados de verdade (skill não instalada pelo template, LICENSE herdado incorretamente, `CLAUDE.md` desatualizado, permissão de org, migração por cópia direta) e perguntas frequentes (apagamento físico, outage de produto de IA, necessidade da skill, licença metodologia vs. conteúdo, detecção de release nova, git host alternativo, visibilidade esquecida).
+
 ## [1.8.0] — 2026-07-29
 
 ### Adicionado
