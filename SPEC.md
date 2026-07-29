@@ -1,6 +1,6 @@
 # Hipocampo — SPEC
 
-Versão: 1.5.0 · Segue [SemVer](https://semver.org/lang/pt-BR/)
+Versão: 1.6.0 · Segue [SemVer](https://semver.org/lang/pt-BR/)
 
 Este documento é a especificação normativa da metodologia Hipocampo: o schema de frontmatter, as regras de retrieval e as convenções que qualquer instância (repositório de conteúdo) precisa seguir para ser considerada compatível com uma versão do Hipocampo. Não é um manual de uso — para isso, ver [GETTING-STARTED.md](GETTING-STARTED.md). Não é um documento de limitações — para isso, ver [DISCLAIMER.md](DISCLAIMER.md). Não é um guia de boas práticas — para isso, ver [BEST-PRACTICES.md](BEST-PRACTICES.md).
 
@@ -184,6 +184,8 @@ Nenhuma camada sobrescreve um invariante. Se um pedido violar um invariante, o a
 ## 9. Versionamento
 
 A metodologia em si segue [SemVer](https://semver.org/lang/pt-BR/): MAJOR para mudança que quebra compatibilidade (exige migração ativa, ver `MIGRATIONS.md`), MINOR para capacidade nova compatível com o que já existe, PATCH para clarificação ou correção que não muda comportamento. Cada versão liberada é marcada com uma tag de git. Cada instância declara, no próprio `CLAUDE.md`/README, a versão ou faixa de compatibilidade que implementa (exemplo: "Segue Hipocampo ^1.0.0").
+
+Toda nova versão segue uma rotina obrigatória antes de ser considerada completa — checagem de necessidade de migração e sincronização do `hipocampo-toolkit`. Ver `decisions/0014-rotina-obrigatoria-de-release.md`.
 
 ## 10. Migração de conteúdo pré-existente
 
