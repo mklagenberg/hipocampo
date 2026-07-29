@@ -2,6 +2,12 @@
 
 Histórico de versões da metodologia em si. Segue [SemVer](https://semver.org/lang/pt-BR/) — ver SPEC.md, seção 9.
 
+## [1.4.0] — 2026-07-29
+
+### Adicionado
+- `BEST-PRACTICES.md` — guia de boas práticas de uso da metodologia, em tom acessível: operação do dia a dia, postura de privacidade/compliance, e adoção por times/empresas novas.
+- Exceção formal e estreita ao Invariante 3 (SPEC.md, seção 8): apagamento físico do conteúdo pessoal específico é permitido quando acionado por uma solicitação legítima de eliminação de dado pessoal (LGPD Art. 16 / GDPR Art. 17), sempre com decisão humana explícita e substituição por um registro mínimo do fato ("tombstone"). Ver `decisions/0010-excecao-apagamento-obrigacao-legal.md`.
+
 ## [1.3.0] — 2026-07-28
 
 ### Adicionado
