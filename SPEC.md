@@ -1,6 +1,6 @@
 # Hipocampo — SPEC
 
-Versão: 1.4.0 · Segue [SemVer](https://semver.org/lang/pt-BR/)
+Versão: 1.5.0 · Segue [SemVer](https://semver.org/lang/pt-BR/)
 
 Este documento é a especificação normativa da metodologia Hipocampo: o schema de frontmatter, as regras de retrieval e as convenções que qualquer instância (repositório de conteúdo) precisa seguir para ser considerada compatível com uma versão do Hipocampo. Não é um manual de uso — para isso, ver [GETTING-STARTED.md](GETTING-STARTED.md). Não é um documento de limitações — para isso, ver [DISCLAIMER.md](DISCLAIMER.md). Não é um guia de boas práticas — para isso, ver [BEST-PRACTICES.md](BEST-PRACTICES.md).
 
@@ -67,6 +67,12 @@ Questão pessoal de qualquer indivíduo (saúde, situação financeira pessoal) 
 Detalhe técnico de vulnerabilidade ou exploração ativa (payload de ataque, query/dork que revela o comprometimento, credencial, endpoint explorável) nunca é registrado verbatim, em nenhuma instância, mesmo confidencial/restricted — registra-se o fato (existência da falha, categoria, data do achado) e a resposta dada, nunca o material que reproduziria ou confirmaria o ataque.
 
 Quando um documento inteiro depende estruturalmente de um tipo de dado banido (não dá pra adaptar removendo só o trecho problemático), o agente não decide sozinho entre publicar mesmo assim ou descartar — sinaliza a violação ao humano responsável pela instância e aguarda decisão explícita. Ver `decisions/0009-politica-de-privacidade-por-instancia.md`.
+
+## 2-B. Mecânica CRUD e leitura frontmatter-first
+
+O ciclo de vida do documento (seção 2, campo `status`) implementa as quatro operações de um CRUD: **Create** (criação com frontmatter completo), **Read** (consulta por agente ou humano), **Update** (edição de conteúdo com incremento de `revision`), **Delete** (mitigado pelo invariante 3 — nunca apagar fisicamente, só `archived`/`superseded`, com exceção estreita da `decisions/0010`). Ver `decisions/0012-mecanica-crud-frontmatter-first.md`.
+
+Regra de leitura recomendada ao agente: ao operar sobre múltiplos documentos (busca, triagem, staleness), ler sempre o **frontmatter primeiro** — YAML, custo de token baixo, suficiente pra filtrar por `type`, `tags`, `status`, `temporality`, `related` e decidir relevância. Só ler o **corpo completo** depois de decidir, pelo frontmatter, que aquele documento específico precisa de leitura completa. Numa instância com muitos documentos, isso evita custo de token desnecessário — ler o corpo inteiro de todo candidato só pra descartar a maioria não é o padrão de acesso default.
 
 ## 3. `type` — enum e critério de expansão
 
@@ -178,6 +184,10 @@ Nenhuma camada sobrescreve um invariante. Se um pedido violar um invariante, o a
 ## 9. Versionamento
 
 A metodologia em si segue [SemVer](https://semver.org/lang/pt-BR/): MAJOR para mudança que quebra compatibilidade (exige migração ativa, ver `MIGRATIONS.md`), MINOR para capacidade nova compatível com o que já existe, PATCH para clarificação ou correção que não muda comportamento. Cada versão liberada é marcada com uma tag de git. Cada instância declara, no próprio `CLAUDE.md`/README, a versão ou faixa de compatibilidade que implementa (exemplo: "Segue Hipocampo ^1.0.0").
+
+## 10. Migração de conteúdo pré-existente
+
+Trazer conteúdo de fora do Hipocampo (sistema legado, export de outra ferramenta) ou de uma versão anterior da metodologia nunca copia o arquivo original diretamente para o repositório de destino. O frontmatter é sempre reescrito do zero, conforme o schema vigente (seção 2); o corpo é ajustado conforme as regras vigentes de atomicidade, nomenclatura e privacidade (seção 2-A), documentando em `revision_note` o que foi preservado verbatim e o que foi alterado, e por quê. Ver `decisions/0011-migracao-nunca-copia-arquivo-direto.md`.
 
 ## Histórico de versões
 
