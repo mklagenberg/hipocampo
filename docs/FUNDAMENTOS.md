@@ -21,6 +21,23 @@ Hipocampo guarda conhecimento como arquivos de texto simples (`.md`, markdown) d
 | **Branch** | Uma linha paralela de desenvolvimento dentro do mesmo repositório — permite propor uma mudança sem afetar a versão "oficial" até que ela seja aceita. |
 | **Pull Request (PR)** | Um pedido formal de "juntar as mudanças desta branch na branch principal", geralmente revisado antes de aceito. |
 | **GitHub** | Um serviço que hospeda repositórios git na nuvem e adiciona permissionamento, interface web, e automação em cima do git puro. |
+| **Template** | Um repositório marcado como "modelo" — usá-lo cria um repositório novo com os mesmos arquivos iniciais, sem herdar o histórico de commits do original. |
+| **Organização (org)** | Uma conta de GitHub que representa um grupo/empresa, não uma pessoa. Repositórios corporativos geralmente vivem numa org, não na conta pessoal de ninguém. |
+
+## Passo a passo: criar um repositório a partir de um template
+
+Isso é o que você faz pra instanciar o Hipocampo a partir do `hipocampo-toolkit` (ver `GETTING-STARTED.md`, seção 2). Sem nenhuma suposição de conhecimento prévio:
+
+1. Acesse a página do repositório `hipocampo-toolkit` no GitHub (`github.com/mklagenberg/hipocampo-toolkit`).
+2. Perto do topo da página, à direita do nome do repositório, há um botão verde **"Use this template"**. Clique nele e escolha **"Create a new repository"** no menu que aparece.
+3. Você chega numa tela de criação de repositório novo. Preencha:
+   - **Owner** — sua conta pessoal, ou a organização da empresa, se você tiver permissão pra criar repositórios lá (ver "Organização" no glossário acima).
+   - **Repository name** — o nome do seu repositório de conteúdo (ex.: `meu-second-brain` ou o nome que sua instância vai usar).
+   - **Visibilidade** — escolha **Private**. Isso é obrigatório na metodologia (ver `SPEC.md`, seção 8) — nunca escolha Public aqui.
+4. Clique no botão verde **"Create repository from template"**. Em poucos segundos, você tem um repositório novo, com os mesmos arquivos do `hipocampo-toolkit`, mas sem o histórico de commits dele — é uma cópia limpa, começando do zero.
+5. A partir daqui, siga `hipocampo-toolkit/POS-INSTANCIACAO.md` — o template não deixa nada pronto pra uso sozinho, tem um checklist obrigatório de primeira configuração (trocar a licença herdada, instalar sua própria cópia da skill, entre outros passos).
+
+**Se o repositório precisa ficar dentro de uma organização (ex.: uma empresa) e você não vê a organização na lista de "Owner":** você provavelmente não tem permissão de criar repositórios lá — peça pra quem administra a organização criar o repositório, ou te conceder essa permissão.
 
 ## Por que GitHub especificamente
 
