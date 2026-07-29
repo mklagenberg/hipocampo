@@ -2,6 +2,13 @@
 
 Histórico de versões da metodologia em si. Segue [SemVer](https://semver.org/lang/pt-BR/) — ver SPEC.md, seção 9.
 
+## [1.5.0] — 2026-07-29
+
+### Adicionado
+- Seção 2-B no SPEC.md: mecânica CRUD nomeada explicitamente (Create/Read/Update/Delete mapeados ao ciclo de vida já existente) e regra de leitura frontmatter-first para agentes (frontmatter primeiro, corpo completo só quando necessário — economia de tokens). Ver `decisions/0012-mecanica-crud-frontmatter-first.md`.
+- Seção 10 no SPEC.md: migração de conteúdo pré-existente nunca copia arquivo direto — frontmatter sempre reescrito conforme o schema vigente, corpo ajustado conforme atomicidade/nomenclatura/privacidade vigentes. Ver `decisions/0011-migracao-nunca-copia-arquivo-direto.md`.
+- Novo princípio no DISCLAIMER.md: dados de qualquer instância sempre human-readable (markdown + git), independente de produto de IA específico estar no ar. Ver `decisions/0013-dados-sempre-human-readable.md`.
+
 ## [1.4.0] — 2026-07-29
 
 ### Adicionado

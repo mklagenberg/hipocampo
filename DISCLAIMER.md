@@ -13,6 +13,12 @@ Hipocampo é uma metodologia de organização de conhecimento pessoal ou corpora
 - **Não substitui compliance legal.** Nada neste repositório constitui parecer jurídico. Se sua instância guarda dado pessoal sensível, segredo industrial ou informação sujeita a regulação específica (LGPD, contratual, setorial), a adequação legal é responsabilidade de quem opera a instância — não algo que o Hipocampo resolve por desenho.
 - **Rotinas de IA são probabilísticas.** Qualquer ritual conduzido por um agente (consolidação, staleness, classificação de `type`/`temporality`) pode errar. Hipocampo assume supervisão humana no laço — o invariante "o agente nunca escreve sem pedido explícito" (SPEC.md, seção 8) existe exatamente por isso, não é boilerplate.
 
+## Dados sempre human-readable, independente de produto de IA
+
+Todo dado de uma instância Hipocampo deve permanecer legível e navegável por um humano usando só as ferramentas nativas do repositório — o visualizador de markdown do próprio GitHub, um editor de texto qualquer, `git log`/`git show` —, sem depender de nenhum produto de IA específico estar no ar. Isso não é uma limitação da metodologia — é a mesma característica que já garante, acima, que permissão de acesso é sempre resolvida no nível do GitHub, nunca de um produto de terceiro por cima dele.
+
+Vendor lock-in é um risco real e crescente à medida que mais funcionalidade é construída em cima de produtos de IA específicos (skills, MCPs, agentes). Um outage, uma descontinuação de produto, ou uma mudança de precificação não deveriam nunca colocar em risco o acesso ao conhecimento em si — só a conveniência de operá-lo com IA. Ver `decisions/0013-dados-sempre-human-readable.md`.
+
 ## Cenários recomendados
 
 - Conhecimento pessoal ou de equipe pequena, onde a pessoa/time consegue revisar o que o agente propõe.
