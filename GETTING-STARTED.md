@@ -2,6 +2,17 @@
 
 Guia prático para adotar a metodologia. Para a especificação normativa completa, ver [SPEC.md](SPEC.md). Para o que o Hipocampo não é e onde não se aplica, ver [DISCLAIMER.md](DISCLAIMER.md). Se você nunca usou git/GitHub, comece pelo [doc de fundamentos](docs/FUNDAMENTOS.md).
 
+## 0. Se você está aprendendo a metodologia pela primeira vez
+
+Antes de instanciar qualquer coisa, uma ordem de leitura que evita voltar atrás:
+
+1. **[DISCLAIMER.md](DISCLAIMER.md)** — o que o Hipocampo é e não é, antes de depender dele pra algo que importa.
+2. **Este documento, do início ao fim** — a mecânica prática.
+3. **[BEST-PRACTICES.md](BEST-PRACTICES.md)** — julgamento do dia a dia, privacidade, adoção em equipe — depois que a mecânica já fez sentido.
+4. Sob demanda, quando a dúvida aparecer: **[SPEC.md](SPEC.md)** (a norma completa), **[docs/MODELOS-DE-IA.md](docs/MODELOS-DE-IA.md)** (o que importa num agente de IA pra operar isso bem) e **[docs/PERFORMANCE-E-GRAFO.md](docs/PERFORMANCE-E-GRAFO.md)** (como o retrieval funciona, e a relação com o OKF da Google).
+
+Se você já instanciou um repositório e só quer o passo a passo imediato de configuração, pule pra seção 2 abaixo e para o `POS-INSTANCIACAO.md` do `hipocampo-toolkit`.
+
 ## 1. Entenda a arquitetura antes de criar nada
 
 Hipocampo separa dois tipos de repositório:
@@ -17,8 +28,12 @@ Você nunca edita `hipocampo` nem `hipocampo-toolkit` para guardar conhecimento 
 
 1. No GitHub, acesse `hipocampo-toolkit` e use o botão **"Use this template"** para criar um repositório novo.
 2. **Marque o novo repositório como privado.** Isso não é opcional — é o invariante que sustenta todo o modelo de `visibility` do SPEC.md (seção 8).
-3. No `CLAUDE.md` gerado a partir do template, preencha o bloco "Extensões locais a Hipocampo vX.Y" com as decisões específicas dessa instância (subpastas de `category` que você já sabe que vai usar, `ttl` default por tipo de conteúdo, convenção de commit).
-4. Declare a versão de compatibilidade (exemplo: "Segue Hipocampo ^1.0.0").
+3. **Substitua o `LICENSE`.** O template copia o Apache-2.0 da metodologia, que é errado pra um repositório de conteúdo. Use um dos templates em `hipocampo-toolkit/license-templates/` (pessoal ou corporativo), preenchido com o titular real — nunca deixe o Apache-2.0 herdado.
+4. **Personalize e instale sua própria cópia da skill.** `hipocampo-toolkit/skill/SKILL.md` é genérica — hardcoda só `hipocampo`/`hipocampo-toolkit`. Preencha o roteador de repositórios (seção "Personalização obrigatória" da skill) com os nomes dos seus repositórios pessoais/corporativos, e registre a skill de fato (o template só copia o esqueleto, não a deixa funcional sozinha).
+5. No `CLAUDE.md` gerado a partir do template, preencha o bloco "Extensões locais a Hipocampo vX.Y" com as decisões específicas dessa instância (subpastas de `category` que você já sabe que vai usar, `ttl` default por tipo de conteúdo, convenção de commit).
+6. Declare a versão de compatibilidade (exemplo: "Segue Hipocampo ^1.6.0").
+
+O passo a passo detalhado desses seis itens, em formato de checklist, está em `hipocampo-toolkit/POS-INSTANCIACAO.md`.
 
 ## 3. Escreva seu primeiro documento
 
@@ -50,12 +65,12 @@ Se você mantém mais de um repositório de conteúdo (por exemplo, um pessoal e
 
 ## 5. Rotinas
 
-Hipocampo pressupõe rituais periódicos conduzidos por um agente de IA sob sua supervisão — não automação sem revisão. Dois rituais centrais:
+Hipocampo pressupõe rituais periódicos conduzidos por um agente de IA sob sua supervisão — não automação sem revisão. Dois rituais centrais, ambos já cobertos pela skill Hipocampo (`hipocampo-toolkit/skill/SKILL.md`, depois de personalizada):
 
 - **Staleness** — verificação periódica de `ttl` vencido, comportamento diferente por `temporality` (SPEC.md, seção 5).
 - **Consolidação** (inbox → conhecimento) — captura solta vira documento com frontmatter completo, sempre revisada por você antes de escrita definitiva (invariante 5 do SPEC.md — o agente nunca escreve sem pedido explícito).
 
-A arquitetura específica de skill para rodar essas rotinas fica a cargo de cada adotante — o `hipocampo-toolkit` traz um stub como ponto de partida, não uma implementação fechada.
+A skill também checa, no início de sessão, se há uma versão nova da metodologia publicada em `hipocampo` e avisa você — nunca aplica a atualização sozinha.
 
 ## 6. Antes de ativar
 
