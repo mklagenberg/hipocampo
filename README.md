@@ -13,4 +13,4 @@ Metodologia de second brain agêntico: git + markdown + rituais de IA. Este repo
 
 Para instanciar um repositório de conteúdo a partir desta metodologia, use o template em [hipocampo-toolkit](https://github.com/mklagenberg/hipocampo-toolkit).
 
-Versão atual: **1.4.0** ([SemVer](https://semver.org/lang/pt-BR/)).
+Versão atual: **1.5.0** ([SemVer](https://semver.org/lang/pt-BR/)).
