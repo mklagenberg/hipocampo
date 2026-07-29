@@ -2,6 +2,11 @@
 
 Histórico de versões da metodologia em si. Segue [SemVer](https://semver.org/lang/pt-BR/) — ver SPEC.md, seção 9.
 
+## [1.6.0] — 2026-07-29
+
+### Adicionado
+- Rotina obrigatória a cada release da metodologia (SPEC.md, seção 9): checagem de necessidade de migração (mesmo que a conclusão seja "nenhuma ação necessária") e sincronização do `hipocampo-toolkit` (CLAUDE.md e demais arquivos afetados). Primeira execução retroativa desta rodada: `hipocampo-toolkit/CLAUDE.md` corrigido de "^1.0.0" (desatualizado havia cinco releases) para "^1.5.0", e adicionados templates de LICENSE pros perfis pessoal/corporativo em `hipocampo-toolkit/license-templates/`, corrigindo a herança indevida do Apache-2.0 da metodologia em repositórios de conteúdo recém-instanciados. Ver `decisions/0014-rotina-obrigatoria-de-release.md`.
+
 ## [1.5.0] — 2026-07-29
 
 ### Adicionado
