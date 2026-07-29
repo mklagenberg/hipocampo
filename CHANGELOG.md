@@ -2,6 +2,15 @@
 
 Histórico de versões da metodologia em si. Segue [SemVer](https://semver.org/lang/pt-BR/) — ver SPEC.md, seção 9.
 
+## [1.7.0] — 2026-07-29
+
+### Adicionado
+- `docs/MODELOS-DE-IA.md` — referência sobre o que importa (e o que não importa) num modelo/produto de IA pra operar o Hipocampo bem: janela de contexto e frontmatter-first, natureza probabilística das rotinas, MCP do GitHub como denominador comum entre ferramentas.
+- `docs/PERFORMANCE-E-GRAFO.md` — como o modelo de retrieval/grafo do Hipocampo funciona, e comparação explícita com o OKF (Open Knowledge Format) da Google, publicado em junho de 2026.
+
+### Alterado
+- `GETTING-STARTED.md` — nova seção 0 com ordem de leitura recomendada pra quem está aprendendo a metodologia pela primeira vez; passo de instanciação atualizado com a troca de LICENSE (herdado incorretamente como Apache-2.0) e a personalização/instalação da skill real (`hipocampo-toolkit/skill/SKILL.md`); referências à skill "stub" removidas.
+
 ## [1.6.0] — 2026-07-29
 
 ### Adicionado
