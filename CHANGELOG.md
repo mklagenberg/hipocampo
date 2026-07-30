@@ -9,17 +9,20 @@ Trabalho acumulado em `main`, ainda sem tag/release publicada — ver `decisions
 ### Adicionado
 - SPEC.md, seção 5-B: **frontmatter audit** — ritual determinístico (script, não julgamento de IA), cadência recomendada diária, roda antes da REM, produz `meta/fila-de-manutencao.md`. Ver `decisions/0017-frontmatter-audit-ritual-deterministico.md`.
 - SPEC.md, seção 5-C: **auditoria estrutural semanal** — atomicidade, posicionamento, e verificação de vazamento de dado sensível contra a política por tipo de instância (primeiro mecanismo de enforcement da DR0009). Ver `decisions/0019-auditoria-estrutural-semanal.md`.
-- SPEC.md, seção 11: **AGENTS.md como arquivo canônico de instrução**, `CLAUDE.md` vira ponteiro fino. Ver `decisions/0015-agents-md-arquivo-canonico-instrucao.md`.
+- SPEC.md, seção 11: **AGENTS.md como arquivo canônico de instrução**, `CLAUDE.md` vira ponteiro fino. `AGENTS.md` também passa a declarar o **tipo de instância** (`corporativa`/`pessoal`), critério do qual variante da política de dados sensíveis (seção 2-A) se aplica ao repositório — nunca mais inferido pelo agente. Ver `decisions/0015-agents-md-arquivo-canonico-instrucao.md` e `decisions/0022-tipo-de-instancia-declarado-no-agents-md.md`.
 - SPEC.md, seção 12: **identidade de autor multi-conta** — registro de contas de git equivalentes ao mesmo `author`, e regra de direção de convite (pessoal convida profissional pro second brain pessoal, nunca o inverso). Ver `decisions/0020-identidade-autor-multi-conta.md`.
 - `decisions/0016-memoria-curto-prazo-sanitizacao.md` — refina o modelo de camadas de memória (DR0008): curto prazo é estágio de sanitização (atomicidade, posicionamento), não só captura bruta; cada repositório tem seu próprio `inbox/`.
 - `decisions/0018-validacao-frontmatter-tempo-de-leitura.md` — extensão da mecânica CRUD/READ (DR0012): toda leitura valida frontmatter contra a norma, sinaliza `ttl` vencido e sugere revalidação por pesquisa quando aplicável.
 - `decisions/0021-politica-de-cadencia-de-release.md` — acumular trabalho antes de cortar release, hotfix/PATCH pra urgência genuína.
+- `decisions/0022-tipo-de-instancia-declarado-no-agents-md.md` — fecha uma assimetria na auditoria estrutural (DR0019): a função de vazamento de dado sensível estava ancorada só na política genérica (seção 2-A), sem dizer onde o tipo de instância que a política referencia é declarado. Agora está explicitamente no `AGENTS.md`, mesmo artefato que já ancorava a função de posicionamento.
 
 ### Alterado
 - SPEC.md, seção 5-A: ritual REM ganha segunda função ("atualizar memórias antigas", processando a fila do frontmatter audit) e cadência recomendada diária.
 - SPEC.md, seção 2-B: READ agora inclui validação de frontmatter em tempo real, não só leitura frontmatter-first.
+- SPEC.md, seção 2-A: nova frase de fechamento apontando pro campo "tipo de instância" do `AGENTS.md` como critério de qual variante da política se aplica (DR0022).
+- SPEC.md, seção 5-C: função 3 (vazamento de dado sensível) reescrita pra citar o mesmo campo "tipo de instância" do `AGENTS.md`, no mesmo padrão já usado pela função 2 (posicionamento).
 - SPEC.md, seção 9: nota sobre a nova política de cadência de release.
-- Corrigido o cabeçalho de versão do SPEC.md, que estava desatualizado em "1.6.0" (não acompanhava os releases v1.7.0-v1.9.0, que não alteraram o SPEC.md em si) — agora reflete a versão atual, 1.9.0.
+- Corrigido o cabeçalho de versão do SPEC.md, que estava desatualizado em "1.6.0" (não acompanhava os releases v1.7.0-v1.9.0, que não alteraram o SPEC.md em si) — agora reflete a versão atual, 1.9.0 + não lançado.
 
 ## [1.9.0] — 2026-07-29
 
