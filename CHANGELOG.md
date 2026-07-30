@@ -11,17 +11,22 @@ Trabalho acumulado em `main`, ainda sem tag/release publicada — ver `decisions
 - SPEC.md, seção 5-C: **auditoria estrutural semanal** — atomicidade, posicionamento, e verificação de vazamento de dado sensível contra a política por tipo de instância (primeiro mecanismo de enforcement da DR0009). Ver `decisions/0019-auditoria-estrutural-semanal.md`.
 - SPEC.md, seção 11: **AGENTS.md como arquivo canônico de instrução**, `CLAUDE.md` vira ponteiro fino. `AGENTS.md` também passa a declarar o **tipo de instância** (`corporativa`/`pessoal`), critério do qual variante da política de dados sensíveis (seção 2-A) se aplica ao repositório — nunca mais inferido pelo agente. Ver `decisions/0015-agents-md-arquivo-canonico-instrucao.md` e `decisions/0022-tipo-de-instancia-declarado-no-agents-md.md`.
 - SPEC.md, seção 12: **identidade de autor multi-conta** — registro de contas de git equivalentes ao mesmo `author`, e regra de direção de convite (pessoal convida profissional pro second brain pessoal, nunca o inverso). Ver `decisions/0020-identidade-autor-multi-conta.md`.
+- SPEC.md, seção 9: **critério operacional de escopo SemVer** — teste concreto pra classificar MAJOR/MINOR/PATCH ("quebra ou só fica atrasado?"), em vez de julgamento solto. Ver `decisions/0023-criterio-operacional-escopo-semver.md`.
+- **`UPGRADE.md`** (novo) — checklist cumulativa e idempotente de atualização de instância: o que uma instância deveria ter, hoje, pra estar aderente à versão atual, não importa de qual versão antiga ela partiu. Diferente do `MIGRATIONS.md` (só saltos MAJOR). Exercitado contra um caso hipotético (instância parada em v1.3.0) e validado contra um caso real (`hipocampo-company-vault`, ainda no estágio pré-v1.7.0: skill stub, `CLAUDE.md` nunca migrado). Ver `decisions/0024-upgrade-md-checklist-cumulativa.md`.
 - `decisions/0016-memoria-curto-prazo-sanitizacao.md` — refina o modelo de camadas de memória (DR0008): curto prazo é estágio de sanitização (atomicidade, posicionamento), não só captura bruta; cada repositório tem seu próprio `inbox/`.
 - `decisions/0018-validacao-frontmatter-tempo-de-leitura.md` — extensão da mecânica CRUD/READ (DR0012): toda leitura valida frontmatter contra a norma, sinaliza `ttl` vencido e sugere revalidação por pesquisa quando aplicável.
 - `decisions/0021-politica-de-cadencia-de-release.md` — acumular trabalho antes de cortar release, hotfix/PATCH pra urgência genuína.
 - `decisions/0022-tipo-de-instancia-declarado-no-agents-md.md` — fecha uma assimetria na auditoria estrutural (DR0019): a função de vazamento de dado sensível estava ancorada só na política genérica (seção 2-A), sem dizer onde o tipo de instância que a política referencia é declarado. Agora está explicitamente no `AGENTS.md`, mesmo artefato que já ancorava a função de posicionamento.
+- `decisions/0023-criterio-operacional-escopo-semver.md` — ver acima.
+- `decisions/0024-upgrade-md-checklist-cumulativa.md` — ver acima.
 
 ### Alterado
 - SPEC.md, seção 5-A: ritual REM ganha segunda função ("atualizar memórias antigas", processando a fila do frontmatter audit) e cadência recomendada diária.
 - SPEC.md, seção 2-B: READ agora inclui validação de frontmatter em tempo real, não só leitura frontmatter-first.
 - SPEC.md, seção 2-A: nova frase de fechamento apontando pro campo "tipo de instância" do `AGENTS.md` como critério de qual variante da política se aplica (DR0022).
 - SPEC.md, seção 5-C: função 3 (vazamento de dado sensível) reescrita pra citar o mesmo campo "tipo de instância" do `AGENTS.md`, no mesmo padrão já usado pela função 2 (posicionamento).
-- SPEC.md, seção 9: nota sobre a nova política de cadência de release.
+- SPEC.md, seção 9: reescrita — critério operacional de escopo (DR0023), regra de tag + Release sempre publicados juntos (fecha a assimetria real da v1.3.0, que tem tag sem Release), e rotina de release expandida pra incluir a atualização do `UPGRADE.md` (DR0024).
+- SPEC.md, seção 11: nota final apontando pro `UPGRADE.md` como checklist completo de migração `CLAUDE.md` → `AGENTS.md`.
 - Corrigido o cabeçalho de versão do SPEC.md, que estava desatualizado em "1.6.0" (não acompanhava os releases v1.7.0-v1.9.0, que não alteraram o SPEC.md em si) — agora reflete a versão atual, 1.9.0 + não lançado.
 
 ## [1.9.0] — 2026-07-29

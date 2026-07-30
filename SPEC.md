@@ -4,7 +4,7 @@ Versão: 1.9.0 + não lançado · Segue [SemVer](https://semver.org/lang/pt-BR/)
 
 > **Nota de versão:** a última release formal (tag + GitHub Release) é **v1.9.0**. Este documento já inclui trabalho aceito e mesclado em `main` além dessa release (seções 5-B, 5-C, 11 e 12) — ver `CHANGELOG.md`, seção `[Não lançado]`, e `decisions/0021-politica-de-cadencia-de-release.md`. Se você está checando compatibilidade pra uma instância existente, confira contra a tag mais recente, não contra este arquivo em `main`, até a próxima release ser cortada.
 
-Este documento é a especificação normativa da metodologia Hipocampo: o schema de frontmatter, as regras de retrieval e as convenções que qualquer instância (repositório de conteúdo) precisa seguir para ser considerada compatível com uma versão do Hipocampo. Não é um manual de uso — para isso, ver [GETTING-STARTED.md](GETTING-STARTED.md). Não é um documento de limitações — para isso, ver [DISCLAIMER.md](DISCLAIMER.md). Não é um guia de boas práticas — para isso, ver [BEST-PRACTICES.md](BEST-PRACTICES.md).
+Este documento é a especificação normativa da metodologia Hipocampo: o schema de frontmatter, as regras de retrieval e as convenções que qualquer instância (repositório de conteúdo) precisa seguir para ser considerada compatível com uma versão do Hipocampo. Não é um manual de uso — para isso, ver [GETTING-STARTED.md](GETTING-STARTED.md). Não é um documento de limitações — para isso, ver [DISCLAIMER.md](DISCLAIMER.md). Não é um guia de boas práticas — para isso, ver [BEST-PRACTICES.md](BEST-PRACTICES.md). Não é um guia de atualização de instância existente — para isso, ver [UPGRADE.md](UPGRADE.md).
 
 ## 1. Escopo
 
@@ -206,9 +206,11 @@ Nenhuma camada sobrescreve um invariante. Se um pedido violar um invariante, o a
 
 ## 9. Versionamento
 
-A metodologia em si segue [SemVer](https://semver.org/lang/pt-BR/): MAJOR para mudança que quebra compatibilidade (exige migração ativa, ver `MIGRATIONS.md`), MINOR para capacidade nova compatível com o que já existe, PATCH para clarificação ou correção que não muda comportamento. Cada versão liberada é marcada com uma tag de git. Cada instância declara, no próprio `AGENTS.md`/`CLAUDE.md`, a versão ou faixa de compatibilidade que implementa (exemplo: "Segue Hipocampo ^1.0.0").
+A metodologia em si segue [SemVer](https://semver.org/lang/pt-BR/): MAJOR para mudança que quebra compatibilidade (exige migração ativa, ver `MIGRATIONS.md`), MINOR para capacidade nova compatível com o que já existe, PATCH para clarificação ou correção que não muda comportamento. O escopo de cada mudança é classificado por um teste operacional concreto, não por julgamento solto: MAJOR é quando uma instância existente, sem nenhuma ação, passaria a estar formalmente incompatível; MINOR é quando a instância continua válida sem ação, ainda que fique atrasada em relação à capacidade nova; PATCH é clarificação/correção sem capacidade nova. Ver `decisions/0023-criterio-operacional-escopo-semver.md`.
 
-Toda nova versão segue uma rotina obrigatória antes de ser considerada completa — checagem de necessidade de migração e sincronização do `hipocampo-toolkit`. Ver `decisions/0014-rotina-obrigatoria-de-release.md`.
+Cada versão liberada é marcada com uma tag de git **e** uma GitHub Release publicada, sempre juntas, no mesmo passo da rotina de release — nunca uma sem a outra. Cada instância declara, no próprio `AGENTS.md`/`CLAUDE.md`, a versão ou faixa de compatibilidade que implementa (exemplo: "Segue Hipocampo ^1.0.0").
+
+Toda nova versão segue uma rotina obrigatória antes de ser considerada completa: classificação de escopo (acima), tag + Release, atualização do `CHANGELOG.md`, sincronização do `hipocampo-toolkit`, e atualização do **[UPGRADE.md](UPGRADE.md)** — checklist cumulativa e idempotente do que uma instância existente precisa ter pra estar aderente à versão atual, diferente do `MIGRATIONS.md` (que só cobre saltos MAJOR). Ver `decisions/0014-rotina-obrigatoria-de-release.md` e `decisions/0024-upgrade-md-checklist-cumulativa.md`.
 
 Corte de release (tag + GitHub Release publicados) não precisa acontecer a cada mudança aceita — trabalho acumula em `main` até massa crítica ou pausa natural, ver `decisions/0021-politica-de-cadencia-de-release.md`. Mudança urgente (correção, não capacidade nova) sai como PATCH, fora do ciclo normal de acúmulo.
 
@@ -222,7 +224,7 @@ Trazer conteúdo de fora do Hipocampo (sistema legado, export de outra ferrament
 
 `CLAUDE.md` continua existindo em toda instância, mas como ponteiro fino — poucas linhas, remetendo pra `AGENTS.md` como fonte de verdade, sem duplicar conteúdo. Ver `decisions/0015-agents-md-arquivo-canonico-instrucao.md`.
 
-Instâncias já existentes antes desta seção (v1.6.0 e anteriores, quando `CLAUDE.md` ainda era o arquivo canônico) migram na próxima vez que forem tocadas — não é automático (mesmo princípio de qualquer mudança MINOR, ver DISCLAIMER.md).
+Instâncias já existentes antes desta seção (v1.6.0 e anteriores, quando `CLAUDE.md` ainda era o arquivo canônico) migram na próxima vez que forem tocadas — não é automático (mesmo princípio de qualquer mudança MINOR, ver DISCLAIMER.md). Ver `UPGRADE.md` pro checklist completo de migração.
 
 ## 12. Identidade de autor multi-conta
 
