@@ -2,6 +2,25 @@
 
 Histórico de versões da metodologia em si. Segue [SemVer](https://semver.org/lang/pt-BR/) — ver SPEC.md, seção 9.
 
+## [Não lançado]
+
+Trabalho acumulado em `main`, ainda sem tag/release publicada — ver `decisions/0021-politica-de-cadencia-de-release.md`. Vira uma seção versionada de verdade quando a release for cortada.
+
+### Adicionado
+- SPEC.md, seção 5-B: **frontmatter audit** — ritual determinístico (script, não julgamento de IA), cadência recomendada diária, roda antes da REM, produz `meta/fila-de-manutencao.md`. Ver `decisions/0017-frontmatter-audit-ritual-deterministico.md`.
+- SPEC.md, seção 5-C: **auditoria estrutural semanal** — atomicidade, posicionamento, e verificação de vazamento de dado sensível contra a política por tipo de instância (primeiro mecanismo de enforcement da DR0009). Ver `decisions/0019-auditoria-estrutural-semanal.md`.
+- SPEC.md, seção 11: **AGENTS.md como arquivo canônico de instrução**, `CLAUDE.md` vira ponteiro fino. Ver `decisions/0015-agents-md-arquivo-canonico-instrucao.md`.
+- SPEC.md, seção 12: **identidade de autor multi-conta** — registro de contas de git equivalentes ao mesmo `author`, e regra de direção de convite (pessoal convida profissional pro second brain pessoal, nunca o inverso). Ver `decisions/0020-identidade-autor-multi-conta.md`.
+- `decisions/0016-memoria-curto-prazo-sanitizacao.md` — refina o modelo de camadas de memória (DR0008): curto prazo é estágio de sanitização (atomicidade, posicionamento), não só captura bruta; cada repositório tem seu próprio `inbox/`.
+- `decisions/0018-validacao-frontmatter-tempo-de-leitura.md` — extensão da mecânica CRUD/READ (DR0012): toda leitura valida frontmatter contra a norma, sinaliza `ttl` vencido e sugere revalidação por pesquisa quando aplicável.
+- `decisions/0021-politica-de-cadencia-de-release.md` — acumular trabalho antes de cortar release, hotfix/PATCH pra urgência genuína.
+
+### Alterado
+- SPEC.md, seção 5-A: ritual REM ganha segunda função ("atualizar memórias antigas", processando a fila do frontmatter audit) e cadência recomendada diária.
+- SPEC.md, seção 2-B: READ agora inclui validação de frontmatter em tempo real, não só leitura frontmatter-first.
+- SPEC.md, seção 9: nota sobre a nova política de cadência de release.
+- Corrigido o cabeçalho de versão do SPEC.md, que estava desatualizado em "1.6.0" (não acompanhava os releases v1.7.0-v1.9.0, que não alteraram o SPEC.md em si) — agora reflete a versão atual, 1.9.0.
+
 ## [1.9.0] — 2026-07-29
 
 ### Adicionado
