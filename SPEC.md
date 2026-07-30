@@ -1,6 +1,8 @@
 # Hipocampo — SPEC
 
-Versão: 1.9.0 · Segue [SemVer](https://semver.org/lang/pt-BR/)
+Versão: 1.9.0 + não lançado · Segue [SemVer](https://semver.org/lang/pt-BR/)
+
+> **Nota de versão:** a última release formal (tag + GitHub Release) é **v1.9.0**. Este documento já inclui trabalho aceito e mesclado em `main` além dessa release (seções 5-B, 5-C, 11 e 12) — ver `CHANGELOG.md`, seção `[Não lançado]`, e `decisions/0021-politica-de-cadencia-de-release.md`. Se você está checando compatibilidade pra uma instância existente, confira contra a tag mais recente, não contra este arquivo em `main`, até a próxima release ser cortada.
 
 Este documento é a especificação normativa da metodologia Hipocampo: o schema de frontmatter, as regras de retrieval e as convenções que qualquer instância (repositório de conteúdo) precisa seguir para ser considerada compatível com uma versão do Hipocampo. Não é um manual de uso — para isso, ver [GETTING-STARTED.md](GETTING-STARTED.md). Não é um documento de limitações — para isso, ver [DISCLAIMER.md](DISCLAIMER.md). Não é um guia de boas práticas — para isso, ver [BEST-PRACTICES.md](BEST-PRACTICES.md).
 
