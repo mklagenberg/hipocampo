@@ -70,6 +70,8 @@ Detalhe técnico de vulnerabilidade ou exploração ativa (payload de ataque, qu
 
 Quando um documento inteiro depende estruturalmente de um tipo de dado banido (não dá pra adaptar removendo só o trecho problemático), o agente não decide sozinho entre publicar mesmo assim ou descartar — sinaliza a violação ao humano responsável pela instância e aguarda decisão explícita. Ver `decisions/0009-politica-de-privacidade-por-instancia.md`. A auditoria estrutural semanal (seção 5-C) é o mecanismo periódico que verifica o cumprimento desta política.
 
+**Qual variante desta política se aplica a um repositório não é inferido pelo agente** a partir do nome do repositório ou do contexto da conversa — é lido do campo "tipo de instância" (`corporativa` ou `pessoal`), declarado obrigatoriamente no bloco "Escopo do repositório" do `AGENTS.md` daquele repositório (seção 11). Ver `decisions/0022-tipo-de-instancia-declarado-no-agents-md.md`.
+
 ## 2-B. Mecânica CRUD e leitura frontmatter-first
 
 O ciclo de vida do documento (seção 2, campo `status`) implementa as quatro operações de um CRUD: **Create** (criação com frontmatter completo), **Read** (consulta por agente ou humano), **Update** (edição de conteúdo com incremento de `revision`), **Delete** (mitigado pelo invariante 3 — nunca apagar fisicamente, só `archived`/`superseded`, com exceção estreita da `decisions/0010`). Ver `decisions/0012-mecanica-crud-frontmatter-first.md`.
@@ -145,7 +147,7 @@ Frontmatter audit nunca decide disposição — só relata. Decisão de disposi�
 
 ## 5-C. Auditoria estrutural semanal
 
-Ritual novo, cadência recomendada semanal, com três funções: (1) revisar atomicidade de documentos já consolidados; (2) revisar posicionamento — se a estrutura de `category`/pastas ainda faz sentido, se um documento está fora do escopo do repositório onde vive (ver seção 11, escopo declarado no `AGENTS.md`); (3) verificar vazamento de dado sensível contra a política por tipo de instância (seção 2-A). É o primeiro mecanismo periódico de verificação dessa política, que existe como regra desde a v1.3.0 sem nenhuma checagem formal até aqui.
+Ritual novo, cadência recomendada semanal, com três funções: (1) revisar atomicidade de documentos já consolidados; (2) revisar posicionamento — se a estrutura de `category`/pastas ainda faz sentido, se um documento está fora do escopo do repositório onde vive (ver seção 11, escopo declarado no `AGENTS.md`); (3) verificar vazamento de dado sensível contra a política por tipo de instância (seção 2-A) — usando como critério o **tipo de instância** (`corporativa`/`pessoal`) declarado no mesmo bloco "Escopo do repositório" do `AGENTS.md` (seção 11), nunca inferido pelo agente (ver `decisions/0022-tipo-de-instancia-declarado-no-agents-md.md`). É o primeiro mecanismo periódico de verificação dessa política, que existe como regra desde a v1.3.0 sem nenhuma checagem formal até aqui.
 
 Qualquer achado é sempre apresentado ao humano responsável antes de qualquer ação — mover, dividir ou remover documento nunca acontece sozinho (invariante 5). Ver `decisions/0019-auditoria-estrutural-semanal.md`.
 
@@ -216,7 +218,7 @@ Trazer conteúdo de fora do Hipocampo (sistema legado, export de outra ferrament
 
 ## 11. Arquivo de instrução: AGENTS.md e CLAUDE.md
 
-`AGENTS.md` é o arquivo canônico de instrução operacional de qualquer instância Hipocampo — invariantes, extensões locais (seção 8), referência de frontmatter, e o **escopo do repositório**: o que deve e o que não deve ser armazenado ali, e pra onde vai o que não pertence. Este último item é obrigatório, nunca implícito — mesmo princípio das extensões locais — e é a fonte que os rituais de manutenção (REM, seção 5-A; auditoria estrutural, seção 5-C) consultam pra decidir se um documento pertence ao repositório onde está.
+`AGENTS.md` é o arquivo canônico de instrução operacional de qualquer instância Hipocampo — invariantes, extensões locais (seção 8), referência de frontmatter, e o **escopo do repositório**: o que deve e o que não deve ser armazenado ali, e pra onde vai o que não pertence, além do **tipo de instância** (`corporativa` ou `pessoal`, ver seção 2-A). Estes itens são obrigatórios, nunca implícitos — mesmo princípio das extensões locais — e são a fonte que os rituais de manutenção (REM, seção 5-A; auditoria estrutural, seção 5-C) consultam pra decidir se um documento pertence ao repositório onde está e qual variante da política de dados sensíveis se aplica.
 
 `CLAUDE.md` continua existindo em toda instância, mas como ponteiro fino — poucas linhas, remetendo pra `AGENTS.md` como fonte de verdade, sem duplicar conteúdo. Ver `decisions/0015-agents-md-arquivo-canonico-instrucao.md`.
 
