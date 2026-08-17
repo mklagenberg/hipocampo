@@ -1,54 +1,9 @@
-change:
-  id: "0026-0028-taxonomia-fato-relato-opiniao-e-ciclo-de-vida"
-  title: "Taxonomia fato/relato/opinião/lembrança + ciclo de vida cross-repositório (Promote/Depromote/Redbutton)"
-  class: "normative"
-  semver: "minor"
-  status: "implemented"
-  structural: true
-  summary: "Sinaliza opinião/lembrança pessoal em instância corporativa e formaliza ações de mover/remover conteúdo entre repositórios do mesmo titular."
-  backfill: true
-  backfill_note: "Change Set retroativo — trabalho já mesclado via PR #22 antes deste mecanismo existir (decisions/0031). Primeiro exercício de validação do template."
-
-git:
-  base_ref: "main (pré-PR #22)"
-  target_branch: "main"
-  merged_pr: 22
-
-triggers:
-  regra_normativa: true
-  schema_frontmatter: true
-  mecanismo_cross_repositorio: true
-  politica_dados_sensiveis: true
-  release: false
-
-affected:
-  specification:
-    status: "updated"
-    paths: ["SPEC.md#2-frontmatter-schema-unificado", "SPEC.md#8-extensãopersonalização-e-precedência-do-agente", "SPEC.md#13-ações-de-ciclo-de-vida-cross-repositório-promote-depromote-redbutton"]
-  decisions:
-    status: "updated"
-    paths: ["decisions/0026-relato-vs-opiniao-em-instancia-corporativa.md", "decisions/0027-promote-depromote-redbutton.md", "decisions/0028-gatilho-ampliado-remediacao-2a.md"]
-  changelog:
-    status: "updated"
-    paths: ["CHANGELOG.md"]
-  upgrade:
-    status: "not-applicable"
-    paths: []
-    rationale: "Nenhum release cortado ainda contendo essa mudança — trabalho acumulado em [Não lançado] (decisions/0021); UPGRADE.md será atualizado no corte da v2.0.0."
-  migrations:
-    status: "not-applicable"
-    paths: []
-    rationale: "Mudança aditiva/MINOR isoladamente — não quebra instância existente pelo teste da decisions/0023."
-  roadmap:
-    status: "not-applicable"
-    paths: []
-    rationale: "ROADMAP.md não existia ainda quando este trabalho foi mesclado (criado só na Fase B, PR #24, posterior)."
-  conformance:
-    status: "not-applicable"
-    paths: []
-    rationale: "moda.yaml e conformance/moda.yaml não existiam ainda quando este trabalho foi mesclado (criados só na Fase B, PR #24, posterior)."
-
-validation:
-  commands: []
-  evidence: ["Revisão humana de Mau via GitHub UI, merge manual do PR #22 em 2026-08-17T18:59:20Z."]
-  notes: "Nenhuma validação determinística existia neste momento (achado major 4 da auditoria MODA) — evidência é só revisão humana."
+# Movido / Moved: este documento foi traduzido e renomeado para
+# changes/0026-0028-fact-account-opinion-memory-taxonomy-and-cross-repo-lifecycle/impact.yaml
+# Este arquivo é mantido como redirecionamento e nunca será apagado
+# (ver invariante "documento nunca é apagado fisicamente", SPEC.md seção 8).
+#
+# This document was translated and renamed to
+# changes/0026-0028-fact-account-opinion-memory-taxonomy-and-cross-repo-lifecycle/impact.yaml
+# This file is kept as a redirect and will never be deleted
+# (see the "a document is never physically deleted" invariant, SPEC.md section 8).
