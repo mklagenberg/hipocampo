@@ -28,6 +28,10 @@ inputs:
   - id: "instance_scope"
     required: true
     description: "What belongs in this repository and what doesn't (fills in AGENTS.md, section 'Scope of this repository')."
+  - id: "language"
+    required: false
+    default: "en"
+    description: "BCP-47 tag for the language this vault's content will actually be written in (e.g., 'en', 'pt-BR'). Defaults to English, matching the scaffold's own language — confirm with the user before finalizing rather than assuming the default (hipocampo/decisions/0034)."
 
 outputs:
   - path: "AGENTS.md"
@@ -57,7 +61,7 @@ outputs:
   - path: "hipocampo.yaml"
     operation: "generate"
     ownership: "managed-structure"
-    note: "Vault manifest (hipocampo/decisions/0033); domain fixed to 'pessoal' for this profile."
+    note: "Vault manifest (hipocampo/decisions/0033, hipocampo/decisions/0034); domain fixed to 'pessoal' for this profile, language defaults to 'en' unless overridden by the collected input."
 
 conflicts:
   default: "stop-and-report"

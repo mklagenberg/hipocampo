@@ -20,21 +20,21 @@ controls:
     evidence: ["README.md", "DISCLAIMER.md"]
   activation_and_proportionality:
     status: "partial"
-    evidence: ["DISCLAIMER.md", "SPEC.md#2-a-política-de-dados-sensíveis-por-tipo-de-instância"]
+    evidence: ["DISCLAIMER.md", "SPEC.md#2-a-sensitive-data-policy-by-instance-type"]
     notes: ["Recommended/not-recommended scenarios exist; an explicit rule for how rigor/autonomy/evidence/cost scale with risk is missing."]
   human_reference_practice:
     status: "satisfied"
     evidence: ["BEST-PRACTICES.md", "GETTING-STARTED.md"]
   inputs_outputs_and_invariants:
     status: "satisfied"
-    evidence: ["SPEC.md#2-frontmatter-schema-unificado", "SPEC.md#8-extensãopersonalização-e-precedência-do-agente", "DISCLAIMER.md"]
+    evidence: ["SPEC.md#2-frontmatter-unified-schema", "SPEC.md#8-extensioncustomization-and-agent-precedence", "DISCLAIMER.md"]
   decomposition_and_control_flow:
     status: "partial"
-    evidence: ["SPEC.md#5-a-ritual-rem-e-camadas-de-memória", "SPEC.md#5-b-frontmatter-audit", "SPEC.md#5-c-auditoria-estrutural-semanal"]
+    evidence: ["SPEC.md#5-a-rem-ritual-and-memory-layers", "SPEC.md#5-b-frontmatter-audit", "SPEC.md#5-c-weekly-structural-audit"]
     notes: ["Rituals are well described; no explicit model of stages/gates/parallelism/stop conditions in MODA terms."]
   distribution_of_agency:
     status: "partial"
-    evidence: ["SPEC.md#8-extensãopersonalização-e-precedência-do-agente", "skill/references/instanciacao.md"]
+    evidence: ["SPEC.md#8-extensioncustomization-and-agent-precedence", "skill/references/instantiation.md"]
     notes: ["Invariant 5 and the recurring write gates exist in practice — including in the new agent-driven instantiation procedure (Phase D); never explicitly classified as deterministic/agent-reasoned/tool-executed/human-decided/hybrid."]
   orchestration:
     status: "not-applicable"
@@ -46,14 +46,14 @@ controls:
     notes: ["Ritual outputs exist (e.g., meta/fila-de-manutencao.md) but are not formalized as a contract (completion criterion, error state, control handback). The scaffold profiles (Phase D) already formally declare inputs/outputs/conflicts, but only for instantiation — not for the recurring rituals."]
   state_context_and_knowledge:
     status: "satisfied"
-    evidence: ["SPEC.md#5-a-ritual-rem-e-camadas-de-memória", "SPEC.md#6-related-entre-repositórios-o-registry"]
+    evidence: ["SPEC.md#5-a-rem-ritual-and-memory-layers", "SPEC.md#6-related-across-repositories-the-registry"]
   quality_and_evaluation:
     status: "missing"
     evidence: []
     notes: ["No representative test scenario, baseline, or acceptance threshold formalized. See ROADMAP.md."]
   safety_security_and_privacy:
     status: "satisfied"
-    evidence: ["SPEC.md#2-a-política-de-dados-sensíveis-por-tipo-de-instância", "SPEC.md#8-extensãopersonalização-e-precedência-do-agente"]
+    evidence: ["SPEC.md#2-a-sensitive-data-policy-by-instance-type", "SPEC.md#8-extensioncustomization-and-agent-precedence"]
   failure_and_recovery:
     status: "missing"
     evidence: []
@@ -63,15 +63,15 @@ controls:
     evidence: ["decisions/0025-skill-is-client-side-never-per-repository.md", "docs/MULTI-TOOL-USAGE.md", "docs/AI-MODELS.md"]
   packaging_and_synchronization:
     status: "partial"
-    evidence: ["UPGRADE.md", "moda.yaml", "skill/manifest.yaml", "scaffold/skeleton/hipocampo.yaml", "decisions/0033-hipocampo-yaml-per-vault-manifest.md"]
-    notes: ["UPGRADE.md is strong; skill/manifest.yaml (the skill's machine manifest) and the per-vault hipocampo.yaml template now exist (Phase D). None of the 4 existing real vaults has been retroactively updated with hipocampo.yaml yet — see UPGRADE.md."]
+    evidence: ["UPGRADE.md", "moda.yaml", "skill/manifest.yaml", "scaffold/skeleton/hipocampo.yaml", "decisions/0033-hipocampo-yaml-per-vault-manifest.md", "decisions/0034-repository-and-vault-language-policy.md"]
+    notes: ["UPGRADE.md is strong; skill/manifest.yaml (the skill's machine manifest) and the per-vault hipocampo.yaml template now exist (Phase D), extended with instance.language (decisions/0034). None of the 4 existing real vaults has been retroactively updated with hipocampo.yaml yet — see UPGRADE.md."]
   evolution:
     status: "partial"
-    evidence: ["CHANGELOG.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "ROADMAP.md", "SPEC.md#9-versionamento"]
+    evidence: ["CHANGELOG.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "ROADMAP.md", "SPEC.md#9-versioning"]
     notes: ["ROADMAP.md and the repository type taxonomy (decisions/0029-0030) are already complete; a declared cadence for auditing the methodology itself is still missing."]
   specification_driven_change_control:
     status: "partial"
-    evidence: ["docs/change-management.md", "decisions/0031-change-set-mechanism.md", "changes/0026-0028-fact-account-opinion-memory-taxonomy-and-cross-repo-lifecycle/", "changes/0032-0033-scaffolding-and-vault-manifest/"]
+    evidence: ["docs/change-management.md", "decisions/0031-change-set-mechanism.md", "changes/0026-0028-fact-account-opinion-memory-taxonomy-and-cross-repo-lifecycle/", "changes/0032-0033-scaffolding-and-vault-manifest/", "changes/0034-repository-and-vault-language-policy/"]
     notes: ["The Change Set mechanism exists and is documented, with a backfill exercise (PR #22) and a prospective Change Set (Phase D, 0032/0033) validating the template in both modes. Still no deterministic validation comparing impact.yaml against the actual diff (see quality_and_evaluation)."]
   repository_contract:
     status: "partial"

@@ -26,6 +26,7 @@ Before changing the methodology's structure, read `moda.yaml`, `conformance/moda
 
 ## Working rules
 
+- Write all content contributed to this repository (`SPEC.md`, `decisions/`, `docs/`, `skill/`, `scaffold/`) in English — see `decisions/0034-repository-and-vault-language-policy.md`. This does not apply to a vault (a content repository generated from this methodology): a vault's own working language is declared in that vault's `hipocampo.yaml`, independent of this repository's language.
 - Preserve the distinction between methodology, framework, method, process, procedure, workflow, standard, prompt, skill, toolkit, and implementation (MODA SPEC, section 3) — `SPEC.md` itself already uses these distinctions consistently, even without MODA's explicit RFC 2119 keywords.
 - Treat the repository as a system of record. Do not treat an unrecorded conversation as the sole source of durable intent — a structural decision always becomes a Decision Record.
 - Point to evidence; do not copy normative rules into a conformance mapping or audit report.

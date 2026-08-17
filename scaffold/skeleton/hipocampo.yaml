@@ -3,6 +3,11 @@
 # hipocampo/decisions/0029), while this same repository's AGENTS.md uses the
 # original vocabulary ('Instance type': corporativa | pessoal). The divergence is
 # known and documented in hipocampo/decisions/0033 — not yet harmonized.
+# Language note: 'instance.language' below is this vault's own content language —
+# independent of hipocampo's own language (English, hipocampo/decisions/0034).
+# Defaults to "en" (the scaffold's own language); confirm with the operator before
+# finalizing, especially for a vault that will actually be written in another
+# language (e.g. "pt-BR").
 
 hipocampo:
   manifest_version: "1.0"
@@ -14,6 +19,7 @@ instance:
   repository: "<fill in: URL of this repository>"
   domain: "<fill in: pessoal | empresa>"
   tier: "<fill in: conteudo | vault>"
+  language: "en"
 
 scaffold:
   profile: "<fill in: pessoal | empresa>"
