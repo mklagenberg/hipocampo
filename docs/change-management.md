@@ -1,74 +1,74 @@
-# Change management orientado a especificação
+# Specification-driven change management
 
-Hipocampo trata uma mudança estrutural no repositório como mudança num sistema de contratos, não só uma coleção de arquivos. `SPEC.md` é a especificação normativa autoritativa; `decisions/`, `CHANGELOG.md`, `UPGRADE.md`, `MIGRATIONS.md`, `moda.yaml`/`conformance/moda.yaml`, e a cópia pessoal da skill são projeções sincronizadas desse contrato. Mecanismo adotado seguindo o modelo do [MODA](https://github.com/mklagenberg/moda) (`docs/change-management.md` deles) — ver `decisions/0031-mecanismo-de-change-set.md` pro racional completo da adoção.
+Hipocampo treats a structural change to the repository as a change to a system of contracts, not just a collection of files. `SPEC.md` is the authoritative normative specification; `decisions/`, `CHANGELOG.md`, `UPGRADE.md`, `MIGRATIONS.md`, `moda.yaml`/`conformance/moda.yaml`, and the personal copy of the skill are synchronized projections of that contract. Mechanism adopted following the [MODA](https://github.com/mklagenberg/moda) model (their `docs/change-management.md`) — see `decisions/0031-change-set-mechanism.md` for the full rationale behind the adoption.
 
-## Classes de mudança
+## Change classes
 
-| Classe | Significado | Exige Change Set? |
+| Class | Meaning | Requires a Change Set? |
 |---|---|---|
-| `editorial` | Wording, formatação, ou link, sem efeito semântico, operacional, estrutural, de segurança, ou de compatibilidade | Opcional, a menos que mude uma superfície de contrato protegida |
-| `operational` | Muda orientação de execução, rotina, empacotamento, ou skill, sem mudar obrigação normativa | Obrigatório |
-| `normative` | Adiciona, remove, ou muda uma obrigação, contrato público, fronteira de compatibilidade, ou significado de conformidade | Obrigatório |
+| `editorial` | Wording, formatting, or a link, with no semantic, operational, structural, security, or compatibility effect | Optional, unless it changes a protected contract surface |
+| `operational` | Changes execution guidance, a routine, packaging, or the skill, without changing a normative obligation | Required |
+| `normative` | Adds, removes, or changes an obligation, public contract, compatibility boundary, or meaning of conformance | Required |
 
-Os nomes das três classes ficam em inglês, mesmo com o resto do repositório em português — `editorial` em português carrega conotação de opinião/parecer que o termo original não tem (aqui é wording/formatação); manter o termo técnico evita esse ruído (será revisitado quando a Fase E de tradução do repositório acontecer).
+The names of the three classes stay in English, even with the rest of the repository in Portuguese — `editorial` in Portuguese carries a connotation of opinion/judgment that the original term doesn't have (here it means wording/formatting); keeping the technical term avoids that noise (this will be revisited when the repository's Phase E translation happens).
 
-Uma mudança aparentemente editorial é operacional ou normativa quando muda como um humano ou agente age, como uma instância valida algo, ou o que uma instância precisa implementar pra continuar aderente.
+An apparently editorial change is operational or normative when it changes how a human or agent acts, how an instance validates something, or what an instance needs to implement to remain conformant.
 
-## Change Set do Hipocampo
+## Hipocampo Change Set
 
-Uma mudança que exige Change Set vive em `changes/<change-id>/` e contém:
+A change that requires a Change Set lives at `changes/<change-id>/` and contains:
 
-- `proposal.md` — problema, contrato atual, contrato proposto, alternativas descartadas, riscos, critério de aceitação, compatibilidade/migração, recuperação;
-- `impact.yaml` — classificação legível por máquina, impacto SemVer, gatilhos, superfícies afetadas, validação.
+- `proposal.md` — problem, current contract, proposed contract, discarded alternatives, risks, acceptance criteria, compatibility/migration, recovery;
+- `impact.yaml` — machine-readable classification, SemVer impact, triggers, affected surfaces, validation.
 
-A proposta captura o raciocínio de *esta* mudança específica. Uma escolha estrutural durável também é registrada em `decisions/` — um Change Set não substitui uma Decision Record; eles respondem perguntas diferentes (mesma distinção de escopo já em uso entre Decision Record e `type: decision`, `SPEC.md` seção 7, só que aplicada aqui entre Change Set e Decision Record). Change Sets aceitos permanecem como evidência de rastreabilidade — nunca editados depois de aceitos, só superseded.
+The proposal captures the reasoning behind *this specific* change. A durable structural choice is also recorded in `decisions/` — a Change Set doesn't replace a Decision Record; they answer different questions (the same scope distinction already in use between a Decision Record and `type: decision`, `SPEC.md` section 7, just applied here between Change Set and Decision Record). Accepted Change Sets remain as traceability evidence — never edited after acceptance, only superseded.
 
-## Status de impacto
+## Impact status
 
-Toda superfície declarada em `impact.yaml` é classificada como:
+Every surface declared in `impact.yaml` is classified as:
 
-- `updated` — um ou mais caminhos declarados mudaram;
-- `reviewed` — revisada e intencionalmente não alterada, com racional;
-- `not-applicable` — fora do escopo da mudança, com racional.
+- `updated` — one or more declared paths changed;
+- `reviewed` — reviewed and intentionally left unchanged, with rationale;
+- `not-applicable` — out of scope for the change, with rationale.
 
-A declaração não é prova por si só — revisão humana avalia se o racional é crível. Nenhuma validação determinística compara isso com o diff real ainda (ver seção abaixo).
+The declaration isn't proof by itself — human review assesses whether the rationale is credible. No deterministic validation compares this against the actual diff yet (see the section below).
 
-## Fluxo de mudança
+## Change flow
 
-1. Classifique a mudança antes de implementar.
-2. Crie um Change Set pra mudança operacional ou normativa.
-3. Declare o contrato pretendido e o critério de aceitação em `proposal.md`.
-4. Declare gatilhos, impacto SemVer, superfícies afetadas, e validação esperada em `impact.yaml`.
-5. Mude a fonte autoritativa primeiro: `SPEC.md` pra regra normativa, ou o artefato operacional dono do comportamento pra mudança operacional.
-6. Sincronize as projeções afetadas sem copiar prosa normativa em cada arquivo.
-7. Rode a validação declarada (hoje, revisão humana — validação determinística ainda não existe, ver `ROADMAP.md`).
-8. Revise o diff, lacunas não resolvidas, necessidade de migração/recuperação, e impacto de conformidade MODA.
-9. Mescle só depois de revisão humana explícita (Mau).
-10. Corte tag só através da rotina de release (`SPEC.md`, seção 9).
+1. Classify the change before implementing it.
+2. Create a Change Set for an operational or normative change.
+3. Declare the intended contract and acceptance criteria in `proposal.md`.
+4. Declare triggers, SemVer impact, affected surfaces, and expected validation in `impact.yaml`.
+5. Change the authoritative source first: `SPEC.md` for a normative rule, or the operational artifact that owns the behavior for an operational change.
+6. Synchronize the affected projections without copying normative prose into each file.
+7. Run the declared validation (today, human review — deterministic validation doesn't exist yet, see `ROADMAP.md`).
+8. Review the diff, any unresolved gaps, migration/recovery needs, and MODA conformance impact.
+9. Merge only after explicit human review (Mau).
+10. Cut a tag only through the release routine (`SPEC.md`, section 9).
 
-## Gatilhos
+## Triggers
 
-Adaptados ao vocabulário real do Hipocampo — não são uma tradução literal da tabela do MODA, porque conceitos deles (`package_contract`, por exemplo) não têm equivalente hoje neste repositório.
+Adapted to Hipocampo's actual vocabulary — not a literal translation of MODA's table, because some of their concepts (`package_contract`, for example) have no equivalent in this repository today.
 
-| Gatilho | Superfícies mínimas a revisar |
+| Trigger | Minimum surfaces to review |
 |---|---|
-| `regra_normativa` — mudança de regra em `SPEC.md` | `SPEC.md`, `decisions/`, `CHANGELOG.md`, `UPGRADE.md`/`MIGRATIONS.md` conforme o escopo SemVer (`decisions/0023`) |
-| `schema_frontmatter` — campo novo/alterado no schema (seção 2) | `SPEC.md` seção 2, `UPGRADE.md`, exemplos citados em `GETTING-STARTED.md`/`BEST-PRACTICES.md` |
-| `mecanismo_cross_repositorio` — Promote/Depromote/Redbutton/Registry (seções 6/13) | `SPEC.md` seções 6/13, `decisions/`, `CHANGELOG.md` |
-| `politica_dados_sensiveis` — seção 2-A | `SPEC.md` seção 2-A, `decisions/`, `BEST-PRACTICES.md` |
-| `release` — corte de versão | `CHANGELOG.md`, `UPGRADE.md`, `MIGRATIONS.md` (se MAJOR), `moda.yaml` (versão declarada), `conformance/moda.yaml` |
+| `regra_normativa` — a rule change in `SPEC.md` | `SPEC.md`, `decisions/`, `CHANGELOG.md`, `UPGRADE.md`/`MIGRATIONS.md` depending on SemVer scope (`decisions/0023`) |
+| `schema_frontmatter` — a new/changed field in the schema (section 2) | `SPEC.md` section 2, `UPGRADE.md`, examples cited in `GETTING-STARTED.md`/`BEST-PRACTICES.md` |
+| `mecanismo_cross_repositorio` — Promote/Depromote/Redbutton/Registry (sections 6/13) | `SPEC.md` sections 6/13, `decisions/`, `CHANGELOG.md` |
+| `politica_dados_sensiveis` — section 2-A | `SPEC.md` section 2-A, `decisions/`, `BEST-PRACTICES.md` |
+| `release` — version cut | `CHANGELOG.md`, `UPGRADE.md`, `MIGRATIONS.md` (if MAJOR), `moda.yaml` (declared version), `conformance/moda.yaml` |
 
-`reviewed` e `not-applicable` só são válidos com racional concreto. Uma escolha estrutural também exige Decision Record.
+`reviewed` and `not-applicable` are only valid with concrete rationale. A structural choice also requires a Decision Record.
 
-## Checagem determinística e humana
+## Deterministic and human checking
 
-Hoje não existe validação determinística/CI da estrutura do próprio repositório de metodologia (achado `major` da auditoria MODA de 2026-08-17, ver `ROADMAP.md`) — até isso ser resolvido, toda checagem de Change Set é humana:
+Today there's no deterministic/CI validation of the methodology repository's own structure (a `major` finding from the 2026-08-17 MODA audit, see `ROADMAP.md`) — until that's resolved, every Change Set check is human:
 
-- se a classificação e o impacto SemVer declarados são verdadeiros;
-- se uma mudança de regra foi totalmente projetada na orientação operacional (skill pessoal, `AGENTS.md` de instância, etc.);
-- se os racionais de `reviewed`/`not-applicable` são críveis;
-- se riscos de migração e release são aceitáveis.
+- whether the declared classification and SemVer impact are true;
+- whether a rule change has been fully projected into the operational guidance (personal skill, instance `AGENTS.md`, etc.);
+- whether the `reviewed`/`not-applicable` rationales are credible;
+- whether migration and release risks are acceptable.
 
-## Regra de conclusão
+## Completion rule
 
-Uma mudança está incompleta quando sua implementação parece pronta mas as superfícies de contrato declaradas, evidência, ou obrigação de migração ficam inconsistentes entre si. Não existe checagem automatizada ainda que prove isso sozinha — revisão humana continua responsável pela completude semântica.
+A change is incomplete when its implementation looks ready but the declared contract surfaces, evidence, or migration obligation are inconsistent with each other. There's no automated check yet that proves this on its own — human review remains responsible for semantic completeness.
