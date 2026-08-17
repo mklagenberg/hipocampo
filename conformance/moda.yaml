@@ -70,12 +70,12 @@ controls:
     evidence: ["CHANGELOG.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "ROADMAP.md", "SPEC.md#9-versionamento"]
     notes: ["ROADMAP.md e a taxonomia de tipo de repositório (decisions/0029-0030) já concluídas nesta rodada; falta cadência declarada de auditoria da própria metodologia."]
   specification_driven_change_control:
-    status: "missing"
-    evidence: []
-    notes: ["Nenhum mecanismo formal de Change Set (proposal.md + impact.yaml). Ver ROADMAP.md."]
+    status: "partial"
+    evidence: ["docs/change-management.md", "decisions/0031-mecanismo-de-change-set.md", "changes/0026-0028-taxonomia-fato-relato-opiniao-e-ciclo-de-vida/"]
+    notes: ["Mecanismo de Change Set agora existe e está documentado, com um exercício de backfill (PR #22) validando o template; passa a ser obrigatório prospectivamente pra mudança operational/normative. Ainda sem validação determinística que compare impact.yaml com o diff real (ver quality_and_evaluation)."]
   repository_contract:
     status: "partial"
-    evidence: ["README.md", "AGENTS.md", "moda.yaml", "CHANGELOG.md", "ROADMAP.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md"]
-    notes: ["Change-management policy e validation policy mapeados de forma parcial (ver controles acima); sem Git/release workflow dedicado além de decisions/0014."]
+    evidence: ["README.md", "AGENTS.md", "moda.yaml", "CHANGELOG.md", "ROADMAP.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "docs/change-management.md", "changes/"]
+    notes: ["Change-management policy agora satisfeita (docs/change-management.md); validation policy segue mapeada de forma parcial (ver controle quality_and_evaluation); sem Git/release workflow dedicado além de decisions/0014."]
 
 exceptions: []
