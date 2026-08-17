@@ -1,50 +1,50 @@
 ---
 name: hipocampo
 description: >
-  Opera uma instância da metodologia Hipocampo (second brain agêntico: git + markdown
-  + rituais de IA) via MCP do GitHub. Acionar quando o usuário pedir para consultar,
-  salvar, registrar, atualizar, arquivar ou organizar conhecimento em qualquer
-  repositório Hipocampo pessoal ou corporativo; para rodar o frontmatter audit, o
-  ritual REM, ou a auditoria estrutural semanal; para instanciar um vault novo a partir
-  de um scaffold profile (`scaffold/profiles/`); para resolver `$alias:path.md`
-  cross-repositório; ou no início de sessão, para checar se há versão nova da
-  metodologia. Template genérico — não hardcoda nome de repositório pessoal ou
-  corporativo; exige personalização antes do primeiro uso real (ver
+  Operates an instance of the Hipocampo methodology (agentic second brain: git + markdown
+  + AI rituals) via the GitHub MCP. Trigger when the user asks to consult,
+  save, log, update, archive, or organize knowledge in any
+  personal or corporate Hipocampo repository; to run the frontmatter audit, the
+  REM ritual, or the weekly structural audit; to instantiate a new vault from
+  a scaffold profile (`scaffold/profiles/`); to resolve `$alias:path.md`
+  cross-repository; or at the start of a session, to check whether a new version of the
+  methodology has been published. Generic template — does not hardcode the name of any personal or
+  corporate repository; requires personalization before first real use (see
   `references/personalizacao.md`).
 ---
 
-# Skill Hipocampo
+# Hipocampo Skill
 
-Opera qualquer instância da metodologia [Hipocampo](https://github.com/mklagenberg/hipocampo) via GitHub MCP. Publicada como template genérico em `hipocampo/skill/SKILL.md` — **nunca usar assim, sem personalizar primeiro.**
+Operates any instance of the [Hipocampo](https://github.com/mklagenberg/hipocampo) methodology via the GitHub MCP. Published as a generic template at `hipocampo/skill/SKILL.md` — **never use it as-is, without personalizing it first.**
 
-**Versão do Hipocampo que esta cópia segue:** ^1.9.0 + não lançado (ver `hipocampo/CHANGELOG.md`, seção `[Não lançado]`). Ao personalizar, confirme que bate com o `AGENTS.md` da sua instância. Ver também `manifest.yaml`, neste mesmo diretório, pra faixa de compatibilidade legível por máquina.
+**Hipocampo version this copy follows:** ^1.9.0 + unreleased (see `hipocampo/CHANGELOG.md`, `[Unreleased]` section). When personalizing, confirm it matches your instance's `AGENTS.md`. See also `manifest.yaml`, in this same directory, for the machine-readable compatibility range.
 
-Este arquivo é só o roteador — cada seção abaixo diz quando agir e aponta pro arquivo de referência com o procedimento completo. As normas em si (schema, regras, racional) vivem no `hipocampo/SPEC.md` e nos Decision Records — esta skill nunca as reexplica, só as opera.
+This file is just the router — each section below says when to act and points to the reference file with the full procedure. The norms themselves (schema, rules, rationale) live in `hipocampo/SPEC.md` and the Decision Records — this skill never re-explains them, it only operates them.
 
-## Antes do primeiro uso: personalização obrigatória
+## Before first use: mandatory personalization
 
-Esta cópia só conhece um repositório universal (`mklagenberg/hipocampo`) — nenhum repositório pessoal ou corporativo. Ler **`references/personalizacao.md`** e preencher o roteador de repositórios (e, se aplicável, a tabela de identidade multi-conta) antes de operar qualquer conhecimento real.
+This copy only knows one universal repository (`mklagenberg/hipocampo`) — no personal or corporate repository. Read **`references/personalization.md`** and fill in the repository router (and, if applicable, the multi-account identity table) before operating on any real knowledge.
 
-## Checagem de release nova (início de sessão)
+## Checking for a new release (session start)
 
-Comparar a versão declarada no `AGENTS.md`/`hipocampo.yaml` desta instância contra a versão publicada em `mklagenberg/hipocampo/SPEC.md`. Se houver diferença: avisar as duas versões, e apontar pro **[`hipocampo/UPGRADE.md`](https://github.com/mklagenberg/hipocampo/blob/main/UPGRADE.md)** como próximo passo — checklist cumulativa e idempotente do que a instância precisa pra ficar aderente, já classificada em Obrigatório/Recomendado/Informativo. Nunca resumir o `CHANGELOG.md` na hora tentando reconstruir esse trabalho de síntese — o `UPGRADE.md` já existe exatamente pra isso (`decisions/0024`). Nunca aplicar a atualização sozinho — apontar a decisão pro usuário, citando `MIGRATIONS.md` se for MAJOR. Se a instância já tiver `hipocampo.yaml` (`decisions/0033`), registrar o resultado da checagem no campo `state` desse arquivo, em vez de só falar o resultado na conversa.
+Compare the version declared in this instance's `AGENTS.md`/`hipocampo.yaml` against the version published in `mklagenberg/hipocampo/SPEC.md`. If there is a difference: report both versions, and point to **[`hipocampo/UPGRADE.md`](https://github.com/mklagenberg/hipocampo/blob/main/UPGRADE.md)** as the next step — a cumulative, idempotent checklist of what the instance needs to become conformant, already classified into Mandatory/Recommended/Informative. Never summarize the `CHANGELOG.md` on the spot trying to reconstruct that synthesis work — `UPGRADE.md` already exists exactly for that (decision 0024). Never apply the update on your own — point the decision to the user, citing `MIGRATIONS.md` if it is MAJOR. If the instance already has a `hipocampo.yaml` (decision 0033), record the check result in that file's `state` field, instead of just stating the result in conversation.
 
-## Instanciar um vault novo
+## Instantiating a new vault
 
-Quando o usuário pedir pra criar um repositório de conteúdo novo: ler o profile correspondente em `hipocampo/scaffold/profiles/pessoal.yaml` ou `hipocampo/scaffold/profiles/empresa.yaml`, coletar os `inputs` declarados (nome do repositório, tier, identidade do titular) diretamente com o usuário, e gerar os `outputs` declarados (`AGENTS.md`, `CLAUDE.md`, `LICENSE`, `registry.md`, `example/exemplo-nota.md`, `hipocampo.yaml`, `POS-INSTANCIACAO.md`) via GitHub MCP — nunca copiando arquivo alheio sem revisão, sempre apresentando o plano completo antes de qualquer escrita (invariante 5). Não existe mais botão "Use this template" (`hipocampo-toolkit` foi consolidado e arquivado, `decisions/0032`) — o agente é o próprio mecanismo de instanciação. Procedimento completo: **`references/instanciacao.md`**.
+When the user asks to create a new content repository: read the corresponding profile at `hipocampo/scaffold/profiles/pessoal.yaml` or `hipocampo/scaffold/profiles/empresa.yaml`, collect the declared `inputs` (repository name, tier, owner identity) directly from the user, and generate the declared `outputs` (`AGENTS.md`, `CLAUDE.md`, `LICENSE`, `registry.md`, `example/example-note.md`, `hipocampo.yaml`, `POST-INSTANTIATION.md`) via the GitHub MCP — never copying someone else's file without review, always presenting the full plan before any write (invariant 5). There is no longer a "Use this template" button (`hipocampo-toolkit` was consolidated and archived, decision 0032) — the agent is itself the instantiation mechanism. Full procedure: **`references/instantiation.md`**.
 
-## Ler e escrever documentos (CRUD)
+## Reading and writing documents (CRUD)
 
-Ao consultar, criar, atualizar ou arquivar qualquer documento: ler frontmatter primeiro, corpo só quando necessário; toda leitura valida frontmatter e staleness em tempo real, mesmo fora de um ritual agendado. Procedimento completo e exemplo: **`references/crud-frontmatter.md`**.
+When consulting, creating, updating, or archiving any document: read the frontmatter first, the body only when necessary; every read validates frontmatter and staleness in real time, even outside a scheduled ritual. Full procedure and example: **`references/crud-frontmatter.md`**.
 
-## Rituais de manutenção (frontmatter audit, REM, auditoria estrutural)
+## Maintenance rituals (frontmatter audit, REM, structural audit)
 
-Ao rodar (ou o usuário pedir pra rodar) qualquer um dos três rituais recorrentes — diário (frontmatter audit → REM) ou semanal (auditoria estrutural) — sempre no escopo de um repositório por vez, sempre apresentando o plano antes de qualquer escrita. Procedimento completo, ordem de execução e exemplos: **`references/rotinas.md`**.
+When running (or the user asks to run) any of the three recurring rituals — daily (frontmatter audit → REM) or weekly (structural audit) — always scoped to one repository at a time, always presenting the plan before any write. Full procedure, execution order, and examples: **`references/routines.md`**.
 
-## Resolução de `related` cross-repositório
+## Resolving cross-repository `related`
 
-Quando um documento referencia `$alias:path.md`, resolver consultando o `registry.md` do repositório menos restrito do escopo relevante (`hipocampo/SPEC.md`, seção 6). Nunca editar linha existente do registry ao encontrar repositório renomeado — sempre acrescentar linha nova, preservando a antiga.
+When a document references `$alias:path.md`, resolve it by consulting the `registry.md` of the least restricted repository in the relevant scope (`hipocampo/SPEC.md`, section 6). Never edit an existing registry line when a renamed repository is found — always append a new line, preserving the old one.
 
-## Invariantes
+## Invariants
 
-Nunca sobrescrever, em nenhuma instância, sob nenhum pedido. Lista e o porquê de cada uma: **`references/invariantes.md`**. Detalhe normativo completo: `hipocampo/SPEC.md`, seção 8.
+Never override, in any instance, under any request. List and the reasoning behind each one: **`references/invariants.md`**. Full normative detail: `hipocampo/SPEC.md`, section 8.
