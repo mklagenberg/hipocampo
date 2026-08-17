@@ -8,7 +8,7 @@ moda:
 artifact:
   id: "hipocampo"
   name: "Hipocampo"
-  full_name: "Hipocampo — metodologia de second brain agêntico"
+  full_name: "Hipocampo — agentic second brain methodology"
   kind: "methodology"
   domain: "personal-and-corporate-knowledge-management"
   version: "1.9.0"
@@ -39,7 +39,7 @@ documentation:
   decision_policy: "SPEC.md#7-decision-record-vs-type-decision"
   change_management: "docs/change-management.md"
   validation: "audits/moda/2026-08-17-v1.0.0-self-audit.md"
-  git_workflow: "decisions/0014-rotina-obrigatoria-de-release.md"
+  git_workflow: "decisions/0014-mandatory-release-routine.md"
 
 components:
   - id: "frontmatter-schema"
@@ -84,7 +84,7 @@ components:
     lifecycle: "embedded"
   - id: "vault-manifest"
     kind: "schema"
-    source: "decisions/0033-manifesto-hipocampo-yaml-por-vault.md (scaffold/skeleton/hipocampo.yaml)"
+    source: "decisions/0033-hipocampo-yaml-per-vault-manifest.md (scaffold/skeleton/hipocampo.yaml)"
     lifecycle: "embedded"
 
 packages:
@@ -100,7 +100,7 @@ packages:
     source_kind: "local"
   skill:
     role: "client-side-operational-skill"
-    version: "ver skill/manifest.yaml"
+    version: "see skill/manifest.yaml"
     source: "skill/"
     source_kind: "local"
   scaffold:
@@ -119,4 +119,4 @@ conformance:
 synchronization:
   policy: "UPGRADE.md"
   state: "current"
-  reason: "SPEC.md, CHANGELOG.md e decisions/ são mantidos sincronizados manualmente a cada PR mesclado (uma Decision Record acompanhada das entradas correspondentes em SPEC.md/CHANGELOG.md por mudança estrutural); a partir da Fase C, mudança operational/normative também acompanha um Change Set em changes/. A partir da Fase D, skill/ e scaffold/ vivem dentro do próprio repositório (sem sincronização cross-repositório com hipocampo-toolkit, que foi consolidado e arquivado). Nenhuma checagem automatizada de drift existe ainda — ver conformance/moda.yaml, controles packaging_and_synchronization e quality_and_evaluation."
+  reason: "SPEC.md, CHANGELOG.md, and decisions/ are kept manually synchronized on every merged PR (a Decision Record accompanied by the corresponding entries in SPEC.md/CHANGELOG.md for every structural change); starting from Phase C, operational/normative changes are also accompanied by a Change Set in changes/. Starting from Phase D, skill/ and scaffold/ live inside the repository itself (no cross-repository synchronization with hipocampo-toolkit, which was consolidated and archived). No automated drift check exists yet — see conformance/moda.yaml, controls packaging_and_synchronization and quality_and_evaluation."

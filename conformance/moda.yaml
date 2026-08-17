@@ -21,7 +21,7 @@ controls:
   activation_and_proportionality:
     status: "partial"
     evidence: ["DISCLAIMER.md", "SPEC.md#2-a-política-de-dados-sensíveis-por-tipo-de-instância"]
-    notes: ["Cenários recomendados/não recomendados existem; falta regra explícita de como rigor/autonomia/evidência/custo escalam com risco."]
+    notes: ["Recommended/not-recommended scenarios exist; an explicit rule for how rigor/autonomy/evidence/cost scale with risk is missing."]
   human_reference_practice:
     status: "satisfied"
     evidence: ["BEST-PRACTICES.md", "GETTING-STARTED.md"]
@@ -31,51 +31,51 @@ controls:
   decomposition_and_control_flow:
     status: "partial"
     evidence: ["SPEC.md#5-a-ritual-rem-e-camadas-de-memória", "SPEC.md#5-b-frontmatter-audit", "SPEC.md#5-c-auditoria-estrutural-semanal"]
-    notes: ["Rituais bem descritos; sem modelo explícito de estágios/gates/paralelismo/condições de parada nos termos do MODA."]
+    notes: ["Rituals are well described; no explicit model of stages/gates/parallelism/stop conditions in MODA terms."]
   distribution_of_agency:
     status: "partial"
     evidence: ["SPEC.md#8-extensãopersonalização-e-precedência-do-agente", "skill/references/instanciacao.md"]
-    notes: ["Invariante 5 e os gates de escrita recorrentes existem na prática — inclusive no novo procedimento de instanciação agent-driven (Fase D); nunca classificados explicitamente como determinístico/agente-raciocinado/ferramenta-executado/humano-decidido/híbrido."]
+    notes: ["Invariant 5 and the recurring write gates exist in practice — including in the new agent-driven instantiation procedure (Phase D); never explicitly classified as deterministic/agent-reasoned/tool-executed/human-decided/hybrid."]
   orchestration:
     status: "not-applicable"
-    evidence: ["decisions/0025-skill-client-side-nunca-por-repositorio.md"]
-    notes: ["Hipocampo é desenhado pra um agente por vez, client-side — sem orquestração multi-agente."]
+    evidence: ["decisions/0025-skill-is-client-side-never-per-repository.md"]
+    notes: ["Hipocampo is designed for one agent at a time, client-side — no multi-agent orchestration."]
   contracts:
     status: "partial"
     evidence: ["SPEC.md#5-b-frontmatter-audit", "scaffold/profiles/pessoal.yaml", "scaffold/profiles/empresa.yaml"]
-    notes: ["Saídas de ritual existem (ex.: meta/fila-de-manutencao.md) mas não formalizadas como contrato (critério de conclusão, estado de erro, devolução de controle). Os profiles de scaffold (Fase D) já declaram inputs/outputs/conflitos formalmente, mas só pra instanciação — não pros rituais recorrentes."]
+    notes: ["Ritual outputs exist (e.g., meta/fila-de-manutencao.md) but are not formalized as a contract (completion criterion, error state, control handback). The scaffold profiles (Phase D) already formally declare inputs/outputs/conflicts, but only for instantiation — not for the recurring rituals."]
   state_context_and_knowledge:
     status: "satisfied"
     evidence: ["SPEC.md#5-a-ritual-rem-e-camadas-de-memória", "SPEC.md#6-related-entre-repositórios-o-registry"]
   quality_and_evaluation:
     status: "missing"
     evidence: []
-    notes: ["Nenhum cenário representativo de teste, baseline, ou threshold de aceitação formalizado. Ver ROADMAP.md."]
+    notes: ["No representative test scenario, baseline, or acceptance threshold formalized. See ROADMAP.md."]
   safety_security_and_privacy:
     status: "satisfied"
     evidence: ["SPEC.md#2-a-política-de-dados-sensíveis-por-tipo-de-instância", "SPEC.md#8-extensãopersonalização-e-precedência-do-agente"]
   failure_and_recovery:
     status: "missing"
     evidence: []
-    notes: ["Nenhuma definição de comportamento sob evidência insuficiente, contradição, ferramenta indisponível, interrupção, pedido inseguro, migração incompatível. Ver ROADMAP.md."]
+    notes: ["No defined behavior under insufficient evidence, contradiction, unavailable tool, interruption, unsafe request, incompatible migration. See ROADMAP.md."]
   portability:
     status: "satisfied"
-    evidence: ["decisions/0025-skill-client-side-nunca-por-repositorio.md", "docs/USO-MULTI-FERRAMENTA.md", "docs/MODELOS-DE-IA.md"]
+    evidence: ["decisions/0025-skill-is-client-side-never-per-repository.md", "docs/MULTI-TOOL-USAGE.md", "docs/AI-MODELS.md"]
   packaging_and_synchronization:
     status: "partial"
-    evidence: ["UPGRADE.md", "moda.yaml", "skill/manifest.yaml", "scaffold/skeleton/hipocampo.yaml", "decisions/0033-manifesto-hipocampo-yaml-por-vault.md"]
-    notes: ["UPGRADE.md forte; skill/manifest.yaml (manifesto de máquina da skill) e o template de hipocampo.yaml por vault agora existem (Fase D). Nenhum dos 4 vaults reais existentes foi atualizado retroativamente com hipocampo.yaml ainda — ver UPGRADE.md."]
+    evidence: ["UPGRADE.md", "moda.yaml", "skill/manifest.yaml", "scaffold/skeleton/hipocampo.yaml", "decisions/0033-hipocampo-yaml-per-vault-manifest.md"]
+    notes: ["UPGRADE.md is strong; skill/manifest.yaml (the skill's machine manifest) and the per-vault hipocampo.yaml template now exist (Phase D). None of the 4 existing real vaults has been retroactively updated with hipocampo.yaml yet — see UPGRADE.md."]
   evolution:
     status: "partial"
     evidence: ["CHANGELOG.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "ROADMAP.md", "SPEC.md#9-versionamento"]
-    notes: ["ROADMAP.md e a taxonomia de tipo de repositório (decisions/0029-0030) já concluídas; falta cadência declarada de auditoria da própria metodologia."]
+    notes: ["ROADMAP.md and the repository type taxonomy (decisions/0029-0030) are already complete; a declared cadence for auditing the methodology itself is still missing."]
   specification_driven_change_control:
     status: "partial"
-    evidence: ["docs/change-management.md", "decisions/0031-mecanismo-de-change-set.md", "changes/0026-0028-taxonomia-fato-relato-opiniao-e-ciclo-de-vida/", "changes/0032-0033-scaffolding-e-manifesto-vault/"]
-    notes: ["Mecanismo de Change Set existe e está documentado, com um exercício de backfill (PR #22) e um Change Set prospectivo (Fase D, 0032/0033) validando o template nos dois modos. Ainda sem validação determinística que compare impact.yaml com o diff real (ver quality_and_evaluation)."]
+    evidence: ["docs/change-management.md", "decisions/0031-change-set-mechanism.md", "changes/0026-0028-fact-account-opinion-memory-taxonomy-and-cross-repo-lifecycle/", "changes/0032-0033-scaffolding-and-vault-manifest/"]
+    notes: ["The Change Set mechanism exists and is documented, with a backfill exercise (PR #22) and a prospective Change Set (Phase D, 0032/0033) validating the template in both modes. Still no deterministic validation comparing impact.yaml against the actual diff (see quality_and_evaluation)."]
   repository_contract:
     status: "partial"
     evidence: ["README.md", "AGENTS.md", "moda.yaml", "CHANGELOG.md", "ROADMAP.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "docs/change-management.md", "changes/", "scaffold/"]
-    notes: ["Change-management policy satisfeita (docs/change-management.md); mecanismo de scaffold agora declarativo (scaffold/, Fase D); validation policy segue mapeada de forma parcial (ver controle quality_and_evaluation); sem Git/release workflow dedicado além de decisions/0014."]
+    notes: ["Change-management policy satisfied (docs/change-management.md); scaffold mechanism is now declarative (scaffold/, Phase D); validation policy remains partially mapped (see the quality_and_evaluation control); no dedicated Git/release workflow beyond decisions/0014."]
 
 exceptions: []
