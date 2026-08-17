@@ -7,6 +7,8 @@ Histórico de versões da metodologia em si. Segue [SemVer](https://semver.org/l
 Trabalho acumulado em `main`, ainda sem tag/release publicada — ver `decisions/0021-politica-de-cadencia-de-release.md`. Vira uma seção versionada de verdade quando a release for cortada.
 
 ### Adicionado
+- SPEC.md, seção 2-C (nova): **taxonomia de tipo de repositório** — dois eixos ortogonais, domínio de titularidade (`pessoal`/`empresa`, já em uso via `decisions/0002`) e tier de exposição (`confidencial`/`público`), mapeando sem repositório novo aos quatro repositórios de conteúdo reais. Novo campo de frontmatter `curation_status` (seção 2), relevante só em repositório `empresa-confidencial` — `staged` (candidato a promoção futura) ou `permanent` (default). Ver `decisions/0029-taxonomia-tipo-de-repositorio.md`.
+- SPEC.md, seção 13 (Promote): generalizada pra cobrir também graduação dentro do mesmo domínio de titularidade (documento `empresa-confidencial` com `curation_status: staged` sendo promovido pra `empresa-público`), sempre pelo caminho elegante — o caminho literal continua exclusivo do caso cross-domain, porque só ali há transferência de titularidade real em jogo. Ver `decisions/0030-promote-graduacao-mesmo-dominio.md`.
 - SPEC.md, seção 2: campos `contributors` (adicionado à listagem central do schema — já existia via `decisions/0006`, mas nunca aparecia na listagem principal) e `contains_subjective_content` (novo, relevante só quando `owner` preenchido). Taxonomia de quatro tipos de informação — **Fato**, **Relato**, **Opinião**, **Lembrança** — usada como rótulo inline em documento misto; `contains_subjective_content` cobre só Opinião/Lembrança, as duas categorias com risco de responsabilização pessoal. `@handle` inline só quando há mais de um contribuidor. Grava Opinião/Lembrança nova em instância corporativa só mediante confirmação explícita do usuário — sem isso, vai pra instância pessoal. Aplica-se também à função de consolidação do ritual REM (seção 5-A) e à ação Promote (seção 13). Ver `decisions/0026-relato-vs-opiniao-em-instancia-corporativa.md`.
 - SPEC.md, seção 13 (nova): **Promote, Depromote, Redbutton** — ações de ciclo de vida cross-repositório. Promote (pessoal → corporativo) com dois caminhos (derivação elegante via `decisions/0011`, ou transferência literal com aviso explícito de titularidade per `decisions/0007`); Depromote (descida de nível dentro do mesmo domínio de titularidade); Redbutton (remediação de violação da política 2-A). `superseded_by` (seção 2/6) passa a aceitar sintaxe `$alias:` cross-repositório. Ver `decisions/0027-promote-depromote-redbutton.md`.
 - SPEC.md, seção 8: gatilho da exceção ao invariante 3 (`decisions/0010`) ampliado pra também cobrir violação da política 2-A identificada por auditoria estrutural ou pelo operador, sem exigir solicitação formal do titular. Ver `decisions/0028-gatilho-ampliado-remediacao-2a.md`.
@@ -26,6 +28,8 @@ Trabalho acumulado em `main`, ainda sem tag/release publicada — ver `decisions
 - `decisions/0026-relato-vs-opiniao-em-instancia-corporativa.md` — ver acima.
 - `decisions/0027-promote-depromote-redbutton.md` — ver acima.
 - `decisions/0028-gatilho-ampliado-remediacao-2a.md` — ver acima.
+- `decisions/0029-taxonomia-tipo-de-repositorio.md` — ver acima.
+- `decisions/0030-promote-graduacao-mesmo-dominio.md` — ver acima.
 
 ### Alterado
 - SPEC.md, seção 5-A: ritual REM ganha segunda função ("atualizar memórias antigas", processando a fila do frontmatter audit) e cadência recomendada diária.
