@@ -41,7 +41,7 @@ The declaration isn't proof by itself — human review assesses whether the rati
 4. Declare triggers, SemVer impact, affected surfaces, and expected validation in `impact.yaml`.
 5. Change the authoritative source first: `SPEC.md` for a normative rule, or the operational artifact that owns the behavior for an operational change.
 6. Synchronize the affected projections without copying normative prose into each file.
-7. Run the declared validation (today, human review — deterministic validation doesn't exist yet, see `ROADMAP.md`).
+7. Run the declared validation: `scripts/validate_hipocampo.py` for the repository's own structural integrity (automatic in CI on the PR), plus human review for everything the script doesn't cover (see "Deterministic and human checking" below).
 8. Review the diff, any unresolved gaps, migration/recovery needs, and MODA conformance impact.
 9. Merge only after explicit human review (Mau).
 10. Cut a tag only through the release routine (`SPEC.md`, section 9).
@@ -62,7 +62,7 @@ Adapted to Hipocampo's actual vocabulary — not a literal translation of MODA's
 
 ## Deterministic and human checking
 
-Today there's no deterministic/CI validation of the methodology repository's own structure (a `major` finding from the 2026-08-17 MODA audit, see `ROADMAP.md`) — until that's resolved, every Change Set check is human:
+Structural integrity of the methodology repository itself — Decision Record template compliance, internal link resolution, README/CHANGELOG version consistency — is now checked deterministically by `scripts/validate_hipocampo.py`, run in CI on every pull request against `main` (`.github/workflows/validate.yml`, `decisions/0036-deterministic-validation-of-repository-structure.md`), closing the corresponding `major` finding from the 2026-08-17 MODA audit. That check does not reach a Change Set's *semantic* completeness, though — the following remain human review:
 
 - whether the declared classification and SemVer impact are true;
 - whether a rule change has been fully projected into the operational guidance (personal skill, instance `AGENTS.md`, etc.);
