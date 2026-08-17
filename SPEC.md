@@ -36,6 +36,7 @@ author: "Nome Real - @usuario-github"    # sempre pessoa, nunca a IA — ou @nom
 contributors: []                          # pessoas além do author que contribuíram conteúdo a este documento específico; documento novo sempre usa pessoa real, apurada por commit ou citação explícita — @nome-da-secao só em conteúdo histórico (ver decisions/0006)
 owner: ""                                 # nome da empresa, só quando nasce em contexto de trabalho
 contains_subjective_content: false        # default false; só relevante quando owner preenchido — sinaliza que o corpo contém opinião e/ou lembrança pessoal do autor/contribuidor, não só fato/relato (ver decisions/0026)
+curation_status: ""                       # opcional, só relevante em repositório empresa-confidencial (seção 2-C) — "staged" (candidato a promoção futura pra empresa-público) ou "permanent" (confidencial por natureza, default); ver decisions/0029
 license: ""                               # sempre derivado de `visibility`, nunca preenchido à mão (ver decisions/0007)
 ---
 ```
@@ -57,6 +58,9 @@ Resolve **só** quem, já tendo acesso ao repositório, pode usar o conteúdo se
 
 ### contains_subjective_content
 Campo opcional, relevante só quando `owner` está preenchido (instância corporativa). Sinaliza que o corpo do documento contém ao menos um trecho de **Opinião** ou **Lembrança** — as duas categorias, dentro da taxonomia de tipo de informação (`decisions/0026`), que carregam risco de responsabilização pessoal de quem escreveu. A taxonomia completa tem quatro valores, usados como prefixo inline quando um documento mistura mais de um tipo: **Fato:** (verificado/confirmado), **Relato:** (dito/observado, não confirmado), **Opinião:** (julgamento de valor), **Lembrança:** (recordação pessoal reconstrutiva — termo escolhido pra não colidir com "camadas de memória", seção 5-A, que é sobre estágio de processamento, não sobre confiabilidade de uma afirmação). Documento inteiramente de um só tipo não precisa rotular frase a frase, só este campo já basta. O `@handle` só acompanha o rótulo inline quando o documento tem `contributors` preenchido — caso em que `author` sozinho não basta pra saber de quem é cada trecho; documento de autor único dispensa o handle inline, o `author` do frontmatter já resolve a atribuição. Antes de gravar Opinião ou Lembrança nova numa instância corporativa (`contains_subjective_content` passando a `true`), o agente pergunta explicitamente se deve ficar ali marcada ou ir pra instância pessoal do autor/contribuidor responsável — sem confirmação explícita, vai pra pessoal, nunca adivinha. Ver `decisions/0026-relato-vs-opiniao-em-instancia-corporativa.md`.
+
+### curation_status
+Campo opcional, relevante só dentro de um repositório do tier `empresa-confidencial` (seção 2-C). Sinaliza a intenção de ciclo de vida do documento dentro desse repositório: `staged` marca candidato a eventualmente ser promovido pra um repositório `empresa-público`, depois de curadoria da liderança; `permanent` (default, quando o campo fica vazio) marca conteúdo confidencial por natureza, sem expectativa de publicação futura. Não substitui nem se sobrepõe a `visibility` — os dois campos resolvem perguntas diferentes: `visibility` é sobre quem, já com acesso ao repositório, pode usar o conteúdo sem restrição adicional; `curation_status` é sobre se aquele documento específico é candidato a mudar de repositório algum dia. Ver `decisions/0029-taxonomia-tipo-de-repositorio.md`.
 
 ### license
 Sempre derivado mecanicamente de `visibility`, nunca definido à mão — evita divergência entre a camada de confidencialidade (`visibility`) e a camada jurídica (`license`). Usa o padrão SPDX `LicenseRef-<idstring>`, com o texto legal completo no arquivo `LICENSE` da raiz do repositório, nunca reescrito por documento. Ver `decisions/0007-licenciamento-repos-de-conteudo.md`.
@@ -84,6 +88,26 @@ O ciclo de vida do documento (seção 2, campo `status`) implementa as quatro op
 Regra de leitura recomendada ao agente: ao operar sobre múltiplos documentos (busca, triagem, staleness), ler sempre o **frontmatter primeiro** — YAML, custo de token baixo, suficiente pra filtrar por `type`, `tags`, `status`, `temporality`, `related` e decidir relevância. Só ler o **corpo completo** depois de decidir, pelo frontmatter, que aquele documento específico precisa de leitura completa. Numa instância com muitos documentos, isso evita custo de token desnecessário — ler o corpo inteiro de todo candidato só pra descartar a maioria não é o padrão de acesso default.
 
 Além disso, toda operação de READ inclui uma validação leve do frontmatter contra a norma desta seção 2 e a checagem de staleness da seção 5 — independente de o frontmatter audit (seção 5-B, ritual em lote) já ter passado por aquele documento especificamente. Se a validação encontrar problema, o agente sinaliza explicitamente o que está errado e o que precisa ser feito; no caso de `ttl` vencido, deixa claro que a informação é defasada e sugere revalidação por pesquisa quando o documento for `source: url`. Esta validação nunca altera `status` ou qualquer campo sozinha — só sinaliza. Ver `decisions/0018-validacao-frontmatter-tempo-de-leitura.md`.
+
+## 2-C. Taxonomia de tipo de repositório: domínio e tier
+
+Todo repositório de conteúdo Hipocampo se classifica em dois eixos ortogonais — o nome físico do repositório é livre, o que importa é o intuito:
+
+1. **Domínio de titularidade** (seção 2-A, já em uso via "tipo de instância" no `AGENTS.md`): `pessoal` ou `empresa`.
+2. **Tier de exposição**, dentro de cada domínio: `confidencial` ou `público`.
+
+Os quatro pares possíveis já correspondem, na prática real de qualquer instância multi-repositório (`decisions/0002`), a repositórios físicos distintos — nenhum par exige repositório novo além dos que a arquitetura multi-repo já prevê:
+
+| Domínio | Tier | Papel |
+|---|---|---|
+| pessoal | confidencial | segredos pessoais, acesso só do titular |
+| pessoal | público | conhecimento pessoal compartilhável sem restrição |
+| empresa | confidencial | conhecimento restrito a quem precisa saber (ex.: liderança) |
+| empresa | público | conhecimento já curado, acessível a toda a organização |
+
+Não existe um terceiro tier "estruturante" como repositório à parte. Conhecimento corporativo confidencial que é candidato a eventualmente virar público (curadoria pendente da liderança, não uma decisão de manter confidencial pra sempre) continua vivendo no repositório `empresa-confidencial` — a intenção de ciclo de vida é marcada no frontmatter de cada documento (`curation_status`, seção 2), não por uma separação física adicional. O mesmo raciocínio não se aplica ao domínio pessoal: como autor e curador são a mesma pessoa, não há um estágio de "aguardando curadoria de terceiro" a marcar — pessoal permanece com dois tiers apenas. Ver `decisions/0029-taxonomia-tipo-de-repositorio.md` pro racional completo, incluindo por que um repositório físico novo foi descartado.
+
+A declaração formal de qual domínio+tier um repositório específico implementa é operacionalizada por um manifesto de instância (mecanismo em desenvolvimento junto à adequação da metodologia ao MODA) — até esse manifesto existir, a declaração continua sendo o campo "tipo de instância" do `AGENTS.md` (seção 2-A/11) combinado com o tier já conhecido informalmente pelo operador da instância.
 
 ## 3. `type` — enum e critério de expansão
 
@@ -243,13 +267,15 @@ Entre instância pessoal e instância corporativa da mesma pessoa, convite de ac
 
 Três ações que movem ou removem conteúdo entre repositórios de uma mesma pessoa/organização, complementares ao CRUD de um único repositório (seção 2-B). A curadoria do ritual REM (seção 5-A, função Consolidar) e a auditoria estrutural (5-C) são a primeira linha de proteção contra conteúdo mal colocado — essas três ações existem pra quando essa curadoria falha, ou pra reclassificação deliberada de conteúdo já existente. Ver `decisions/0027-promote-depromote-redbutton.md` e `decisions/0028-gatilho-ampliado-remediacao-2a.md`.
 
-### Promote — pessoal → corporativo
+### Promote — pessoal → corporativo, ou graduação dentro do mesmo domínio
 
-Duas variantes, sempre apresentadas juntas antes de qualquer escrita (invariante 5):
+Duas variantes de caminho, sempre apresentadas juntas antes de qualquer escrita (invariante 5), mais um segundo caso de aplicação:
 
 **Caminho elegante (recomendado por padrão):** cria documento novo no repositório corporativo, seguindo a disciplina de `decisions/0011` — frontmatter reescrito do zero pro schema/política do destino, nunca copiado verbatim; corpo despersonalizado conforme necessário; checagem de conformidade com a política de dados sensíveis (seção 2-A) antes de escrever; `author` corrigido pra identidade corporativa (`decisions/0020`); rótulos de tipo de informação (`decisions/0026`) reavaliados no novo contexto. O documento pessoal de origem **não muda de `status`** — continua ativo, ganha só um `related` novo apontando (`$alias:`) pro documento corporativo, com `revision_note` registrando data e natureza da derivação. O documento corporativo aponta de volta pro pessoal do mesmo jeito. Os dois documentos evoluem de forma independente dali em diante — não é replicação no sentido vetado por `decisions/0002`, porque nunca houve expectativa de sincronia entre eles.
 
 **Caminho literal (raro):** o documento pessoal é de fato transferido — `status: superseded`, `superseded_by: $alias:destino`, `temporality: historical`, conteúdo preservado como estava no momento da promoção. Antes de qualquer escrita nesse caminho, o agente explica explicitamente ao usuário: (a) isso transfere titularidade do conteúdo pra empresa, conforme `decisions/0007` — o `LICENSE` do repositório corporativo declara a empresa como titular; (b) isso não é reversível de forma trivial — a reversão completa (documento voltando a viver plenamente no domínio pessoal) não é uma ação de rotina. Só prossegue com confirmação explícita depois desse aviso.
+
+**Graduação dentro do mesmo domínio (novo, `decisions/0030`):** Promote também cobre o caso em que um documento `empresa-confidencial` marcado `curation_status: staged` (seção 2-C) está pronto pra virar `empresa-público` — mesmo domínio de titularidade o tempo todo, então usa sempre o caminho elegante (nunca o literal, já que não há transferência de titularidade nova em jogo, `decisions/0007` não muda nesse caso). Documento de origem não é apagado; `curation_status` passa a `permanent` (encerra o candidatismo) ou o documento fica com `related` apontando pro novo documento público, a critério de quem confirma a ação. Só documento `staged` é elegível a essa variante — documento `permanent` precisa de reclassificação explícita de `curation_status` antes, decisão humana separada da própria promoção.
 
 ### Depromote — descida de nível dentro do mesmo domínio de titularidade
 
