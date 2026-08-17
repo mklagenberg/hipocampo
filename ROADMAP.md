@@ -10,18 +10,18 @@ Este roadmap comunica direção, não promessa de data. Só um plano de release 
 
 **Resultado:** Hipocampo declara e sustenta com evidência real uma relação formal de conformidade com o [MODA](https://github.com/mklagenberg/moda) — hoje `audited_against`/`mapped`/`partial` (ver `moda.yaml`, `conformance/moda.yaml`), evoluindo pra `conforms_to` conforme os achados `major` da auditoria de 2026-08-17 (`audits/moda/`) forem endereçados.
 
-**Status:** em andamento — taxonomia de tipo de repositório (`decisions/0029`/`0030`) e fundação declarativa (`moda.yaml`, `AGENTS.md`, este `ROADMAP.md`) já mescladas; mecanismo de Change Set, validação determinística, consolidação do `hipocampo-toolkit` em scaffolding, tradução pra inglês, e as dimensões de design ainda faltantes (falha/recuperação, qualidade/avaliação) seguem pendentes.
+**Status:** em andamento — taxonomia de tipo de repositório (`decisions/0029`/`0030`), fundação declarativa (`moda.yaml`, `AGENTS.md`, este `ROADMAP.md`), mecanismo de Change Set (`docs/change-management.md`, `decisions/0031`) e consolidação do `hipocampo-toolkit` em scaffolding + manifesto `hipocampo.yaml` por vault (`scaffold/`, `decisions/0032`/`0033`) já mescladas; validação determinística, tradução pra inglês, e as dimensões de design ainda faltantes (falha/recuperação, qualidade/avaliação) seguem pendentes.
 
-O trabalho inclui:
+**Pendências manuais (fora do escopo de qualquer PR):** arquivamento do repositório `hipocampo-toolkit` no GitHub, e commit de aviso de redirecionamento no `README.md` dele — nenhuma ferramenta disponível neste processo automatiza a ação de arquivar um repositório; ação do Mau.
 
-- mecanismo de Change Set (`changes/<id>/proposal.md` + `impact.yaml`), com backfill retroativo do PR #22 como primeiro exercício;
+O trabalho restante inclui:
+
 - validação determinística mínima (script + CI) da integridade estrutural do próprio repositório de metodologia;
-- consolidação do `hipocampo-toolkit` dentro do `hipocampo` como scaffolding formal (perfis declarando engine version, inputs, outputs, classe de ownership de arquivo), incluindo a skill genérica;
-- manifesto por vault (`hipocampo.yaml`) pra todo repositório de conteúdo instanciado, com estado de sincronização (`current`/`update-available`/etc.);
 - tradução completa do repositório `hipocampo` (só a metodologia, não os vaults nem a cópia pessoal de skill) pra inglês, com stub de redirecionamento em todo caminho de `decisions/` traduzido;
 - seção nova de comportamento sob falha (evidência insuficiente, contradição, ferramenta indisponível, interrupção, pedido inseguro, migração incompatível);
 - cenários representativos mínimos de avaliação;
 - casos de uso documentados;
+- `CONTRIBUTING.md` (ao final, por decisão do Mau);
 - `MIGRATIONS.md` ganhando sua primeira entrada real ("1.x → 2.0") e corte da tag `v2.0.0`.
 
 A release fica bloqueada até o gate de release da própria metodologia (`SPEC.md`, seção 9, e `decisions/0014`/`0021`/`0023`) passar e ser aprovado explicitamente por Mau.

@@ -34,16 +34,16 @@ controls:
     notes: ["Rituais bem descritos; sem modelo explícito de estágios/gates/paralelismo/condições de parada nos termos do MODA."]
   distribution_of_agency:
     status: "partial"
-    evidence: ["SPEC.md#8-extensãopersonalização-e-precedência-do-agente"]
-    notes: ["Invariante 5 e os gates de escrita recorrentes existem na prática; nunca classificados explicitamente como determinístico/agente-raciocinado/ferramenta-executado/humano-decidido/híbrido."]
+    evidence: ["SPEC.md#8-extensãopersonalização-e-precedência-do-agente", "skill/references/instanciacao.md"]
+    notes: ["Invariante 5 e os gates de escrita recorrentes existem na prática — inclusive no novo procedimento de instanciação agent-driven (Fase D); nunca classificados explicitamente como determinístico/agente-raciocinado/ferramenta-executado/humano-decidido/híbrido."]
   orchestration:
     status: "not-applicable"
     evidence: ["decisions/0025-skill-client-side-nunca-por-repositorio.md"]
     notes: ["Hipocampo é desenhado pra um agente por vez, client-side — sem orquestração multi-agente."]
   contracts:
     status: "partial"
-    evidence: ["SPEC.md#5-b-frontmatter-audit"]
-    notes: ["Saídas de ritual existem (ex.: meta/fila-de-manutencao.md) mas não formalizadas como contrato (critério de conclusão, estado de erro, devolução de controle)."]
+    evidence: ["SPEC.md#5-b-frontmatter-audit", "scaffold/profiles/pessoal.yaml", "scaffold/profiles/empresa.yaml"]
+    notes: ["Saídas de ritual existem (ex.: meta/fila-de-manutencao.md) mas não formalizadas como contrato (critério de conclusão, estado de erro, devolução de controle). Os profiles de scaffold (Fase D) já declaram inputs/outputs/conflitos formalmente, mas só pra instanciação — não pros rituais recorrentes."]
   state_context_and_knowledge:
     status: "satisfied"
     evidence: ["SPEC.md#5-a-ritual-rem-e-camadas-de-memória", "SPEC.md#6-related-entre-repositórios-o-registry"]
@@ -63,19 +63,19 @@ controls:
     evidence: ["decisions/0025-skill-client-side-nunca-por-repositorio.md", "docs/USO-MULTI-FERRAMENTA.md", "docs/MODELOS-DE-IA.md"]
   packaging_and_synchronization:
     status: "partial"
-    evidence: ["UPGRADE.md", "moda.yaml"]
-    notes: ["UPGRADE.md forte; sem manifesto de máquina pra skill nem hipocampo.yaml por vault ainda. Ver ROADMAP.md."]
+    evidence: ["UPGRADE.md", "moda.yaml", "skill/manifest.yaml", "scaffold/skeleton/hipocampo.yaml", "decisions/0033-manifesto-hipocampo-yaml-por-vault.md"]
+    notes: ["UPGRADE.md forte; skill/manifest.yaml (manifesto de máquina da skill) e o template de hipocampo.yaml por vault agora existem (Fase D). Nenhum dos 4 vaults reais existentes foi atualizado retroativamente com hipocampo.yaml ainda — ver UPGRADE.md."]
   evolution:
     status: "partial"
     evidence: ["CHANGELOG.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "ROADMAP.md", "SPEC.md#9-versionamento"]
-    notes: ["ROADMAP.md e a taxonomia de tipo de repositório (decisions/0029-0030) já concluídas nesta rodada; falta cadência declarada de auditoria da própria metodologia."]
+    notes: ["ROADMAP.md e a taxonomia de tipo de repositório (decisions/0029-0030) já concluídas; falta cadência declarada de auditoria da própria metodologia."]
   specification_driven_change_control:
     status: "partial"
-    evidence: ["docs/change-management.md", "decisions/0031-mecanismo-de-change-set.md", "changes/0026-0028-taxonomia-fato-relato-opiniao-e-ciclo-de-vida/"]
-    notes: ["Mecanismo de Change Set agora existe e está documentado, com um exercício de backfill (PR #22) validando o template; passa a ser obrigatório prospectivamente pra mudança operational/normative. Ainda sem validação determinística que compare impact.yaml com o diff real (ver quality_and_evaluation)."]
+    evidence: ["docs/change-management.md", "decisions/0031-mecanismo-de-change-set.md", "changes/0026-0028-taxonomia-fato-relato-opiniao-e-ciclo-de-vida/", "changes/0032-0033-scaffolding-e-manifesto-vault/"]
+    notes: ["Mecanismo de Change Set existe e está documentado, com um exercício de backfill (PR #22) e um Change Set prospectivo (Fase D, 0032/0033) validando o template nos dois modos. Ainda sem validação determinística que compare impact.yaml com o diff real (ver quality_and_evaluation)."]
   repository_contract:
     status: "partial"
-    evidence: ["README.md", "AGENTS.md", "moda.yaml", "CHANGELOG.md", "ROADMAP.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "docs/change-management.md", "changes/"]
-    notes: ["Change-management policy agora satisfeita (docs/change-management.md); validation policy segue mapeada de forma parcial (ver controle quality_and_evaluation); sem Git/release workflow dedicado além de decisions/0014."]
+    evidence: ["README.md", "AGENTS.md", "moda.yaml", "CHANGELOG.md", "ROADMAP.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "docs/change-management.md", "changes/", "scaffold/"]
+    notes: ["Change-management policy satisfeita (docs/change-management.md); mecanismo de scaffold agora declarativo (scaffold/, Fase D); validation policy segue mapeada de forma parcial (ver controle quality_and_evaluation); sem Git/release workflow dedicado além de decisions/0014."]
 
 exceptions: []

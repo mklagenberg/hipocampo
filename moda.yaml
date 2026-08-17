@@ -76,8 +76,16 @@ components:
     lifecycle: "embedded"
   - id: "personal-skill"
     kind: "skill"
-    source: "hipocampo-toolkit/skill/SKILL.md (repositório externo — consolidação planejada, ver ROADMAP.md)"
-    lifecycle: "independent"
+    source: "skill/SKILL.md"
+    lifecycle: "embedded"
+  - id: "vault-scaffold"
+    kind: "scaffold"
+    source: "scaffold/ (scaffold/profiles/pessoal.yaml, scaffold/profiles/empresa.yaml)"
+    lifecycle: "embedded"
+  - id: "vault-manifest"
+    kind: "schema"
+    source: "decisions/0033-manifesto-hipocampo-yaml-por-vault.md (scaffold/skeleton/hipocampo.yaml)"
+    lifecycle: "embedded"
 
 packages:
   specification:
@@ -90,6 +98,16 @@ packages:
     version: "1.9.0"
     source: "decisions/"
     source_kind: "local"
+  skill:
+    role: "client-side-operational-skill"
+    version: "ver skill/manifest.yaml"
+    source: "skill/"
+    source_kind: "local"
+  scaffold:
+    role: "vault-instantiation-scaffold"
+    version: "1.0.0"
+    source: "scaffold/"
+    source_kind: "local"
 
 installations: []
 
@@ -101,4 +119,4 @@ conformance:
 synchronization:
   policy: "UPGRADE.md"
   state: "current"
-  reason: "SPEC.md, CHANGELOG.md e decisions/ são mantidos sincronizados manualmente a cada PR mesclado (uma Decision Record acompanhada das entradas correspondentes em SPEC.md/CHANGELOG.md por mudança estrutural); a partir da Fase C, mudança operational/normative também acompanha um Change Set em changes/. Nenhuma checagem automatizada de drift existe ainda — ver conformance/moda.yaml, controles packaging_and_synchronization e quality_and_evaluation."
+  reason: "SPEC.md, CHANGELOG.md e decisions/ são mantidos sincronizados manualmente a cada PR mesclado (uma Decision Record acompanhada das entradas correspondentes em SPEC.md/CHANGELOG.md por mudança estrutural); a partir da Fase C, mudança operational/normative também acompanha um Change Set em changes/. A partir da Fase D, skill/ e scaffold/ vivem dentro do próprio repositório (sem sincronização cross-repositório com hipocampo-toolkit, que foi consolidado e arquivado). Nenhuma checagem automatizada de drift existe ainda — ver conformance/moda.yaml, controles packaging_and_synchronization e quality_and_evaluation."

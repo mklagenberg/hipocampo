@@ -7,10 +7,17 @@ Histórico de versões da metodologia em si. Segue [SemVer](https://semver.org/l
 Trabalho acumulado em `main`, ainda sem tag/release publicada — ver `decisions/0021-politica-de-cadencia-de-release.md`. Vira uma seção versionada de verdade quando a release for cortada.
 
 ### Adicionado
+- **`scaffold/`** (novo) — mecanismo de instanciação de vaults consolidado a partir do antigo repositório `hipocampo-toolkit`, como scaffold declarativo conforme MODA (`docs/composition-scaffolding-and-distribution.md`): dois profiles por domínio (`scaffold/profiles/pessoal.yaml`, `scaffold/profiles/empresa.yaml`, com `tier` como input), `scaffold/skeleton/` com o conteúdo-fonte de cada output, `scaffold/license-templates/` migrado sem alteração de conteúdo jurídico. Ver `decisions/0032-consolidacao-toolkit-em-scaffolding.md`.
+- **`skill/`** (migrado pra dentro de `hipocampo`) — a skill operacional da metodologia, antes hospedada só em `hipocampo-toolkit`, agora vive em `hipocampo/skill/` (`SKILL.md` + `references/crud-frontmatter.md`, `invariantes.md`, `personalizacao.md`, `rotinas.md`, e o novo `references/instanciacao.md`). A pasta `skill/` deixa de ser copiada pra dentro de repositórios de conteúdo novos — nunca teve efeito funcional ali (`decisions/0025`).
+- **`skill/manifest.yaml`** (novo) — manifesto de máquina da skill, seguindo o padrão `skill-manifest.yaml` do MODA, adaptado honestamente: sem versão independentemente empacotada/distribuída ainda (só a cópia pessoal client-side, `decisions/0025`).
+- **`skill/references/instanciacao.md`** (novo) — procedimento completo de instanciação agent-driven de um vault novo: escolha de profile, coleta de inputs, apresentação do plano antes de escrever (invariante 5), geração dos outputs, comportamento em conflito.
+- **`hipocampo.yaml`** (novo formato, por vault) — manifesto machine-readable que todo vault gerado pelo scaffold passa a carregar na raiz: proveniência (profile, commit-fonte, versão do engine), `instance.domain`/`instance.tier`, `state`. Ver `decisions/0033-manifesto-hipocampo-yaml-por-vault.md`. Divergência de vocabulário entre `instance.domain` (`pessoal`/`empresa`) e o campo "Tipo de instância" do `AGENTS.md` (`pessoal`/`corporativa`) é registrada como pendência conhecida, não harmonizada nesta fase.
+- **`changes/0032-0033-scaffolding-e-manifesto-vault/`** (novo) — Change Set prospectivo cobrindo `decisions/0032` e `decisions/0033`, primeiro exercício do mecanismo (`decisions/0031`) fora do modo backfill.
+- `moda.yaml`: componente `personal-skill` passa de lifecycle `independent` (hospedado em `hipocampo-toolkit`) pra `embedded`; novos componentes `vault-scaffold` e `vault-manifest`; novos pacotes locais `skill` e `scaffold` em `packages`.
+- `conformance/moda.yaml`: controle `packaging_and_synchronization` reavaliado à luz do `skill/manifest.yaml` e do `hipocampo.yaml` por vault (segue `partial` — nenhum vault real existente foi retroativamente atualizado ainda); controle `specification_driven_change_control` ganha segunda evidência (Change Set prospectivo, não só backfill); controles `distribution_of_agency`, `contracts` e `repository_contract` ganham evidência nova referente ao scaffold.
+- `README.md`, `GETTING-STARTED.md` (seções 1 e 2), `UPGRADE.md`: todos os pontos de referência a `hipocampo-toolkit` atualizados pra apontar pro `scaffold/` consolidado; `GETTING-STARTED.md` seção 2 reescrita do zero pro modelo agent-driven (sem botão "Use this template"); `UPGRADE.md` ganha itens novos de checklist (`hipocampo.yaml`, `skill/manifest.yaml`, divergência de vocabulário `domain`/"Tipo de instância").
 - **`docs/change-management.md`** (novo) — mecanismo de Change Set adotado do MODA e adaptado ao vocabulário do Hipocampo: classes `editorial`/`operational`/`normative`, estrutura `changes/<change-id>/` (`proposal.md` + `impact.yaml`), tabela de gatilhos própria. Passa a ser obrigatório pra mudança `operational`/`normative` a partir de agora. Ver `decisions/0031-mecanismo-de-change-set.md`.
 - **`changes/0026-0028-taxonomia-fato-relato-opiniao-e-ciclo-de-vida/`** (novo) — Change Set retroativo (backfill) do PR #22, primeiro exercício de validação do template.
-- `moda.yaml`: campo `documentation.change_management` passa a apontar pro `docs/change-management.md` real, em vez do mapeamento provisório em `decisions/0021`.
-- `conformance/moda.yaml`: controle `specification_driven_change_control` passa de `missing` pra `partial`. Fecha achado major 5 da auditoria de 2026-08-17.
 - **`moda.yaml`** (novo, raiz) — declaração formal de conformidade retrospectiva com o [MODA](https://github.com/mklagenberg/moda): `relationship: audited_against`, `adoption_mode: retrospective`, `claim_stage: mapped`, `conformance_result: partial`. Primeiro artefato da adequação da metodologia ao MODA rumo à v2.0.0.
 - **`conformance/moda.yaml`** (novo) — mapeamento controle-a-controle contra as dimensões de design do MODA (SPEC MODA, seção 4) e o contrato de repositório (seção 5), refletindo os achados da auditoria de 2026-08-17.
 - **`audits/moda/2026-08-17-v1.0.0-self-audit.md`** (novo) — auditoria de conformidade MODA congelada como evidência imutável.
@@ -41,6 +48,8 @@ Trabalho acumulado em `main`, ainda sem tag/release publicada — ver `decisions
 - `decisions/0029-taxonomia-tipo-de-repositorio.md` — ver acima.
 - `decisions/0030-promote-graduacao-mesmo-dominio.md` — ver acima.
 - `decisions/0031-mecanismo-de-change-set.md` — ver acima.
+- `decisions/0032-consolidacao-toolkit-em-scaffolding.md` — ver acima.
+- `decisions/0033-manifesto-hipocampo-yaml-por-vault.md` — ver acima.
 
 ### Alterado
 - SPEC.md, seção 5-A: ritual REM ganha segunda função ("atualizar memórias antigas", processando a fila do frontmatter audit) e cadência recomendada diária.
@@ -49,8 +58,12 @@ Trabalho acumulado em `main`, ainda sem tag/release publicada — ver `decisions
 - SPEC.md, seção 5-C: função 3 (vazamento de dado sensível) reescrita pra citar o mesmo campo "tipo de instância" do `AGENTS.md`, no mesmo padrão já usado pela função 2 (posicionamento).
 - SPEC.md, seção 9: reescrita — critério operacional de escopo (DR0023), regra de tag + Release sempre publicados juntos (fecha a assimetria real da v1.3.0, que tem tag sem Release), e rotina de release expandida pra incluir a atualização do `UPGRADE.md` (DR0024).
 - SPEC.md, seção 11: nota final apontando pro `UPGRADE.md` como checklist completo de migração `CLAUDE.md` → `AGENTS.md`.
-- `UPGRADE.md`: novo item obrigatório — repositório de conteúdo não tem pasta `skill/` própria (DR0025).
+- `UPGRADE.md`: novo item obrigatório — repositório de conteúdo não tem pasta `skill/` própria (DR0025); e, nesta rodada, itens novos de manifesto `hipocampo.yaml`, `skill/manifest.yaml` e divergência de vocabulário (DR0033); caminhos `hipocampo-toolkit/*` corrigidos pra `scaffold/*` (DR0032).
 - Corrigido o cabeçalho de versão do SPEC.md, que estava desatualizado em "1.6.0" (não acompanhava os releases v1.7.0-v1.9.0, que não alteraram o SPEC.md em si) — agora reflete a versão atual, 1.9.0 + não lançado.
+- `README.md`, `GETTING-STARTED.md`: pontos de referência a `hipocampo-toolkit` (instanciação via "Use this template", caminho da skill genérica) reescritos pro modelo agent-driven baseado em `scaffold/` (DR0032).
+
+### Removido
+- Referência ao repositório `hipocampo-toolkit` como template GitHub separado — consolidado dentro de `hipocampo` (`scaffold/` + `skill/`). O repositório em si é arquivado no GitHub como ação manual (nenhuma ferramenta disponível neste processo automatiza esse passo), recebendo antes um aviso de redirecionamento no próprio `README.md` dele.
 
 ## [1.9.0] — 2026-07-29
 
