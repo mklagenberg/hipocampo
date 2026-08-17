@@ -37,7 +37,7 @@ documentation:
   migrations: "MIGRATIONS.md"
   decisions: "decisions/"
   decision_policy: "SPEC.md#7-decision-record-vs-type-decision"
-  change_management: "decisions/0021-politica-de-cadencia-de-release.md"
+  change_management: "docs/change-management.md"
   validation: "audits/moda/2026-08-17-v1.0.0-self-audit.md"
   git_workflow: "decisions/0014-rotina-obrigatoria-de-release.md"
 
@@ -70,6 +70,10 @@ components:
     kind: "template"
     source: "SPEC.md#7-decision-record-vs-type-decision"
     lifecycle: "embedded"
+  - id: "change-set-mechanism"
+    kind: "protocol"
+    source: "docs/change-management.md"
+    lifecycle: "embedded"
   - id: "personal-skill"
     kind: "skill"
     source: "hipocampo-toolkit/skill/SKILL.md (repositório externo — consolidação planejada, ver ROADMAP.md)"
@@ -97,4 +101,4 @@ conformance:
 synchronization:
   policy: "UPGRADE.md"
   state: "current"
-  reason: "SPEC.md, CHANGELOG.md e decisions/ são mantidos sincronizados manualmente a cada PR mesclado (uma Decision Record acompanhada das entradas correspondentes em SPEC.md/CHANGELOG.md por mudança estrutural); nenhuma checagem automatizada de drift existe ainda — ver conformance/moda.yaml, controles packaging_and_synchronization e quality_and_evaluation."
+  reason: "SPEC.md, CHANGELOG.md e decisions/ são mantidos sincronizados manualmente a cada PR mesclado (uma Decision Record acompanhada das entradas correspondentes em SPEC.md/CHANGELOG.md por mudança estrutural); a partir da Fase C, mudança operational/normative também acompanha um Change Set em changes/. Nenhuma checagem automatizada de drift existe ainda — ver conformance/moda.yaml, controles packaging_and_synchronization e quality_and_evaluation."
