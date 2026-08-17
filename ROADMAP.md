@@ -1,50 +1,50 @@
 # Roadmap
 
-Última revisão: **2026-08-17**
+Last revised: **2026-08-17**
 
-Este roadmap comunica direção, não promessa de data. Só um plano de release aprovado ou marco formal cria compromisso de entrega. Trabalho detalhado vive em Decision Records e PRs; trabalho concluído vive no `CHANGELOG.md`.
+This roadmap communicates direction, not a date commitment. Only an approved release plan or formal milestone creates a delivery commitment. Detailed work lives in Decision Records and PRs; completed work lives in `CHANGELOG.md`.
 
-## Agora
+## Now
 
-### Adequação da metodologia ao MODA — rumo à v2.0.0
+### Bringing the methodology into MODA conformance — toward v2.0.0
 
-**Resultado:** Hipocampo declara e sustenta com evidência real uma relação formal de conformidade com o [MODA](https://github.com/mklagenberg/moda) — hoje `audited_against`/`mapped`/`partial` (ver `moda.yaml`, `conformance/moda.yaml`), evoluindo pra `conforms_to` conforme os achados `major` da auditoria de 2026-08-17 (`audits/moda/`) forem endereçados.
+**Outcome:** Hipocampo declares and sustains, with real evidence, a formal conformance relationship with [MODA](https://github.com/mklagenberg/moda) — today `audited_against`/`mapped`/`partial` (see `moda.yaml`, `conformance/moda.yaml`), evolving toward `conforms_to` as the `major` findings from the 2026-08-17 audit (`audits/moda/`) are addressed.
 
-**Status:** em andamento — taxonomia de tipo de repositório (`decisions/0029`/`0030`), fundação declarativa (`moda.yaml`, `AGENTS.md`, este `ROADMAP.md`), mecanismo de Change Set (`docs/change-management.md`, `decisions/0031`) e consolidação do `hipocampo-toolkit` em scaffolding + manifesto `hipocampo.yaml` por vault (`scaffold/`, `decisions/0032`/`0033`) já mescladas; validação determinística, tradução pra inglês, e as dimensões de design ainda faltantes (falha/recuperação, qualidade/avaliação) seguem pendentes.
+**Status:** in progress — repository type taxonomy (`decisions/0029`/`0030`), declarative foundation (`moda.yaml`, `AGENTS.md`, this `ROADMAP.md`), Change Set mechanism (`docs/change-management.md`, `decisions/0031`), and consolidation of `hipocampo-toolkit` into scaffolding + the `hipocampo.yaml` manifest per vault (`scaffold/`, `decisions/0032`/`0033`) have already been merged; deterministic validation, English translation, and the design dimensions still missing (failure/recovery, quality/evaluation) remain pending.
 
-**Pendências manuais (fora do escopo de qualquer PR):** arquivamento do repositório `hipocampo-toolkit` no GitHub, e commit de aviso de redirecionamento no `README.md` dele — nenhuma ferramenta disponível neste processo automatiza a ação de arquivar um repositório; ação do Mau.
+**Manual pending items (outside the scope of any PR):** archiving the `hipocampo-toolkit` repository on GitHub, and committing a redirect notice to its `README.md` — no tool available in this process automates the action of archiving a repository; this is Mau's action.
 
-O trabalho restante inclui:
+The remaining work includes:
 
-- validação determinística mínima (script + CI) da integridade estrutural do próprio repositório de metodologia;
-- tradução completa do repositório `hipocampo` (só a metodologia, não os vaults nem a cópia pessoal de skill) pra inglês, com stub de redirecionamento em todo caminho de `decisions/` traduzido;
-- seção nova de comportamento sob falha (evidência insuficiente, contradição, ferramenta indisponível, interrupção, pedido inseguro, migração incompatível);
-- cenários representativos mínimos de avaliação;
-- casos de uso documentados;
-- `CONTRIBUTING.md` (ao final, por decisão do Mau);
-- `MIGRATIONS.md` ganhando sua primeira entrada real ("1.x → 2.0") e corte da tag `v2.0.0`.
+- minimal deterministic validation (script + CI) of the structural integrity of the methodology repository itself;
+- complete translation of the `hipocampo` repository (only the methodology, not the vaults nor the personal skill copy) into English, with a redirect stub at every translated `decisions/` path;
+- new section on behavior under failure (insufficient evidence, contradiction, unavailable tool, interruption, unsafe request, incompatible migration);
+- minimal representative evaluation scenarios;
+- documented use cases;
+- `CONTRIBUTING.md` (at the end, per Mau's decision);
+- `MIGRATIONS.md` getting its first real entry ("1.x → 2.0") and cutting the `v2.0.0` tag.
 
-A release fica bloqueada até o gate de release da própria metodologia (`SPEC.md`, seção 9, e `decisions/0014`/`0021`/`0023`) passar e ser aprovado explicitamente por Mau.
+The release is blocked until the methodology's own release gate (`SPEC.md`, section 9, and `decisions/0014`/`0021`/`0023`) passes and is explicitly approved by Mau.
 
-## Depois
+## Next
 
-### Validação determinística contínua
+### Continuous deterministic validation
 
-**Resultado:** toda PR contra `main` roda automaticamente checagem de template de Decision Record, links internos, e consistência versão declarada ↔ `CHANGELOG.md`, sem depender de revisão manual pra achar esse tipo de erro.
+**Outcome:** every PR against `main` automatically runs a check of the Decision Record template, internal links, and consistency between the declared version and `CHANGELOG.md`, without depending on manual review to catch this kind of error.
 
-**Status:** especificado como parte da v2.0.0 (ver "Agora"); implementação real ainda não começou.
+**Status:** specified as part of v2.0.0 (see "Now"); actual implementation hasn't started yet.
 
-## Mais tarde
+## Later
 
-### Auditoria periódica de instâncias reais
+### Periodic audit of real instances
 
-**Resultado:** os 4 repositórios de conteúdo do Mau (e qualquer instância futura de terceiro) têm uma cadência declarada de checagem de aderência ao `hipocampo.yaml`/`UPGRADE.md`, não só sob pedido explícito.
+**Outcome:** Mau's 4 content repositories (and any future third-party instance) have a declared cadence for checking conformance to `hipocampo.yaml`/`UPGRADE.md`, not only on explicit request.
 
-**Status:** hipótese.
+**Status:** hypothesis.
 
-## Não planejado
+## Not planned
 
-- Hospedar ou executar instância de conteúdo — Hipocampo especifica, não roda infraestrutura.
-- Orquestração multi-agente — Hipocampo é desenhado pra um agente por vez, client-side (`decisions/0025`).
-- Atualizar silenciosamente skill instalada ou conteúdo já gerado numa instância.
-- Certificação externa de conformidade MODA — MODA 1.0 não oferece isso, e Hipocampo não pretende inventar a própria.
+- Hosting or running a content instance — Hipocampo specifies, it doesn't run infrastructure.
+- Multi-agent orchestration — Hipocampo is designed for one agent at a time, client-side (`decisions/0025`).
+- Silently updating an installed skill or content already generated in an instance.
+- External MODA conformance certification — MODA 1.0 doesn't offer this, and Hipocampo doesn't intend to invent its own.

@@ -1,60 +1,60 @@
-# Instruções para agentes
+# Instructions for agents
 
-Hipocampo é um repositório de metodologia, público. Este arquivo é o entry point canônico de agente pra quem contribui **na metodologia em si** — distinto do `AGENTS.md` que cada instância de conteúdo (vault) usa pra si mesma, e que o Hipocampo especifica pra outros (`SPEC.md`, seção 11). Se você chegou aqui tentando operar um vault (salvar conhecimento, rodar um ritual), o arquivo certo é o `AGENTS.md` daquele repositório de conteúdo, não este.
+Hipocampo is a public methodology repository. This file is the canonical agent entry point for whoever contributes **to the methodology itself** — distinct from the `AGENTS.md` that each content instance (vault) uses for itself, and that Hipocampo specifies for others (`SPEC.md`, section 11). If you got here trying to operate a vault (store knowledge, run a ritual), the right file is that content repository's `AGENTS.md`, not this one.
 
-## Comece pelo mapa
+## Start with the map
 
-Carregue só o contexto necessário pra tarefa atual:
+Load only the context needed for the current task:
 
-1. Leia `README.md` pra identidade e navegação do repositório.
-2. Leia `SPEC.md` pra especificação normativa completa.
-3. Leia `moda.yaml` pra identidade legível por máquina e estado de conformidade com o MODA.
-4. Leia a Decision Record relevante em `decisions/` antes de mudar qualquer regra já existente.
-5. Leia `ROADMAP.md` quando a mudança afetar direção ou introduzir capacidade nova.
-6. Leia `CHANGELOG.md` e `UPGRADE.md` antes de mudar comportamento já lançado.
-7. Leia `conformance/moda.yaml` e a auditoria mais recente em `audits/moda/` antes de mudar estrutura que afete conformidade com o MODA.
+1. Read `README.md` for the repository's identity and navigation.
+2. Read `SPEC.md` for the complete normative specification.
+3. Read `moda.yaml` for machine-readable identity and MODA conformance state.
+4. Read the relevant Decision Record in `decisions/` before changing any existing rule.
+5. Read `ROADMAP.md` when the change affects direction or introduces a new capability.
+6. Read `CHANGELOG.md` and `UPGRADE.md` before changing already-released behavior.
+7. Read `conformance/moda.yaml` and the latest audit in `audits/moda/` before changing structure that affects MODA conformance.
 
-Não transforme este arquivo numa enciclopédia. Conhecimento detalhado vive nos documentos linkados.
+Don't turn this file into an encyclopedia. Detailed knowledge lives in the linked documents.
 
-## Disclosure MODA
+## MODA Disclosure
 
 <!-- moda:disclosure:start -->
-Este repositório está sendo estruturado e avaliado com o [MODA](https://github.com/mklagenberg/moda) — um framework aberto para organizar, desenhar, auditar, empacotar e evoluir metodologias agênticas.
+This repository is being structured and evaluated with [MODA](https://github.com/mklagenberg/moda) — an open framework for organizing, designing, auditing, packaging, and evolving agentic methodologies.
 
-Antes de mudar a estrutura da metodologia, leia `moda.yaml`, `conformance/moda.yaml`, e a auditoria mais recente em `audits/moda/`. Não alegue conformidade sem evidência produzida contra a versão declarada do MODA — hoje a relação declarada é `audited_against` (retrospectiva, `claim_stage: mapped`, `conformance_result: partial`), não `conforms_to`. Não migre estrutura silenciosamente.
+Before changing the methodology's structure, read `moda.yaml`, `conformance/moda.yaml`, and the latest audit in `audits/moda/`. Do not claim conformance without evidence produced against the declared MODA version — today the declared relationship is `audited_against` (retrospective, `claim_stage: mapped`, `conformance_result: partial`), not `conforms_to`. Do not migrate structure silently.
 <!-- moda:disclosure:end -->
 
-## Regras de trabalho
+## Working rules
 
-- Preserve a distinção entre metodologia, framework, método, processo, procedimento, workflow, padrão, prompt, skill, toolkit e implementação (SPEC MODA, seção 3) — o próprio `SPEC.md` já usa essas distinções de forma consistente, mesmo sem as palavras-chave RFC 2119 explícitas do MODA.
-- Trate o repositório como sistema de registro. Não trate uma conversa não registrada como única fonte de intenção durável — decisão estrutural sempre vira Decision Record.
-- Aponte pra evidência; não copie regra normativa pra dentro de mapeamento de conformidade ou relatório de auditoria.
-- Prefira validação determinística quando ela existir — hoje não existe nenhuma pro próprio repositório de metodologia (achado `major` da auditoria de 2026-08-17, `audits/moda/`); até isso ser resolvido (ver `ROADMAP.md`), toda mudança estrutural depende de revisão humana explícita.
-- Exija direção humana pra intenção não resolvida, aceitação de risco, ação destrutiva, efeito colateral externo, fronteira de segurança, e migração incompatível — mesmo princípio do invariante 5 do `SPEC.md` (seção 8), aplicado aqui à metodologia em si, não só às instâncias que ela especifica.
-- Nunca relate fonte, teste, link ou auditoria como checado quando não foi checado de fato.
+- Preserve the distinction between methodology, framework, method, process, procedure, workflow, standard, prompt, skill, toolkit, and implementation (MODA SPEC, section 3) — `SPEC.md` itself already uses these distinctions consistently, even without MODA's explicit RFC 2119 keywords.
+- Treat the repository as a system of record. Do not treat an unrecorded conversation as the sole source of durable intent — a structural decision always becomes a Decision Record.
+- Point to evidence; do not copy normative rules into a conformance mapping or audit report.
+- Prefer deterministic validation when it exists — today none exists for the methodology repository itself (`major` finding from the 2026-08-17 audit, `audits/moda/`); until this is resolved (see `ROADMAP.md`), every structural change depends on explicit human review.
+- Require human direction for unresolved intent, risk acceptance, destructive action, external side effect, security boundary, and incompatible migration — same principle as invariant 5 of `SPEC.md` (section 8), applied here to the methodology itself, not only to the instances it specifies.
+- Never report a source, test, link, or audit as checked when it wasn't actually checked.
 
-## Protocolo de mudança
+## Change protocol
 
-- Classifique o trabalho como editorial, operacional ou normativo antes de implementar (vocabulário do MODA). O mecanismo formal de Change Set (`changes/<id>/proposal.md` + `impact.yaml`) existe desde a Fase C (`docs/change-management.md`, `decisions/0031-mecanismo-de-change-set.md`) e é **obrigatório** pra mudança `operational`/`normative` a partir daquele ponto: um Change Set novo em `changes/<id>/`, acompanhando a Decision Record (quando envolve escolha estrutural) e as seções correspondentes de `SPEC.md`/`CHANGELOG.md`, todos atualizados na mesma PR. Mudança `editorial` não exige Change Set.
-- Mude a especificação normativa (`SPEC.md`) primeiro quando a obrigação mudar.
-- Use branch de vida curta e PR pra mudança normal; mantenha `main` como única branch de integração permanente.
-- Atualize `CHANGELOG.md` pra mudança de comportamento ou contrato notável.
-- Registre escolha estrutural durável em `decisions/`.
-- Atualize `ROADMAP.md` quando a direção mudar; nunca use como backlog de tarefa ou changelog.
-- Atualize `UPGRADE.md` pra ação de adoção exigida por release compatível pra trás.
-- Atualize `MIGRATIONS.md` pra mudança incompatível.
-- Quando operar só via MCP, sem capacidade de criar tag/release, forneça ao humano a tag exata, branch alvo, commit, título, descrição derivada do changelog, e classificação de release pra criação após aprovação — nunca alegue que a tag ou release existe. Ver `SPEC.md`, seção 9, e `decisions/0014-rotina-obrigatoria-de-release.md`.
+- Classify the work as editorial, operational, or normative before implementing (MODA vocabulary). The formal Change Set mechanism (`changes/<id>/proposal.md` + `impact.yaml`) has existed since Phase C (`docs/change-management.md`, `decisions/0031-change-set-mechanism.md`) and is **mandatory** for `operational`/`normative` change from that point on: a new Change Set in `changes/<id>/`, accompanying the Decision Record (when it involves a structural choice) and the corresponding sections of `SPEC.md`/`CHANGELOG.md`, all updated in the same PR. `editorial` change doesn't require a Change Set.
+- Change the normative specification (`SPEC.md`) first when the obligation changes.
+- Use a short-lived branch and PR for normal change; keep `main` as the only permanent integration branch.
+- Update `CHANGELOG.md` for a notable behavior or contract change.
+- Record a durable structural choice in `decisions/`.
+- Update `ROADMAP.md` when direction changes; never use it as a task backlog or changelog.
+- Update `UPGRADE.md` for adoption action required by a backward-compatible release.
+- Update `MIGRATIONS.md` for an incompatible change.
+- When operating only via MCP, without the ability to create a tag/release, give the human the exact tag, target branch, commit, title, description derived from the changelog, and release classification for creation after approval — never claim the tag or release exists. See `SPEC.md`, section 9, and `decisions/0014-mandatory-release-routine.md`.
 
-## Versionamento
+## Versioning
 
-Hipocampo segue [SemVer](https://semver.org/lang/pt-BR/) — critério operacional completo em `SPEC.md`, seção 9, e `decisions/0023-criterio-operacional-escopo-semver.md`.
+Hipocampo follows [SemVer](https://semver.org/lang/pt-BR/) — full operational criterion in `SPEC.md`, section 9, and `decisions/0023-operational-criterion-for-semver-scope.md`.
 
-## Conclusão
+## Conclusion
 
-Uma mudança só está completa quando:
+A change is only complete when:
 
-- a intenção e o escopo estão explícitos;
-- a Decision Record relevante (quando aplicável), o Change Set (quando `operational`/`normative`) e as seções correspondentes de `SPEC.md`/`CHANGELOG.md` estão sincronizados na mesma PR;
-- nenhum achado crítico conhecido fica escondido;
-- documentação afetada e disclosures gerados estão sincronizados;
-- nenhuma alegação de conformidade MODA vai além do que a evidência em `conformance/moda.yaml` sustenta.
+- the intent and scope are explicit;
+- the relevant Decision Record (when applicable), the Change Set (when `operational`/`normative`), and the corresponding sections of `SPEC.md`/`CHANGELOG.md` are synchronized in the same PR;
+- no known critical finding is left hidden;
+- affected documentation and generated disclosures are synchronized;
+- no MODA conformance claim goes beyond what the evidence in `conformance/moda.yaml` supports.
