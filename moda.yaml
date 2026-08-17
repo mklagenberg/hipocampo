@@ -1,0 +1,100 @@
+moda:
+  manifest_version: "1.0"
+  repository: "https://github.com/mklagenberg/hipocampo"
+  compatibility: "^1.0.0"
+  verified_against: "1.0.0"
+  verified_commit: "81171ed22163f73f250e32534f9edc3a4f8d51e1"
+
+artifact:
+  id: "hipocampo"
+  name: "Hipocampo"
+  full_name: "Hipocampo — metodologia de second brain agêntico"
+  kind: "methodology"
+  domain: "personal-and-corporate-knowledge-management"
+  version: "1.9.0"
+  status: "active"
+  language: "pt-BR"
+  repository: "https://github.com/mklagenberg/hipocampo"
+  license: "Apache-2.0"
+
+adoption:
+  relationship: "audited_against"
+  mode: "retrospective"
+  claim_stage: "mapped"
+  conformance_result: "partial"
+
+documentation:
+  human_entrypoint: "README.md"
+  agent_entrypoint: "AGENTS.md"
+  specification: "SPEC.md"
+  getting_started: "GETTING-STARTED.md"
+  invariants: "SPEC.md#8-extensãopersonalização-e-precedência-do-agente"
+  best_practices: "BEST-PRACTICES.md"
+  limitations: "DISCLAIMER.md"
+  changelog: "CHANGELOG.md"
+  roadmap: "ROADMAP.md"
+  upgrade: "UPGRADE.md"
+  migrations: "MIGRATIONS.md"
+  decisions: "decisions/"
+  decision_policy: "SPEC.md#7-decision-record-vs-type-decision"
+  change_management: "decisions/0021-politica-de-cadencia-de-release.md"
+  validation: "audits/moda/2026-08-17-v1.0.0-self-audit.md"
+  git_workflow: "decisions/0014-rotina-obrigatoria-de-release.md"
+
+components:
+  - id: "frontmatter-schema"
+    kind: "specification"
+    source: "SPEC.md#2-frontmatter-schema-unificado"
+    lifecycle: "embedded"
+  - id: "repository-taxonomy"
+    kind: "model"
+    source: "SPEC.md#2-c-taxonomia-de-tipo-de-repositório-domínio-e-tier"
+    lifecycle: "embedded"
+  - id: "rem-ritual"
+    kind: "procedure"
+    source: "SPEC.md#5-a-ritual-rem-e-camadas-de-memória"
+    lifecycle: "embedded"
+  - id: "frontmatter-audit"
+    kind: "procedure"
+    source: "SPEC.md#5-b-frontmatter-audit"
+    lifecycle: "embedded"
+  - id: "structural-audit"
+    kind: "procedure"
+    source: "SPEC.md#5-c-auditoria-estrutural-semanal"
+    lifecycle: "embedded"
+  - id: "cross-repo-lifecycle-actions"
+    kind: "pattern"
+    source: "SPEC.md#13-ações-de-ciclo-de-vida-cross-repositório-promote-depromote-redbutton"
+    lifecycle: "embedded"
+  - id: "decision-record-template"
+    kind: "template"
+    source: "SPEC.md#7-decision-record-vs-type-decision"
+    lifecycle: "embedded"
+  - id: "personal-skill"
+    kind: "skill"
+    source: "hipocampo-toolkit/skill/SKILL.md (repositório externo — consolidação planejada, ver ROADMAP.md)"
+    lifecycle: "independent"
+
+packages:
+  specification:
+    role: "normative-specification"
+    version: "1.9.0"
+    source: "SPEC.md"
+    source_kind: "local"
+  decisions:
+    role: "durable-decision-records"
+    version: "1.9.0"
+    source: "decisions/"
+    source_kind: "local"
+
+installations: []
+
+conformance:
+  profile: "conformance/moda.yaml"
+  latest_audit: "audits/moda/2026-08-17-v1.0.0-self-audit.md"
+  audit_mode: "self-audit"
+
+synchronization:
+  policy: "UPGRADE.md"
+  state: "current"
+  reason: "SPEC.md, CHANGELOG.md e decisions/ são mantidos sincronizados manualmente a cada PR mesclado (uma Decision Record acompanhada das entradas correspondentes em SPEC.md/CHANGELOG.md por mudança estrutural); nenhuma checagem automatizada de drift existe ainda — ver conformance/moda.yaml, controles packaging_and_synchronization e quality_and_evaluation."
