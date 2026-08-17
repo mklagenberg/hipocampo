@@ -10,13 +10,15 @@ Metodologia de second brain agêntico: git + markdown + rituais de IA. Este repo
 - [CHANGELOG.md](CHANGELOG.md) — histórico de versões da metodologia.
 - [ROADMAP.md](ROADMAP.md) — direção atual, sem compromisso de data.
 - [decisions/](decisions/) — Decision Records: por que cada regra estrutural é o que é.
-- [docs/FUNDAMENTOS.md](docs/FUNDAMENTOS.md) — introdução a git/GitHub pra quem nunca usou, com paralelo a Obsidian, passo a passo de "Use this template" e checklist de privacidade.
+- [skill/SKILL.md](skill/SKILL.md) — skill operacional da metodologia (fonte canônica genérica; cada pessoa instala e personaliza sua própria cópia).
+- [scaffold/README.md](scaffold/) — mecanismo declarativo de instanciação de repositórios de conteúdo novos (profiles, esqueleto de arquivos, templates de LICENSE).
+- [docs/FUNDAMENTOS.md](docs/FUNDAMENTOS.md) — introdução a git/GitHub pra quem nunca usou, com paralelo a Obsidian e checklist de privacidade.
 - [docs/MODELOS-DE-IA.md](docs/MODELOS-DE-IA.md) — o que importa num modelo/produto de IA pra operar o Hipocampo bem.
 - [docs/PERFORMANCE-E-GRAFO.md](docs/PERFORMANCE-E-GRAFO.md) — como o retrieval/grafo funciona, e a relação com o OKF da Google.
 - [docs/USO-MULTI-FERRAMENTA.md](docs/USO-MULTI-FERRAMENTA.md) — princípio comum e especificidades de uso em Claude, ChatGPT, Gemini, Copilot, Antigravity.
 - [docs/FAQ-E-ERROS-COMUNS.md](docs/FAQ-E-ERROS-COMUNS.md) — erros de instanciação já encontrados de verdade e perguntas frequentes.
 
-Para instanciar um repositório de conteúdo a partir desta metodologia, use o template em [hipocampo-toolkit](https://github.com/mklagenberg/hipocampo-toolkit).
+Para instanciar um repositório de conteúdo a partir desta metodologia, peça pro agente que opera sua cópia da skill Hipocampo pra executar o scaffold declarado em [scaffold/](scaffold/) — não existe mais um botão "Use this template" separado (o antigo `hipocampo-toolkit` foi consolidado aqui, `decisions/0032`). Procedimento operacional completo: [skill/references/instanciacao.md](skill/references/instanciacao.md).
 
 Agentes devem começar por [AGENTS.md](AGENTS.md).
 

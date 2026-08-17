@@ -11,7 +11,7 @@ Antes de instanciar qualquer coisa, uma ordem de leitura que evita voltar atrás
 3. **[BEST-PRACTICES.md](BEST-PRACTICES.md)** — julgamento do dia a dia, privacidade, adoção em equipe — depois que a mecânica já fez sentido.
 4. Sob demanda, quando a dúvida aparecer: **[SPEC.md](SPEC.md)** (a norma completa), **[docs/MODELOS-DE-IA.md](docs/MODELOS-DE-IA.md)** (o que importa num agente de IA pra operar isso bem) e **[docs/PERFORMANCE-E-GRAFO.md](docs/PERFORMANCE-E-GRAFO.md)** (como o retrieval funciona, e a relação com o OKF da Google).
 
-Se você já instanciou um repositório e só quer o passo a passo imediato de configuração, pule pra seção 2 abaixo e para o `POS-INSTANCIACAO.md` do `hipocampo-toolkit`.
+Se você já instanciou um repositório e só quer o passo a passo imediato de configuração, pule pra seção 2 abaixo e para o `POS-INSTANCIACAO.md` gerado pelo agente dentro do seu repositório novo (fonte-modelo: `scaffold/skeleton/POS-INSTANCIACAO.md`).
 
 ## 1. Entenda a arquitetura antes de criar nada
 
@@ -19,21 +19,22 @@ Hipocampo separa dois tipos de repositório:
 
 | Camada | O que guarda | Visibilidade |
 |---|---|---|
-| Metodologia e ferramental (`hipocampo`, `hipocampo-toolkit`) | Spec, regras, template, skill — nunca conteúdo real | Pública |
-| Base de conhecimento (qualquer repositório instanciado a partir do `hipocampo-toolkit`) | O conteúdo de fato — notas, decisões, projetos, pessoas | **Sempre privada, sem exceção** |
+| Metodologia e ferramental (`hipocampo`, incluindo `scaffold/` e `skill/`) | Spec, regras, scaffold, skill — nunca conteúdo real | Pública |
+| Base de conhecimento (qualquer repositório instanciado pelo agente a partir do scaffold em `hipocampo/scaffold/`) | O conteúdo de fato — notas, decisões, projetos, pessoas | **Sempre privada, sem exceção** |
 
-Você nunca edita `hipocampo` nem `hipocampo-toolkit` para guardar conhecimento próprio. Eles são a spec e o molde; seu conhecimento vive num repositório separado, privado, instanciado a partir do molde.
+Você nunca edita `hipocampo` pra guardar conhecimento próprio. Ele é a spec e o scaffold; seu conhecimento vive num repositório separado, privado, instanciado a partir do scaffold.
 
 ## 2. Instancie um repositório de conteúdo
 
-1. No GitHub, acesse `hipocampo-toolkit` e use o botão **"Use this template"** para criar um repositório novo.
-2. **Marque o novo repositório como privado.** Isso não é opcional — é o invariante que sustenta todo o modelo de `visibility` do SPEC.md (seção 8).
-3. **Substitua o `LICENSE`.** O template copia o Apache-2.0 da metodologia, que é errado pra um repositório de conteúdo. Use um dos templates em `hipocampo-toolkit/license-templates/` (pessoal ou corporativo), preenchido com o titular real — nunca deixe o Apache-2.0 herdado.
-4. **Personalize e instale sua própria cópia da skill.** `hipocampo-toolkit/skill/SKILL.md` é genérica — hardcoda só `hipocampo`/`hipocampo-toolkit`. Preencha o roteador de repositórios (seção "Personalização obrigatória" da skill) com os nomes dos seus repositórios pessoais/corporativos, e registre a skill de fato (o template só copia o esqueleto, não a deixa funcional sozinha).
-5. No `CLAUDE.md` gerado a partir do template, preencha o bloco "Extensões locais a Hipocampo vX.Y" com as decisões específicas dessa instância (subpastas de `category` que você já sabe que vai usar, `ttl` default por tipo de conteúdo, convenção de commit).
-6. Declare a versão de compatibilidade (exemplo: "Segue Hipocampo ^1.6.0").
+Não existe mais um botão "Use this template" — a instanciação é executada por um agente de IA operando a skill Hipocampo (ver `skill/references/instanciacao.md`), a partir de um profile declarado em `scaffold/profiles/` (`pessoal.yaml` ou `empresa.yaml`, `decisions/0032`).
 
-O passo a passo detalhado desses seis itens, em formato de checklist, está em `hipocampo-toolkit/POS-INSTANCIACAO.md`.
+1. Peça ao agente pra instanciar um repositório novo, informando: nome do repositório, tipo de instância (`corporativa`/`pessoal`), titular do conteúdo (pessoa física ou empresa), e nível de curadoria (`conteudo` ou `vault` — ver `SPEC.md`, seção 2-C).
+2. O agente lê o profile correspondente, coleta qualquer input que faltar, e **apresenta o plano completo antes de escrever qualquer coisa** (invariante 5, `SPEC.md` seção 8) — repositório a criar, cada arquivo a gerar, LICENSE escolhido.
+3. Depois de você confirmar, o agente cria o repositório (**privado — não é opcional**, invariante 1) e gera cada output declarado no profile: `AGENTS.md` e `hipocampo.yaml` já preenchidos com os inputs coletados, `LICENSE` já a partir do template certo (`scaffold/license-templates/`), `CLAUDE.md`, `POS-INSTANCIACAO.md`, `registry.md`, `example/exemplo-nota.md`.
+4. O repositório novo **não** recebe uma pasta `skill/` — a skill roda sempre no seu ambiente de IA, por pessoa, nunca por repositório (`decisions/0025`). Se ainda não tiver, instale sua própria cópia personalizada a partir de [`skill/SKILL.md`](skill/SKILL.md) + `skill/references/*.md` (este repositório, fonte canônica), preenchendo o roteador de repositórios (`references/personalizacao.md` da sua cópia) — inclusive com este repositório novo.
+5. Depois de gerado, siga o `POS-INSTANCIACAO.md` do repositório novo — agora um checklist de **verificação**, não um passo a passo manual: confirma que o agente gerou tudo certo antes de você guardar qualquer conhecimento real.
+
+Detalhe operacional completo (quem faz o quê, em que ordem, o que apresentar antes de escrever): `skill/references/instanciacao.md`.
 
 ## 3. Escreva seu primeiro documento
 
@@ -65,7 +66,7 @@ Se você mantém mais de um repositório de conteúdo (por exemplo, um pessoal e
 
 ## 5. Rotinas
 
-Hipocampo pressupõe rituais periódicos conduzidos por um agente de IA sob sua supervisão — não automação sem revisão. Dois rituais centrais, ambos já cobertos pela skill Hipocampo (`hipocampo-toolkit/skill/SKILL.md`, depois de personalizada):
+Hipocampo pressupõe rituais periódicos conduzidos por um agente de IA sob sua supervisão — não automação sem revisão. Dois rituais centrais, ambos já cobertos pela skill Hipocampo (`skill/SKILL.md`, depois de personalizada):
 
 - **Staleness** — verificação periódica de `ttl` vencido, comportamento diferente por `temporality` (SPEC.md, seção 5).
 - **Consolidação** (inbox → conhecimento) — captura solta vira documento com frontmatter completo, sempre revisada por você antes de escrita definitiva (invariante 5 do SPEC.md — o agente nunca escreve sem pedido explícito).

@@ -1,0 +1,70 @@
+profile:
+  id: "empresa"
+  version: "1.0.0"
+  purpose: "Gera um repositório de conteúdo Hipocampo cujo titular é uma empresa (ex.: hipocampo-company, hipocampo-company-vault)."
+
+methodology:
+  compatibility: "^1.9.0"
+
+engine:
+  version: "1.0.0"
+  source_repository: "https://github.com/mklagenberg/hipocampo"
+  source_commit: "<preenchido pelo agente no momento da instanciação, HEAD de main>"
+
+inputs:
+  - id: "repository_name"
+    required: true
+    description: "Nome do repositório novo a ser criado (ex.: hipocampo-company-vault)."
+  - id: "tier"
+    required: true
+    enum: ["conteudo", "vault"]
+    description: "Nível de curadoria do repositório: 'conteudo' (recebe visibility public/internal/confidential/restricted) ou 'vault' (só confidential/restricted — LICENSE mantém só seções c/d)."
+  - id: "company_legal_name"
+    required: true
+    description: "Razão social da empresa titular do conteúdo."
+  - id: "instance_scope"
+    required: true
+    description: "O que pertence a este repositório e o que não pertence (preenche AGENTS.md, seção 'Escopo deste repositório')."
+
+outputs:
+  - path: "AGENTS.md"
+    operation: "generate"
+    ownership: "generated-once"
+    note: "Preenchido a partir dos inputs coletados; usuário pode editar livremente depois."
+  - path: "CLAUDE.md"
+    operation: "generate"
+    ownership: "canonical-reference"
+    note: "Ponteiro fino para AGENTS.md; não deveria precisar de edição."
+  - path: "POS-INSTANCIACAO.md"
+    operation: "generate"
+    ownership: "canonical-reference"
+    note: "Checklist de verificação pós-geração; conteúdo fixo em toda instância."
+  - path: "LICENSE"
+    operation: "generate"
+    ownership: "generated-once"
+    note: "Gerado a partir de scaffold/license-templates/LICENSE-corporativo.md, ajustado por tier (ver license-templates/README.md)."
+  - path: "registry.md"
+    operation: "generate"
+    ownership: "managed-structure"
+    note: "Tabela vazia na geração; cresce só por acréscimo (nunca editar linha existente)."
+  - path: "example/exemplo-nota.md"
+    operation: "generate"
+    ownership: "user-authored"
+    note: "Ilustrativo; usuário apaga ou substitui antes do primeiro documento real."
+  - path: "hipocampo.yaml"
+    operation: "generate"
+    ownership: "managed-structure"
+    note: "Manifesto do vault (hipocampo/decisions/0033); domain fixo em 'empresa' para este profile."
+
+conflicts:
+  default: "stop-and-report"
+  allow_silent_overwrite: false
+
+upgrade:
+  automatic: false
+  managed_ownership_only: true
+  migration_guide: "hipocampo/UPGRADE.md"
+
+postconditions:
+  validator: "revisão humana via POS-INSTANCIACAO.md gerado"
+  conformance_claim: "declared"

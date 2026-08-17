@@ -1,0 +1,33 @@
+manifest_version: "1.0"
+
+skill:
+  name: "hipocampo"
+  version: "1.0.0"
+  core_path: "skill/"
+  source_repository: "https://github.com/mklagenberg/hipocampo"
+  source_commit: "<preenchido no corte da v2.0.0>"
+
+methodology:
+  compatibility: "^1.9.0"
+
+adapters:
+  - target: "claude"
+    version: "1.0.0"
+    package: "cópia pessoal client-side, salva por operador (decisions/0025) — sem pacote empacotado/distribuído próprio ainda"
+  - target: "chatgpt"
+    version: "1.0.0"
+    package: "cópia pessoal client-side, salva por operador (decisions/0025) — sem pacote empacotado/distribuído próprio ainda"
+  - target: "gemini"
+    version: "1.0.0"
+    package: "cópia pessoal client-side, salva por operador (decisions/0025) — sem pacote empacotado/distribuído próprio ainda"
+  - target: "github-copilot"
+    version: "1.0.0"
+    package: "cópia pessoal client-side, salva por operador (decisions/0025) — sem pacote empacotado/distribuído próprio ainda"
+
+updates:
+  manifest: "https://github.com/mklagenberg/hipocampo/blob/main/skill/manifest.yaml"
+  advisories: "https://github.com/mklagenberg/hipocampo/blob/main/CHANGELOG.md (canal formal de advisory de segurança ainda não existe — ver ROADMAP.md)"
+  check_on_first_activation: true
+  normal_ttl: "P7D"
+  security_ttl: "P1D"
+  self_modify: false
