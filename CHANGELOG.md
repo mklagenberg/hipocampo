@@ -7,6 +7,10 @@ Histórico de versões da metodologia em si. Segue [SemVer](https://semver.org/l
 Trabalho acumulado em `main`, ainda sem tag/release publicada — ver `decisions/0021-politica-de-cadencia-de-release.md`. Vira uma seção versionada de verdade quando a release for cortada.
 
 ### Adicionado
+- **`docs/change-management.md`** (novo) — mecanismo de Change Set adotado do MODA e adaptado ao vocabulário do Hipocampo: classes `editorial`/`operational`/`normative`, estrutura `changes/<change-id>/` (`proposal.md` + `impact.yaml`), tabela de gatilhos própria. Passa a ser obrigatório pra mudança `operational`/`normative` a partir de agora. Ver `decisions/0031-mecanismo-de-change-set.md`.
+- **`changes/0026-0028-taxonomia-fato-relato-opiniao-e-ciclo-de-vida/`** (novo) — Change Set retroativo (backfill) do PR #22, primeiro exercício de validação do template.
+- `moda.yaml`: campo `documentation.change_management` passa a apontar pro `docs/change-management.md` real, em vez do mapeamento provisório em `decisions/0021`.
+- `conformance/moda.yaml`: controle `specification_driven_change_control` passa de `missing` pra `partial`. Fecha achado major 5 da auditoria de 2026-08-17.
 - **`moda.yaml`** (novo, raiz) — declaração formal de conformidade retrospectiva com o [MODA](https://github.com/mklagenberg/moda): `relationship: audited_against`, `adoption_mode: retrospective`, `claim_stage: mapped`, `conformance_result: partial`. Primeiro artefato da adequação da metodologia ao MODA rumo à v2.0.0.
 - **`conformance/moda.yaml`** (novo) — mapeamento controle-a-controle contra as dimensões de design do MODA (SPEC MODA, seção 4) e o contrato de repositório (seção 5), refletindo os achados da auditoria de 2026-08-17.
 - **`audits/moda/2026-08-17-v1.0.0-self-audit.md`** (novo) — auditoria de conformidade MODA congelada como evidência imutável.
@@ -36,6 +40,7 @@ Trabalho acumulado em `main`, ainda sem tag/release publicada — ver `decisions
 - `decisions/0028-gatilho-ampliado-remediacao-2a.md` — ver acima.
 - `decisions/0029-taxonomia-tipo-de-repositorio.md` — ver acima.
 - `decisions/0030-promote-graduacao-mesmo-dominio.md` — ver acima.
+- `decisions/0031-mecanismo-de-change-set.md` — ver acima.
 
 ### Alterado
 - SPEC.md, seção 5-A: ritual REM ganha segunda função ("atualizar memórias antigas", processando a fila do frontmatter audit) e cadência recomendada diária.
