@@ -1,0 +1,45 @@
+change_set:
+  id: "0035-controlled-vocabulary-dictionary"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0035-controlled-vocabulary-dictionary.md"
+
+impact:
+  - artifact: "docs/vocabulary-dictionary.md"
+    status: "created"
+    note: "Canonical de:para reference (pt-BR deprecated value -> current English value) for source, domain, both tier concepts, and AGENTS.md's Instance type; includes usage instructions and a callout for two known, unresolved pre-existing inconsistencies (the two different 'tier' concepts; domain vs. Instance type divergence)."
+  - artifact: "SPEC.md"
+    status: "updated"
+    note: "Section 2: source enum values become url|conversation|internal (was url|conversa|interno), with a note that deprecated values remain valid. Section 2-B: read-time validation also flags a deprecated vocabulary value. Section 2-C: domain/tier canonical values become personal|company / confidential|public; new vocabulary note and a flagged (not resolved) note on the tier concept mismatch with decisions/0033. Section 5-A: REM ritual's 'fix a field' disposition explicitly covers vocabulary normalization. Section 5-B: frontmatter audit gains deprecated-vocabulary detection as a finding category. Section 5-C: structural audit gains a fourth function checking AGENTS.md/hipocampo.yaml fields against the dictionary; Instance type canonical values become corporate|personal. Section 11: Instance type mention updated to canonical values. Section 13: compound descriptor labels (empresa-confidencial, empresa-público) translated to company-confidential, company-public in Promote/Depromote prose."
+  - artifact: "skill/references/routines.md"
+    status: "updated"
+    note: "Frontmatter audit description gains deprecated-vocabulary-value detection. REM ritual's 'update old memories' function gains vocabulary normalization as an ordinary field fix. Structural audit gains a fourth function (repository-level field vocabulary check) with a worked example. Instance type values updated to canonical English, deprecated pt-BR value still shown as valid in the example."
+  - artifact: "skill/references/instantiation.md"
+    status: "updated"
+    note: "Domain/tier/Instance type values in the procedure and worked example updated to canonical English (personal, company, corporate). New note flagging the pre-existing tier concept mismatch between this file's prior description (confidencial/público) and the scaffold profile's actual tier enum (now content/vault) — instructs reading the profile's real enum instead of assuming either vocabulary."
+  - artifact: "scaffold/profiles/pessoal.yaml"
+    status: "updated"
+    note: "tier enum conteudo|vault -> content|vault; domain fixed value in the hipocampo.yaml output note -> 'personal'."
+  - artifact: "scaffold/profiles/empresa.yaml"
+    status: "updated"
+    note: "Same as above, domain -> 'company'."
+  - artifact: "scaffold/skeleton/hipocampo.yaml"
+    status: "updated"
+    note: "domain/tier fill-in placeholders updated to English (personal|company, content|vault); scaffold.profile placeholder kept as pessoal|empresa (literal profile-id token, not translated, per PR #27) with a clarifying comment; vocabulary-note comment block rewritten to reference decisions/0035 and flag both known mismatches (tier concept, domain vs. Instance type)."
+  - artifact: "scaffold/skeleton/AGENTS.md"
+    status: "updated"
+    note: "Instance type placeholder updated to [fill in: corporate | personal]; explanatory note rewritten to reference the dictionary and decisions/0035, and to keep flagging the domain vs. Instance type divergence (decisions/0033), unresolved by this change."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "New [Unreleased] entries for decisions/0035, docs/vocabulary-dictionary.md, and all files listed above."
+  - artifact: "ROADMAP.md"
+    status: "updated"
+    note: "Status line updated to mention the vocabulary-dictionary addendum and its PR."
+
+validation:
+  commands: []
+  evidence: []
+  notes: "No deterministic validation exists yet (Fase G, still pending) — evidence is human review only, per the same pattern as prior Change Sets in this cycle. A future deterministic check could mechanically verify that every value in docs/vocabulary-dictionary.md's 'Canonical (en)' column is what SPEC.md's own frontmatter example block actually uses, catching drift between the two."

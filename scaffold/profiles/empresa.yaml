@@ -17,8 +17,8 @@ inputs:
     description: "Name of the new repository to be created (e.g., hipocampo-company-vault)."
   - id: "tier"
     required: true
-    enum: ["conteudo", "vault"]
-    description: "Repository curation level: 'conteudo' (receives public/internal/confidential/restricted visibility) or 'vault' (confidential/restricted only — LICENSE keeps only sections c/d)."
+    enum: ["content", "vault"]
+    description: "Repository curation level: 'content' (receives public/internal/confidential/restricted visibility) or 'vault' (confidential/restricted only — LICENSE keeps only sections c/d). Deprecated pt-BR value for 'content' is 'conteudo' — see hipocampo/docs/vocabulary-dictionary.md."
   - id: "company_legal_name"
     required: true
     description: "Legal (registered) name of the company that owns the content."
@@ -58,7 +58,7 @@ outputs:
   - path: "hipocampo.yaml"
     operation: "generate"
     ownership: "managed-structure"
-    note: "Vault manifest (hipocampo/decisions/0033, hipocampo/decisions/0034); domain fixed to 'empresa' for this profile, language defaults to 'en' unless overridden by the collected input."
+    note: "Vault manifest (hipocampo/decisions/0033, hipocampo/decisions/0034, hipocampo/decisions/0035); domain fixed to 'company' for this profile, language defaults to 'en' unless overridden by the collected input."
 
 conflicts:
   default: "stop-and-report"

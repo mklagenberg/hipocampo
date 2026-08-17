@@ -1,0 +1,40 @@
+# Controlled-vocabulary dictionary: English canonical, pt-BR compatible
+
+**Status:** Accepted
+
+## Context
+
+PR #27 (Fase E, the English translation of this repository) deliberately left several controlled-vocabulary **field values** untranslated — `domain: pessoal | empresa`, `tier: confidencial | público`, the `AGENTS.md` "Instance type" field (`corporativa | pessoal`), `source: conversa | interno` — because Mau's four real content repositories depend on these exact literal tokens today, and translating them would have silently broken every existing instance's frontmatter and `AGENTS.md`. That deviation was explicitly flagged in the PR description for Mau's review, since it diverged from a literal reading of "tudo traduz."
+
+Mau's answer, given explicitly in this session: define the canonical vocabulary in English now, but never break an existing instance — build a de:para (old→new) dictionary that keeps the deprecated pt-BR values permanently valid, and migrate documents to the new vocabulary opportunistically, as the maintenance rituals (frontmatter audit, REM, structural audit) already touch them — never as a bulk, forced rewrite.
+
+This also surfaced two pre-existing issues, independent of language, while inventorying every controlled-vocabulary field in the repository:
+
+1. `hipocampo.yaml`'s `instance.tier` (`decisions/0033`, scaffold profiles) uses `conteudo | vault` (repository curation level), while `SPEC.md` section 2-C / `decisions/0029` / `skill/references/instantiation.md` define a *different* `tier` concept, `confidencial | público` (exposure level). Both value sets are now translated to English as part of this change, but the underlying mismatch — two different things sharing the field name `tier` — is not resolved here. It predates this decision and needs its own, separate design decision.
+2. `AGENTS.md`'s "Instance type" field (`corporativa | pessoal`) and `hipocampo.yaml`'s `instance.domain` (`pessoal | empresa`) are, and remain, two different vocabularies for a similar concept — already known and documented in `decisions/0033`, deliberately not harmonized there. This decision translates both to English independently but does not merge them.
+
+## Decision
+
+1. **The canonical vocabulary for every controlled-vocabulary field in `hipocampo` is now English.** Concretely: `source` (`conversation`/`internal`, `url` unchanged), `domain` (`personal`/`company`), the exposure `tier` (`confidential`/`public`), the scaffold's curation-level `tier` (`content`/`vault`), and `AGENTS.md`'s "Instance type" (`corporate`/`personal`). `SPEC.md`, `skill/references/`, and `scaffold/` are updated to use these values as the default/example/generated value going forward.
+2. **`docs/vocabulary-dictionary.md`** is the canonical de:para reference — every field covered by this decision, its deprecated pt-BR value(s), its current English value, and the DR that governs it. Usage instructions live in the same file.
+3. **A deprecated pt-BR value is never an error, never a schema violation, and never breaks compatibility.** Any agent operating any Hipocampo instance — this repository or a vault — treats an old value and its new counterpart as fully equivalent on read. There is no deprecation deadline: an instance may keep pt-BR values indefinitely if its operator never asks for a change, and that is a fully valid, permanent state, not a debt.
+4. **New content and new instances always use the canonical English value.** A newly scaffolded vault (`scaffold/`), a newly written document, or any value an agent writes for the first time never uses a deprecated value — even in an instance whose *other*, pre-existing values are still pt-BR. This does not force a bulk migration of the rest of that instance.
+5. **Existing deprecated values are migrated opportunistically, never in bulk, never silently** — extending the existing flag-then-human-decides pattern already used for `ttl` expiry (`SPEC.md` sections 2-B, 5-A, 5-B) instead of inventing a new mechanism:
+   - Read-time frontmatter validation (section 2-B) flags a deprecated document-level value the same way it flags an expired `ttl` — it never changes anything itself.
+   - The frontmatter audit (section 5-B) adds "deprecated controlled-vocabulary value" as a mechanically detected finding category in `meta/fila-de-manutencao.md` — a literal lookup against the dictionary, no judgment involved, consistent with the audit's deterministic nature.
+   - The REM ritual's "update old memories" function (section 5-A) treats normalizing a flagged deprecated value as an ordinary instance of "fix a field" — same explicit-plan-before-write rule as any other disposition (invariant 5).
+   - `AGENTS.md`'s "Instance type" and `hipocampo.yaml`'s `instance.domain`/`instance.tier` are not document frontmatter, so the frontmatter audit never sees them. The weekly structural audit (section 5-C) is extended with a fourth function: whenever it reads either file, it checks their values against the dictionary too, and flags a deprecated value as a normalization candidate the same way it flags any other finding.
+6. **This decision does not resolve the two pre-existing issues named in Context** (the two different `tier` concepts; the `domain`/"Instance type" vocabulary divergence). Both are now internally consistent in English, but neither cross-concept mismatch is harmonized by this change — flagged here, in writing, for a future decision, following the same practice `decisions/0033` already used for the second one.
+
+## Rationale
+
+The mechanism reuses, rather than duplicates, machinery this methodology already has for exactly this shape of problem: a per-document, mechanically detectable frontmatter condition that shouldn't be silently auto-fixed but also shouldn't require a human to comb through every file looking for it. `ttl` expiry already does this (flag at read time → audit queues it → REM disposes of it, always with an explicit plan first); a deprecated vocabulary value is the same shape of finding, just checked against a dictionary instead of a date. Building a second, parallel mechanism for it would be needless surface area.
+
+Never forcing a bulk rewrite matters because a real instance's git history, in the four vaults Mau actually operates, has value independent of which exact string a field held at some past revision — an automated bulk-normalize pass would generate a wall of `revision`-incrementing commits with no real content change, and would violate invariant 5 (never write without an explicit request) if done unprompted. Opportunistic, ritual-driven migration achieves the same eventual convergence toward the new vocabulary without ever forcing it.
+
+## Discarded alternatives
+
+- **Bulk-migrate every real instance's existing frontmatter now.** Discarded — violates invariant 5 (no write without explicit request), and treats a purely cosmetic vocabulary change as urgent when it isn't; the four real vaults have working content that doesn't need touching just to update a string.
+- **Leave the pt-BR values as the permanent canonical form, matching PR #27's original (flagged) deviation.** Discarded per Mau's explicit instruction in this session — `hipocampo` itself is English going forward (`decisions/0034`), and its own schema's example/default values should not be the one remaining Portuguese surface.
+- **Deprecate the pt-BR values with a removal deadline (e.g., "must migrate by v3.0").** Discarded — nothing about a vault's own working vocabulary needs to expire; a permanent compatibility layer costs one small reference table and imposes no pressure on any real instance's timeline.
+- **Resolve the `tier` concept mismatch (exposure vs. curation level) and the `domain`/"Instance type" divergence as part of this same decision.** Discarded — both are real design questions independent of language (translating a token doesn't tell you which of two concepts should keep the name `tier`), and conflating them with the language change risks a rushed, under-considered resolution to a question that deserves its own Context/Decision/Rationale. Named explicitly instead, for a future DR.
