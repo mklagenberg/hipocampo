@@ -7,6 +7,7 @@ Histórico de versões da metodologia em si. Segue [SemVer](https://semver.org/l
 Trabalho acumulado em `main`, ainda sem tag/release publicada — ver `decisions/0021-politica-de-cadencia-de-release.md`. Vira uma seção versionada de verdade quando a release for cortada.
 
 ### Adicionado
+- SPEC.md, seção 2: campos `contributors` (adicionado à listagem central do schema — já existia via `decisions/0006`, mas nunca aparecia na listagem principal) e `contains_opinion` (novo, relevante só quando `owner` preenchido). Distingue relato factual de opinião pessoal do autor/contribuidor em instância corporativa; documento misto rotula trechos no corpo com **Relato:**/**Opinião:**, `@handle` inline só quando há mais de um contribuidor. Grava opinião nova em instância corporativa só mediante confirmação explícita do usuário — sem isso, vai pra instância pessoal. Aplica-se também à função de consolidação do ritual REM (seção 5-A). Ver `decisions/0026-relato-vs-opiniao-em-instancia-corporativa.md`.
 - SPEC.md, seção 5-B: **frontmatter audit** — ritual determinístico (script, não julgamento de IA), cadência recomendada diária, roda antes da REM, produz `meta/fila-de-manutencao.md`. Ver `decisions/0017-frontmatter-audit-ritual-deterministico.md`.
 - SPEC.md, seção 5-C: **auditoria estrutural semanal** — atomicidade, posicionamento, e verificação de vazamento de dado sensível contra a política por tipo de instância (primeiro mecanismo de enforcement da DR0009). Ver `decisions/0019-auditoria-estrutural-semanal.md`.
 - SPEC.md, seção 11: **AGENTS.md como arquivo canônico de instrução**, `CLAUDE.md` vira ponteiro fino. `AGENTS.md` também passa a declarar o **tipo de instância** (`corporativa`/`pessoal`), critério do qual variante da política de dados sensíveis (seção 2-A) se aplica ao repositório — nunca mais inferido pelo agente. Ver `decisions/0015-agents-md-arquivo-canonico-instrucao.md` e `decisions/0022-tipo-de-instancia-declarado-no-agents-md.md`.
@@ -20,6 +21,7 @@ Trabalho acumulado em `main`, ainda sem tag/release publicada — ver `decisions
 - `decisions/0022-tipo-de-instancia-declarado-no-agents-md.md` — fecha uma assimetria na auditoria estrutural (DR0019): a função de vazamento de dado sensível estava ancorada só na política genérica (seção 2-A), sem dizer onde o tipo de instância que a política referencia é declarado. Agora está explicitamente no `AGENTS.md`, mesmo artefato que já ancorava a função de posicionamento.
 - `decisions/0023-criterio-operacional-escopo-semver.md` — ver acima.
 - `decisions/0024-upgrade-md-checklist-cumulativa.md` — ver acima.
+- `decisions/0026-relato-vs-opiniao-em-instancia-corporativa.md` — ver acima.
 
 ### Alterado
 - SPEC.md, seção 5-A: ritual REM ganha segunda função ("atualizar memórias antigas", processando a fila do frontmatter audit) e cadência recomendada diária.
