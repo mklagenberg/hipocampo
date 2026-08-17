@@ -1,48 +1,48 @@
 # Hipocampo — Disclaimer
 
-Este documento existe separado da [LICENSE](LICENSE) porque resolve um problema diferente: a LICENSE diz o que você pode fazer legalmente com o código/spec; este documento diz o que a metodologia **é e não é**, na prática, antes de você depender dela para algo que importa.
+This document exists separately from the [LICENSE](LICENSE) because it solves a different problem: the LICENSE says what you can legally do with the code/spec; this document says what the methodology **is and is not**, in practice, before you rely on it for something that matters.
 
-## Objetivo
+## Purpose
 
-Hipocampo é uma metodologia de organização de conhecimento pessoal ou corporativo usando git, markdown e rituais conduzidos por agentes de IA. O objetivo é retrieval melhor e conhecimento vivo (não estático) ao longo do tempo — não é, e nunca teve a ambição de ser, um substituto para sistemas com garantias formais mais fortes.
+Hipocampo is a methodology for organizing personal or corporate knowledge using git, markdown, and rituals conducted by AI agents. The goal is better retrieval and living (not static) knowledge over time — it is not, and never had the ambition of being, a substitute for systems with stronger formal guarantees.
 
-## O que Hipocampo não é
+## What Hipocampo is not
 
-- **Não é um banco de dados transacional.** Não há garantia de atomicidade, consistência sob concorrência, ou rollback automático além do que o próprio git oferece (que é versionamento, não transação).
-- **`visibility` não é enforcement técnico.** O campo `visibility` no frontmatter (SPEC.md, seção 2) é uma convenção de leitura para humanos e agentes — não impede tecnicamente que alguém com acesso ao repositório leia um arquivo marcado `confidential`. Enforcement técnico real, quando necessário, é feito por permissão de repositório do GitHub (ver invariante 4 do SPEC.md), não por etiqueta dentro de um repositório compartilhado.
-- **Não substitui compliance legal.** Nada neste repositório constitui parecer jurídico. Se sua instância guarda dado pessoal sensível, segredo industrial ou informação sujeita a regulação específica (LGPD, contratual, setorial), a adequação legal é responsabilidade de quem opera a instância — não algo que o Hipocampo resolve por desenho.
-- **Rotinas de IA são probabilísticas.** Qualquer ritual conduzido por um agente (consolidação, staleness, classificação de `type`/`temporality`) pode errar. Hipocampo assume supervisão humana no laço — o invariante "o agente nunca escreve sem pedido explícito" (SPEC.md, seção 8) existe exatamente por isso, não é boilerplate.
+- **It is not a transactional database.** There is no guarantee of atomicity, consistency under concurrency, or automatic rollback beyond what git itself offers (which is versioning, not transactions).
+- **`visibility` is not technical enforcement.** The `visibility` field in the frontmatter (SPEC.md, section 2) is a reading convention for humans and agents — it does not technically prevent someone with access to the repository from reading a file marked `confidential`. Real technical enforcement, when needed, is done through GitHub repository permissions (see invariant 4 of SPEC.md), not by a label inside a shared repository.
+- **It does not replace legal compliance.** Nothing in this repository constitutes legal advice. If your instance stores sensitive personal data, trade secrets, or information subject to specific regulation (LGPD, contractual, sectoral), legal adequacy is the responsibility of whoever operates the instance — not something Hipocampo solves by design.
+- **AI routines are probabilistic.** Any ritual conducted by an agent (consolidation, staleness, classification of `type`/`temporality`) can be wrong. Hipocampo assumes human supervision in the loop — the invariant "the agent never writes without an explicit request" (SPEC.md, section 8) exists exactly for this reason, it is not boilerplate.
 
-## Dados sempre human-readable, independente de produto de IA
+## Data always human-readable, regardless of AI product
 
-Todo dado de uma instância Hipocampo deve permanecer legível e navegável por um humano usando só as ferramentas nativas do repositório — o visualizador de markdown do próprio GitHub, um editor de texto qualquer, `git log`/`git show` —, sem depender de nenhum produto de IA específico estar no ar. Isso não é uma limitação da metodologia — é a mesma característica que já garante, acima, que permissão de acesso é sempre resolvida no nível do GitHub, nunca de um produto de terceiro por cima dele.
+All data in a Hipocampo instance must remain readable and navigable by a human using only the repository's native tools — GitHub's own markdown viewer, any text editor, `git log`/`git show` — without depending on any specific AI product being online. This is not a limitation of the methodology — it is the same characteristic that already guarantees, above, that access permission is always resolved at the GitHub level, never by a third-party product layered on top of it.
 
-Vendor lock-in é um risco real e crescente à medida que mais funcionalidade é construída em cima de produtos de IA específicos (skills, MCPs, agentes). Um outage, uma descontinuação de produto, ou uma mudança de precificação não deveriam nunca colocar em risco o acesso ao conhecimento em si — só a conveniência de operá-lo com IA. Ver `decisions/0013-dados-sempre-human-readable.md`.
+Vendor lock-in is a real and growing risk as more functionality is built on top of specific AI products (skills, MCPs, agents). An outage, a product discontinuation, or a pricing change should never put access to the knowledge itself at risk — only the convenience of operating it with AI. See `decisions/0013-data-always-human-readable.md`.
 
-## Cenários recomendados
+## Recommended scenarios
 
-- Conhecimento pessoal ou de equipe pequena, onde a pessoa/time consegue revisar o que o agente propõe.
-- Conteúdo onde "provavelmente certo, revisável depois" é uma trade-off aceitável em troca de retrieval melhor.
-- Organizações que já confiam em GitHub como plataforma de permissionamento (o modelo de privacidade do Hipocampo depende estruturalmente disso — ver `docs/FUNDAMENTOS.md`).
+- Personal or small-team knowledge, where the person/team can review what the agent proposes.
+- Content where "probably correct, reviewable later" is an acceptable trade-off in exchange for better retrieval.
+- Organizations that already trust GitHub as a permissioning platform (Hipocampo's privacy model structurally depends on this — see `docs/FUNDAMENTALS.md`).
 
-## Cenários não recomendados
+## Scenarios not recommended
 
-- Registro que precisa de trilha de auditoria formal com garantias legais (esse é papel de sistema de compliance dedicado, não de second brain).
-- Dado que não pode, sob nenhuma circunstância, ser processado por um modelo de IA de terceiro — mesmo com opt-out de treinamento, o conteúdo ainda passa pela inferência do provedor no momento do uso.
-- Substituição de sistema com SLA formal de disponibilidade/integridade (git + markdown não tem esse tipo de garantia).
+- Records that need a formal audit trail with legal guarantees (that is the role of a dedicated compliance system, not a second brain).
+- Data that cannot, under any circumstances, be processed by a third-party AI model — even with training opt-out, the content still passes through the provider's inference at the moment of use.
+- Replacement of a system with a formal SLA for availability/integrity (git + markdown does not have that kind of guarantee).
 
-## Pressupostos técnicos
+## Technical assumptions
 
-Hipocampo pressupõe: um host de git com permissionamento real por repositório (o modelo foi desenhado em torno do GitHub, mas o princípio se generaliza a qualquer host equivalente); um agente de IA capaz de ler/escrever markdown e seguir instrução estruturada; disposição do operador da instância de revisar o que o agente propõe, não só aceitar automaticamente.
+Hipocampo assumes: a git host with real per-repository permissioning (the model was designed around GitHub, but the principle generalizes to any equivalent host); an AI agent capable of reading/writing markdown and following structured instruction; willingness on the part of the instance operator to review what the agent proposes, not just accept it automatically.
 
-## Versionamento e o que isso significa pra você
+## Versioning and what it means for you
 
-A metodologia segue SemVer (detalhe completo em SPEC.md, seção 9, e em `MIGRATIONS.md`). Na prática, para quem só usa:
+The methodology follows SemVer (full detail in SPEC.md, section 9, and in `MIGRATIONS.md`). In practice, for those who just use it:
 
-- **PATCH** (1.0.x) — nada muda pra você. Clarificação de texto ou correção de erro de spec.
-- **MINOR** (1.x.0) — capacidade nova opcional. Sua instância continua válida sem adotar nada; ignorar é uma opção legítima.
-- **MAJOR** (x.0.0) — algo mudou de forma incompatível. Sua instância continua funcionando com a versão que ela declara seguir, mas migrar para a versão nova exige seguir o guia correspondente em `MIGRATIONS.md`. Migração nunca é automática nem silenciosa.
+- **PATCH** (1.0.x) — nothing changes for you. Text clarification or spec error correction.
+- **MINOR** (1.x.0) — new optional capability. Your instance remains valid without adopting anything; ignoring it is a legitimate option.
+- **MAJOR** (x.0.0) — something changed in an incompatible way. Your instance keeps working with the version it declares it follows, but migrating to the new version requires following the corresponding guide in `MIGRATIONS.md`. Migration is never automatic or silent.
 
-## Ponte pra LICENSE
+## Bridge to LICENSE
 
-Este disclaimer não altera nem substitui nada da [LICENSE](LICENSE) (Apache-2.0) ou do [NOTICE](NOTICE). Em caso de conflito de interpretação entre este documento e a LICENSE, a LICENSE prevalece como o documento juridicamente vinculante — este arquivo é orientação prática, não instrumento legal.
+This disclaimer does not alter or replace anything in the [LICENSE](LICENSE) (Apache-2.0) or the [NOTICE](NOTICE). In case of a conflict of interpretation between this document and the LICENSE, the LICENSE prevails as the legally binding document — this file is practical guidance, not a legal instrument.

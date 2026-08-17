@@ -1,26 +1,26 @@
 # Hipocampo — Migrations
 
-Guia de migração para cada salto MAJOR de versão (SemVer — ver SPEC.md, seção 9, e DISCLAIMER.md).
+Migration guide for each MAJOR version jump (SemVer — see SPEC.md, section 9, and DISCLAIMER.md).
 
-Migração MINOR e PATCH não exige ação — ver DISCLAIMER.md, seção "Versionamento e o que isso significa pra você". Este arquivo só documenta saltos MAJOR, que exigem migração ativa por definição.
+MINOR and PATCH migration requires no action — see DISCLAIMER.md, section "Versioning and what it means for you". This file only documents MAJOR jumps, which require active migration by definition.
 
-## Como usar este documento
+## How to use this document
 
-Cada instância declara, no próprio `CLAUDE.md`/README, a versão ou faixa de compatibilidade que implementa. Quando uma versão MAJOR nova é liberada, encontre aqui a seção correspondente ao salto que você precisa dar (por exemplo, "1.x → 2.0") antes de atualizar a declaração de versão da sua instância.
+Each instance declares, in its own `CLAUDE.md`/README, the version or compatibility range it implements. When a new MAJOR version is released, find here the section corresponding to the jump you need to make (for example, "1.x → 2.0") before updating your instance's version declaration.
 
-## Histórico de saltos MAJOR
+## History of MAJOR jumps
 
-Nenhum salto MAJOR ainda ocorreu. A versão inicial é 1.0.0 — não há migração a documentar até a primeira mudança incompatível.
+No MAJOR jump has occurred yet. The initial version is 1.0.0 — there is no migration to document until the first incompatible change.
 
-Quando o primeiro salto MAJOR acontecer, a seção correspondente aqui vai seguir este formato:
+When the first MAJOR jump happens, the corresponding section here will follow this format:
 
 ```markdown
 ## 1.x → 2.0
 
-**O que quebrou:** [resumo direto]
-**Por quê:** [link pro Decision Record em decisions/ que motivou a mudança]
-**Passo a passo:**
+**What broke:** [direct summary]
+**Why:** [link to the Decision Record in decisions/ that motivated the change]
+**Step by step:**
 1. ...
 2. ...
-**Como saber se sua instância já pode migrar:** [checklist]
+**How to know if your instance can migrate already:** [checklist]
 ```
