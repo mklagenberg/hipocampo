@@ -10,6 +10,8 @@ This document is the normative specification of the Hipocampo methodology: the f
 
 Hipocampo is an agentic second brain methodology: git + markdown + AI rituals. This repository (`hipocampo`) and `hipocampo-toolkit` are the only two public repositories of the methodology — they carry the spec and the tooling, never actual content. Every knowledge base that implements Hipocampo lives in private repositories, without exception (see invariants, section 8).
 
+**Repository language:** this repository is maintained in English — `SPEC.md`, `decisions/`, `docs/`, `skill/`, and `scaffold/` are written and contributed to in English (see `decisions/0034-repository-and-vault-language-policy.md`). A vault (a content repository generated from this methodology) is not bound to this: its own working language is declared in its `hipocampo.yaml` manifest (`instance.language`, `decisions/0033`/`0034`), independent of the language this repository is maintained in.
+
 ## 2. Frontmatter — unified schema
 
 Every document in a Hipocampo instance is a `.md` file with this YAML frontmatter:
