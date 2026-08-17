@@ -39,6 +39,8 @@ documentation:
   decision_policy: "SPEC.md#7-decision-record-vs-type-decision"
   change_management: "docs/change-management.md"
   validation: "audits/moda/2026-08-17-v1.0.0-self-audit.md"
+  structural_validation: "scripts/validate_hipocampo.py"
+  release_checklist: "RELEASE-CHECKLIST.md"
   git_workflow: "decisions/0014-mandatory-release-routine.md"
 
 components:
@@ -73,6 +75,10 @@ components:
   - id: "change-set-mechanism"
     kind: "protocol"
     source: "docs/change-management.md"
+    lifecycle: "embedded"
+  - id: "structural-validation"
+    kind: "tool"
+    source: "scripts/validate_hipocampo.py, .github/workflows/validate.yml"
     lifecycle: "embedded"
   - id: "personal-skill"
     kind: "skill"

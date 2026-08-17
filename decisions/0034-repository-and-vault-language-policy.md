@@ -1,4 +1,4 @@
-# Repository and vault language policy
+# 0034 — Repository and vault language policy
 
 **Status:** Accepted
 

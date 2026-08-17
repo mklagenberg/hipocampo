@@ -249,9 +249,11 @@ The methodology itself follows [SemVer](https://semver.org/lang/pt-BR/): MAJOR f
 
 Every released version is marked with a git tag **and** a published GitHub Release, always together, in the same step of the release routine — never one without the other. Each instance declares, in its own `AGENTS.md`/`CLAUDE.md`, the version or compatibility range it implements (example: "Follows Hipocampo ^1.0.0").
 
-Every new version follows a mandatory routine before being considered complete: scope classification (above), tag + Release, `CHANGELOG.md` update, `hipocampo-toolkit` synchronization, and an update to **[UPGRADE.md](UPGRADE.md)** — a cumulative, idempotent checklist of what an existing instance needs to have to conform to the current version, different from `MIGRATIONS.md` (which only covers MAJOR jumps). See `decisions/0014-mandatory-release-routine.md` and `decisions/0024-upgrade-md-cumulative-checklist.md`.
+Every new version follows a mandatory routine before being considered complete: scope classification (above), tag + Release, `CHANGELOG.md` update, skill/scaffold synchronization (formerly `hipocampo-toolkit` synchronization, before its consolidation into this repository, `decisions/0032`), and an update to **[UPGRADE.md](UPGRADE.md)** — a cumulative, idempotent checklist of what an existing instance needs to have to conform to the current version, different from `MIGRATIONS.md` (which only covers MAJOR jumps). See `decisions/0014-mandatory-release-routine.md` and `decisions/0024-upgrade-md-cumulative-checklist.md`.
 
 Cutting a release (tag + published GitHub Release) doesn't need to happen for every accepted change — work accumulates on `main` until critical mass or a natural pause, see `decisions/0021-release-cadence-policy.md`. An urgent change (a fix, not a new capability) ships as a PATCH, outside the normal accumulation cycle.
+
+Before a release routine is considered complete, **[RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md)** operationalizes the steps above into a single concrete run-through, and **`scripts/validate_hipocampo.py`** (run automatically in CI on every pull request against `main`, `.github/workflows/validate.yml`) deterministically checks the methodology repository's own structural integrity — Decision Record template compliance, internal link resolution, and version consistency between `README.md` and `CHANGELOG.md`. See `decisions/0036-deterministic-validation-of-repository-structure.md` and `decisions/0037-minimal-release-gate-checklist.md`.
 
 ## 10. Migrating pre-existing content
 

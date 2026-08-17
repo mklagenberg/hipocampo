@@ -9,6 +9,7 @@ Agentic second brain methodology: git + markdown + AI rituals. This repository i
 - [MIGRATIONS.md](MIGRATIONS.md) — migration guide per MAJOR version jump.
 - [CHANGELOG.md](CHANGELOG.md) — methodology version history.
 - [ROADMAP.md](ROADMAP.md) — current direction, no date commitment.
+- [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md) — minimal checklist run when cutting a new version of the methodology itself.
 - [decisions/](decisions/) — Decision Records: why each structural rule is the way it is.
 - [skill/SKILL.md](skill/SKILL.md) — the methodology's operational skill (generic canonical source; each person installs and personalizes their own copy).
 - [scaffold/README.md](scaffold/) — declarative mechanism for instantiating new content repositories (profiles, file skeleton, LICENSE templates).
