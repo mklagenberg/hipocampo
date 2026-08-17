@@ -30,7 +30,7 @@ Before changing the methodology's structure, read `moda.yaml`, `conformance/moda
 - Preserve the distinction between methodology, framework, method, process, procedure, workflow, standard, prompt, skill, toolkit, and implementation (MODA SPEC, section 3) — `SPEC.md` itself already uses these distinctions consistently, even without MODA's explicit RFC 2119 keywords.
 - Treat the repository as a system of record. Do not treat an unrecorded conversation as the sole source of durable intent — a structural decision always becomes a Decision Record.
 - Point to evidence; do not copy normative rules into a conformance mapping or audit report.
-- Prefer deterministic validation when it exists — today none exists for the methodology repository itself (`major` finding from the 2026-08-17 audit, `audits/moda/`); until this is resolved (see `ROADMAP.md`), every structural change depends on explicit human review.
+- Prefer deterministic validation when it exists — for this repository's own structural integrity (Decision Record template, internal links, README/CHANGELOG version consistency), run `python3 scripts/validate_hipocampo.py --root .` (also enforced in CI on every PR, `.github/workflows/validate.yml`, `decisions/0036-deterministic-validation-of-repository-structure.md`). This does not cover everything: whether a Change Set's declared impact matches its actual diff, and the methodology's own quality/evaluation dimension, remain human review — see `docs/change-management.md` and `ROADMAP.md`.
 - Require human direction for unresolved intent, risk acceptance, destructive action, external side effect, security boundary, and incompatible migration — same principle as invariant 5 of `SPEC.md` (section 8), applied here to the methodology itself, not only to the instances it specifies.
 - Never report a source, test, link, or audit as checked when it wasn't actually checked.
 
@@ -45,6 +45,7 @@ Before changing the methodology's structure, read `moda.yaml`, `conformance/moda
 - Update `UPGRADE.md` for adoption action required by a backward-compatible release.
 - Update `MIGRATIONS.md` for an incompatible change.
 - When operating only via MCP, without the ability to create a tag/release, give the human the exact tag, target branch, commit, title, description derived from the changelog, and release classification for creation after approval — never claim the tag or release exists. See `SPEC.md`, section 9, and `decisions/0014-mandatory-release-routine.md`.
+- Before considering a release routine complete, go through `RELEASE-CHECKLIST.md` — it operationalizes `decisions/0014`/`0021`/`0023` into a single concrete run-through (`decisions/0037-minimal-release-gate-checklist.md`).
 
 ## Versioning
 
