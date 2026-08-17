@@ -7,6 +7,9 @@ Histórico de versões da metodologia em si. Segue [SemVer](https://semver.org/l
 Trabalho acumulado em `main`, ainda sem tag/release publicada — ver `decisions/0021-politica-de-cadencia-de-release.md`. Vira uma seção versionada de verdade quando a release for cortada.
 
 ### Adicionado
+- SPEC.md, seção 2: campos `contributors` (adicionado à listagem central do schema — já existia via `decisions/0006`, mas nunca aparecia na listagem principal) e `contains_subjective_content` (novo, relevante só quando `owner` preenchido). Taxonomia de quatro tipos de informação — **Fato**, **Relato**, **Opinião**, **Lembrança** — usada como rótulo inline em documento misto; `contains_subjective_content` cobre só Opinião/Lembrança, as duas categorias com risco de responsabilização pessoal. `@handle` inline só quando há mais de um contribuidor. Grava Opinião/Lembrança nova em instância corporativa só mediante confirmação explícita do usuário — sem isso, vai pra instância pessoal. Aplica-se também à função de consolidação do ritual REM (seção 5-A) e à ação Promote (seção 13). Ver `decisions/0026-relato-vs-opiniao-em-instancia-corporativa.md`.
+- SPEC.md, seção 13 (nova): **Promote, Depromote, Redbutton** — ações de ciclo de vida cross-repositório. Promote (pessoal → corporativo) com dois caminhos (derivação elegante via `decisions/0011`, ou transferência literal com aviso explícito de titularidade per `decisions/0007`); Depromote (descida de nível dentro do mesmo domínio de titularidade); Redbutton (remediação de violação da política 2-A). `superseded_by` (seção 2/6) passa a aceitar sintaxe `$alias:` cross-repositório. Ver `decisions/0027-promote-depromote-redbutton.md`.
+- SPEC.md, seção 8: gatilho da exceção ao invariante 3 (`decisions/0010`) ampliado pra também cobrir violação da política 2-A identificada por auditoria estrutural ou pelo operador, sem exigir solicitação formal do titular. Ver `decisions/0028-gatilho-ampliado-remediacao-2a.md`.
 - SPEC.md, seção 5-B: **frontmatter audit** — ritual determinístico (script, não julgamento de IA), cadência recomendada diária, roda antes da REM, produz `meta/fila-de-manutencao.md`. Ver `decisions/0017-frontmatter-audit-ritual-deterministico.md`.
 - SPEC.md, seção 5-C: **auditoria estrutural semanal** — atomicidade, posicionamento, e verificação de vazamento de dado sensível contra a política por tipo de instância (primeiro mecanismo de enforcement da DR0009). Ver `decisions/0019-auditoria-estrutural-semanal.md`.
 - SPEC.md, seção 11: **AGENTS.md como arquivo canônico de instrução**, `CLAUDE.md` vira ponteiro fino. `AGENTS.md` também passa a declarar o **tipo de instância** (`corporativa`/`pessoal`), critério do qual variante da política de dados sensíveis (seção 2-A) se aplica ao repositório — nunca mais inferido pelo agente. Ver `decisions/0015-agents-md-arquivo-canonico-instrucao.md` e `decisions/0022-tipo-de-instancia-declarado-no-agents-md.md`.
@@ -20,6 +23,9 @@ Trabalho acumulado em `main`, ainda sem tag/release publicada — ver `decisions
 - `decisions/0022-tipo-de-instancia-declarado-no-agents-md.md` — fecha uma assimetria na auditoria estrutural (DR0019): a função de vazamento de dado sensível estava ancorada só na política genérica (seção 2-A), sem dizer onde o tipo de instância que a política referencia é declarado. Agora está explicitamente no `AGENTS.md`, mesmo artefato que já ancorava a função de posicionamento.
 - `decisions/0023-criterio-operacional-escopo-semver.md` — ver acima.
 - `decisions/0024-upgrade-md-checklist-cumulativa.md` — ver acima.
+- `decisions/0026-relato-vs-opiniao-em-instancia-corporativa.md` — ver acima.
+- `decisions/0027-promote-depromote-redbutton.md` — ver acima.
+- `decisions/0028-gatilho-ampliado-remediacao-2a.md` — ver acima.
 
 ### Alterado
 - SPEC.md, seção 5-A: ritual REM ganha segunda função ("atualizar memórias antigas", processando a fila do frontmatter audit) e cadência recomendada diária.
