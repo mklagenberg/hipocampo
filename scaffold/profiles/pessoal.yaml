@@ -1,7 +1,7 @@
 profile:
   id: "pessoal"
   version: "1.0.0"
-  purpose: "Gera um repositório de conteúdo Hipocampo cujo titular é uma pessoa física (ex.: hipocampo-concepts, hipocampo-personal-vault)."
+  purpose: "Generates a Hipocampo content repository whose owner is a natural person (e.g., hipocampo-concepts, hipocampo-personal-vault)."
 
 methodology:
   compatibility: "^1.9.0"
@@ -9,55 +9,59 @@ methodology:
 engine:
   version: "1.0.0"
   source_repository: "https://github.com/mklagenberg/hipocampo"
-  source_commit: "<preenchido pelo agente no momento da instanciação, HEAD de main>"
+  source_commit: "<filled in by the agent at instantiation time, HEAD of main>"
 
 inputs:
   - id: "repository_name"
     required: true
-    description: "Nome do repositório novo a ser criado (ex.: hipocampo-personal-vault)."
+    description: "Name of the new repository to be created (e.g., hipocampo-personal-vault)."
   - id: "tier"
     required: true
     enum: ["conteudo", "vault"]
-    description: "Nível de curadoria do repositório: 'conteudo' (recebe visibility public/internal/confidential/restricted) ou 'vault' (só confidential/restricted — LICENSE mantém só seções c/d)."
+    description: "Repository curation level: 'conteudo' (receives public/internal/confidential/restricted visibility) or 'vault' (confidential/restricted only — LICENSE keeps only sections c/d)."
   - id: "owner_full_name"
     required: true
-    description: "Nome completo do titular do conteúdo, pessoa física."
+    description: "Full name of the content owner, a natural person."
   - id: "owner_github_handle"
     required: true
-    description: "Handle GitHub do titular, sem @."
+    description: "GitHub handle of the owner, without @."
   - id: "instance_scope"
     required: true
-    description: "O que pertence a este repositório e o que não pertence (preenche AGENTS.md, seção 'Escopo deste repositório')."
+    description: "What belongs in this repository and what doesn't (fills in AGENTS.md, section 'Scope of this repository')."
+  - id: "language"
+    required: false
+    default: "en"
+    description: "BCP-47 tag for the language this vault's content will actually be written in (e.g., 'en', 'pt-BR'). Defaults to English, matching the scaffold's own language — confirm with the user before finalizing rather than assuming the default (hipocampo/decisions/0034)."
 
 outputs:
   - path: "AGENTS.md"
     operation: "generate"
     ownership: "generated-once"
-    note: "Preenchido a partir dos inputs coletados; usuário pode editar livremente depois."
+    note: "Filled in from the collected inputs; the user may edit it freely afterward."
   - path: "CLAUDE.md"
     operation: "generate"
     ownership: "canonical-reference"
-    note: "Ponteiro fino para AGENTS.md; não deveria precisar de edição."
-  - path: "POS-INSTANCIACAO.md"
+    note: "Thin pointer to AGENTS.md; shouldn't need editing."
+  - path: "POST-INSTANTIATION.md"
     operation: "generate"
     ownership: "canonical-reference"
-    note: "Checklist de verificação pós-geração; conteúdo fixo em toda instância."
+    note: "Post-generation verification checklist; fixed content across every instance."
   - path: "LICENSE"
     operation: "generate"
     ownership: "generated-once"
-    note: "Gerado a partir de scaffold/license-templates/LICENSE-pessoal.md, ajustado por tier (ver license-templates/README.md)."
+    note: "Generated from scaffold/license-templates/LICENSE-pessoal.md, adjusted by tier (see license-templates/README.md)."
   - path: "registry.md"
     operation: "generate"
     ownership: "managed-structure"
-    note: "Tabela vazia na geração; cresce só por acréscimo (nunca editar linha existente)."
+    note: "Empty table at generation time; grows only by addition (never edit an existing row)."
   - path: "example/exemplo-nota.md"
     operation: "generate"
     ownership: "user-authored"
-    note: "Ilustrativo; usuário apaga ou substitui antes do primeiro documento real."
+    note: "Illustrative; the user deletes or replaces it before the first real document."
   - path: "hipocampo.yaml"
     operation: "generate"
     ownership: "managed-structure"
-    note: "Manifesto do vault (hipocampo/decisions/0033); domain fixo em 'pessoal' para este profile."
+    note: "Vault manifest (hipocampo/decisions/0033, hipocampo/decisions/0034); domain fixed to 'pessoal' for this profile, language defaults to 'en' unless overridden by the collected input."
 
 conflicts:
   default: "stop-and-report"
@@ -69,5 +73,5 @@ upgrade:
   migration_guide: "hipocampo/UPGRADE.md"
 
 postconditions:
-  validator: "revisão humana via POS-INSTANCIACAO.md gerado"
+  validator: "human review via generated POST-INSTANTIATION.md"
   conformance_claim: "declared"

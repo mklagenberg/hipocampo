@@ -1,7 +1,7 @@
-# Registry de aliases cross-repositório
+# Cross-repository alias registry
 
-Ver `hipocampo/SPEC.md`, seção 6, para a sintaxe completa (`$alias:path.md`). Nunca editar uma linha existente — renomear repositório = acrescentar linha nova com data.
+See `hipocampo/SPEC.md`, section 6, for the complete syntax (`$alias:path.md`). Never edit an existing row — renaming a repository = add a new row with a date.
 
-| Alias | Repositório atual | Válido desde | Nota |
+| Alias | Current repository | Valid since | Note |
 |---|---|---|---|
-| — | — | — | tabela vazia — preencher ao criar o primeiro alias |
+| — | — | — | empty table — fill in when creating the first alias |

@@ -1,60 +1,60 @@
-# Hipocampo — Boas Práticas
+# Hipocampo — Best Practices
 
-Este guia é para quem já leu o [Getting Started](GETTING-STARTED.md) e quer usar o Hipocampo bem — não só corretamente, mas de um jeito que segure o teste do tempo. Ele nasceu de erros reais cometidos numa migração de centenas de documentos (não de teoria) — cada recomendação aqui já foi testada, quebrada, ou aprendida do jeito difícil por alguém antes de você.
+This guide is for those who have already read [Getting Started](GETTING-STARTED.md) and want to use Hipocampo well — not just correctly, but in a way that stands the test of time. It was born from real mistakes made in a migration of hundreds of documents (not from theory) — every recommendation here has already been tested, broken, or learned the hard way by someone before you.
 
-Se você quer o texto normativo completo, ele está no [SPEC.md](SPEC.md). Aqui é o "e na prática, o que eu faço?".
+If you want the full normative text, it is in [SPEC.md](SPEC.md). Here it is the "and in practice, what do I do?".
 
-## 1. Usando bem no dia a dia
+## 1. Using it well day to day
 
-**Nem toda decisão precisa de um Decision Record.** Se a dúvida é "por que esse cliente foi pro cofre e não pro repositório geral", isso é uma decisão da sua instância — vira um documento comum com `type: decision`, do lado do conteúdo. Um Decision Record de verdade (pasta `decisions/` do `hipocampo`) é reservado pra mudança na metodologia em si — schema, regra, comportamento do agente. Confundir os dois deixa o `hipocampo` inchado com decisões que não interessam a mais ninguém fora da sua instância.
+**Not every decision needs a Decision Record.** If the question is "why did this client go to the vault and not to the general repository", that is a decision of your instance — it becomes a regular document with `type: decision`, on the content side. A real Decision Record (the `decisions/` folder of `hipocampo`) is reserved for a change in the methodology itself — schema, rule, agent behavior. Confusing the two leaves `hipocampo` bloated with decisions that matter to no one outside your instance.
 
-**`related` vazio quase sempre é preguiça, não ausência de conexão.** Se o texto de um documento cita outro pelo nome, isso é uma conexão que merece entrar no campo `related` — não custa nada e economiza uma busca manual depois. A lição mais repetida durante a migração de conteúdo real foi exatamente essa: dezenas de documentos citavam uns aos outros no corpo do texto sem nenhum link estruturado.
+**An empty `related` field is almost always laziness, not absence of connection.** If a document's text mentions another by name, that is a connection that deserves to go into the `related` field — it costs nothing and saves a manual search later. The most repeated lesson during the migration of real content was exactly this: dozens of documents referenced each other in the body text without any structured link.
 
-**`category` nasce depois, nunca antes.** Não crie uma subpasta `crm/` ou `financeiro/` só porque você imagina que um dia vai precisar. Espere acumular alguns documentos do mesmo tema e só então promova pra subpasta — o mesmo raciocínio vale pra criar um novo valor de `type`. Estrutura demais, cedo demais, é tão ruim quanto estrutura nenhuma.
+**`category` is born afterward, never beforehand.** Do not create a `crm/` or `financeiro/` subfolder just because you imagine you'll need it one day. Wait to accumulate a few documents on the same topic and only then promote to a subfolder — the same reasoning applies to creating a new `type` value. Too much structure, too early, is just as bad as no structure at all.
 
-**`type: framework` é para metodologia sua, não para todo documento bem escrito.** Esse tipo existe porque ele muda quem é dono do conteúdo (você, mesmo que aplicado em contexto de trabalho — ver `DISCLAIMER.md`). Se o documento é só um bom guia técnico, sem essa questão de titularidade em jogo, ele é `reference`, não `framework`.
+**`type: framework` is for methodology of your own, not for every well-written document.** This type exists because it changes who owns the content (you, even when applied in a work context — see `DISCLAIMER.md`). If the document is just a good technical guide, without that question of ownership at stake, it is `reference`, not `framework`.
 
-**Migrando conteúdo antigo? Três armadilhas garantidas:**
-- O documento-índice de uma pasta antiga quase nunca deve ser copiado literalmente — ele normalmente acumula nomes, links e contexto que não pertencem ao lugar novo. Reescreva como um `README.md` limpo.
-- Um documento genérico que virou vários documentos mais específicos precisa virar um "tombstone": `status: superseded`, com `superseded_by` listando todos os filhos — nunca dois documentos ativos dizendo a mesma coisa.
-- Se o acervo antigo não tinha campo `date`, não invente — puxe a data do primeiro commit real do arquivo (histórico do git), é mais confiável que qualquer estimativa.
+**Migrating old content? Three guaranteed pitfalls:**
+- The index document of an old folder should almost never be copied literally — it usually accumulates names, links, and context that do not belong in the new place. Rewrite it as a clean `README.md`.
+- A generic document that has turned into several more specific documents needs to become a "tombstone": `status: superseded`, with `superseded_by` listing all the children — never two active documents saying the same thing.
+- If the old collection did not have a `date` field, do not make one up — pull the date from the file's first real commit (git history), it is more reliable than any estimate.
 
-**Autoria de conteúdo migrado sem dono claro (equipe inteira, sem registro individual) tem um mecanismo próprio** (`CONTRIBUTORS.md` + `@nome-da-secao`, ver `decisions/0006`) — mas isso é só para o passado. Documento novo, escrito hoje, sempre tem um autor de verdade: a pessoa que escreveu ou dirigiu a escrita. Não force esse mecanismo em conteúdo novo só porque parece mais neutro.
+**Authorship of migrated content without a clear owner (whole team, no individual record) has its own mechanism** (`CONTRIBUTORS.md` + `@section-name`, see `decisions/0006`) — but that is only for the past. A new document, written today, always has a real author: the person who wrote it or directed the writing. Do not force this mechanism onto new content just because it seems more neutral.
 
-## 2. Privacidade não é feature, é fundação
+## 2. Privacy is not a feature, it's a foundation
 
-O Hipocampo não trata privacidade como uma etiqueta a mais no frontmatter — trata como parte do desenho. Vale entender por quê, porque isso muda como você deveria pensar ao escrever qualquer documento novo em instância de trabalho.
+Hipocampo does not treat privacy as one more label in the frontmatter — it treats it as part of the design. It's worth understanding why, because this changes how you should think when writing any new document in a work instance.
 
-**O que nunca entra num repositório corporativo, resumido:** contrato ou NDA, avaliação de desempenho de alguém identificável, qualquer anotação de saúde (sua ou de terceiro), dado pessoal (senha, endereço, telefone/e-mail pessoal, nome de parente), e valor de salário, fornecedor ou projeto — com uma única exceção: o resultado de negócio entregue a um cliente num case (quanto de receita gerou, quanto de custo evitou) pode ficar como número real, porque é o próprio produto do trabalho, não exposição financeira interna. Nome, cargo e contato profissional de colega ou cliente são permitidos, sempre com o ano da referência ao lado — é uma fotografia datada, nunca um estado presumido atual. O detalhe completo está em `decisions/0009`.
+**What never goes into a corporate repository, summarized:** a contract or NDA, a performance review of an identifiable person, any health note (yours or a third party's), personal data (password, address, personal phone/email, relative's name), and salary, vendor, or project figures — with a single exception: a business outcome delivered to a client in a case study (how much revenue it generated, how much cost it avoided) can remain as a real number, because it is the very product of the work, not internal financial exposure. The name, role, and professional contact of a colleague or client are allowed, always with the reference year alongside — it is a dated snapshot, never a presumed current state. Full detail is in `decisions/0009`.
 
-**"Despersonalizar" um documento não é só trocar o nome.** Antes de considerar um documento seguro pra publicar, pergunte três coisas, na ordem de uma técnica real de anonimização (não inventamos isso, é o padrão usado por reguladores europeus):
+**"Depersonalizing" a document is not just swapping out the name.** Before considering a document safe to publish, ask three things, in the order of a real anonymization technique (we did not invent this, it is the standard used by European regulators):
 
-1. **Isolamento** — mesmo sem o nome, dá pra isolar esse registro como sendo de uma pessoa/empresa específica, só de olhar pro resto do documento?
-2. **Vinculação** — dá pra cruzar esse documento com outro que você já tem e juntar as peças?
-3. **Inferência** — dá pra deduzir quem é, com alta probabilidade, só pelo contexto (setor, porte, época, projeto)?
+1. **Isolation** — even without the name, can this record be isolated as belonging to a specific person/company, just by looking at the rest of the document?
+2. **Linkability** — can this document be cross-referenced with another one you already have to piece it together?
+3. **Inference** — can you deduce who it is, with high probability, just from context (sector, size, time period, project)?
 
-Se a resposta for sim pra qualquer uma das três, a despersonalização não pegou de verdade — troque mais detalhe, não só o nome próprio.
+If the answer is yes to any of the three, the depersonalization did not really take — swap out more detail, not just the proper name.
 
-**Às vezes alguém tem o direito de pedir que o próprio nome saia do repositório de vez.** Isso é raro (o item acima já reduz bastante quando acontece), mas quando é um pedido legítimo de eliminação de dado pessoal, o Hipocampo tem um processo pra isso (`decisions/0010`): o conteúdo pessoal específico é substituído por um registro mínimo do que aconteceu (sem repetir o dado), nunca simplesmente ignorado.
+**Sometimes someone has the right to ask that their own name be removed from the repository for good.** This is rare (the item above already reduces this a lot when it happens), but when it is a legitimate request for deletion of personal data, Hipocampo has a process for it (`decisions/0010`): the specific personal content is replaced with a minimal record of what happened (without repeating the data), never simply ignored.
 
-**`visibility` é uma convenção de leitura, não um cadeado.** Marcar um documento como `confidential` não impede tecnicamente ninguém com acesso ao repositório de abrir o arquivo — quem protege de verdade é a permissão do próprio GitHub no nível do repositório. É por isso que a arquitetura do Hipocampo separa pessoal, pessoal-sigiloso, corporativo e corporativo-sigiloso em **repositórios diferentes**, não em pastas dentro do mesmo repositório: permissão real do GitHub é por repositório, então a separação física é a única coisa que garante que quem não deveria ver, realmente não vê.
+**`visibility` is a reading convention, not a lock.** Marking a document as `confidential` does not technically prevent anyone with access to the repository from opening the file — what actually protects it is GitHub's own permission at the repository level. That is why Hipocampo's architecture separates personal, personal-confidential, corporate, and corporate-confidential into **different repositories**, not folders within the same repository: real GitHub permission is per-repository, so physical separation is the only thing that guarantees that whoever shouldn't see it, really doesn't see it.
 
-**Nunca escreva verbatim o "como" de uma falha de segurança.** Se você documentar que uma vulnerabilidade foi encontrada, registre o quê e quando — nunca o payload, a query, ou qualquer coisa que reproduza o ataque pra quem ler depois.
+**Never write out the "how" of a security flaw verbatim.** If you document that a vulnerability was found, record what and when — never the payload, the query, or anything that would let a later reader reproduce the attack.
 
-## 3. Adotando o Hipocampo num time ou empresa novo
+## 3. Adopting Hipocampo in a new team or company
 
-**Comece pensando em quantos repositórios você precisa, não em quantas pastas.** O desenho de referência é quatro: um pessoal e um pessoal-sigiloso (pra quem adota sozinho), um do time/empresa e um sigiloso do time/empresa (pra quem adota em grupo). Nem todo mundo precisa dos quatro desde o primeiro dia — mas pense na separação de *quem tem acesso a quê* antes de escrever o primeiro documento, porque mudar isso depois significa mover conteúdo entre repositórios, não só reclassificar uma etiqueta.
+**Start by thinking about how many repositories you need, not how many folders.** The reference design is four: one personal and one personal-confidential (for those adopting solo), one for the team/company and one confidential one for the team/company (for those adopting as a group). Not everyone needs all four from day one — but think about the separation of *who has access to what* before writing the first document, because changing this later means moving content between repositories, not just reclassifying a label.
 
-**O repositório sigiloso ("vault") não é "o lugar mais confidencial de tudo" — é o lugar pra um tipo específico de sensibilidade.** Depois que você aplicar a política de dados sensíveis (item 2 acima), o que sobra candidato ao vault normalmente é sensibilidade competitiva qualitativa — pipeline comercial em negociação, avaliação interna de parceria, postura de negociação —, não financeiro nem avaliação de pessoa (isso já está banido antes de chegar na pergunta "vault ou não").
+**The confidential repository ("vault") is not "the most confidential place of all" — it's the place for a specific kind of sensitivity.** After you apply the sensitive data policy (item 2 above), what remains a vault candidate is normally qualitative competitive sensitivity — a sales pipeline under negotiation, an internal partnership assessment, a negotiating stance — not financials or a person's evaluation (that is already banned before it even reaches the question "vault or not").
 
-**Nomeie categorias conforme elas nascem, não com um plano de pastas pronto no dia 1.** Mesma lógica do item 1, só que agora em escala de organização inteira.
+**Name categories as they arise, not with a folder plan ready on day 1.** Same logic as item 1, just now at the scale of an entire organization.
 
-**Não ligue nada de verdade até ter certeza.** Construa a instância nova em paralelo, sem apontar rotina, skill ou colega pra ela até você mesmo confirmar que está pronta. É mais fácil adiar uma ativação do que desfazer uma confusão de dois sistemas rodando ao mesmo tempo.
+**Don't wire anything up for real until you're sure.** Build the new instance in parallel, without pointing any routine, skill, or colleague at it until you have confirmed yourself that it is ready. It is easier to postpone an activation than to undo the confusion of two systems running at the same time.
 
-**Duas pegadinhas mecânicas do GitHub que todo adotante encontra mais cedo ou mais tarde:**
-- **"Use this template" só cria repositório novo** — não existe forma de aplicar um template retroativamente a um repositório que você já criou vazio. E ele também copia a LICENSE do template de origem, mesmo quando isso não faz sentido no destino — remova-a depois, é esperado.
-- **Instalar um app de IA (como o conector do GitHub) num repositório de organização é diferente de autorizá-lo na sua conta pessoal.** São duas permissões separadas: quem autoriza (sua identidade) e quem instala (acesso ao repositório em si). Se sua conta pessoal não for administradora da organização, você vai precisar de uma segunda conta que seja, só pra fazer a instalação — a autorização da sua conta pessoal continua igual, não precisa refazer nada nela.
+**Two mechanical GitHub gotchas that every adopter runs into sooner or later:**
+- **"Use this template" only creates a new repository** — there is no way to apply a template retroactively to a repository you already created empty. It also copies the LICENSE from the source template, even when that doesn't make sense at the destination — remove it afterward, that's expected.
+- **Installing an AI app (like the GitHub connector) on an organization repository is different from authorizing it on your personal account.** These are two separate permissions: who authorizes (your identity) and who installs (access to the repository itself). If your personal account is not an administrator of the organization, you will need a second account that is, just to do the installation — your personal account's authorization stays the same, no need to redo anything there.
 
 ---
 
-*Este documento é vivo — se você encontrar um erro comum que não está listado aqui, ele provavelmente merece uma linha nova.*
+*This document is alive — if you find a common mistake that isn't listed here, it probably deserves a new line.*

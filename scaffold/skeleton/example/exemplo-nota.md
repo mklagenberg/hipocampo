@@ -1,23 +1,3 @@
----
-title: "Exemplo de nota — apagar ou substituir"
-date: "2026-07-27"
-updated: "2026-07-27"
-source: "interno"
-tags: ["exemplo"]
-type: "note"
-category: ""
-temporality: "evergreen"
-ttl: "2028-07-27"
-status: "draft"
-related: []
-superseded_by: ""
-revision: 1
-revision_note: "Documento de exemplo gerado pelo scaffold — nunca editado desde a criação."
-visibility: "internal"
-author: "Nome Real - @usuario-github"
-owner: ""
----
-
-# Exemplo de nota
-
-Este arquivo existe só para ilustrar o frontmatter completo do Hipocampo (ver `hipocampo/SPEC.md`, seção 2) em um documento concreto. Apague ou substitua pelo seu primeiro documento real.
+> **Movido / Moved:** este documento foi traduzido e renomeado para `scaffold/skeleton/example/example-note.md`. Este arquivo é mantido como redirecionamento e nunca será apagado (ver invariante "documento nunca é apagado fisicamente", SPEC.md seção 8).
+>
+> This document was translated and renamed to `scaffold/skeleton/example/example-note.md`. This file is kept as a redirect and will never be deleted (see the "a document is never physically deleted" invariant, SPEC.md section 8).

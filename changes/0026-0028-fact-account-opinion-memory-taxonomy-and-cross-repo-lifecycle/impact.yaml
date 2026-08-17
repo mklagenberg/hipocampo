@@ -1,0 +1,54 @@
+change:
+  id: "0026-0028-fact-account-opinion-memory-taxonomy-and-cross-repo-lifecycle"
+  title: "Fact/Account/Opinion/Memory taxonomy + cross-repository lifecycle (Promote/Depromote/Redbutton)"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  structural: true
+  summary: "Flags personal opinion/memory in a corporate instance and formalizes actions to move/remove content between repositories of the same owner."
+  backfill: true
+  backfill_note: "Retroactive Change Set — work already merged via PR #22 before this mechanism existed (decisions/0031). First template-validation exercise."
+
+git:
+  base_ref: "main (pre-PR #22)"
+  target_branch: "main"
+  merged_pr: 22
+
+triggers:
+  regra_normativa: true
+  schema_frontmatter: true
+  mecanismo_cross_repositorio: true
+  politica_dados_sensiveis: true
+  release: false
+
+affected:
+  specification:
+    status: "updated"
+    paths: ["SPEC.md#2-frontmatter-schema-unificado", "SPEC.md#8-extensãopersonalização-e-precedência-do-agente", "SPEC.md#13-ações-de-ciclo-de-vida-cross-repositório-promote-depromote-redbutton"]
+  decisions:
+    status: "updated"
+    paths: ["decisions/0026-account-vs-opinion-in-corporate-instance.md", "decisions/0027-promote-depromote-redbutton.md", "decisions/0028-broadened-trigger-2a-remediation.md"]
+  changelog:
+    status: "updated"
+    paths: ["CHANGELOG.md"]
+  upgrade:
+    status: "not-applicable"
+    paths: []
+    rationale: "No release has been cut yet containing this change — work accumulated under [Unreleased] (decisions/0021); UPGRADE.md will be updated when v2.0.0 is cut."
+  migrations:
+    status: "not-applicable"
+    paths: []
+    rationale: "Additive/MINOR change in isolation — does not break an existing instance per the decisions/0023 test."
+  roadmap:
+    status: "not-applicable"
+    paths: []
+    rationale: "ROADMAP.md did not exist yet when this work was merged (created only in Phase B, PR #24, later)."
+  conformance:
+    status: "not-applicable"
+    paths: []
+    rationale: "moda.yaml and conformance/moda.yaml did not exist yet when this work was merged (created only in Phase B, PR #24, later)."
+
+validation:
+  commands: []
+  evidence: ["Human review by Mau via GitHub UI, manual merge of PR #22 on 2026-08-17T18:59:20Z."]
+  notes: "No deterministic validation existed at this point (major finding 4 of the MODA audit) — evidence is human review only."

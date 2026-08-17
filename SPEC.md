@@ -1,18 +1,20 @@
 # Hipocampo — SPEC
 
-Versão: 1.9.0 + não lançado · Segue [SemVer](https://semver.org/lang/pt-BR/)
+Version: 1.9.0 + unreleased · Follows [SemVer](https://semver.org/lang/pt-BR/)
 
-> **Nota de versão:** a última release formal (tag + GitHub Release) é **v1.9.0**. Este documento já inclui trabalho aceito e mesclado em `main` além dessa release (seções 5-B, 5-C, 11, 12 e 13) — ver `CHANGELOG.md`, seção `[Não lançado]`, e `decisions/0021-politica-de-cadencia-de-release.md`. Se você está checando compatibilidade pra uma instância existente, confira contra a tag mais recente, não contra este arquivo em `main`, até a próxima release ser cortada.
+> **Version note:** the latest formal release (tag + GitHub Release) is **v1.9.0**. This document already includes work accepted and merged into `main` beyond that release (sections 5-B, 5-C, 11, 12, and 13) — see `CHANGELOG.md`, the `[Unreleased]` section, and `decisions/0021-release-cadence-policy.md`. If you're checking compatibility for an existing instance, check it against the latest tag, not against this file on `main`, until the next release is cut.
 
-Este documento é a especificação normativa da metodologia Hipocampo: o schema de frontmatter, as regras de retrieval e as convenções que qualquer instância (repositório de conteúdo) precisa seguir para ser considerada compatível com uma versão do Hipocampo. Não é um manual de uso — para isso, ver [GETTING-STARTED.md](GETTING-STARTED.md). Não é um documento de limitações — para isso, ver [DISCLAIMER.md](DISCLAIMER.md). Não é um guia de boas práticas — para isso, ver [BEST-PRACTICES.md](BEST-PRACTICES.md). Não é um guia de atualização de instância existente — para isso, ver [UPGRADE.md](UPGRADE.md).
+This document is the normative specification of the Hipocampo methodology: the frontmatter schema, the retrieval rules, and the conventions that any instance (content repository) must follow to be considered compatible with a version of Hipocampo. It is not a usage manual — for that, see [GETTING-STARTED.md](GETTING-STARTED.md). It is not a document of limitations — for that, see [DISCLAIMER.md](DISCLAIMER.md). It is not a best-practices guide — for that, see [BEST-PRACTICES.md](BEST-PRACTICES.md). It is not an upgrade guide for an existing instance — for that, see [UPGRADE.md](UPGRADE.md).
 
-## 1. Escopo
+## 1. Scope
 
-Hipocampo é uma metodologia de second brain agêntico: git + markdown + rituais de IA. Este repositório (`hipocampo`) e o `hipocampo-toolkit` são os únicos dois repositórios públicos da metodologia — carregam spec e ferramental, nunca conteúdo real. Toda base de conhecimento que implementa o Hipocampo vive em repositórios privados, sem exceção (ver invariantes, seção 8).
+Hipocampo is an agentic second brain methodology: git + markdown + AI rituals. This repository (`hipocampo`) and `hipocampo-toolkit` are the only two public repositories of the methodology — they carry the spec and the tooling, never actual content. Every knowledge base that implements Hipocampo lives in private repositories, without exception (see invariants, section 8).
 
-## 2. Frontmatter — schema unificado
+**Repository language:** this repository is maintained in English — `SPEC.md`, `decisions/`, `docs/`, `skill/`, and `scaffold/` are written and contributed to in English (see `decisions/0034-repository-and-vault-language-policy.md`). A vault (a content repository generated from this methodology) is not bound to this: its own working language is declared in its `hipocampo.yaml` manifest (`instance.language`, `decisions/0033`/`0034`), independent of the language this repository is maintained in.
 
-Todo documento de uma instância Hipocampo é um arquivo `.md` com este frontmatter YAML:
+## 2. Frontmatter — unified schema
+
+Every document in a Hipocampo instance is a `.md` file with this YAML frontmatter:
 
 ```yaml
 ---
@@ -22,269 +24,269 @@ updated: "YYYY-MM-DD"
 source: "url | conversa | interno"
 tags: []
 type: "note | reference | decision | project | person | case | framework | company"
-category: ""                      # opcional, só quando a área já tem subpasta física por tema
+category: ""                      # optional, only when the area already has a dedicated physical subfolder by topic
 temporality: "evergreen | ephemeral | contextual | historical"
-ttl: "YYYY-MM-DD"                 # sempre data concreta — nunca o literal "evergreen"
-context_anchor: ""                # obrigatório só quando temporality: contextual
+ttl: "YYYY-MM-DD"                 # always a concrete date — never the literal "evergreen"
+context_anchor: ""                # required only when temporality: contextual
 status: "draft | active | stale | archived | superseded"
-related: []                       # "path/local.md" ou "$alias:path.md"
-superseded_by: ""                 # "path/local.md" ou "$alias:path.md" — mesma sintaxe cross-repo de related (ver seção 6 e decisions/0027)
+related: []                       # "path/local.md" or "$alias:path.md"
+superseded_by: ""                 # "path/local.md" or "$alias:path.md" — same cross-repo syntax as related (see section 6 and decisions/0027)
 revision: 1
 revision_note: ""
 visibility: "public | internal | confidential | restricted"
-author: "Nome Real - @usuario-github"    # sempre pessoa, nunca a IA — ou @nome-da-secao de CONTRIBUTORS.md, só em conteúdo histórico (ver decisions/0006)
-contributors: []                          # pessoas além do author que contribuíram conteúdo a este documento específico; documento novo sempre usa pessoa real, apurada por commit ou citação explícita — @nome-da-secao só em conteúdo histórico (ver decisions/0006)
-owner: ""                                 # nome da empresa, só quando nasce em contexto de trabalho
-contains_subjective_content: false        # default false; só relevante quando owner preenchido — sinaliza que o corpo contém opinião e/ou lembrança pessoal do autor/contribuidor, não só fato/relato (ver decisions/0026)
-curation_status: ""                       # opcional, só relevante em repositório empresa-confidencial (seção 2-C) — "staged" (candidato a promoção futura pra empresa-público) ou "permanent" (confidencial por natureza, default); ver decisions/0029
-license: ""                               # sempre derivado de `visibility`, nunca preenchido à mão (ver decisions/0007)
+author: "Real Name - @github-username"    # always a person, never the AI — or @section-name from CONTRIBUTORS.md, only for historical content (see decisions/0006)
+contributors: []                          # people besides the author who contributed content to this specific document; a new document always uses a real person, verified by commit or explicit citation — @section-name only for historical content (see decisions/0006)
+owner: ""                                 # company name, only when the document originates in a work context
+contains_subjective_content: false        # default false; only relevant when owner is filled in — flags that the body contains opinion and/or the author's/contributor's personal memory, not just fact/account (see decisions/0026)
+curation_status: ""                       # optional, only relevant in an empresa-confidencial repository (section 2-C) — "staged" (candidate for future promotion to empresa-público) or "permanent" (confidential by nature, default); see decisions/0029
+license: ""                               # always derived from `visibility`, never filled in by hand (see decisions/0007)
 ---
 ```
 
 ### title, date, updated, source, tags
-Uso descritivo padrão. `source` diferencia conhecimento que entrou por pesquisa externa (`url`), por diálogo (`conversa`) ou produzido internamente (`interno`).
+Standard descriptive usage. `source` distinguishes knowledge that came in through external research (`url`), through dialogue (`conversa`), or produced internally (`interno`).
 
 ### status
-Ciclo de vida do documento: `draft` (ainda não é conhecimento consolidado) → `active` (em uso) → `stale` (sinalizado pela rotina de staleness, precisa revisão) → `archived` (retirado de circulação, mas preservado) → `superseded` (substituído por outro documento, ver `superseded_by`). Documento nunca é apagado fisicamente — só transita para `archived` ou `superseded` (invariante, ver seção 8).
+Document lifecycle: `draft` (not yet consolidated knowledge) → `active` (in use) → `stale` (flagged by the staleness routine, needs review) → `archived` (withdrawn from circulation, but preserved) → `superseded` (replaced by another document, see `superseded_by`). A document is never physically deleted — it only transitions to `archived` or `superseded` (invariant, see section 8).
 
 ### revision, revision_note
-Cada edição de conteúdo (não wording trivial) incrementa `revision` e registra o motivo em `revision_note`. Histórico de por quê o documento mudou, não só quando.
+Every content edit (not trivial wording) increments `revision` and records the reason in `revision_note`. A history of *why* the document changed, not just *when*.
 
 ### visibility
-Resolve **só** quem, já tendo acesso ao repositório, pode usar o conteúdo sem restrição adicional: `public` (sem restrição, inclusive fora do repo), `internal` (uso interno da organização dona do repo), `confidential` (uso restrito a quem precisa saber, mesmo dentro do repo), `restricted` (uso individualizado, caso a caso). `visibility` **nunca decide exposição à internet** — isso é resolvido estruturalmente pela regra de que nenhum repositório de conhecimento é público (invariante, seção 8). Uma etiqueta `confidential` num repositório que o time inteiro acessa não impede ninguém desse time de ler o arquivo — permissão real do GitHub é granularidade de repositório, não de arquivo dentro de um repositório compartilhado. Conteúdo que precisa de enforcement técnico de fato vai para um repositório separado com permissão de acesso restrita, não para uma etiqueta `visibility` dentro de um repositório mais aberto.
+Resolves **only** who, already having access to the repository, can use the content without additional restriction: `public` (no restriction, even outside the repo), `internal` (internal use by the organization that owns the repo), `confidential` (use restricted to those who need to know, even within the repo), `restricted` (individualized use, case by case). `visibility` **never decides exposure to the internet** — that is resolved structurally by the rule that no knowledge repository is public (invariant, section 8). A `confidential` label in a repository the whole team accesses does not stop anyone on that team from reading the file — real GitHub permission is repository-level granularity, not file-level granularity within a shared repository. Content that actually needs technical enforcement goes into a separate repository with restricted access permission, not into a `visibility` label inside a more open repository.
 
 ### author / owner
-`author` é sempre uma pessoa (`Nome Real - @usuario-github`), nunca a IA — mesmo quando um agente escreve o texto sob direção de alguém, o autor é quem dirigiu. Campo obrigatório em qualquer documento, qualquer `visibility`. Exceção escopada só a conteúdo histórico/migrado, sem autoria individual rastreável na origem: `author`/`contributors` podem referenciar uma seção nomeada e datada de um arquivo `CONTRIBUTORS.md` via `@nome-da-secao`, em vez de uma pessoa — documento novo nunca usa essa exceção (ver `decisions/0006-creditos-de-contribuicao.md`). Fora dessa exceção, `contributors` (opcional) lista pessoas além do `author` que de fato contribuíram conteúdo a um documento novo, apuradas por commit ou citação explícita — nunca assumidas em bloco pela existência de uma equipe (ver `decisions/0006`). `owner` é sempre o nome de uma empresa, preenchido só quando o documento nasce em contexto de trabalho — ver a distinção completa de papéis e o que cada um pode fazer com o conteúdo no `DISCLAIMER.md` e nos Decision Records de licenciamento em `decisions/`. Ver também seção 12 para o caso de uma pessoa operar mais de uma conta de git.
+`author` is always a person (`Real Name - @github-username`), never the AI — even when an agent writes the text under someone's direction, the author is whoever directed it. Mandatory field on any document, at any `visibility`. An exception scoped only to historical/migrated content, with no individually traceable authorship at the source: `author`/`contributors` may reference a named, dated section of a `CONTRIBUTORS.md` file via `@section-name`, instead of a person — a new document never uses this exception (see `decisions/0006-contribution-credits.md`). Outside that exception, `contributors` (optional) lists people besides the `author` who actually contributed content to a new document, verified by commit or explicit citation — never assumed in bulk from a team's existence (see `decisions/0006`). `owner` is always the name of a company, filled in only when the document originates in a work context — see the full distinction of roles and what each may do with the content in `DISCLAIMER.md` and in the licensing Decision Records under `decisions/`. See also section 12 for the case of a person operating more than one git account.
 
 ### contains_subjective_content
-Campo opcional, relevante só quando `owner` está preenchido (instância corporativa). Sinaliza que o corpo do documento contém ao menos um trecho de **Opinião** ou **Lembrança** — as duas categorias, dentro da taxonomia de tipo de informação (`decisions/0026`), que carregam risco de responsabilização pessoal de quem escreveu. A taxonomia completa tem quatro valores, usados como prefixo inline quando um documento mistura mais de um tipo: **Fato:** (verificado/confirmado), **Relato:** (dito/observado, não confirmado), **Opinião:** (julgamento de valor), **Lembrança:** (recordação pessoal reconstrutiva — termo escolhido pra não colidir com "camadas de memória", seção 5-A, que é sobre estágio de processamento, não sobre confiabilidade de uma afirmação). Documento inteiramente de um só tipo não precisa rotular frase a frase, só este campo já basta. O `@handle` só acompanha o rótulo inline quando o documento tem `contributors` preenchido — caso em que `author` sozinho não basta pra saber de quem é cada trecho; documento de autor único dispensa o handle inline, o `author` do frontmatter já resolve a atribuição. Antes de gravar Opinião ou Lembrança nova numa instância corporativa (`contains_subjective_content` passando a `true`), o agente pergunta explicitamente se deve ficar ali marcada ou ir pra instância pessoal do autor/contribuidor responsável — sem confirmação explícita, vai pra pessoal, nunca adivinha. Ver `decisions/0026-relato-vs-opiniao-em-instancia-corporativa.md`.
+Optional field, relevant only when `owner` is filled in (corporate instance). Flags that the document body contains at least one passage of **Opinion** or **Memory** — the two categories, within the information-type taxonomy (`decisions/0026`), that carry risk of personal liability for whoever wrote them. The full taxonomy has four values, used as an inline prefix when a document mixes more than one type: **Fact:** (verified/confirmed), **Account:** (said/observed, not confirmed), **Opinion:** (value judgment), **Memory:** (reconstructive personal recollection — a term chosen so as not to collide with "memory layers," section 5-A, which is about processing stage, not about the reliability of a statement). A document that is entirely of a single type doesn't need to be labeled sentence by sentence — this field alone is enough. The `@handle` only accompanies the inline label when the document has `contributors` filled in — a case where `author` alone isn't enough to know who wrote each passage; a single-author document skips the inline handle, since the frontmatter's `author` already resolves attribution. Before writing new Opinion or Memory content in a corporate instance (`contains_subjective_content` becoming `true`), the agent explicitly asks whether it should stay marked there or go to the responsible author's/contributor's personal instance — without explicit confirmation, it goes to personal, never guessed. See `decisions/0026-account-vs-opinion-in-corporate-instance.md`.
 
 ### curation_status
-Campo opcional, relevante só dentro de um repositório do tier `empresa-confidencial` (seção 2-C). Sinaliza a intenção de ciclo de vida do documento dentro desse repositório: `staged` marca candidato a eventualmente ser promovido pra um repositório `empresa-público`, depois de curadoria da liderança; `permanent` (default, quando o campo fica vazio) marca conteúdo confidencial por natureza, sem expectativa de publicação futura. Não substitui nem se sobrepõe a `visibility` — os dois campos resolvem perguntas diferentes: `visibility` é sobre quem, já com acesso ao repositório, pode usar o conteúdo sem restrição adicional; `curation_status` é sobre se aquele documento específico é candidato a mudar de repositório algum dia. Ver `decisions/0029-taxonomia-tipo-de-repositorio.md`.
+Optional field, relevant only within a repository of the `empresa-confidencial` tier (section 2-C). Flags the intended lifecycle of the document within that repository: `staged` marks a candidate for eventual promotion to an `empresa-público` repository, after leadership curation; `permanent` (default, when the field is left empty) marks content confidential by nature, with no expectation of future publication. It does not replace or overlap with `visibility` — the two fields resolve different questions: `visibility` is about who, already with access to the repository, can use the content without additional restriction; `curation_status` is about whether that specific document is a candidate to change repository someday. See `decisions/0029-repository-type-taxonomy.md`.
 
 ### license
-Sempre derivado mecanicamente de `visibility`, nunca definido à mão — evita divergência entre a camada de confidencialidade (`visibility`) e a camada jurídica (`license`). Usa o padrão SPDX `LicenseRef-<idstring>`, com o texto legal completo no arquivo `LICENSE` da raiz do repositório, nunca reescrito por documento. Ver `decisions/0007-licenciamento-repos-de-conteudo.md`.
+Always mechanically derived from `visibility`, never set by hand — this avoids divergence between the confidentiality layer (`visibility`) and the legal layer (`license`). Uses the SPDX pattern `LicenseRef-<idstring>`, with the full legal text in the `LICENSE` file at the repository root, never rewritten per document. See `decisions/0007-content-repo-licensing.md`.
 
-## 2-A. Política de dados sensíveis por tipo de instância
+## 2-A. Sensitive-data policy by instance type
 
-Instância corporativa (`owner` preenchido com o nome de uma organização) nunca armazena, em nenhum nível de `visibility` — mesmo `restricted`: conteúdo de contrato ou NDA; avaliação de desempenho de indivíduo identificável; anotação de saúde de qualquer pessoa (titular da instância ou terceiro); dado pessoal (senha, endereço pessoal, telefone ou e-mail pessoal, nome de parente); valor de salário, valor pago a fornecedor, ou valor de projeto/contrato. Exceção única pra valor absoluto: resultado de negócio entregue a um cliente num `type: case` (receita gerada, custo evitado) é o próprio produto do case, não exposição financeira interna. Aprendizado interno quantificado (ex.: economia de processo) é registrado como variação percentual, nunca valor absoluto.
+A corporate instance (`owner` filled in with an organization's name) never stores, at any `visibility` level — even `restricted`: contract or NDA content; performance evaluation of an identifiable individual; health note about any person (the instance owner or a third party); personal data (password, personal address, personal phone or email, relative's name); salary figures, amounts paid to a vendor, or project/contract value. Single exception for an absolute figure: a business result delivered to a client in a `type: case` (revenue generated, cost avoided) is the very product of the case, not internal financial exposure. Quantified internal learning (e.g., process savings) is recorded as a percentage variation, never an absolute value.
 
-Dado financeiro sobre terceiro que não é fornecedor/parceiro comercial direto (ex.: inteligência de mercado sobre concorrente, extraída de fonte pública) não é abrangido por essa restrição — desde que a fonte pública seja citada explicitamente no documento.
+Financial data about a third party that is not a direct vendor/business partner (e.g., market intelligence about a competitor, extracted from a public source) is not covered by this restriction — provided the public source is explicitly cited in the document.
 
-Nome completo, cargo, e-mail profissional, telefone ou endereço profissional — de colega ou de contato de cliente — são permitidos em instância corporativa, sempre acompanhados de citação de ano/data: o registro é uma fotografia datada, nunca um estado presumido atual.
+Full name, title, professional email, professional phone, or professional address — of a colleague or a client contact — are permitted in a corporate instance, always accompanied by a year/date citation: the record is a dated snapshot, never a presumed current state.
 
-Questão pessoal de qualquer indivíduo (saúde, situação financeira pessoal) nunca vai pra instância corporativa — sempre pra instância pessoal do titular relevante, se existir uma.
+Any individual's personal matter (health, personal financial situation) never goes into a corporate instance — always into the relevant owner's personal instance, if one exists.
 
-Detalhe técnico de vulnerabilidade ou exploração ativa (payload de ataque, query/dork que revela o comprometimento, credencial, endpoint explorável) nunca é registrado verbatim, em nenhuma instância, mesmo confidencial/restricted — registra-se o fato (existência da falha, categoria, data do achado) e a resposta dada, nunca o material que reproduziria ou confirmaria o ataque.
+Technical detail of an active vulnerability or exploit (attack payload, query/dork that reveals the compromise, credential, exploitable endpoint) is never recorded verbatim, in any instance, even confidential/restricted — the fact is recorded (the flaw's existence, category, date of the finding) and the response given, never the material that would reproduce or confirm the attack.
 
-Quando um documento inteiro depende estruturalmente de um tipo de dado banido (não dá pra adaptar removendo só o trecho problemático), o agente não decide sozinho entre publicar mesmo assim ou descartar — sinaliza a violação ao humano responsável pela instância e aguarda decisão explícita. Ver `decisions/0009-politica-de-privacidade-por-instancia.md`. A auditoria estrutural semanal (seção 5-C) é o mecanismo periódico que verifica o cumprimento desta política, e a ação Redbutton (seção 13) é o mecanismo de remediação quando uma violação é confirmada.
+When an entire document structurally depends on a banned data type (it can't be fixed by just removing the problematic passage), the agent doesn't decide alone between publishing anyway or discarding it — it flags the violation to the human responsible for the instance and waits for an explicit decision. See `decisions/0009-privacy-policy-by-instance.md`. The weekly structural audit (section 5-C) is the periodic mechanism that checks compliance with this policy, and the Redbutton action (section 13) is the remediation mechanism when a violation is confirmed.
 
-**Qual variante desta política se aplica a um repositório não é inferido pelo agente** a partir do nome do repositório ou do contexto da conversa — é lido do campo "tipo de instância" (`corporativa` ou `pessoal`), declarado obrigatoriamente no bloco "Escopo do repositório" do `AGENTS.md` daquele repositório (seção 11). Ver `decisions/0022-tipo-de-instancia-declarado-no-agents-md.md`.
+**Which variant of this policy applies to a repository is never inferred by the agent** from the repository's name or the conversation's context — it is read from the "instance type" field (`corporativa` or `pessoal`), mandatorily declared in the "Repository scope" block of that repository's `AGENTS.md` (section 11). See `decisions/0022-instance-type-declared-in-agents-md.md`.
 
-## 2-B. Mecânica CRUD e leitura frontmatter-first
+## 2-B. CRUD mechanics and frontmatter-first reading
 
-O ciclo de vida do documento (seção 2, campo `status`) implementa as quatro operações de um CRUD: **Create** (criação com frontmatter completo), **Read** (consulta por agente ou humano), **Update** (edição de conteúdo com incremento de `revision`), **Delete** (mitigado pelo invariante 3 — nunca apagar fisicamente, só `archived`/`superseded`, com exceção estreita da `decisions/0010`, com gatilho ampliado pela `decisions/0028`). Ver `decisions/0012-mecanica-crud-frontmatter-first.md`.
+The document lifecycle (section 2, `status` field) implements the four operations of a CRUD: **Create** (creation with full frontmatter), **Read** (query by agent or human), **Update** (content edit with `revision` increment), **Delete** (mitigated by invariant 3 — never delete physically, only `archived`/`superseded`, with the narrow exception of `decisions/0010`, with its trigger broadened by `decisions/0028`). See `decisions/0012-crud-frontmatter-first-mechanics.md`.
 
-Regra de leitura recomendada ao agente: ao operar sobre múltiplos documentos (busca, triagem, staleness), ler sempre o **frontmatter primeiro** — YAML, custo de token baixo, suficiente pra filtrar por `type`, `tags`, `status`, `temporality`, `related` e decidir relevância. Só ler o **corpo completo** depois de decidir, pelo frontmatter, que aquele documento específico precisa de leitura completa. Numa instância com muitos documentos, isso evita custo de token desnecessário — ler o corpo inteiro de todo candidato só pra descartar a maioria não é o padrão de acesso default.
+Recommended reading rule for the agent: when operating over multiple documents (search, triage, staleness), always read the **frontmatter first** — YAML, low token cost, sufficient to filter by `type`, `tags`, `status`, `temporality`, `related`, and decide relevance. Only read the **full body** after deciding, from the frontmatter, that that specific document needs a full read. In an instance with many documents, this avoids unnecessary token cost — reading the full body of every candidate just to discard most of them is not the default access pattern.
 
-Além disso, toda operação de READ inclui uma validação leve do frontmatter contra a norma desta seção 2 e a checagem de staleness da seção 5 — independente de o frontmatter audit (seção 5-B, ritual em lote) já ter passado por aquele documento especificamente. Se a validação encontrar problema, o agente sinaliza explicitamente o que está errado e o que precisa ser feito; no caso de `ttl` vencido, deixa claro que a informação é defasada e sugere revalidação por pesquisa quando o documento for `source: url`. Esta validação nunca altera `status` ou qualquer campo sozinha — só sinaliza. Ver `decisions/0018-validacao-frontmatter-tempo-de-leitura.md`.
+In addition, every READ operation includes a light validation of the frontmatter against the norm in this section 2 and the staleness check in section 5 — independent of whether the frontmatter audit (section 5-B, batch ritual) has already gone over that specific document. If validation finds a problem, the agent explicitly flags what's wrong and what needs to be done; in the case of an expired `ttl`, it makes clear that the information is outdated and suggests revalidation by research when the document is `source: url`. This validation never changes `status` or any field on its own — it only flags. See `decisions/0018-frontmatter-validation-at-read-time.md`.
 
-## 2-C. Taxonomia de tipo de repositório: domínio e tier
+## 2-C. Repository-type taxonomy: domain and tier
 
-Todo repositório de conteúdo Hipocampo se classifica em dois eixos ortogonais — o nome físico do repositório é livre, o que importa é o intuito:
+Every Hipocampo content repository classifies along two orthogonal axes — the repository's physical name is free, what matters is the intent:
 
-1. **Domínio de titularidade** (seção 2-A, já em uso via "tipo de instância" no `AGENTS.md`): `pessoal` ou `empresa`.
-2. **Tier de exposição**, dentro de cada domínio: `confidencial` ou `público`.
+1. **Domain of ownership** (section 2-A, already in use via "instance type" in `AGENTS.md`): `pessoal` or `empresa`.
+2. **Exposure tier**, within each domain: `confidencial` or `público`.
 
-Os quatro pares possíveis já correspondem, na prática real de qualquer instância multi-repositório (`decisions/0002`), a repositórios físicos distintos — nenhum par exige repositório novo além dos que a arquitetura multi-repo já prevê:
+The four possible pairs already correspond, in the real practice of any multi-repository instance (`decisions/0002`), to distinct physical repositories — no pair requires a new repository beyond what the multi-repo architecture already provides for:
 
-| Domínio | Tier | Papel |
+| Domain | Tier | Role |
 |---|---|---|
-| pessoal | confidencial | segredos pessoais, acesso só do titular |
-| pessoal | público | conhecimento pessoal compartilhável sem restrição |
-| empresa | confidencial | conhecimento restrito a quem precisa saber (ex.: liderança) |
-| empresa | público | conhecimento já curado, acessível a toda a organização |
+| pessoal | confidencial | personal secrets, access only for the owner |
+| pessoal | público | personal knowledge shareable without restriction |
+| empresa | confidencial | knowledge restricted to those who need to know (e.g., leadership) |
+| empresa | público | knowledge already curated, accessible to the whole organization |
 
-Não existe um terceiro tier "estruturante" como repositório à parte. Conhecimento corporativo confidencial que é candidato a eventualmente virar público (curadoria pendente da liderança, não uma decisão de manter confidencial pra sempre) continua vivendo no repositório `empresa-confidencial` — a intenção de ciclo de vida é marcada no frontmatter de cada documento (`curation_status`, seção 2), não por uma separação física adicional. O mesmo raciocínio não se aplica ao domínio pessoal: como autor e curador são a mesma pessoa, não há um estágio de "aguardando curadoria de terceiro" a marcar — pessoal permanece com dois tiers apenas. Ver `decisions/0029-taxonomia-tipo-de-repositorio.md` pro racional completo, incluindo por que um repositório físico novo foi descartado.
+There is no third "structuring" tier as a separate repository. Confidential corporate knowledge that is a candidate to eventually become public (curation pending from leadership, not a decision to keep it confidential forever) keeps living in the `empresa-confidencial` repository — the lifecycle intent is marked in each document's frontmatter (`curation_status`, section 2), not by an additional physical separation. The same reasoning doesn't apply to the personal domain: since author and curator are the same person, there is no "awaiting third-party curation" stage to mark — personal stays with just two tiers. See `decisions/0029-repository-type-taxonomy.md` for the full rationale, including why a new physical repository was ruled out.
 
-A declaração formal de qual domínio+tier um repositório específico implementa é operacionalizada por um manifesto de instância (mecanismo em desenvolvimento junto à adequação da metodologia ao MODA) — até esse manifesto existir, a declaração continua sendo o campo "tipo de instância" do `AGENTS.md` (seção 2-A/11) combinado com o tier já conhecido informalmente pelo operador da instância.
+The formal declaration of which domain+tier a specific repository implements is operationalized by an instance manifest (a mechanism in development alongside bringing the methodology into conformance with MODA) — until that manifest exists, the declaration remains the "instance type" field in `AGENTS.md` (section 2-A/11) combined with the tier already known informally by the instance's operator.
 
-## 3. `type` — enum e critério de expansão
+## 3. `type` — enum and expansion criterion
 
-| Valor | Uso |
+| Value | Usage |
 |---|---|
-| `note` | observação atômica que não é nenhum dos outros |
-| `reference` | conceito despersonalizado e reutilizável (absorve o que seria "generic") |
-| `decision` | decisão de conteúdo/arquitetura de uma instância específica — distinto do Decision Record da metodologia, ver seção 7 |
-| `project` | iniciativa em andamento |
-| `person` | pessoa nomeada |
-| `company` | empresa nomeada (cliente, parceiro, concorrente, a própria empresa) |
-| `case` | case de cliente/trabalho entregue, com resultado quantificado |
-| `framework` | metodologia sujeita a regime de autoria/titularidade (ver DISCLAIMER.md) |
+| `note` | atomic observation that doesn't fit any of the others |
+| `reference` | depersonalized, reusable concept (absorbs what would be "generic") |
+| `decision` | content/architecture decision for a specific instance — distinct from the methodology's Decision Record, see section 7 |
+| `project` | ongoing initiative |
+| `person` | named person |
+| `company` | named company (client, partner, competitor, the company itself) |
+| `case` | delivered client/work case, with a quantified result |
+| `framework` | methodology subject to an authorship/ownership regime (see DISCLAIMER.md) |
 
-`context` foi avaliado e descartado como valor de `type` — sobreposição grande com `reference`/`company`. Quando fizer sentido, vira tag (`contexto`), não classificação de retrieval.
+`context` was evaluated and dropped as a `type` value — too much overlap with `reference`/`company`. When it makes sense, it becomes a tag (`contexto`), not a retrieval classification.
 
-**Regra de expansão:** só criar um valor novo de `type` quando houver massa crítica de documentos que não encaixam em nenhum valor existente — o mesmo princípio que já se aplica às subpastas de `category` (seção 4). Um enum pequeno e sem sobreposição é o que sustenta a melhora de retrieval que motiva ter `type` como campo estruturado.
+**Expansion rule:** only create a new `type` value when there is a critical mass of documents that don't fit any existing value — the same principle already applied to `category` subfolders (section 4). A small, non-overlapping enum is what sustains the retrieval improvement that motivates having `type` as a structured field.
 
 ## 4. `category`
 
-Campo opcional, string livre. Só é preenchido quando a área temática já acumulou massa crítica de documentos a ponto de justificar uma subpasta física dedicada — não é obrigatório desde o primeiro documento de um tema.
+Optional field, free string. Only filled in when a thematic area has already accumulated a critical mass of documents to the point of justifying a dedicated physical subfolder — not mandatory from a topic's very first document.
 
-**`category: frameworks` e `type: framework` coexistem e não são redundantes.** São eixos diferentes: `category` é sobre onde o documento mora fisicamente no repositório (só existe quando a área já tem massa crítica de subpastas); `type: framework` é sobre regime de autoria/titularidade, independente de pasta. Um documento pode ser `type: framework` sem `category: frameworks` — não ter atingido massa crítica pra virar subpasta física não muda o regime de titularidade do conteúdo. Ver `decisions/0005-category-vs-type-framework.md`.
+**`category: frameworks` and `type: framework` coexist and are not redundant.** They are different axes: `category` is about where the document physically lives in the repository (only exists once the area already has critical mass for subfolders); `type: framework` is about the authorship/ownership regime, independent of folder. A document can be `type: framework` without `category: frameworks` — not having reached critical mass for a physical subfolder doesn't change the content's ownership regime. See `decisions/0005-category-vs-type-framework.md`.
 
-## 5. `temporality` e o ciclo de staleness
+## 5. `temporality` and the staleness cycle
 
-Campo ortogonal a `type` — controla como a rotina de staleness (verificação periódica de conhecimento desatualizado) trata cada documento.
+Field orthogonal to `type` — controls how the staleness routine (periodic check for outdated knowledge) treats each document.
 
-| Valor | `ttl` sugerido | Comportamento da rotina de staleness |
+| Value | Suggested `ttl` | Staleness-routine behavior |
 |---|---|---|
-| `evergreen` | data concreta, longa (+24 meses) | Checagem leve — "ainda é verdade?" |
-| `ephemeral` | data concreta, curta (+30 a 90 dias) | Agressiva — vencido sem renovação já entra pré-marcado "sugestão: arquivar/superseder", não só "revisar" |
-| `contextual` | data concreta, de segurança (+90 a 180 dias) | Dupla checagem: pelo `ttl` de segurança E pelo status do documento em `context_anchor` — se a âncora mudar para `archived`/`superseded`, o documento contextual é flaggeado imediatamente, independente do `ttl` ainda não ter vencido |
-| `historical` | data concreta, irrelevante na prática (pode ser bem longa) | Pulado por completo pela rotina de staleness — só sai desse estado via `superseded_by` |
+| `evergreen` | concrete, long date (+24 months) | Light check — "is it still true?" |
+| `ephemeral` | concrete, short date (+30 to 90 days) | Aggressive — expired without renewal enters pre-marked "suggestion: archive/supersede," not just "review" |
+| `contextual` | concrete, safety date (+90 to 180 days) | Double check: by the safety `ttl` AND by the status of the document in `context_anchor` — if the anchor changes to `archived`/`superseded`, the contextual document is flagged immediately, regardless of whether the `ttl` has expired yet |
+| `historical` | concrete date, practically irrelevant (can be quite far out) | Skipped entirely by the staleness routine — only leaves this state via `superseded_by` |
 
-`ttl` é **sempre uma data concreta**, nunca o literal `"evergreen"` — isso é papel exclusivo de `temporality`. Um documento com `ttl: "evergreen"` no valor do campo é um erro de preenchimento, não uma convenção válida.
+`ttl` is **always a concrete date**, never the literal `"evergreen"` — that is `temporality`'s exclusive role. A document with `ttl: "evergreen"` as the field's value is a filling error, not a valid convention.
 
-`context_anchor` é obrigatório só quando `temporality: contextual`. Usa a mesma sintaxe de `related` (`path.md` local ou `$alias:path.md` cross-repo, ver seção 6), mas é valor único, não lista — precisa ser inequívoco qual documento governa a expiração.
+`context_anchor` is required only when `temporality: contextual`. Uses the same syntax as `related` (local `path.md` or cross-repo `$alias:path.md`, see section 6), but is a single value, not a list — it needs to be unambiguous which document governs the expiration.
 
-Precedentes: `evergreen`/`ephemeral` seguem Andy Matuschak, "Evergreen notes" (evergreen vs. transient). `contextual` segue a prática de records management (event-based retention vs. time-based retention). `historical` formaliza a convenção já em uso do sufixo "(histórico)" no título.
+Precedents: `evergreen`/`ephemeral` follow Andy Matuschak, "Evergreen notes" (evergreen vs. transient). `contextual` follows records-management practice (event-based retention vs. time-based retention). `historical` formalizes the already-used convention of the "(historical)" title suffix.
 
-## 5-A. Ritual REM e camadas de memória
+## 5-A. REM ritual and memory layers
 
-A seção 5 formaliza como um documento *já existente* envelhece. Esta seção formaliza como um item *novo* — captura bruta, ainda não curada — entra no sistema e vira documento consolidado. Capacidade opcional por instância (ver `decisions/0008-ritual-rem-e-camadas-de-memoria.md`, refinada por `decisions/0016-memoria-curto-prazo-sanitizacao.md`).
+Section 5 formalizes how an *already existing* document ages. This section formalizes how a *new* item — raw capture, not yet curated — enters the system and becomes a consolidated document. An optional capability per instance (see `decisions/0008-rem-ritual-and-memory-layers.md`, refined by `decisions/0016-short-term-memory-sanitization.md`).
 
-Três camadas relevantes pro dia a dia:
+Three layers relevant to day-to-day operation:
 
-1. **Memória sensorial** — vive fora de qualquer repositório Hipocampo: a conversa/sessão em si, notas soltas (ex.: Google Keep), documento externo (ex.: Google Drive), arquivo anexado. Nunca versionada em git; alta perda por design.
-2. **Memória de curto prazo** — já vive dentro do repositório, em `inbox/`, já passou pelo gate de atenção (ex.: um "check-in"/dump de sessão), mas ainda não é atômica nem está necessariamente no lugar certo. É um estágio de **sanitização**, não só um buffer de captura — precisa de trabalho (dividir por conceito, corrigir `category`/nomenclatura/`visibility`) antes de virar memória de longo prazo.
-3. **Memória de longo prazo** — documento atômico, curado, frontmatter completo, corretamente posicionado. Corpo principal de qualquer repositório Hipocampo.
+1. **Sensory memory** — lives outside any Hipocampo repository: the conversation/session itself, loose notes (e.g., Google Keep), an external document (e.g., Google Drive), an attached file. Never versioned in git; high loss by design.
+2. **Short-term memory** — already lives inside the repository, in `inbox/`, has already passed the attention gate (e.g., a "check-in"/session dump), but is not yet atomic and not necessarily in the right place. It's a **sanitization** stage, not just a capture buffer — it needs work (splitting by concept, fixing `category`/naming/`visibility`) before becoming long-term memory.
+3. **Long-term memory** — atomic document, curated, full frontmatter, correctly positioned. The main body of any Hipocampo repository.
 
-**Ritual REM (consolidação):** cadência recomendada diária, rodando depois do frontmatter audit do mesmo ciclo (seção 5-B). Duas funções:
+**REM ritual (consolidation):** recommended cadence is daily, running after the same cycle's frontmatter audit (section 5-B). Two functions:
 
-1. **Consolidar** — ler `inbox/` (memória de curto prazo, nunca a sensorial direto), decidir pra cada item pendente entre virar documento novo, fundir com um existente, ou descartar. Essa é a primeira linha de proteção contra conteúdo mal classificado — decidir na entrada se um item nasce pessoal ou corporativo (ação Promote, seção 13, quando o destino natural é diferente do repositório onde o item está sendo consolidado). Quando o item consolidado tem destino numa instância corporativa e contém Opinião ou Lembrança do autor/contribuidor, essa decisão inclui perguntar explicitamente se o conteúdo subjetivo fica marcado ali ou vai pra instância pessoal — ver seção 2, campo `contains_subjective_content`, e `decisions/0026`.
-2. **Atualizar memórias antigas** — ler `meta/fila-de-manutencao.md` (produzida pelo frontmatter audit, seção 5-B) e decidir disposição de cada item sinalizado: revalidar (inclusive via pesquisa externa, quando `source: url`), arquivar, superseder, ou corrigir campo.
+1. **Consolidate** — read `inbox/` (short-term memory, never sensory memory directly), decide for each pending item between becoming a new document, merging with an existing one, or being discarded. This is the first line of protection against misclassified content — deciding at intake whether an item is born personal or corporate (Promote action, section 13, when the natural destination differs from the repository where the item is being consolidated). When the consolidated item's destination is a corporate instance and it contains Opinion or Memory from the author/contributor, this decision includes explicitly asking whether the subjective content stays marked there or goes to the responsible author's/contributor's personal instance — see section 2, field `contains_subjective_content`, and `decisions/0026`.
+2. **Update old memories** — read `meta/fila-de-manutencao.md` (produced by the frontmatter audit, section 5-B) and decide the disposition of each flagged item: revalidate (including via external research, when `source: url`), archive, supersede, or fix a field.
 
-O plano completo (de qualquer uma das duas funções) é sempre apresentado antes de qualquer execução — mesma invariante de pedido explícito (seção 8) aplicado a este ritual. Rituais de manutenção operam sempre no escopo de um repositório por vez — cada repositório tem seu próprio `inbox/` e sua própria fila.
+The full plan (for either of the two functions) is always presented before any execution — the same explicit-request invariant (section 8) applied to this ritual. Maintenance rituals always operate at the scope of one repository at a time — each repository has its own `inbox/` and its own queue.
 
-Regras adicionais (sem mudança desde a v1.2.0): atomicidade (documento consolidado = um conceito só; material bruto com N ideias vira N documentos); um `memory.md` de harness de agente (satélite pequeno e durável do próprio agente) e um snapshot de transferência (export imutável pra migração) não são memória sensorial nem passam pelo ritual REM — mecanismos distintos, não confundir; evolução de schema é reativa, só cresce por massa crítica (mesmo princípio da seção 4).
+Additional rules (unchanged since v1.2.0): atomicity (a consolidated document = a single concept; raw material with N ideas becomes N documents); an agent harness's `memory.md` (a small, durable satellite of the agent itself) and a transfer snapshot (immutable export for migration) are neither sensory memory nor subject to the REM ritual — distinct mechanisms, not to be confused; schema evolution is reactive, only growing through critical mass (same principle as section 4).
 
 ## 5-B. Frontmatter audit
 
-Ritual novo, **determinístico** (script, não julgamento de agente de IA) — cadência recomendada diária, rodando antes da consolidação REM do mesmo ciclo (seção 5-A). Varre o frontmatter (nunca o corpo — frontmatter-first, seção 2-B) de todo documento de um repositório, e produz `meta/fila-de-manutencao.md`, listando: `ttl` vencido (por `temporality`, seção 5), campo obrigatório ausente (seção 2), e qualquer outra violação mecanicamente detectável da norma de frontmatter.
+New ritual, **deterministic** (a script, not an AI agent's judgment) — recommended daily cadence, running before the same cycle's REM consolidation (section 5-A). Scans the frontmatter (never the body — frontmatter-first, section 2-B) of every document in a repository, and produces `meta/fila-de-manutencao.md`, listing: expired `ttl` (by `temporality`, section 5), missing required field (section 2), and any other mechanically detectable violation of the frontmatter norm.
 
-Frontmatter audit nunca decide disposição — só relata. Decisão de disposição é sempre da função "atualizar memórias antigas" do ritual REM (seção 5-A), ou de pedido humano explícito. Ver `decisions/0017-frontmatter-audit-ritual-deterministico.md`.
+The frontmatter audit never decides disposition — it only reports. Disposition decisions always belong to the "update old memories" function of the REM ritual (section 5-A), or to an explicit human request. See `decisions/0017-deterministic-frontmatter-audit-ritual.md`.
 
-## 5-C. Auditoria estrutural semanal
+## 5-C. Weekly structural audit
 
-Ritual novo, cadência recomendada semanal, com três funções: (1) revisar atomicidade de documentos já consolidados; (2) revisar posicionamento — se a estrutura de `category`/pastas ainda faz sentido, se um documento está fora do escopo do repositório onde vive (ver seção 11, escopo declarado no `AGENTS.md`); (3) verificar vazamento de dado sensível contra a política por tipo de instância (seção 2-A) — usando como critério o **tipo de instância** (`corporativa`/`pessoal`) declarado no mesmo bloco "Escopo do repositório" do `AGENTS.md` (seção 11), nunca inferido pelo agente (ver `decisions/0022-tipo-de-instancia-declarado-no-agents-md.md`). É o primeiro mecanismo periódico de verificação dessa política, que existe como regra desde a v1.3.0 sem nenhuma checagem formal até aqui. Um achado da função 3 pode acionar a ação Redbutton (seção 13, `decisions/0028`).
+New ritual, recommended weekly cadence, with three functions: (1) reviewing the atomicity of already-consolidated documents; (2) reviewing positioning — whether the `category`/folder structure still makes sense, whether a document is outside the scope of the repository it lives in (see section 11, scope declared in `AGENTS.md`); (3) checking for sensitive-data leaks against the policy by instance type (section 2-A) — using as criterion the **instance type** (`corporativa`/`pessoal`) declared in the same "Repository scope" block of `AGENTS.md` (section 11), never inferred by the agent (see `decisions/0022-instance-type-declared-in-agents-md.md`). This is the first periodic verification mechanism for that policy, which has existed as a rule since v1.3.0 with no formal check until now. A finding from function 3 can trigger the Redbutton action (section 13, `decisions/0028`).
 
-Qualquer achado é sempre apresentado ao humano responsável antes de qualquer ação — mover, dividir ou remover documento nunca acontece sozinho (invariante 5). Ver `decisions/0019-auditoria-estrutural-semanal.md`.
+Any finding is always presented to the responsible human before any action — moving, splitting, or removing a document never happens on its own (invariant 5). See `decisions/0019-weekly-structural-audit.md`.
 
-## 6. `related` entre repositórios — o Registry
+## 6. `related` across repositories — the Registry
 
-Um documento em qualquer instância Hipocampo pode referenciar outro documento no mesmo repositório ou em um repositório diferente da mesma pessoa/organização. A sintaxe distingue os dois casos:
+A document in any Hipocampo instance can reference another document in the same repository or in a different repository belonging to the same person/organization. The syntax distinguishes the two cases:
 
-- Sem prefixo (`"path/local.md"`) = mesmo repositório.
-- Com prefixo `$alias:` (`"$alias:path.md"`) = repositório diferente, resolvido via um arquivo `registry.md`.
+- No prefix (`"path/local.md"`) = same repository.
+- With `$alias:` prefix (`"$alias:path.md"`) = a different repository, resolved via a `registry.md` file.
 
-`$nome`, não `{{nome}}` — `{{nome}}` corre o risco de ser interpretado como sintaxe de motor de template (Jinja/Mustache) se o arquivo algum dia passar por um pipeline desse tipo; `$` não tem significado especial em YAML puro. Ver `decisions/0004-alias-sintaxe.md`.
+`$name`, not `{{name}}` — `{{name}}` risks being interpreted as templating-engine syntax (Jinja/Mustache) if the file ever passes through such a pipeline; `$` has no special meaning in plain YAML. See `decisions/0004-alias-syntax.md`.
 
-`registry.md` mora no repositório menos restrito de cada escopo (por exemplo, o repositório de conceitos de um escopo pessoal, ou o repositório principal de um escopo corporativo). Formato:
+`registry.md` lives in the least-restricted repository of each scope (for example, the concepts repository of a personal scope, or the main repository of a corporate scope). Format:
 
 ```markdown
-| Alias | Repositório atual | Válido desde | Nota |
+| Alias | Current repository | Valid since | Note |
 |---|---|---|---|
-| $alias-exemplo | dono/repo-atual | YYYY-MM-DD | — |
+| $example-alias | owner/current-repo | YYYY-MM-DD | — |
 ```
 
-**Nunca editar uma linha existente do registry.** Renomear um repositório = acrescentar linha nova com o nome novo e a data, preservando a linha antiga — o mesmo princípio de `superseded_by` (seção 2), aplicado a nome de repositório em vez de documento.
+**Never edit an existing registry row.** Renaming a repository = add a new row with the new name and date, preserving the old row — the same principle as `superseded_by` (section 2), applied to a repository name instead of a document.
 
-`superseded_by` (seção 2) aceita a mesma sintaxe `$alias:` cross-repositório documentada acima pra `related` — necessário pras ações Promote (caminho literal) e Depromote (seção 13), que substituem um documento em um repositório por outro em um repositório diferente. Ver `decisions/0027-promote-depromote-redbutton.md`.
+`superseded_by` (section 2) accepts the same cross-repository `$alias:` syntax documented above for `related` — necessary for the Promote (literal path) and Depromote (section 13) actions, which replace a document in one repository with another in a different repository. See `decisions/0027-promote-depromote-redbutton.md`.
 
-Um documento `type: framework` isento de titularidade de empresa (ver DISCLAIMER.md) nunca migra entre repositórios — nesse sentido específico, `related` para ele nunca precisa de sintaxe cross-repo, porque ele não muda de endereço. O inverso é esperado e correto: um documento em qualquer repositório de conteúdo pode (e deve) ter `related` cross-repo apontando **para** um desses frameworks isentos. A isenção impede a cópia/duplicação do framework, não a referência a ele.
+A `type: framework` document exempt from company ownership (see DISCLAIMER.md) never migrates between repositories — in that specific sense, `related` for it never needs cross-repo syntax, because it never changes address. The inverse is expected and correct: a document in any content repository can (and should) have a cross-repo `related` pointing **to** one of these exempt frameworks. The exemption prevents copying/duplicating the framework, not referencing it.
 
 ## 7. Decision Record vs. `type: decision`
 
-Dois mecanismos com escopos diferentes — não confundir:
+Two mechanisms with different scopes — not to be confused:
 
-- **Decision Record** (`decisions/NNNN-slug.md`) — só existe no repositório `hipocampo`. Decisão sobre a metodologia em si: schema, regra, rotina. Template: Contexto (dúvida central) → Decisão (escolha) → Racional (porquê) → Alternativas descartadas → Status.
-- **`type: decision`** — documento comum, existe em qualquer repositório de conteúdo. Decisão sobre conteúdo/arquitetura daquela instância específica (por exemplo, "por que esse cliente ficou em tal repositório e não em outro").
+- **Decision Record** (`decisions/NNNN-slug.md`) — only exists in the `hipocampo` repository. A decision about the methodology itself: schema, rule, routine. Template: Context (central question) → Decision (choice) → Rationale (why) → Discarded alternatives → Status.
+- **`type: decision`** — a regular document, existing in any content repository. A decision about that specific instance's content/architecture (for example, "why this client ended up in this repository and not another").
 
-O `CHANGELOG.md` de cada instância de conteúdo é estreito de escopo: só registra decisão estrutural local daquela instância. Mudança de regra/schema do Hipocampo em si vira uma linha de referência ("atualizado para Hipocampo vX.Y, ver CHANGELOG do hipocampo") em vez de reexplicada.
+Each content instance's `CHANGELOG.md` is narrow in scope: it only records that instance's local structural decisions. A change to Hipocampo's own rules/schema becomes a reference line ("updated to Hipocampo vX.Y, see hipocampo's CHANGELOG") instead of being re-explained.
 
-## 8. Extensão/personalização e precedência do agente
+## 8. Extension/customization and agent precedence
 
-**Invariantes** — nenhuma instância sobrescreve, sob nenhuma circunstância:
+**Invariants** — no instance overrides these, under any circumstance:
 
-1. Nenhum repositório de conhecimento é público à internet.
-2. `author` é sempre uma pessoa, nunca a IA (ver exceção escopada da seção 2 para conteúdo histórico).
-3. Documento nunca é apagado fisicamente — só arquivado ou superseded.
-4. Separação de acesso é sempre por repositório, nunca por etiqueta dentro de um repositório compartilhado.
-5. O agente nunca escreve sem pedido explícito do usuário.
+1. No knowledge repository is public to the internet.
+2. `author` is always a person, never the AI (see the scoped exception in section 2 for historical content).
+3. A document is never physically deleted — only archived or superseded.
+4. Access separation is always per repository, never by a label within a shared repository.
+5. The agent never writes without an explicit request from the user.
 
-O invariante 3 tem uma exceção formal e estreita, documentada em `decisions/0010-excecao-apagamento-obrigacao-legal.md`: apagamento físico do conteúdo pessoal específico é permitido quando acionado por uma solicitação legítima de eliminação de dado pessoal de um titular identificável, com base legal real (LGPD Art. 16 / GDPR Art. 17). `decisions/0028-gatilho-ampliado-remediacao-2a.md` amplia esse gatilho pra também cobrir violação confirmada da política de dados sensíveis (seção 2-A) identificada pela auditoria estrutural (5-C) ou pelo operador da instância, mesmo sem solicitação formal do titular — ver seção 13, ação Redbutton. Em qualquer um dos dois gatilhos, a legitimidade do pedido/achado é sempre avaliada pelo humano responsável pela instância, nunca decidida pelo agente sozinho, e o conteúdo removido é substituído por um registro mínimo do fato ocorrido ("tombstone") — nunca simplesmente apagado sem rastro, e nunca uma porta aberta para apagamento por conveniência.
+Invariant 3 has a formal, narrow exception, documented in `decisions/0010-legal-deletion-exception.md`: physical deletion of specific personal content is permitted when triggered by a legitimate request to erase an identifiable data subject's personal data, on a real legal basis (LGPD Art. 16 / GDPR Art. 17). `decisions/0028-broadened-trigger-2a-remediation.md` broadens this trigger to also cover a confirmed violation of the sensitive-data policy (section 2-A) identified by the structural audit (5-C) or by the instance operator, even without a formal request from the data subject — see section 13, Redbutton action. Under either trigger, the legitimacy of the request/finding is always assessed by the human responsible for the instance, never decided by the agent alone, and the removed content is replaced by a minimal record of the fact that occurred (a "tombstone") — never simply deleted without a trace, and never an open door for deletion out of convenience.
 
-**Ajustável por instância** — sempre documentado, nunca implícito, num bloco "Extensões locais a Hipocampo vX.Y" no `AGENTS.md` daquele repositório (ver seção 11): subpastas de `category`, `ttl` default sugerido por tipo de conteúdo, rituais extras específicos (incluindo se/como o ritual REM da seção 5-A é adotado), nomenclatura de commit/branch.
+**Adjustable per instance** — always documented, never implicit, in an "Local extensions to Hipocampo vX.Y" block in that repository's `AGENTS.md` (see section 11): `category` subfolders, suggested default `ttl` per content type, extra instance-specific rituals (including whether/how the REM ritual from section 5-A is adopted), commit/branch naming.
 
-**Hierarquia de precedência do agente**, do mais específico para o mais geral:
+**Agent precedence hierarchy**, from most specific to most general:
 
-1. Pedido explícito do usuário na conversa atual — dentro dos limites dos invariantes.
-2. Extensão/override documentado localmente na instância.
-3. Regra base deste `SPEC.md`.
-4. Convenção default do `hipocampo-toolkit`, na ausência de tudo o resto.
+1. Explicit user request in the current conversation — within the limits of the invariants.
+2. Extension/override documented locally in the instance.
+3. Base rule from this `SPEC.md`.
+4. Default convention from `hipocampo-toolkit`, in the absence of everything else.
 
-Nenhuma camada sobrescreve um invariante. Se um pedido violar um invariante, o agente segue o invariante e avisa isso explicitamente — nunca obedece nem recusa em silêncio.
+No layer overrides an invariant. If a request would violate an invariant, the agent follows the invariant and explicitly says so — it never silently complies nor silently refuses.
 
-## 9. Versionamento
+## 9. Versioning
 
-A metodologia em si segue [SemVer](https://semver.org/lang/pt-BR/): MAJOR para mudança que quebra compatibilidade (exige migração ativa, ver `MIGRATIONS.md`), MINOR para capacidade nova compatível com o que já existe, PATCH para clarificação ou correção que não muda comportamento. O escopo de cada mudança é classificado por um teste operacional concreto, não por julgamento solto: MAJOR é quando uma instância existente, sem nenhuma ação, passaria a estar formalmente incompatível; MINOR é quando a instância continua válida sem ação, ainda que fique atrasada em relação à capacidade nova; PATCH é clarificação/correção sem capacidade nova. Ver `decisions/0023-criterio-operacional-escopo-semver.md`.
+The methodology itself follows [SemVer](https://semver.org/lang/pt-BR/): MAJOR for a breaking change (requires active migration, see `MIGRATIONS.md`), MINOR for a new capability compatible with what already exists, PATCH for clarification or correction that doesn't change behavior. Each change's scope is classified by a concrete operational test, not loose judgment: it's MAJOR when an existing instance, with no action, would become formally incompatible; MINOR when the instance stays valid with no action, even if it lags behind the new capability; PATCH is clarification/correction with no new capability. See `decisions/0023-operational-criterion-for-semver-scope.md`.
 
-Cada versão liberada é marcada com uma tag de git **e** uma GitHub Release publicada, sempre juntas, no mesmo passo da rotina de release — nunca uma sem a outra. Cada instância declara, no próprio `AGENTS.md`/`CLAUDE.md`, a versão ou faixa de compatibilidade que implementa (exemplo: "Segue Hipocampo ^1.0.0").
+Every released version is marked with a git tag **and** a published GitHub Release, always together, in the same step of the release routine — never one without the other. Each instance declares, in its own `AGENTS.md`/`CLAUDE.md`, the version or compatibility range it implements (example: "Follows Hipocampo ^1.0.0").
 
-Toda nova versão segue uma rotina obrigatória antes de ser considerada completa: classificação de escopo (acima), tag + Release, atualização do `CHANGELOG.md`, sincronização do `hipocampo-toolkit`, e atualização do **[UPGRADE.md](UPGRADE.md)** — checklist cumulativa e idempotente do que uma instância existente precisa ter pra estar aderente à versão atual, diferente do `MIGRATIONS.md` (que só cobre saltos MAJOR). Ver `decisions/0014-rotina-obrigatoria-de-release.md` e `decisions/0024-upgrade-md-checklist-cumulativa.md`.
+Every new version follows a mandatory routine before being considered complete: scope classification (above), tag + Release, `CHANGELOG.md` update, `hipocampo-toolkit` synchronization, and an update to **[UPGRADE.md](UPGRADE.md)** — a cumulative, idempotent checklist of what an existing instance needs to have to conform to the current version, different from `MIGRATIONS.md` (which only covers MAJOR jumps). See `decisions/0014-mandatory-release-routine.md` and `decisions/0024-upgrade-md-cumulative-checklist.md`.
 
-Corte de release (tag + GitHub Release publicados) não precisa acontecer a cada mudança aceita — trabalho acumula em `main` até massa crítica ou pausa natural, ver `decisions/0021-politica-de-cadencia-de-release.md`. Mudança urgente (correção, não capacidade nova) sai como PATCH, fora do ciclo normal de acúmulo.
+Cutting a release (tag + published GitHub Release) doesn't need to happen for every accepted change — work accumulates on `main` until critical mass or a natural pause, see `decisions/0021-release-cadence-policy.md`. An urgent change (a fix, not a new capability) ships as a PATCH, outside the normal accumulation cycle.
 
-## 10. Migração de conteúdo pré-existente
+## 10. Migrating pre-existing content
 
-Trazer conteúdo de fora do Hipocampo (sistema legado, export de outra ferramenta) ou de uma versão anterior da metodologia nunca copia o arquivo original diretamente para o repositório de destino. O frontmatter é sempre reescrito do zero, conforme o schema vigente (seção 2); o corpo é ajustado conforme as regras vigentes de atomicidade, nomenclatura e privacidade (seção 2-A), documentando em `revision_note` o que foi preservado verbatim e o que foi alterado, e por quê. Ver `decisions/0011-migracao-nunca-copia-arquivo-direto.md`. A mesma disciplina é reaproveitada pelo caminho elegante da ação Promote (seção 13).
+Bringing in content from outside Hipocampo (a legacy system, an export from another tool) or from a previous version of the methodology never copies the original file directly into the destination repository. The frontmatter is always rewritten from scratch, per the current schema (section 2); the body is adjusted per the current rules of atomicity, naming, and privacy (section 2-A), documenting in `revision_note` what was preserved verbatim and what was changed, and why. See `decisions/0011-migration-never-direct-copy.md`. The same discipline is reused by the Promote action's elegant path (section 13).
 
-## 11. Arquivo de instrução: AGENTS.md e CLAUDE.md
+## 11. Instruction file: AGENTS.md and CLAUDE.md
 
-`AGENTS.md` é o arquivo canônico de instrução operacional de qualquer instância Hipocampo — invariantes, extensões locais (seção 8), referência de frontmatter, e o **escopo do repositório**: o que deve e o que não deve ser armazenado ali, e pra onde vai o que não pertence, além do **tipo de instância** (`corporativa` ou `pessoal`, ver seção 2-A). Estes itens são obrigatórios, nunca implícitos — mesmo princípio das extensões locais — e são a fonte que os rituais de manutenção (REM, seção 5-A; auditoria estrutural, seção 5-C) consultam pra decidir se um documento pertence ao repositório onde está e qual variante da política de dados sensíveis se aplica.
+`AGENTS.md` is the canonical operational instruction file for any Hipocampo instance — invariants, local extensions (section 8), frontmatter reference, and the **repository scope**: what should and shouldn't be stored there, and where whatever doesn't belong goes instead, plus the **instance type** (`corporativa` or `pessoal`, see section 2-A). These items are mandatory, never implicit — same principle as local extensions — and are the source the maintenance rituals (REM, section 5-A; structural audit, section 5-C) consult to decide whether a document belongs in the repository it's in and which variant of the sensitive-data policy applies.
 
-`CLAUDE.md` continua existindo em toda instância, mas como ponteiro fino — poucas linhas, remetendo pra `AGENTS.md` como fonte de verdade, sem duplicar conteúdo. Ver `decisions/0015-agents-md-arquivo-canonico-instrucao.md`.
+`CLAUDE.md` continues to exist in every instance, but as a thin pointer — a few lines, referring to `AGENTS.md` as the source of truth, without duplicating content. See `decisions/0015-agents-md-canonical-instruction-file.md`.
 
-Instâncias já existentes antes desta seção (v1.6.0 e anteriores, quando `CLAUDE.md` ainda era o arquivo canônico) migram na próxima vez que forem tocadas — não é automático (mesmo princípio de qualquer mudança MINOR, ver DISCLAIMER.md). Ver `UPGRADE.md` pro checklist completo de migração.
+Instances that already existed before this section (v1.6.0 and earlier, when `CLAUDE.md` was still the canonical file) migrate the next time they're touched — not automatic (same principle as any MINOR change, see DISCLAIMER.md). See `UPGRADE.md` for the full migration checklist.
 
-## 12. Identidade de autor multi-conta
+## 12. Multi-account author identity
 
-Quando a pessoa por trás de `author` opera mais de uma conta de git (ex.: pessoal e vinculada a empregador) que precisam resolver pro mesmo `author` humano (invariante 2), essa relação é registrada no `AGENTS.md` do repositório pessoal menos restrito — nunca no `hipocampo`/`hipocampo-toolkit` públicos — e no roteador de repositórios da skill personalizada (nunca na cópia genérica).
+When the person behind `author` operates more than one git account (e.g., personal and one tied to an employer) that need to resolve to the same human `author` (invariant 2), that relationship is recorded in the `AGENTS.md` of the least-restricted personal repository — never in the public `hipocampo`/`hipocampo-toolkit` — and in the custom skill's repository router (never in the generic copy).
 
-Entre instância pessoal e instância corporativa da mesma pessoa, convite de acesso (colaborador de repositório) sempre parte da conta pessoal convidando a profissional pro second brain **pessoal** — nunca o inverso. A identidade pessoal é sempre a âncora de confiança; a organização empregadora nunca tem posição de conceder ou negar acesso ao conhecimento pessoal de alguém. Ver `decisions/0020-identidade-autor-multi-conta.md`.
+Between a person's personal instance and corporate instance, the access invitation (repository collaborator) always starts from the personal account inviting the professional one into the **personal** second brain — never the reverse. Personal identity is always the anchor of trust; the employing organization never has standing to grant or deny access to someone's personal knowledge. See `decisions/0020-multi-account-author-identity.md`.
 
-## 13. Ações de ciclo de vida cross-repositório: Promote, Depromote, Redbutton
+## 13. Cross-repository lifecycle actions: Promote, Depromote, Redbutton
 
-Três ações que movem ou removem conteúdo entre repositórios de uma mesma pessoa/organização, complementares ao CRUD de um único repositório (seção 2-B). A curadoria do ritual REM (seção 5-A, função Consolidar) e a auditoria estrutural (5-C) são a primeira linha de proteção contra conteúdo mal colocado — essas três ações existem pra quando essa curadoria falha, ou pra reclassificação deliberada de conteúdo já existente. Ver `decisions/0027-promote-depromote-redbutton.md` e `decisions/0028-gatilho-ampliado-remediacao-2a.md`.
+Three actions that move or remove content between repositories of the same person/organization, complementary to the single-repository CRUD (section 2-B). The REM ritual's curation (section 5-A, Consolidate function) and the structural audit (5-C) are the first line of protection against misplaced content — these three actions exist for when that curation fails, or for deliberate reclassification of already-existing content. See `decisions/0027-promote-depromote-redbutton.md` and `decisions/0028-broadened-trigger-2a-remediation.md`.
 
-### Promote — pessoal → corporativo, ou graduação dentro do mesmo domínio
+### Promote — personal → corporate, or graduation within the same domain
 
-Duas variantes de caminho, sempre apresentadas juntas antes de qualquer escrita (invariante 5), mais um segundo caso de aplicação:
+Two path variants, always presented together before any writing (invariant 5), plus a second application case:
 
-**Caminho elegante (recomendado por padrão):** cria documento novo no repositório corporativo, seguindo a disciplina de `decisions/0011` — frontmatter reescrito do zero pro schema/política do destino, nunca copiado verbatim; corpo despersonalizado conforme necessário; checagem de conformidade com a política de dados sensíveis (seção 2-A) antes de escrever; `author` corrigido pra identidade corporativa (`decisions/0020`); rótulos de tipo de informação (`decisions/0026`) reavaliados no novo contexto. O documento pessoal de origem **não muda de `status`** — continua ativo, ganha só um `related` novo apontando (`$alias:`) pro documento corporativo, com `revision_note` registrando data e natureza da derivação. O documento corporativo aponta de volta pro pessoal do mesmo jeito. Os dois documentos evoluem de forma independente dali em diante — não é replicação no sentido vetado por `decisions/0002`, porque nunca houve expectativa de sincronia entre eles.
+**Elegant path (recommended by default):** creates a new document in the corporate repository, following `decisions/0011`'s discipline — frontmatter rewritten from scratch for the destination's schema/policy, never copied verbatim; body depersonalized as needed; sensitive-data policy compliance check (section 2-A) before writing; `author` corrected to the corporate identity (`decisions/0020`); information-type labels (`decisions/0026`) re-evaluated in the new context. The source personal document **does not change `status`** — it stays active, gaining only a new `related` pointing (`$alias:`) to the corporate document, with `revision_note` recording the date and nature of the derivation. The corporate document points back to the personal one the same way. The two documents evolve independently from then on — this is not the replication vetoed by `decisions/0002`, because there was never an expectation of them staying in sync.
 
-**Caminho literal (raro):** o documento pessoal é de fato transferido — `status: superseded`, `superseded_by: $alias:destino`, `temporality: historical`, conteúdo preservado como estava no momento da promoção. Antes de qualquer escrita nesse caminho, o agente explica explicitamente ao usuário: (a) isso transfere titularidade do conteúdo pra empresa, conforme `decisions/0007` — o `LICENSE` do repositório corporativo declara a empresa como titular; (b) isso não é reversível de forma trivial — a reversão completa (documento voltando a viver plenamente no domínio pessoal) não é uma ação de rotina. Só prossegue com confirmação explícita depois desse aviso.
+**Literal path (rare):** the personal document is actually transferred — `status: superseded`, `superseded_by: $alias:destination`, `temporality: historical`, content preserved as it was at the moment of promotion. Before any write on this path, the agent explicitly explains to the user: (a) this transfers ownership of the content to the company, per `decisions/0007` — the corporate repository's `LICENSE` declares the company as owner; (b) this is not trivially reversible — full reversal (the document going back to living fully in the personal domain) is not a routine action. Only proceeds with explicit confirmation after this warning.
 
-**Graduação dentro do mesmo domínio (novo, `decisions/0030`):** Promote também cobre o caso em que um documento `empresa-confidencial` marcado `curation_status: staged` (seção 2-C) está pronto pra virar `empresa-público` — mesmo domínio de titularidade o tempo todo, então usa sempre o caminho elegante (nunca o literal, já que não há transferência de titularidade nova em jogo, `decisions/0007` não muda nesse caso). Documento de origem não é apagado; `curation_status` passa a `permanent` (encerra o candidatismo) ou o documento fica com `related` apontando pro novo documento público, a critério de quem confirma a ação. Só documento `staged` é elegível a essa variante — documento `permanent` precisa de reclassificação explícita de `curation_status` antes, decisão humana separada da própria promoção.
+**Graduation within the same domain (new, `decisions/0030`):** Promote also covers the case where an `empresa-confidencial` document marked `curation_status: staged` (section 2-C) is ready to become `empresa-público` — same ownership domain the whole time, so it always uses the elegant path (never the literal one, since there's no new ownership transfer at stake, `decisions/0007` doesn't change in this case). The source document is not deleted; `curation_status` either becomes `permanent` (ending its candidacy) or the document ends up with `related` pointing to the new public document, at the discretion of whoever confirms the action. Only a `staged` document is eligible for this variant — a `permanent` document needs an explicit `curation_status` reclassification first, a human decision separate from the promotion itself.
 
-### Depromote — descida de nível dentro do mesmo domínio de titularidade
+### Depromote — moving down within the same ownership domain
 
-Move conteúdo entre repositórios do mesmo titular (ex.: `empresa-público` → `empresa-confidencial`, ou entre variantes pessoais), sem cruzar a fronteira pessoal/corporativo — por isso não carrega a questão de titularidade do Promote literal, e não precisa do aviso explícito equivalente. Mecânica: `status: superseded` na origem, `superseded_by: $alias:destino`. Reversão literal do Promote (corporativo → pessoal, cruzando a fronteira de titularidade de volta) está fora do escopo desta ação — não é automatizada; decisão caso a caso do humano responsável, fora do fluxo normal do Hipocampo, no mesmo espírito do `DISCLAIMER.md` ("não substitui compliance legal").
+Moves content between repositories of the same owner (e.g., `empresa-público` → `empresa-confidencial`, or between personal variants), without crossing the personal/corporate boundary — so it doesn't carry the ownership question of the literal Promote, and doesn't need the equivalent explicit warning. Mechanics: `status: superseded` at the source, `superseded_by: $alias:destination`. A literal reversal of Promote (corporate → personal, crossing the ownership boundary back) is out of scope for this action — it is not automated; it's a case-by-case decision by the responsible human, outside Hipocampo's normal flow, in the same spirit as `DISCLAIMER.md` ("does not replace legal compliance").
 
-### Redbutton — remediação de violação de política de dados sensíveis
+### Redbutton — remediation of a sensitive-data policy violation
 
-Extensão do gatilho de `decisions/0010` (ver `decisions/0028`): apagamento físico do conteúdo específico, substituído por tombstone, acionado não só por solicitação do titular, mas também quando a auditoria estrutural (5-C) ou o operador da instância identifica conteúdo que viola a política de dados sensíveis (seção 2-A), mesmo sem solicitação formal. Mesmo mecanismo de `decisions/0010`: decisão humana sempre explícita, nunca automática; tombstone documenta o fato sem repetir o dado; limpa o estado atual do repositório, não o histórico do git (exige reescrita manual e rara pra isso, decidida caso a caso). Reservado pra violação real de política ou risco legal — não é o mecanismo pra remover uma opinião ou lembrança mal colocada sem risco legal (isso é Update comum, sem tombstone, ver `decisions/0026`).
+Extension of `decisions/0010`'s trigger (see `decisions/0028`): physical deletion of the specific content, replaced by a tombstone, triggered not only by a data subject's request, but also when the structural audit (5-C) or the instance operator identifies content that violates the sensitive-data policy (section 2-A), even without a formal request. Same mechanism as `decisions/0010`: the decision is always explicitly human, never automatic; the tombstone documents the fact without repeating the data; it cleans the repository's current state, not the git history (which requires a manual, rare rewrite for that, decided case by case). Reserved for a real policy violation or legal risk — not the mechanism for removing a misplaced opinion or memory with no legal risk (that's a regular Update, no tombstone, see `decisions/0026`).
 
-## Histórico de versões
+## Version history
 
-Ver [CHANGELOG.md](CHANGELOG.md).
+See [CHANGELOG.md](CHANGELOG.md).

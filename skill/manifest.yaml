@@ -5,7 +5,7 @@ skill:
   version: "1.0.0"
   core_path: "skill/"
   source_repository: "https://github.com/mklagenberg/hipocampo"
-  source_commit: "<preenchido no corte da v2.0.0>"
+  source_commit: "<filled in at the v2.0.0 cut>"
 
 methodology:
   compatibility: "^1.9.0"
@@ -13,20 +13,20 @@ methodology:
 adapters:
   - target: "claude"
     version: "1.0.0"
-    package: "cópia pessoal client-side, salva por operador (decisions/0025) — sem pacote empacotado/distribuído próprio ainda"
+    package: "personal client-side copy, saved by the operator (decision 0025) — no packaged/distributed package of its own yet"
   - target: "chatgpt"
     version: "1.0.0"
-    package: "cópia pessoal client-side, salva por operador (decisions/0025) — sem pacote empacotado/distribuído próprio ainda"
+    package: "personal client-side copy, saved by the operator (decision 0025) — no packaged/distributed package of its own yet"
   - target: "gemini"
     version: "1.0.0"
-    package: "cópia pessoal client-side, salva por operador (decisions/0025) — sem pacote empacotado/distribuído próprio ainda"
+    package: "personal client-side copy, saved by the operator (decision 0025) — no packaged/distributed package of its own yet"
   - target: "github-copilot"
     version: "1.0.0"
-    package: "cópia pessoal client-side, salva por operador (decisions/0025) — sem pacote empacotado/distribuído próprio ainda"
+    package: "personal client-side copy, saved by the operator (decision 0025) — no packaged/distributed package of its own yet"
 
 updates:
   manifest: "https://github.com/mklagenberg/hipocampo/blob/main/skill/manifest.yaml"
-  advisories: "https://github.com/mklagenberg/hipocampo/blob/main/CHANGELOG.md (canal formal de advisory de segurança ainda não existe — ver ROADMAP.md)"
+  advisories: "https://github.com/mklagenberg/hipocampo/blob/main/CHANGELOG.md (a formal security advisory channel does not exist yet — see ROADMAP.md)"
   check_on_first_activation: true
   normal_ttl: "P7D"
   security_ttl: "P1D"

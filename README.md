@@ -1,38 +1,38 @@
 # hipocampo
 
-Metodologia de second brain agêntico: git + markdown + rituais de IA. Este repositório é spec e ferramental — nunca guarda conteúdo real de nenhuma instância.
+Agentic second brain methodology: git + markdown + AI rituals. This repository is spec and tooling — it never stores real content from any instance.
 
-- [SPEC.md](SPEC.md) — especificação normativa: schema de frontmatter, regras de retrieval, versionamento.
-- [GETTING-STARTED.md](GETTING-STARTED.md) — guia prático de adoção.
-- [DISCLAIMER.md](DISCLAIMER.md) — o que a metodologia é e não é, cenários recomendados e não recomendados.
-- [BEST-PRACTICES.md](BEST-PRACTICES.md) — boas práticas de uso: do dia a dia, postura de privacidade/compliance, e adoção por times/empresas novas.
-- [MIGRATIONS.md](MIGRATIONS.md) — guia de migração por salto MAJOR de versão.
-- [CHANGELOG.md](CHANGELOG.md) — histórico de versões da metodologia.
-- [ROADMAP.md](ROADMAP.md) — direção atual, sem compromisso de data.
-- [decisions/](decisions/) — Decision Records: por que cada regra estrutural é o que é.
-- [skill/SKILL.md](skill/SKILL.md) — skill operacional da metodologia (fonte canônica genérica; cada pessoa instala e personaliza sua própria cópia).
-- [scaffold/README.md](scaffold/) — mecanismo declarativo de instanciação de repositórios de conteúdo novos (profiles, esqueleto de arquivos, templates de LICENSE).
-- [docs/FUNDAMENTOS.md](docs/FUNDAMENTOS.md) — introdução a git/GitHub pra quem nunca usou, com paralelo a Obsidian e checklist de privacidade.
-- [docs/MODELOS-DE-IA.md](docs/MODELOS-DE-IA.md) — o que importa num modelo/produto de IA pra operar o Hipocampo bem.
-- [docs/PERFORMANCE-E-GRAFO.md](docs/PERFORMANCE-E-GRAFO.md) — como o retrieval/grafo funciona, e a relação com o OKF da Google.
-- [docs/USO-MULTI-FERRAMENTA.md](docs/USO-MULTI-FERRAMENTA.md) — princípio comum e especificidades de uso em Claude, ChatGPT, Gemini, Copilot, Antigravity.
-- [docs/FAQ-E-ERROS-COMUNS.md](docs/FAQ-E-ERROS-COMUNS.md) — erros de instanciação já encontrados de verdade e perguntas frequentes.
+- [SPEC.md](SPEC.md) — normative specification: frontmatter schema, retrieval rules, versioning.
+- [GETTING-STARTED.md](GETTING-STARTED.md) — practical adoption guide.
+- [DISCLAIMER.md](DISCLAIMER.md) — what the methodology is and isn't, recommended and non-recommended scenarios.
+- [BEST-PRACTICES.md](BEST-PRACTICES.md) — best practices for use: day-to-day, privacy/compliance posture, and adoption by teams/new companies.
+- [MIGRATIONS.md](MIGRATIONS.md) — migration guide per MAJOR version jump.
+- [CHANGELOG.md](CHANGELOG.md) — methodology version history.
+- [ROADMAP.md](ROADMAP.md) — current direction, no date commitment.
+- [decisions/](decisions/) — Decision Records: why each structural rule is the way it is.
+- [skill/SKILL.md](skill/SKILL.md) — the methodology's operational skill (generic canonical source; each person installs and personalizes their own copy).
+- [scaffold/README.md](scaffold/) — declarative mechanism for instantiating new content repositories (profiles, file skeleton, LICENSE templates).
+- [docs/FUNDAMENTALS.md](docs/FUNDAMENTALS.md) — introduction to git/GitHub for those who've never used it, with a parallel to Obsidian and a privacy checklist.
+- [docs/AI-MODELS.md](docs/AI-MODELS.md) — what matters in an AI model/product to operate Hipocampo well.
+- [docs/PERFORMANCE-AND-GRAPH.md](docs/PERFORMANCE-AND-GRAPH.md) — how retrieval/the graph works, and the relationship with Google's OKF.
+- [docs/MULTI-TOOL-USAGE.md](docs/MULTI-TOOL-USAGE.md) — common principle and specifics of use in Claude, ChatGPT, Gemini, Copilot, Antigravity.
+- [docs/FAQ-AND-COMMON-ERRORS.md](docs/FAQ-AND-COMMON-ERRORS.md) — instantiation errors actually encountered and frequently asked questions.
 
-Para instanciar um repositório de conteúdo a partir desta metodologia, peça pro agente que opera sua cópia da skill Hipocampo pra executar o scaffold declarado em [scaffold/](scaffold/) — não existe mais um botão "Use this template" separado (o antigo `hipocampo-toolkit` foi consolidado aqui, `decisions/0032`). Procedimento operacional completo: [skill/references/instanciacao.md](skill/references/instanciacao.md).
+To instantiate a content repository from this methodology, ask the agent operating your copy of the Hipocampo skill to run the scaffold declared in [scaffold/](scaffold/) — there's no longer a separate "Use this template" button (the old `hipocampo-toolkit` was consolidated here, `decisions/0032`). Full operational procedure: [skill/references/instantiation.md](skill/references/instantiation.md).
 
-Agentes devem começar por [AGENTS.md](AGENTS.md).
+Agents should start at [AGENTS.md](AGENTS.md).
 
-## Adequação ao MODA
+## MODA Conformance
 
 <!-- moda:disclosure:start -->
-Este repositório está sendo avaliado e adequado ao [MODA](https://github.com/mklagenberg/moda) — um framework aberto para organizar, desenhar, auditar, empacotar e evoluir metodologias agênticas.
+This repository is being evaluated and brought into conformance with [MODA](https://github.com/mklagenberg/moda) — an open framework for organizing, designing, auditing, packaging, and evolving agentic methodologies.
 
-- Perfil de artefato: `methodology`
-- Compatibilidade MODA: `^1.0.0`
-- Relação de adoção: `audited_against` (retrospectiva) — evoluindo pra `conforms_to` conforme os achados da auditoria forem endereçados
-- Manifesto: [`moda.yaml`](moda.yaml)
-- Perfil de conformidade: [`conformance/moda.yaml`](conformance/moda.yaml)
-- Última auditoria: [`audits/moda/2026-08-17-v1.0.0-self-audit.md`](audits/moda/2026-08-17-v1.0.0-self-audit.md)
+- Artifact profile: `methodology`
+- MODA compatibility: `^1.0.0`
+- Adoption relationship: `audited_against` (retrospective) — evolving toward `conforms_to` as the audit's findings are addressed
+- Manifest: [`moda.yaml`](moda.yaml)
+- Conformance profile: [`conformance/moda.yaml`](conformance/moda.yaml)
+- Latest audit: [`audits/moda/2026-08-17-v1.0.0-self-audit.md`](audits/moda/2026-08-17-v1.0.0-self-audit.md)
 <!-- moda:disclosure:end -->
 
-Versão atual: **1.9.0** ([SemVer](https://semver.org/lang/pt-BR/)).
+Current version: **1.9.0** ([SemVer](https://semver.org/lang/pt-BR/)).

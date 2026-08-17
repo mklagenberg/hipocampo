@@ -1,0 +1,48 @@
+change_set:
+  id: "0034-repository-and-vault-language-policy"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0034-repository-and-vault-language-policy.md"
+
+impact:
+  - artifact: "SPEC.md"
+    status: "updated"
+    note: "Section 1 states the repository's own language policy and points to the vault-language field in hipocampo.yaml."
+  - artifact: "AGENTS.md"
+    status: "updated"
+    note: "New working rule: write repository content (SPEC.md, decisions/, docs/, skill/, scaffold/) in English."
+  - artifact: "moda.yaml"
+    status: "updated"
+    note: "artifact.language corrected from pt-BR to en, reflecting Fase E; stale Portuguese SPEC.md#... anchor fragments corrected; vault-manifest component source now also cites decisions/0034."
+  - artifact: "conformance/moda.yaml"
+    status: "updated"
+    note: "Stale Portuguese SPEC.md#... anchor fragments corrected across multiple controls; distribution_of_agency evidence path corrected from skill/references/instanciacao.md to skill/references/instantiation.md; packaging_and_synchronization and specification_driven_change_control evidence lists gain this Change Set."
+  - artifact: "scaffold/skeleton/hipocampo.yaml"
+    status: "updated"
+    note: "New instance.language field, pre-filled 'en'."
+  - artifact: "scaffold/profiles/pessoal.yaml"
+    status: "updated"
+    note: "New optional language input, default 'en'."
+  - artifact: "scaffold/profiles/empresa.yaml"
+    status: "updated"
+    note: "Same as above."
+  - artifact: "skill/references/instantiation.md"
+    status: "updated"
+    note: "Instantiation procedure now confirms the vault's content language with the operator instead of assuming the default; example rewritten to show a Portuguese vault being created."
+  - artifact: "UPGRADE.md"
+    status: "updated"
+    note: "New checklist item: existing hipocampo.yaml (once adopted) declares instance.language for that vault's actual content language."
+  - artifact: "ROADMAP.md"
+    status: "updated"
+    note: "Status line and remaining-work bullet updated to reflect PR #27 (English translation + this Change Set) awaiting merge, not yet started."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "New entries under [Unreleased], including one for the Fase E translation itself, which had been missing."
+
+validation:
+  commands: []
+  evidence: []
+  notes: "No deterministic validation exists yet (Fase G, still pending) — evidence is human review only, per the same pattern as prior Change Sets in this cycle."
