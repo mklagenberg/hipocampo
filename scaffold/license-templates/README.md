@@ -1,14 +1,14 @@
-# Templates de LICENSE — como o agente usa isto
+# LICENSE templates — how the agent uses this
 
-Quando o agente instancia um repositório de conteúdo novo (ver `hipocampo/skill/references/instanciacao.md`), ele gera o `LICENSE` da raiz a partir de um destes templates — nunca copia o Apache-2.0 da metodologia (`hipocampo/LICENSE`), que é correto para `hipocampo` mas errado para um repositório de conteúdo, mesmo privado, porque o texto da licença em si já afirmaria uma permissão de uso que não é sua intenção (ver `hipocampo/decisions/0007-licenciamento-repos-de-conteudo.md`).
+When the agent instantiates a new content repository (see `hipocampo/skill/references/instantiation.md`), it generates the root `LICENSE` from one of these templates — it never copies the methodology's Apache-2.0 (`hipocampo/LICENSE`), which is correct for `hipocampo` but wrong for a content repository, even a private one, because the license text itself would already assert a usage permission that isn't the intent (see `hipocampo/decisions/0007-content-repo-licensing.md`).
 
-## Como o agente escolhe
+## How the agent chooses
 
-1. Pelo titular do conteúdo, declarado como input no profile de scaffold:
-   - **`LICENSE-pessoal.md`** — se o titular é uma pessoa física.
-   - **`LICENSE-corporativo.md`** — se o titular é uma empresa.
-2. Preenche os placeholders (`[NOME COMPLETO]`/`[@usuario-github]` ou `[NOME DA EMPRESA]`) a partir dos inputs coletados do usuário.
-3. Se o repositório for de nível "vault" (só recebe `visibility: confidential`/`restricted`, nunca `public`/`internal` — ver `hipocampo/SPEC.md`, seção 2), mantém só as seções (c) e (d) do template, seguindo a nota de ajuste dentro do próprio template.
-4. Salva o resultado como `LICENSE` na raiz do repositório novo.
+1. By the content owner, declared as an input in the scaffold profile:
+   - **`LICENSE-pessoal.md`** — if the owner is a natural person.
+   - **`LICENSE-corporativo.md`** — if the owner is a company.
+2. It fills in the placeholders (`[FULL NAME]`/`[@github-username]` or `[COMPANY NAME]`) from the inputs collected from the user.
+3. If the repository is at the "vault" level (only receives `visibility: confidential`/`restricted`, never `public`/`internal` — see `hipocampo/SPEC.md`, section 2), it keeps only sections (c) and (d) of the template, following the adjustment note within the template itself.
+4. It saves the result as `LICENSE` at the root of the new repository.
 
-Confirme o resultado no passo 2 de `POS-INSTANCIACAO.md` — não é opcional nem cosmético: sem ele, um repositório de conteúdo privado carregaria, tecnicamente, uma licença de código aberto.
+Confirm the result in step 2 of `POST-INSTANTIATION.md` — this is neither optional nor cosmetic: without it, a private content repository would technically carry an open-source license.
