@@ -1,0 +1,81 @@
+framework:
+  id: "moda"
+  required_version: "^1.0.0"
+  verified_against: "1.0.0"
+  verified_commit: "81171ed22163f73f250e32534f9edc3a4f8d51e1"
+
+subject:
+  id: "hipocampo"
+  kind: "methodology"
+  version: "1.9.0"
+  adoption_mode: "retrospective"
+
+assessment:
+  claim_stage: "mapped"
+  result: "partial"
+
+controls:
+  problem_and_purpose:
+    status: "satisfied"
+    evidence: ["README.md", "DISCLAIMER.md"]
+  activation_and_proportionality:
+    status: "partial"
+    evidence: ["DISCLAIMER.md", "SPEC.md#2-a-política-de-dados-sensíveis-por-tipo-de-instância"]
+    notes: ["Cenários recomendados/não recomendados existem; falta regra explícita de como rigor/autonomia/evidência/custo escalam com risco."]
+  human_reference_practice:
+    status: "satisfied"
+    evidence: ["BEST-PRACTICES.md", "GETTING-STARTED.md"]
+  inputs_outputs_and_invariants:
+    status: "satisfied"
+    evidence: ["SPEC.md#2-frontmatter-schema-unificado", "SPEC.md#8-extensãopersonalização-e-precedência-do-agente", "DISCLAIMER.md"]
+  decomposition_and_control_flow:
+    status: "partial"
+    evidence: ["SPEC.md#5-a-ritual-rem-e-camadas-de-memória", "SPEC.md#5-b-frontmatter-audit", "SPEC.md#5-c-auditoria-estrutural-semanal"]
+    notes: ["Rituais bem descritos; sem modelo explícito de estágios/gates/paralelismo/condições de parada nos termos do MODA."]
+  distribution_of_agency:
+    status: "partial"
+    evidence: ["SPEC.md#8-extensãopersonalização-e-precedência-do-agente"]
+    notes: ["Invariante 5 e os gates de escrita recorrentes existem na prática; nunca classificados explicitamente como determinístico/agente-raciocinado/ferramenta-executado/humano-decidido/híbrido."]
+  orchestration:
+    status: "not-applicable"
+    evidence: ["decisions/0025-skill-client-side-nunca-por-repositorio.md"]
+    notes: ["Hipocampo é desenhado pra um agente por vez, client-side — sem orquestração multi-agente."]
+  contracts:
+    status: "partial"
+    evidence: ["SPEC.md#5-b-frontmatter-audit"]
+    notes: ["Saídas de ritual existem (ex.: meta/fila-de-manutencao.md) mas não formalizadas como contrato (critério de conclusão, estado de erro, devolução de controle)."]
+  state_context_and_knowledge:
+    status: "satisfied"
+    evidence: ["SPEC.md#5-a-ritual-rem-e-camadas-de-memória", "SPEC.md#6-related-entre-repositórios-o-registry"]
+  quality_and_evaluation:
+    status: "missing"
+    evidence: []
+    notes: ["Nenhum cenário representativo de teste, baseline, ou threshold de aceitação formalizado. Ver ROADMAP.md."]
+  safety_security_and_privacy:
+    status: "satisfied"
+    evidence: ["SPEC.md#2-a-política-de-dados-sensíveis-por-tipo-de-instância", "SPEC.md#8-extensãopersonalização-e-precedência-do-agente"]
+  failure_and_recovery:
+    status: "missing"
+    evidence: []
+    notes: ["Nenhuma definição de comportamento sob evidência insuficiente, contradição, ferramenta indisponível, interrupção, pedido inseguro, migração incompatível. Ver ROADMAP.md."]
+  portability:
+    status: "satisfied"
+    evidence: ["decisions/0025-skill-client-side-nunca-por-repositorio.md", "docs/USO-MULTI-FERRAMENTA.md", "docs/MODELOS-DE-IA.md"]
+  packaging_and_synchronization:
+    status: "partial"
+    evidence: ["UPGRADE.md", "moda.yaml"]
+    notes: ["UPGRADE.md forte; sem manifesto de máquina pra skill nem hipocampo.yaml por vault ainda. Ver ROADMAP.md."]
+  evolution:
+    status: "partial"
+    evidence: ["CHANGELOG.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "ROADMAP.md", "SPEC.md#9-versionamento"]
+    notes: ["ROADMAP.md e a taxonomia de tipo de repositório (decisions/0029-0030) já concluídas nesta rodada; falta cadência declarada de auditoria da própria metodologia."]
+  specification_driven_change_control:
+    status: "missing"
+    evidence: []
+    notes: ["Nenhum mecanismo formal de Change Set (proposal.md + impact.yaml). Ver ROADMAP.md."]
+  repository_contract:
+    status: "partial"
+    evidence: ["README.md", "AGENTS.md", "moda.yaml", "CHANGELOG.md", "ROADMAP.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md"]
+    notes: ["Change-management policy e validation policy mapeados de forma parcial (ver controles acima); sem Git/release workflow dedicado além de decisions/0014."]
+
+exceptions: []
