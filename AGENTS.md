@@ -35,7 +35,7 @@ Antes de mudar a estrutura da metodologia, leia `moda.yaml`, `conformance/moda.y
 
 ## Protocolo de mudança
 
-- Classifique o trabalho como editorial, operacional ou normativo antes de implementar (vocabulário do MODA) — o mecanismo formal de Change Set (`changes/<id>/proposal.md` + `impact.yaml`) ainda não existe neste repositório (achado `major` da auditoria; ver `ROADMAP.md`). Até lá, toda mudança operacional/normativa segue a prática já em uso: uma Decision Record nova (quando envolve escolha estrutural) + as seções correspondentes de `SPEC.md`/`CHANGELOG.md` atualizadas na mesma PR.
+- Classifique o trabalho como editorial, operacional ou normativo antes de implementar (vocabulário do MODA). O mecanismo formal de Change Set (`changes/<id>/proposal.md` + `impact.yaml`) existe desde a Fase C (`docs/change-management.md`, `decisions/0031-mecanismo-de-change-set.md`) e é **obrigatório** pra mudança `operational`/`normative` a partir daquele ponto: um Change Set novo em `changes/<id>/`, acompanhando a Decision Record (quando envolve escolha estrutural) e as seções correspondentes de `SPEC.md`/`CHANGELOG.md`, todos atualizados na mesma PR. Mudança `editorial` não exige Change Set.
 - Mude a especificação normativa (`SPEC.md`) primeiro quando a obrigação mudar.
 - Use branch de vida curta e PR pra mudança normal; mantenha `main` como única branch de integração permanente.
 - Atualize `CHANGELOG.md` pra mudança de comportamento ou contrato notável.
@@ -54,7 +54,7 @@ Hipocampo segue [SemVer](https://semver.org/lang/pt-BR/) — critério operacion
 Uma mudança só está completa quando:
 
 - a intenção e o escopo estão explícitos;
-- a Decision Record relevante (quando aplicável) e as seções correspondentes de `SPEC.md`/`CHANGELOG.md` estão sincronizadas na mesma PR;
+- a Decision Record relevante (quando aplicável), o Change Set (quando `operational`/`normative`) e as seções correspondentes de `SPEC.md`/`CHANGELOG.md` estão sincronizados na mesma PR;
 - nenhum achado crítico conhecido fica escondido;
 - documentação afetada e disclosures gerados estão sincronizados;
 - nenhuma alegação de conformidade MODA vai além do que a evidência em `conformance/moda.yaml` sustenta.
