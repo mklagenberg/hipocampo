@@ -1,47 +1,47 @@
-# Hipocampo — Guia de atualização de instância
+# Hipocampo — Instance Upgrade Guide
 
-Checklist **cumulativa e idempotente**: o que uma instância deveria ter, hoje, pra estar aderente à versão atual da metodologia — não importa de qual versão antiga ela partiu. Diferente do `CHANGELOG.md` (histórico cronológico do que mudou) e do `MIGRATIONS.md` (só passos de mudança MAJOR, que quebram compatibilidade), este documento é a lista prática "o que fazer agora", sempre relativa ao presente. Ver `decisions/0024-upgrade-md-checklist-cumulativa.md`.
+**Cumulative and idempotent** checklist: what an instance should have, today, to be conformant with the current version of the methodology — no matter which old version it started from. Unlike `CHANGELOG.md` (chronological history of what changed) and `MIGRATIONS.md` (only MAJOR change steps, which break compatibility), this document is the practical "what to do now" list, always relative to the present. See `decisions/0024-upgrade-md-cumulative-checklist.md`.
 
-## Como usar
+## How to use
 
-1. Abra o `AGENTS.md` (ou `CLAUDE.md`, se a instância ainda não migrou) e confira a versão declarada.
-2. Percorra a lista abaixo, item por item. Cada um diz se é **Obrigatório** (invariante ou segurança — raro), **Recomendado** (funcional, mas nada quebra sem ele) ou **Informativo** (leitura, sem ação no repositório).
-3. Repita para cada repositório que você opera — atualização é sempre por instância, nunca "global" (mesmo se você tiver vários repositórios, cada um avança na hora que fizer sentido pra ele).
+1. Open `AGENTS.md` (or `CLAUDE.md`, if the instance hasn't migrated yet) and check the declared version.
+2. Go through the list below, item by item. Each one states whether it's **Mandatory** (invariant or safety — rare), **Recommended** (functional, but nothing breaks without it), or **Informative** (reading, no action on the repository).
+3. Repeat for each repository you operate — upgrading is always per instance, never "global" (even if you have several repositories, each one advances whenever it makes sense for it).
 
-Este documento é atualizado a cada release da metodologia (passo obrigatório da rotina de release, `decisions/0014` + `decisions/0024`) — sempre cumulativo, nunca reescrito do zero.
+This document is updated with every methodology release (mandatory step of the release routine, `decisions/0014` + `decisions/0024`) — always cumulative, never rewritten from scratch.
 
 ## Checklist
 
-### Arquivo canônico e skill
+### Canonical file and skill
 
-- [ ] **[Recomendado, desde a seção 11 do SPEC]** `AGENTS.md` é o arquivo canônico de instrução da instância — não `CLAUDE.md`. Se sua instância ainda usa só `CLAUDE.md`, crie `AGENTS.md` com o conteúdo completo (invariantes, escopo, extensões locais) e deixe `CLAUDE.md` como ponteiro fino de poucas linhas. Ver `decisions/0015-agents-md-arquivo-canonico-instrucao.md`.
-- [ ] **[Recomendado, desde a seção 11 + 2-A do SPEC]** O bloco "Escopo deste repositório" no `AGENTS.md` declara o **Tipo de instância** (`corporativa` ou `pessoal`) — critério que a auditoria estrutural usa pra saber qual variante da política de dados sensíveis se aplica. Ver `decisions/0022-tipo-de-instancia-declarado-no-agents-md.md`.
-- [ ] **[Obrigatório, desde a v1.9 não lançado]** Este repositório **não tem** uma pasta `skill/` própria. A skill roda sempre client-side, por pessoa/ambiente de IA — nunca por repositório (ver `decisions/0025-skill-client-side-nunca-por-repositorio.md`). Se sua instância ainda carrega uma pasta `skill/` (herdada do antigo "Use this template"), apague-a — ela nunca teve efeito funcional, e mantê-la sugere um modelo mental errado ("cada repo tem sua própria skill").
-- [ ] **[Recomendado, desde a v1.7.0]** A skill instalada no seu ambiente de IA é a versão real e personalizada (`skill/SKILL.md` + `skill/references/`, agora dentro do próprio `hipocampo` — o antigo `hipocampo-toolkit` foi consolidado e arquivado, `decisions/0032`) — não o "stub" de versões anteriores à v1.7.0. Reinstale via `save_skill` (ou mecanismo equivalente da sua ferramenta) se sua cópia for antiga.
-- [ ] **[Recomendado, desde a seção 11 do SPEC / v1.9 não lançado]** O roteador de repositórios (`skill/references/personalizacao.md` da sua cópia pessoal da skill) lista **todos** os repositórios que você opera — inclusive os que raramente são tocados. É a lista que qualquer auditoria de versão futura vai usar.
-- [ ] **[Recomendado, se aplicável — seção 12 do SPEC]** Se você opera mais de uma conta de git resolvendo pro mesmo autor humano (ex.: pessoal e vinculada a empregador), essa relação está registrada no `AGENTS.md` da instância pessoal e no roteador da skill personalizada — nunca na cópia genérica. Ver `decisions/0020-identidade-autor-multi-conta.md`.
-- [ ] **[Recomendado, desde a v1.9 não lançado]** Este repositório tem um manifesto `hipocampo.yaml` na raiz (`decisions/0033-manifesto-hipocampo-yaml-por-vault.md`), com `instance.domain`/`instance.tier` preenchidos e a proveniência do scaffold que o gerou (`scaffold.profile`, `scaffold.source_commit`). Se sua instância não tem, gere um a partir de `scaffold/skeleton/hipocampo.yaml` e preencha os campos — nenhuma ação automática faz isso por você retroativamente.
-- [ ] **[Informativo]** O campo "Tipo de instância" do `AGENTS.md` (`corporativa`/`pessoal`) usa um vocabulário diferente do campo `instance.domain` do `hipocampo.yaml` (`pessoal`/`empresa`, `decisions/0029`). A divergência é conhecida, documentada em `decisions/0033-manifesto-hipocampo-yaml-por-vault.md`, e deliberadamente não harmonizada ainda — nenhuma ação necessária além de estar ciente.
-- [ ] **[Informativo]** A skill passa a publicar um manifesto de máquina (`skill/manifest.yaml`, dentro de `hipocampo`) — versão, compatibilidade e canal de atualização consultáveis por ferramenta. Sem efeito prático numa instância de conteúdo existente; é só sobre a skill em si.
+- [ ] **[Recommended, since SPEC section 11]** `AGENTS.md` is the instance's canonical instruction file — not `CLAUDE.md`. If your instance still only uses `CLAUDE.md`, create `AGENTS.md` with the complete content (invariants, scope, local extensions) and leave `CLAUDE.md` as a thin, few-line pointer. See `decisions/0015-agents-md-canonical-instruction-file.md`.
+- [ ] **[Recommended, since SPEC section 11 + 2-A]** The "Scope of this repository" block in `AGENTS.md` declares the **Instance type** (`corporativa` or `pessoal`) — the criterion the structural audit uses to know which variant of the sensitive-data policy applies. See `decisions/0022-instance-type-declared-in-agents-md.md`.
+- [ ] **[Mandatory, since unreleased v1.9]** This repository **does not have** its own `skill/` folder. The skill always runs client-side, per person/AI environment — never per repository (see `decisions/0025-skill-is-client-side-never-per-repository.md`). If your instance still carries a `skill/` folder (inherited from the old "Use this template"), delete it — it never had a functional effect, and keeping it suggests a wrong mental model ("each repo has its own skill").
+- [ ] **[Recommended, since v1.7.0]** The skill installed in your AI environment is the real, personalized version (`skill/SKILL.md` + `skill/references/`, now inside `hipocampo` itself — the old `hipocampo-toolkit` was consolidated and archived, `decisions/0032`) — not the "stub" from versions before v1.7.0. Reinstall via `save_skill` (or your tool's equivalent mechanism) if your copy is old.
+- [ ] **[Recommended, since SPEC section 11 / unreleased v1.9]** The repository router (`skill/references/personalization.md` in your personal skill copy) lists **every** repository you operate — including the rarely-touched ones. It's the list any future version audit will use.
+- [ ] **[Recommended, if applicable — SPEC section 12]** If you operate more than one git account resolving to the same human author (e.g., personal and one tied to an employer), that relationship is recorded in the personal instance's `AGENTS.md` and in the personalized skill's router — never in the generic copy. See `decisions/0020-multi-account-author-identity.md`.
+- [ ] **[Recommended, since unreleased v1.9]** This repository has a `hipocampo.yaml` manifest at its root (`decisions/0033-hipocampo-yaml-per-vault-manifest.md`), with `instance.domain`/`instance.tier` filled in and the provenance of the scaffold that generated it (`scaffold.profile`, `scaffold.source_commit`). If your instance doesn't have one, generate one from `scaffold/skeleton/hipocampo.yaml` and fill in the fields — no automatic action does this retroactively for you.
+- [ ] **[Informative]** The "Instance type" field in `AGENTS.md` (`corporativa`/`pessoal`) uses different vocabulary from the `hipocampo.yaml` `instance.domain` field (`pessoal`/`empresa`, `decisions/0029`). The divergence is known, documented in `decisions/0033-hipocampo-yaml-per-vault-manifest.md`, and deliberately not yet harmonized — no action needed beyond being aware.
+- [ ] **[Informative]** The skill now publishes a machine manifest (`skill/manifest.yaml`, inside `hipocampo`) — version, compatibility, and update channel queryable by tooling. No practical effect on an existing content instance; it's only about the skill itself.
 
-### Licenciamento
+### Licensing
 
-- [ ] **[Obrigatório]** O `LICENSE` do repositório não é o Apache-2.0 herdado do template — é o `LICENSE-pessoal` ou `LICENSE-corporativo` de `scaffold/license-templates/` (o antigo `hipocampo-toolkit/license-templates/` foi consolidado e arquivado, `decisions/0032`). Bug comum em instâncias antigas — ver `docs/FAQ-E-ERROS-COMUNS.md`.
+- [ ] **[Mandatory]** The repository's `LICENSE` is not the Apache-2.0 inherited from the template — it's the `LICENSE-pessoal` or `LICENSE-corporativo` from `scaffold/license-templates/` (the old `hipocampo-toolkit/license-templates/` was consolidated and archived, `decisions/0032`). Common bug in older instances — see `docs/FAQ-AND-COMMON-ERRORS.md`.
 
-### Rituais de manutenção
+### Maintenance rituals
 
-- [ ] **[Recomendado, desde a seção 5-B do SPEC / v1.9 não lançado]** Frontmatter audit (diário, determinístico) rodando antes do ritual REM do mesmo ciclo — cadência declarada no `AGENTS.md`, seção "Rituais de manutenção". Ver `decisions/0017-frontmatter-audit-ritual-deterministico.md`.
-- [ ] **[Recomendado, desde a seção 5-A do SPEC]** Ritual REM (diário, duas funções: consolidar `inbox/` + atualizar memórias antigas) — mesma seção do `AGENTS.md`. Ver `decisions/0008-ritual-rem-e-camadas-de-memoria.md` e `decisions/0016-memoria-curto-prazo-sanitizacao.md`.
-- [ ] **[Recomendado, desde a seção 5-C do SPEC / v1.9 não lançado]** Auditoria estrutural (semanal: atomicidade, posicionamento, vazamento de dado sensível) — mesma seção do `AGENTS.md`. Ver `decisions/0019-auditoria-estrutural-semanal.md`.
+- [ ] **[Recommended, since SPEC section 5-B / unreleased v1.9]** Frontmatter audit (daily, deterministic) running before the REM ritual of the same cycle — cadence declared in `AGENTS.md`, "Maintenance rituals" section. See `decisions/0017-deterministic-frontmatter-audit-ritual.md`.
+- [ ] **[Recommended, since SPEC section 5-A]** REM ritual (daily, two functions: consolidating `inbox/` + updating old memories) — same section of `AGENTS.md`. See `decisions/0008-rem-ritual-and-memory-layers.md` and `decisions/0016-short-term-memory-sanitization.md`.
+- [ ] **[Recommended, since SPEC section 5-C / unreleased v1.9]** Structural audit (weekly: atomicity, placement, sensitive-data leakage) — same section of `AGENTS.md`. See `decisions/0019-weekly-structural-audit.md`.
 
-### Privacidade
+### Privacy
 
-- [ ] **[Informativo]** Existe uma exceção formal e estreita ao invariante "documento nunca é apagado fisicamente", pra obrigação legal de eliminação de dado pessoal (LGPD Art. 16 / GDPR Art. 17) — decisão sempre humana, nunca do agente. Ver `decisions/0010-excecao-apagamento-obrigacao-legal.md`. Nenhuma ação necessária a menos que o caso ocorra de verdade.
+- [ ] **[Informative]** There's a formal, narrow exception to the "a document is never physically deleted" invariant, for the legal obligation to erase personal data (LGPD Art. 16 / GDPR Art. 17) — always a human decision, never the agent's. See `decisions/0010-legal-deletion-exception.md`. No action needed unless the case actually occurs.
 
-## Leitura recomendada, sem ação necessária no repositório
+## Recommended reading, no action needed on the repository
 
-`BEST-PRACTICES.md`, `docs/MODELOS-DE-IA.md`, `docs/PERFORMANCE-E-GRAFO.md`, `docs/USO-MULTI-FERRAMENTA.md`, `docs/FAQ-E-ERROS-COMUNS.md`, `DISCLAIMER.md` — contexto e boas práticas que não mudam nada estruturalmente numa instância existente.
+`BEST-PRACTICES.md`, `docs/AI-MODELS.md`, `docs/PERFORMANCE-AND-GRAPH.md`, `docs/MULTI-TOOL-USAGE.md`, `docs/FAQ-AND-COMMON-ERRORS.md`, `DISCLAIMER.md` — context and best practices that don't structurally change anything in an existing instance.
 
-## Mudanças que quebram compatibilidade (MAJOR)
+## Backward-incompatible changes (MAJOR)
 
-Nenhuma até o momento. Quando uma mudança MAJOR for aceita (critério em `decisions/0023-criterio-operacional-escopo-semver.md`), o passo a passo obrigatório de migração vai para `MIGRATIONS.md`, não para este arquivo.
+None so far. When a MAJOR change is accepted (criterion in `decisions/0023-operational-criterion-for-semver-scope.md`), the mandatory migration steps go into `MIGRATIONS.md`, not this file.
