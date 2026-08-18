@@ -41,6 +41,7 @@ documentation:
   validation: "audits/moda/2026-08-17-v1.0.0-self-audit.md"
   structural_validation: "scripts/validate_hipocampo.py"
   release_checklist: "RELEASE-CHECKLIST.md"
+  evaluation_scenarios: "docs/evaluation-scenarios.md"
   git_workflow: "decisions/0014-mandatory-release-routine.md"
 
 components:
@@ -79,6 +80,14 @@ components:
   - id: "structural-validation"
     kind: "tool"
     source: "scripts/validate_hipocampo.py, .github/workflows/validate.yml"
+    lifecycle: "embedded"
+  - id: "failure-and-recovery-behavior"
+    kind: "specification"
+    source: "SPEC.md#14-behavior-under-failure-and-recovery"
+    lifecycle: "embedded"
+  - id: "evaluation-scenarios"
+    kind: "reference"
+    source: "docs/evaluation-scenarios.md"
     lifecycle: "embedded"
   - id: "personal-skill"
     kind: "skill"

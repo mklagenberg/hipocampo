@@ -1,6 +1,6 @@
 # 0027 — Promote, Depromote, and Redbutton: cross-repository lifecycle actions
 
-**Status:** Proposed
+**Status:** Accepted
 
 ## Context
 
