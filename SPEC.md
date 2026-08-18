@@ -85,7 +85,7 @@ When an entire document structurally depends on a banned data type (it can't be 
 
 ## 2-B. CRUD mechanics and frontmatter-first reading
 
-The document lifecycle (section 2, `status` field) implements the four operations of a CRUD: **Create** (creation with full frontmatter), **Read** (query by agent or human), **Update** (content edit with `revision` increment), **Delete** (mitigated by invariant 3 — never delete physically, only `archived`/`superseded`, with the narrow exception of `decisions/0010`, with its trigger broadened by `decisions/0028`). See `decisions/0012-crud-frontmatter-first-mechanics.md`.
+The document lifecycle (section 2, `status` field) implements the four operations of a CRUD: **Create** (creation with full frontmatter), **Read** (query by agent or human), **Update** (content edit with `revision` increment), **Delete** (mitigated by invariant 3 — never delete physically, only `archived`/`superseded`, with the narrow exception of `decisions/0010`, with its trigger broadened by `decisions/0028`). See `decisions/0012-crud-frontmatter-first-mechanics.md`. Formally, CRUD is the first **mechanic** named under the Dispatcher/Routine/Mechanic/Action taxonomy (section 5-D) — this section already used the word informally, before that taxonomy existed; nothing about CRUD's behavior changes.
 
 Recommended reading rule for the agent: when operating over multiple documents (search, triage, staleness), always read the **frontmatter first** — YAML, low token cost, sufficient to filter by `type`, `tags`, `status`, `temporality`, `related`, and decide relevance. Only read the **full body** after deciding, from the frontmatter, that that specific document needs a full read. In an instance with many documents, this avoids unnecessary token cost — reading the full body of every candidate just to discard most of them is not the default access pattern.
 
@@ -188,6 +188,27 @@ The structural audit is also the touchpoint for controlled-vocabulary fields tha
 
 Any finding is always presented to the responsible human before any action — moving, splitting, or removing a document never happens on its own (invariant 5). See `decisions/0019-weekly-structural-audit.md` and `decisions/0035-controlled-vocabulary-dictionary.md`.
 
+## 5-D. Dispatcher and the four-layer taxonomy: Routine, Mechanic, Action
+
+Two related, but separate, changes — both naming what already exists rather than introducing new behavior. See `decisions/0042-dispatcher-decoupled-from-rem.md` and `decisions/0043-dispatcher-routine-mechanic-action-taxonomy.md`.
+
+**Dispatcher.** REM (section 5-A) is, in practice, the only process the recommended daily cadence schedules today — but frontmatter audit (5-B) and the weekly structural audit (5-C) are structural-maintenance rituals, not memory consolidation, and folding them under REM's name would break the precision the rest of this document's vocabulary depends on (REM's biological metaphor, the sensory/short-term/long-term model of section 5-A). The **Dispatcher** is a separate, neutral top-level concept: it triggers each **routine** (REM, frontmatter audit, weekly structural audit) on schedule. REM's own scope is unchanged — Consolidate and Update old memories only (section 5-A) — it does not gain responsibility for triggering the other two rituals; they become sibling routines under the Dispatcher, not children of REM. Execution order among the three routines remains fixed, exactly as already documented (frontmatter audit before REM in the same daily cycle, section 5-A; structural audit on its own weekly cadence, section 5-C). Whether this becomes dynamic — decided by the Dispatcher from per-routine metadata — is an open question, deferred until at least one real instance is actually running these rituals in practice (none are yet — dogfooding pending, see `AGENTS.md`). The format of the process registry the Dispatcher would read to make that decision is a future artifact, not yet designed.
+
+**Four-layer taxonomy.** Orthogonal to the step-classification scheme (deterministic/discretionary/gated — how a step behaves, sections 8/14) is a taxonomy of what kind of thing a piece of behavior *is*:
+
+- **Dispatcher** — triggers routines, by schedule (above).
+- **Routine** — a scheduled process: REM, frontmatter audit, weekly structural audit. Orchestrates sequences of actions, applying judgment where the routine itself requires it.
+- **Mechanic** — the ruleset a family of actions must follow. Not itself an event — the rulebook an action follows when invoked.
+- **Action** — the concrete operation, invocable on demand or by a routine as a building block (for example, REM's Consolidate function invokes the CRUD mechanic's Create action when writing a new document, section 5-A).
+
+Three mechanics, named here for the first time — the actions themselves already existed normatively:
+
+1. **CRUD mechanic** — Create, Read, Update, Delete (section 2-B, `decisions/0012`).
+2. **Publication mechanic** — Promote, Depromote (section 13, `decisions/0027`, `decisions/0030`).
+3. **Sequenced-removal mechanic** — Redbutton (section 13, `decisions/0027`, `decisions/0028`). Kept separate from the publication mechanic because the trigger profile differs (a deliberate curation decision vs. incident response), and each is expected to grow independent depth over time.
+
+See `decisions/0043-dispatcher-routine-mechanic-action-taxonomy.md` for why "sequenced removal," not "sequenced deletion" — the latter would contradict invariant 3 (section 8), which Redbutton itself respects (tombstone, never a silent physical delete with no trace).
+
 ## 6. `related` across repositories — the Registry
 
 A document in any Hipocampo instance can reference another document in the same repository or in a different repository belonging to the same person/organization. The syntax distinguishes the two cases:
@@ -275,7 +296,7 @@ Between a person's personal instance and corporate instance, the access invitati
 
 ## 13. Cross-repository lifecycle actions: Promote, Depromote, Redbutton
 
-Three actions that move or remove content between repositories of the same person/organization, complementary to the single-repository CRUD (section 2-B). The REM ritual's curation (section 5-A, Consolidate function) and the structural audit (5-C) are the first line of protection against misplaced content — these three actions exist for when that curation fails, or for deliberate reclassification of already-existing content. See `decisions/0027-promote-depromote-redbutton.md` and `decisions/0028-broadened-trigger-2a-remediation.md`.
+Three actions that move or remove content between repositories of the same person/organization, complementary to the single-repository CRUD (section 2-B). The REM ritual's curation (section 5-A, Consolidate function) and the structural audit (5-C) are the first line of protection against misplaced content — these three actions exist for when that curation fails, or for deliberate reclassification of already-existing content. See `decisions/0027-promote-depromote-redbutton.md` and `decisions/0028-broadened-trigger-2a-remediation.md`. Promote and Depromote are governed by the publication mechanic; Redbutton by the sequenced-removal mechanic — both formally named in section 5-D. The actions and their behavior are unchanged by that naming.
 
 ### Promote — personal → corporate, or graduation within the same domain
 

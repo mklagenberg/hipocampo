@@ -1,0 +1,48 @@
+change_set:
+  id: "0042-0043-dispatcher-and-mechanics-taxonomy"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0042-dispatcher-decoupled-from-rem.md"
+    - "decisions/0043-dispatcher-routine-mechanic-action-taxonomy.md"
+
+impact:
+  - artifact: "SPEC.md"
+    status: "updated"
+    note: "New section 5-D, 'Dispatcher and the four-layer taxonomy: Routine, Mechanic, Action' (decisions/0042, decisions/0043). Section 2-B gains a cross-reference sentence naming CRUD as the first mechanic. Section 13's intro paragraph gains a sentence naming the publication and sequenced-removal mechanics."
+  - artifact: "decisions/0042-dispatcher-decoupled-from-rem.md, decisions/0043-dispatcher-routine-mechanic-action-taxonomy.md"
+    status: "updated"
+    note: "New Decision Records, both Status: Accepted."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "New [Unreleased] entries for decisions/0042, decisions/0043, this Change Set, and the SPEC.md/moda.yaml/conformance-moda.yaml updates."
+  - artifact: "moda.yaml"
+    status: "updated"
+    note: "Two new components: dispatcher (procedure) and mechanics-taxonomy (model), both sourced from the new SPEC.md#5-d section and their respective Decision Records."
+  - artifact: "conformance/moda.yaml"
+    status: "updated"
+    note: "decomposition_and_control_flow evidence/notes updated -- the new taxonomy partially closes the 'no explicit model of what kind of thing a routine/action is' gap; status stays partial by design (no MODA-style stage/gate/parallelism/stop-condition model, execution order deliberately kept fixed until real dogfooding exists, decisions/0042). evolution evidence gains decisions/0042-0043."
+  - artifact: "UPGRADE.md"
+    status: "not-applicable"
+    note: "Purely additive vocabulary naming already-existing normative behavior (REM, CRUD, Promote, Depromote, Redbutton) -- nothing an existing instance needs to adopt or change in its own repository."
+  - artifact: "MIGRATIONS.md"
+    status: "not-applicable"
+    note: "Minor-scope, additive change per decisions/0023's operational test -- no existing instance becomes formally incompatible with no action. Does not touch the '1.x -> 2.0' section Lote A (a separate PR) started."
+  - artifact: "docs/change-management.md"
+    status: "reviewed"
+    note: "The mecanismo_cross_repositorio trigger definition (section 13/6 minimum-surfaces table) already covers this Change Set's touch of section 13 -- no change needed to the trigger table itself."
+  - artifact: "skill/"
+    status: "reviewed"
+    note: "This repository's generic skill/ has no scheduling logic that names REM/frontmatter-audit/structural-audit relationships to update -- the Dispatcher is a naming/taxonomy change, not a new operational procedure the skill needs to implement differently. The personal skill copy (mklagenberg/hipocampo's own references/rotinas.md) is not part of this repository."
+  - artifact: "existing real vaults (hipocampo-personal-vault, hipocampo-concepts, hipocampo-company, hipocampo-company-vault)"
+    status: "not-applicable"
+    note: "Real content repositories are never edited from this repository (SPEC.md section 1). No action required of any real vault -- this Change Set adds naming/taxonomy only."
+
+validation:
+  commands:
+    - "python3 scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "Run on the branch before opening the PR: see PR description for the actual output."
+  notes: "This Change Set adds two new Decision Records (template-checked by validate_hipocampo.py) and a new SPEC.md section with internal cross-references (link resolution also checked). It does not touch document frontmatter (SPEC.md section 2) -- the schema-field coverage report is unaffected. Semantic completeness of the Dispatcher/taxonomy split and the 'sequenced removal' naming fix remains human review, per docs/change-management.md's own stated limits."

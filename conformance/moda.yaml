@@ -30,8 +30,8 @@ controls:
     evidence: ["SPEC.md#2-frontmatter-unified-schema", "SPEC.md#8-extensioncustomization-and-agent-precedence", "DISCLAIMER.md"]
   decomposition_and_control_flow:
     status: "partial"
-    evidence: ["SPEC.md#5-a-rem-ritual-and-memory-layers", "SPEC.md#5-b-frontmatter-audit", "SPEC.md#5-c-weekly-structural-audit"]
-    notes: ["Rituals are well described; no explicit model of stages/gates/parallelism/stop conditions in MODA terms."]
+    evidence: ["SPEC.md#5-a-rem-ritual-and-memory-layers", "SPEC.md#5-b-frontmatter-audit", "SPEC.md#5-c-weekly-structural-audit", "SPEC.md#5-d-dispatcher-and-the-four-layer-taxonomy-routine-mechanic-action", "decisions/0042-dispatcher-decoupled-from-rem.md", "decisions/0043-dispatcher-routine-mechanic-action-taxonomy.md"]
+    notes: ["Rituals are well described. A four-layer taxonomy (Dispatcher/Routine/Mechanic/Action) now names what kind of thing each piece of behavior is, closing part of this gap. Still partial: execution order among routines remains fixed rather than an explicit MODA-style stage/gate/parallelism/stop-condition model — deliberately deferred until a real instance actually runs these rituals (decisions/0042)."]
   distribution_of_agency:
     status: "partial"
     evidence: ["SPEC.md#8-extensioncustomization-and-agent-precedence", "skill/references/instantiation.md"]
@@ -67,8 +67,8 @@ controls:
     notes: ["UPGRADE.md is strong; skill/manifest.yaml (the skill's machine manifest) and the per-vault hipocampo.yaml template now exist (Phase D), extended with instance.language (decisions/0034). None of the 4 existing real vaults has been retroactively updated with hipocampo.yaml yet — see UPGRADE.md."]
   evolution:
     status: "partial"
-    evidence: ["CHANGELOG.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "ROADMAP.md", "SPEC.md#9-versioning"]
-    notes: ["ROADMAP.md and the repository type taxonomy (decisions/0029-0030) are already complete; a declared cadence for auditing the methodology itself is still missing."]
+    evidence: ["CHANGELOG.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "ROADMAP.md", "SPEC.md#9-versioning", "decisions/0042-dispatcher-decoupled-from-rem.md", "decisions/0043-dispatcher-routine-mechanic-action-taxonomy.md"]
+    notes: ["ROADMAP.md and the repository type taxonomy (decisions/0029-0030) are already complete; a declared cadence for auditing the methodology itself is still missing. The Dispatcher/Routine/Mechanic/Action taxonomy (decisions/0042-0043) is a second lote of the same v2.0.0 taxonomy revision the entity model (a separate PR) also belongs to."]
   specification_driven_change_control:
     status: "partial"
     evidence: ["docs/change-management.md", "decisions/0031-change-set-mechanism.md", "changes/0026-0028-fact-account-opinion-memory-taxonomy-and-cross-repo-lifecycle/", "changes/0032-0033-scaffolding-and-vault-manifest/", "changes/0034-repository-and-vault-language-policy/", "changes/0038-0039-failure-recovery-and-evaluation-scenarios/"]
