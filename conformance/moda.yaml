@@ -63,12 +63,12 @@ controls:
     evidence: ["decisions/0025-skill-is-client-side-never-per-repository.md", "docs/MULTI-TOOL-USAGE.md", "docs/AI-MODELS.md"]
   packaging_and_synchronization:
     status: "partial"
-    evidence: ["UPGRADE.md", "moda.yaml", "skill/manifest.yaml", "scaffold/skeleton/hipocampo.yaml", "decisions/0033-hipocampo-yaml-per-vault-manifest.md", "decisions/0034-repository-and-vault-language-policy.md"]
-    notes: ["UPGRADE.md is strong; skill/manifest.yaml (the skill's machine manifest) and the per-vault hipocampo.yaml template now exist (Phase D), extended with instance.language (decisions/0034). None of the 4 existing real vaults has been retroactively updated with hipocampo.yaml yet — see UPGRADE.md."]
+    evidence: ["UPGRADE.md", "moda.yaml", "skill/manifest.yaml", "scaffold/skeleton/hipocampo.yaml", "decisions/0033-hipocampo-yaml-per-vault-manifest.md", "decisions/0034-repository-and-vault-language-policy.md", "decisions/0041-entity-model-and-vault-vocabulary.md"]
+    notes: ["UPGRADE.md is strong; skill/manifest.yaml (the skill's machine manifest) and the per-vault hipocampo.yaml template now exist (Phase D), extended with instance.language (decisions/0034) and, this round, instance.entity/instance.role/instance.scope_description replacing instance.domain (decisions/0041). None of the 4 existing real vaults has been retroactively updated with hipocampo.yaml yet, and none has migrated domain to entity/role yet — see UPGRADE.md and MIGRATIONS.md."]
   evolution:
     status: "partial"
-    evidence: ["CHANGELOG.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "ROADMAP.md", "SPEC.md#9-versioning"]
-    notes: ["ROADMAP.md and the repository type taxonomy (decisions/0029-0030) are already complete; a declared cadence for auditing the methodology itself is still missing."]
+    evidence: ["CHANGELOG.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "ROADMAP.md", "SPEC.md#9-versioning", "decisions/0040-multi-vault-multi-entity-design-premises.md", "decisions/0041-entity-model-and-vault-vocabulary.md"]
+    notes: ["ROADMAP.md and the repository type taxonomy (decisions/0029-0030) are already complete; a declared cadence for auditing the methodology itself is still missing. The entity model (decisions/0040-0041) is the first Decision Record pair explicitly scoped as one lote of a MAJOR v2.0.0 jump, per the lote sequencing this taxonomy revision established."]
   specification_driven_change_control:
     status: "partial"
     evidence: ["docs/change-management.md", "decisions/0031-change-set-mechanism.md", "changes/0026-0028-fact-account-opinion-memory-taxonomy-and-cross-repo-lifecycle/", "changes/0032-0033-scaffolding-and-vault-manifest/", "changes/0034-repository-and-vault-language-policy/", "changes/0038-0039-failure-recovery-and-evaluation-scenarios/"]

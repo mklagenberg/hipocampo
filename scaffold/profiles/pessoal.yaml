@@ -32,6 +32,17 @@ inputs:
     required: false
     default: "en"
     description: "BCP-47 tag for the language this vault's content will actually be written in (e.g., 'en', 'pt-BR'). Defaults to English, matching the scaffold's own language — confirm with the user before finalizing rather than assuming the default (hipocampo/decisions/0034)."
+  - id: "entity"
+    required: true
+    default: "personal"
+    description: "Entity identifier this vault belongs to (hipocampo/decisions/0041, hipocampo/SPEC.md section 2-C). Defaults to 'personal' for this profile — an operator with more than one personal-scoped entity may override it."
+  - id: "role"
+    required: true
+    enum: ["anchor", "additional"]
+    description: "Whether this is the entity's one mandatory private anchor vault, or an additional vault (hipocampo/decisions/0040, premise 3). The agent confirms with the operator whether an anchor already exists for this entity before generating a second one."
+  - id: "scope_description"
+    required: false
+    description: "Required only when role: additional — short statement of what belongs in this vault, as distinct from the entity's other vaults. Omit entirely when role: anchor."
 
 outputs:
   - path: "AGENTS.md"
@@ -61,7 +72,7 @@ outputs:
   - path: "hipocampo.yaml"
     operation: "generate"
     ownership: "managed-structure"
-    note: "Vault manifest (hipocampo/decisions/0033, hipocampo/decisions/0034, hipocampo/decisions/0035); domain fixed to 'personal' for this profile, language defaults to 'en' unless overridden by the collected input."
+    note: "Vault manifest (hipocampo/decisions/0033, hipocampo/decisions/0034, hipocampo/decisions/0035, hipocampo/decisions/0041); entity/role/scope_description filled from the collected inputs, language defaults to 'en' unless overridden by the collected input."
 
 conflicts:
   default: "stop-and-report"
