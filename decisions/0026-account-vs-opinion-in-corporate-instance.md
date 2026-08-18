@@ -1,6 +1,6 @@
 # 0026 — Taxonomy of information type in corporate instance
 
-**Status:** Proposed
+**Status:** Accepted
 
 ## Context
 

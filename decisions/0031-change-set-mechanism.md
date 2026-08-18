@@ -1,6 +1,6 @@
 # 0031 — Adoption of the Change Set mechanism (MODA)
 
-**Status:** Proposed
+**Status:** Accepted
 
 ## Context
 

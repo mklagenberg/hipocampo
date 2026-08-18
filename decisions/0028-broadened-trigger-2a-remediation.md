@@ -1,6 +1,6 @@
 # 0028 — Broadened trigger for remediation of a sensitive-data policy (2-A) violation
 
-**Status:** Proposed
+**Status:** Accepted
 
 ## Context
 

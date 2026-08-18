@@ -1,6 +1,6 @@
 # 0029 — Repository type taxonomy: domain × exposure tier
 
-**Status:** Proposed
+**Status:** Accepted
 
 ## Context
 

@@ -1,6 +1,6 @@
 # 0030 — Promote: generalization for graduation within the same domain
 
-**Status:** Proposed
+**Status:** Accepted
 
 ## Context
 
