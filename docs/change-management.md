@@ -31,7 +31,7 @@ Every surface declared in `impact.yaml` is classified as:
 - `reviewed` — reviewed and intentionally left unchanged, with rationale;
 - `not-applicable` — out of scope for the change, with rationale.
 
-The declaration isn't proof by itself — human review assesses whether the rationale is credible. No deterministic validation compares this against the actual diff yet (see the section below).
+The declaration isn't proof by itself — human review assesses whether the rationale is credible. Deterministic validation now compares this against the actual diff (`scripts/validate_change.py`, run in CI on every pull request — see "Deterministic and human checking" below), but the match is heuristic, not semantic: it confirms a changed protected path is *named* in some `updated` entry, not that the entry's own account of what changed is accurate.
 
 ## Change flow
 
@@ -41,7 +41,7 @@ The declaration isn't proof by itself — human review assesses whether the rati
 4. Declare triggers, SemVer impact, affected surfaces, and expected validation in `impact.yaml`.
 5. Change the authoritative source first: `SPEC.md` for a normative rule, or the operational artifact that owns the behavior for an operational change.
 6. Synchronize the affected projections without copying normative prose into each file.
-7. Run the declared validation: `scripts/validate_hipocampo.py` for the repository's own structural integrity (automatic in CI on the PR), plus human review for everything the script doesn't cover (see "Deterministic and human checking" below).
+7. Run the declared validation: `scripts/validate_hipocampo.py` for the repository's own structural integrity, `scripts/validate_change.py` for this Change Set's own schema and diff coverage (both automatic in CI on the PR), plus human review for everything the scripts don't cover (see "Deterministic and human checking" below).
 8. Review the diff, any unresolved gaps, migration/recovery needs, and MODA conformance impact.
 9. Merge only after explicit human review (Mau).
 10. Cut a tag only through the release routine (`SPEC.md`, section 9).
@@ -60,15 +60,20 @@ Adapted to Hipocampo's actual vocabulary — not a literal translation of MODA's
 
 `reviewed` and `not-applicable` are only valid with concrete rationale. A structural choice also requires a Decision Record.
 
+**Note (2026-08-19):** this table is the trigger vocabulary a Change Set is reasoned against in its `proposal.md` and `impact.yaml` notes — it is not, today, a literal `triggers:` field in `impact.yaml` itself. Every real Change Set's `impact.yaml` uses `change_set: {id, class, semver, status, backfill, decisions}` / `impact: [{artifact, status, note}]` / `validation: {commands, evidence, notes}`, with no `triggers:` key. `scripts/validate_change.py` validates against that real, in-use schema — not against a `triggers:` field this table's prose implies but no artifact actually has.
+
 ## Deterministic and human checking
 
-Structural integrity of the methodology repository itself — Decision Record template compliance, internal link resolution, README/CHANGELOG version consistency — is now checked deterministically by `scripts/validate_hipocampo.py`, run in CI on every pull request against `main` (`.github/workflows/validate.yml`, `decisions/0036-deterministic-validation-of-repository-structure.md`), closing the corresponding `major` finding from the 2026-08-17 MODA audit. That check does not reach a Change Set's *semantic* completeness, though — the following remain human review:
+Structural integrity of the methodology repository itself — Decision Record template compliance, internal link resolution, README/CHANGELOG version consistency — is checked deterministically by `scripts/validate_hipocampo.py`; skill-router-versus-scaffold-profile consistency (example output paths, no superseded `domain:` field in examples) by `scripts/validate_skill_docs.py`; and each Change Set's own schema plus coverage against the actual PR diff by `scripts/validate_change.py`. All three run in CI on every pull request against `main` (`.github/workflows/validate.yml`, `decisions/0036-deterministic-validation-of-repository-structure.md`), closing the corresponding `major` finding from the 2026-08-17 MODA audit. **Correction (2026-08-19):** this section, and `conformance/moda.yaml`'s `repository_contract` control, previously cited `.github/workflows/validate.yml` as existing evidence before the workflow file actually existed in this repository — found during a v2.0.0 personal-skill revalidation. The workflow now exists; `scripts/validate_skill_docs.py` and `scripts/validate_change.py` were added at the same time.
+
+None of these checks reach a Change Set's *semantic* completeness, though — the following remain human review:
 
 - whether the declared classification and SemVer impact are true;
 - whether a rule change has been fully projected into the operational guidance (personal skill, instance `AGENTS.md`, etc.);
 - whether the `reviewed`/`not-applicable` rationales are credible;
-- whether migration and release risks are acceptable.
+- whether migration and release risks are acceptable;
+- whether a `scripts/validate_change.py`-confirmed `updated` entry's own account of what changed is accurate, not just that the path is named somewhere.
 
 ## Completion rule
 
-A change is incomplete when its implementation looks ready but the declared contract surfaces, evidence, or migration obligation are inconsistent with each other. There's no automated check yet that proves this on its own — human review remains responsible for semantic completeness.
+A change is incomplete when its implementation looks ready but the declared contract surfaces, evidence, or migration obligation are inconsistent with each other. `scripts/validate_change.py` catches one concrete form of this — a protected path changed with no corresponding `updated` declaration anywhere in the diff's Change Sets — but there's no automated check for the rest: human review remains responsible for semantic completeness.
