@@ -4,7 +4,7 @@
 
 ## Context
 
-Major finding 7 from the 2026-08-17 MODA self-audit: the "quality and evaluation" dimension (MODA SPEC, 4.10) was entirely unaddressed — "no representative test scenario, baseline, or acceptance threshold formalized" (`conformance/moda.yaml`, control `quality_and_evaluation`). The audit's own action plan already names one ready-made candidate: the `@mklagenberg` handle misused in `org-gauge/gauge-latam-observacoes.md`, a `hipocampo-company` document mixing Account and Opinion about a named real person, violating `decisions/0020` — fully described in `decisions/0026-account-vs-opinion-in-corporate-instance.md`.
+Major finding 7 from the 2026-08-17 MODA self-audit: the "quality and evaluation" dimension (MODA SPEC, 4.10) was entirely unaddressed — "no representative test scenario, baseline, or acceptance threshold formalized" (`conformance/moda.yaml`, control `quality_and_evaluation`). The audit's own action plan already names one ready-made candidate: the `@personal-handle` handle misused in `org-acme/acme-latam-observacoes.md`, a `hipocampo-company` document mixing Account and Opinion about a named real person, violating `decisions/0020` — fully described in `decisions/0026-account-vs-opinion-in-corporate-instance.md`. (Entity, colleague, and handle are anonymized placeholders — `decisions/0050-no-nominal-entity-citation-in-methodology-repository.md`.)
 
 This repository never stores real content from any instance (`SPEC.md`, section 1) — an automated harness that executes scenarios against a live vault fixture is not an option without violating that boundary. The project's own scale (one person, no external certification target, `decisions/0037`'s proportionality reasoning) also argues against building a scored acceptance-threshold system that would itself need auditing and upkeep.
 
@@ -14,7 +14,7 @@ Add `docs/evaluation-scenarios.md`: a minimal, human-run reference of representa
 
 Four scenarios, chosen to span both the failure-and-recovery dimension (`decisions/0038`) and the quality-and-evaluation dimension this Decision Record closes, without attempting exhaustive coverage:
 
-1. **A real, already-documented failure case** — the `gauge-latam-observacoes.md` handle/labeling violation, testing whether `decisions/0020`'s identity rule and `decisions/0026`'s write gate, if applied today, would have caught it.
+1. **A real, already-documented failure case** — the `acme-latam-observacoes.md` handle/labeling violation, testing whether `decisions/0020`'s identity rule and `decisions/0026`'s write gate, if applied today, would have caught it.
 2. **A ritual-discipline case** — an expired `ttl` plus a deprecated controlled-vocabulary value, testing whether the frontmatter audit (section 5-B) correctly only reports, and whether an agent correctly resists "helpfully" auto-fixing a flagged value outside the REM ritual's explicit-plan-before-write discipline (invariant 5).
 3. **A policy-refusal case** — a request to record a banned data type (a colleague's salary) in a corporate instance, testing section 2-A's ban and section 14's unsafe-request rule (refuse at the point of violation, offer a compliant alternative, not a blanket refusal).
 4. **A correct-path, multi-Decision-Record case** — a Promote (personal → corporate, elegant path), testing whether all of `decisions/0011`, `0020`, `0026`, and `0027` are actually applied together, not just individually.
@@ -23,7 +23,7 @@ Four scenarios, chosen to span both the failure-and-recovery dimension (`decisio
 
 ## Rationale
 
-Built from real, already-documented material — the `gauge-latam` case was the audit's own suggested candidate, and the other three scenarios are direct applications of rules already normative in `SPEC.md` — rather than invented from scratch. One real failure case plus three representative correct/edge-path cases is enough to make the two open MODA dimensions checkable in practice without requiring either a new automated harness (which the "never stores real content" boundary rules out anyway) or an exhaustive scenario catalog that would itself become a maintenance burden disproportionate to a one-person-maintained methodology.
+Built from real, already-documented material — the `acme-latam` case was the audit's own suggested candidate, and the other three scenarios are direct applications of rules already normative in `SPEC.md` — rather than invented from scratch. One real failure case plus three representative correct/edge-path cases is enough to make the two open MODA dimensions checkable in practice without requiring either a new automated harness (which the "never stores real content" boundary rules out anyway) or an exhaustive scenario catalog that would itself become a maintenance burden disproportionate to a one-person-maintained methodology.
 
 ## Discarded alternatives
 
