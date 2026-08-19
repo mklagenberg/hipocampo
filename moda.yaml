@@ -11,14 +11,14 @@ artifact:
   full_name: "Hipocampo — agentic second brain methodology"
   kind: "methodology"
   domain: "personal-and-corporate-knowledge-management"
-  version: "1.9.0"
+  version: "2.0.0"
   status: "active"
   language: "en"
   repository: "https://github.com/mklagenberg/hipocampo"
   license: "Apache-2.0"
 
 adoption:
-  relationship: "audited_against"
+  relationship: "conforms_to"
   mode: "retrospective"
   claim_stage: "mapped"
   conformance_result: "partial"
@@ -32,6 +32,7 @@ documentation:
   best_practices: "BEST-PRACTICES.md"
   limitations: "DISCLAIMER.md"
   changelog: "CHANGELOG.md"
+  contributing: "CONTRIBUTING.md"
   roadmap: "ROADMAP.md"
   upgrade: "UPGRADE.md"
   migrations: "MIGRATIONS.md"
@@ -147,12 +148,12 @@ components:
 packages:
   specification:
     role: "normative-specification"
-    version: "1.9.0"
+    version: "2.0.0"
     source: "SPEC.md"
     source_kind: "local"
   decisions:
     role: "durable-decision-records"
-    version: "1.9.0"
+    version: "2.0.0"
     source: "decisions/"
     source_kind: "local"
   skill:
@@ -171,6 +172,7 @@ installations: []
 conformance:
   profile: "conformance/moda.yaml"
   latest_audit: "audits/moda/2026-08-17-v1.0.0-self-audit.md"
+  latest_note: "audits/moda/2026-08-19-v2.0.0-major-findings-closed.md"
   audit_mode: "self-audit"
 
 synchronization:

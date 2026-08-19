@@ -8,6 +8,7 @@ Agentic second brain methodology: git + markdown + AI rituals. This repository i
 - [BEST-PRACTICES.md](BEST-PRACTICES.md) — best practices for use: day-to-day, privacy/compliance posture, and adoption by teams/new companies.
 - [MIGRATIONS.md](MIGRATIONS.md) — migration guide per MAJOR version jump.
 - [CHANGELOG.md](CHANGELOG.md) — methodology version history.
+- [CONTRIBUTING.md](CONTRIBUTING.md) — how to contribute to this repository: language policy, Decision Records, Change Sets, validation, releases.
 - [ROADMAP.md](ROADMAP.md) — current direction, no date commitment.
 - [RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md) — minimal checklist run when cutting a new version of the methodology itself.
 - [decisions/](decisions/) — Decision Records: why each structural rule is the way it is.
@@ -30,10 +31,10 @@ This repository is being evaluated and brought into conformance with [MODA](http
 
 - Artifact profile: `methodology`
 - MODA compatibility: `^1.0.0`
-- Adoption relationship: `audited_against` (retrospective) — evolving toward `conforms_to` as the audit's findings are addressed
+- Adoption relationship: `conforms_to` (retrospective) — all `major` findings from the 2026-08-17 self-audit closed as of v2.0.0; `minor` findings and `observation`s remain open, see `conformance/moda.yaml`
 - Manifest: [`moda.yaml`](moda.yaml)
 - Conformance profile: [`conformance/moda.yaml`](conformance/moda.yaml)
 - Latest audit: [`audits/moda/2026-08-17-v1.0.0-self-audit.md`](audits/moda/2026-08-17-v1.0.0-self-audit.md)
 <!-- moda:disclosure:end -->
 
-Current version: **1.9.0** ([SemVer](https://semver.org/lang/pt-BR/)).
+Current version: **2.0.0** ([SemVer](https://semver.org/lang/pt-BR/)).

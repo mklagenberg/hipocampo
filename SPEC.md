@@ -1,8 +1,6 @@
 # Hipocampo — SPEC
 
-Version: 1.9.0 + unreleased · Follows [SemVer](https://semver.org/lang/pt-BR/)
-
-> **Version note:** the latest formal release (tag + GitHub Release) is **v1.9.0**. This document already includes work accepted and merged into `main` beyond that release (sections 5-B, 5-C, 11, 12, 13, and 14) — see `CHANGELOG.md`, the `[Unreleased]` section, and `decisions/0021-release-cadence-policy.md`. If you're checking compatibility for an existing instance, check it against the latest tag, not against this file on `main`, until the next release is cut.
+Version: 2.0.0 · Follows [SemVer](https://semver.org/lang/pt-BR/)
 
 This document is the normative specification of the Hipocampo methodology: the frontmatter schema, the retrieval rules, and the conventions that any instance (content repository) must follow to be considered compatible with a version of Hipocampo. It is not a usage manual — for that, see [GETTING-STARTED.md](GETTING-STARTED.md). It is not a document of limitations — for that, see [DISCLAIMER.md](DISCLAIMER.md). It is not a best-practices guide — for that, see [BEST-PRACTICES.md](BEST-PRACTICES.md). It is not an upgrade guide for an existing instance — for that, see [UPGRADE.md](UPGRADE.md).
 
@@ -113,7 +111,7 @@ The formal declaration of which entity+role a specific vault implements is opera
 
 **Known, separate inconsistency — not addressed here.** `decisions/0033`'s `hipocampo.yaml` manifest and the scaffold profiles (`scaffold/profiles/pessoal.yaml`/`empresa.yaml`) define `instance.tier` with a *different* pair of values (`content`/`vault`, describing repository curation level) than the `confidential`/`public` exposure tier defined in this section and in `decisions/0029`. This predates the vocabulary dictionary and is not a language issue — both value sets are now in English, but they still describe two different things under the same field name `tier`. Flagged here for a future decision; out of scope for `decisions/0035` and unaffected by the entity model.
 
-**Full taxonomy index.** For a consolidated map of every controlled field and named concept across this schema, the vault manifest, and `AGENTS.md` — current state as of this revision, with retroactive version lineage for anything older than v1.9.0 still pending — see `docs/taxonomy.md` (`decisions/0047-taxonomy-map.md`).
+**Full taxonomy index.** For a consolidated map of every controlled field and named concept across this schema, the vault manifest, and `AGENTS.md` — current state and full retroactive version lineage back to `v1.0.0` — see `docs/taxonomy.md` (`decisions/0047-taxonomy-map.md`).
 
 ## 2-D. Multi-vault and multi-entity design premises
 
