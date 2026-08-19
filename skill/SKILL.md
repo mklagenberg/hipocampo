@@ -18,7 +18,7 @@ description: >
 
 Operates any instance of the [Hipocampo](https://github.com/mklagenberg/hipocampo) methodology via the GitHub MCP. Published as a generic template at `hipocampo/skill/SKILL.md` — **never use it as-is, without personalizing it first.**
 
-**Hipocampo version this copy follows:** ^1.9.0 + unreleased (see `hipocampo/CHANGELOG.md`, `[Unreleased]` section). When personalizing, confirm it matches your instance's `AGENTS.md`. See also `manifest.yaml`, in this same directory, for the machine-readable compatibility range.
+**Hipocampo version this copy follows:** ^2.0.0 (see `hipocampo/CHANGELOG.md`). When personalizing, confirm it matches your instance's `AGENTS.md`. See also `manifest.yaml`, in this same directory, for the machine-readable compatibility range.
 
 This file is just the router — each section below says when to act and points to the reference file with the full procedure. The norms themselves (schema, rules, rationale) live in `hipocampo/SPEC.md` and the Decision Records — this skill never re-explains them, it only operates them.
 
