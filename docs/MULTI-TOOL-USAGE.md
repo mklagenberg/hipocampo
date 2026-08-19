@@ -4,15 +4,15 @@ Central reference — see `hipocampo/decisions/0002` for why this content lives 
 
 ## The common principle
 
-Hipocampo isn't coupled to any specific AI tool. What any tool needs, to operate an instance, is read/write access to the repository via the **GitHub MCP** (or an equivalent git integration mechanism). Once that connection exists, the same principles apply across any tool: read the frontmatter first (SPEC.md section 2-B), respect the invariants (section 8), never write without an explicit request, and follow the personalized Hipocampo skill (`hipocampo-toolkit/skill/SKILL.md`) as the source of operational instruction.
+Hipocampo isn't coupled to any specific AI tool. What any tool needs, to operate an instance, is read/write access to the repository via the **GitHub MCP** (or an equivalent git integration mechanism). Once that connection exists, the same principles apply across any tool: read the frontmatter first (SPEC.md section 2-B), respect the invariants (section 8), never write without an explicit request, and follow the personalized Hipocampo skill (`hipocampo/skill/SKILL.md`) as the source of operational instruction.
 
 What changes between tools is only **how** each one connects to GitHub — not what to do once connected.
 
 ## Specifics by tool
 
-**Claude (Cowork, Claude Code, Claude via API/Desktop)** — connects to GitHub via a dedicated MCP connector. Once connected, the Hipocampo skill can be loaded as a user skill (e.g., via `save_skill` in Cowork) and persists across sessions.
+**Claude (Cowork, Claude Code, Claude via API/Desktop)** — connects to GitHub via Settings → Connectors (add/connect the GitHub connector, authorize through GitHub); like ChatGPT, a connected connector must still be turned on per conversation. Once connected, the Hipocampo skill can be saved persistently via Claude's native Skills feature (or `save_skill` in Cowork specifically) and applies automatically across future sessions from then on.
 
-**ChatGPT** — connects to GitHub via connectors/GPTs with access to external tools, or via an equivalent MCP when available on the account. The Hipocampo skill's instruction can be pasted as a custom instruction or kept as a dedicated "GPT," depending on the plan.
+**ChatGPT** — connects to GitHub via Settings → Connectors (Connect, then authorize through GitHub); the connector must still be turned on per chat from the connectors dropdown near the message box. Since ChatGPT has no native "skill" concept and Custom Instructions has a character limit too small for the full skill content, the practical approach is a short Custom Instruction pointing at the live `skill/SKILL.md`/`AGENTS.md` URLs rather than an embedded copy — see `docs/getting-started-non-technical.md` for the exact wording. A dedicated "GPT" is a workable alternative but scopes the setup to that one GPT rather than every chat.
 
 **Gemini** — connects via Gemini extensions/tools with GitHub access, or via Gemini CLI/API when the GitHub MCP is available in the environment.
 
@@ -24,4 +24,4 @@ What changes between tools is only **how** each one connects to GitHub — not w
 
 ## What never changes, in any tool
 
-The five invariants (SPEC.md, section 8), the CRUD/frontmatter-first mechanic (section 2-B), and the principle of always human-readable data (`DISCLAIMER.md`) — none of them is tool-specific. A well-configured Hipocampo instance behaves consistently regardless of which AI tool is used to operate it at any given moment.
+The six invariants (SPEC.md, section 8), the CRUD/frontmatter-first mechanic (section 2-B), and the principle of always human-readable data (`DISCLAIMER.md`) — none of them is tool-specific. A well-configured Hipocampo instance behaves consistently regardless of which AI tool is used to operate it at any given moment.
