@@ -53,6 +53,19 @@ Requires PyYAML (this is the one script in scripts/ that does; the nested
 list-of-mappings shape of impact.yaml is not realistically regex-parseable
 the way scripts/validate_hipocampo.py's flat markdown checks are).
 
+A handful of `changes/*/impact.yaml` predate this validator and predate the
+schema above converging on its current shape (decisions/0031 describes
+iterative adoption, not one atomic cutover), or are pt-BR/EN redirect
+stubs for a renamed directory (comment-only YAML, same "a document is never
+physically deleted" convention SPEC.md section 8 states for other document
+types). Rewriting them to fit today's schema would violate
+docs/change-management.md's own rule -- "Accepted Change Sets remain as
+traceability evidence -- never edited after acceptance, only superseded" --
+so GRANDFATHERED below exempts them from structural validation instead
+(their proposal.md/decisions/enum shape is frozen as accepted history). Any
+new Change Set is NOT eligible for this list; full validation applies to
+everything created after this validator's introduction (0050).
+
 Usage:
     python3 scripts/validate_change.py --root . [--base REF --head REF]
 """
@@ -78,6 +91,20 @@ PROTECTED_PREFIXES = (
 
 PATH_TOKEN_RE = re.compile(r"[\w.\-]+(?:/[\w.\-]+)+|[\w.\-]+\.(?:md|yaml|yml|py)")
 
+# Change Sets that already existed when this validator (0050) was introduced,
+# predating the schema's current shape or kept as pt-BR/EN redirect stubs for a
+# renamed directory. See the module docstring for why these are grandfathered
+# rather than rewritten. This list is intentionally frozen -- do not add to it
+# for a Change Set created after 0050; those get full validation.
+GRANDFATHERED = frozenset({
+    "0026-0028-fact-account-opinion-memory-taxonomy-and-cross-repo-lifecycle",
+    "0026-0028-taxonomia-fato-relato-opiniao-e-ciclo-de-vida",
+    "0032-0033-scaffolding-and-vault-manifest",
+    "0032-0033-scaffolding-e-manifesto-vault",
+    "0034-repository-and-vault-language-policy",
+    "0035-controlled-vocabulary-dictionary",
+})
+
 
 def path_matches(changed: str, prefix: str) -> bool:
     return changed == prefix or (prefix.endswith("/") and changed.startswith(prefix))
@@ -94,6 +121,21 @@ def load_impact(path: Path, errors: list[str]) -> dict:
         errors.append(f"{rel}: root must be a mapping")
         return {}
     return data
+
+
+def load_impact_lenient(path: Path) -> dict:
+    """Best-effort load for a grandfathered impact.yaml -- no errors raised.
+
+    Comment-only redirect stubs parse to None (not a mapping); pre-0050
+    schemas parse fine but wouldn't pass validate_structure's checks. Either
+    way this is only used for diff-coverage token matching if a grandfathered
+    file is ever touched again, not for pass/fail structural validation.
+    """
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except yaml.YAMLError:
+        return {}
+    return data if isinstance(data, dict) else {}
 
 
 def validate_structure(root: Path, impact_path: Path, errors: list[str]) -> dict:
@@ -247,7 +289,10 @@ def main() -> int:
     impacts = find_all_impacts(root)
     all_data: dict[Path, dict] = {}
     for impact_path in impacts:
-        all_data[impact_path] = validate_structure(root, impact_path, errors)
+        if impact_path.parent.name in GRANDFATHERED:
+            all_data[impact_path] = load_impact_lenient(impact_path)
+        else:
+            all_data[impact_path] = validate_structure(root, impact_path, errors)
 
     if args.base:
         try:
