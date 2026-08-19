@@ -2,6 +2,8 @@
 
 Practical guide to adopting the methodology. For the complete normative specification, see [SPEC.md](SPEC.md). For what Hipocampo is not and where it doesn't apply, see [DISCLAIMER.md](DISCLAIMER.md). If you've never used git/GitHub, start with the [fundamentals doc](docs/FUNDAMENTALS.md).
 
+**Haven't set anything up yet, and just want to get started?** Skip straight to the prompt in [`docs/invite-template.md`](docs/invite-template.md) ("Scenario 1 — Starting from zero, no invite") — paste it into Claude or ChatGPT and it walks you through everything below conversationally, including things this document assumes you already have (a GitHub account, a connected AI tool).
+
 ## 0. If you're learning the methodology for the first time
 
 Before instantiating anything, here's a reading order that avoids backtracking:
