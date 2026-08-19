@@ -1,0 +1,45 @@
+change_set:
+  id: "0047-taxonomy-map-retroactive-backfill"
+  class: "operational"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  backfill_note: "Not a backfill in changes/0026-0028's sense (a missing Change Set for already-merged normative work). This Change Set's own content — the taxonomy.md lineage edits — is being implemented now, in this PR; only the subject matter it documents (CHANGELOG.md history back to v1.0.0) is retroactive."
+  decisions:
+    - "decisions/0047-taxonomy-map.md"
+
+impact:
+  - artifact: "docs/taxonomy.md"
+    status: "updated"
+    note: "Every TBD — Lote E2 cell filled in with a real citation (tagged version v1.0.0-v1.9.0, or 'Unreleased' plus the governing Decision Record). 'Status of this document' section rewritten to describe the backfill method and its honest precision limits. Closing section renamed from 'what Lote E2 will do' to 'what Lote E2 did'."
+  - artifact: "decisions/0047-taxonomy-map.md"
+    status: "reviewed"
+    note: "Not edited. It records the decision to split into two lotes, accurate as a historical account of what was decided and why at the time Lote E1 shipped — the split itself doesn't need retraction now that both halves are complete. docs/taxonomy.md itself (the living, current-state document) carries the completion, not the Decision Record."
+  - artifact: "SPEC.md"
+    status: "not-applicable"
+    note: "Lote E1 already added the two pointer sentences (section 2-C, section 5-D) referencing docs/taxonomy.md. No further SPEC.md change needed — the pointer doesn't change based on how complete the target document is."
+  - artifact: "moda.yaml"
+    status: "not-applicable"
+    note: "The taxonomy-map component and taxonomy_map documentation entry already exist from Lote E1 — no new component or entry needed for a content-only completion of the same document."
+  - artifact: "conformance/moda.yaml"
+    status: "updated"
+    note: "decomposition_and_control_flow note updated — no longer describes the taxonomy map's retroactive lineage as pending. evolution note updated — the fifth lote's second sub-lote is no longer pending."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "New [Unreleased] entry describing the backfill, prepended per this file's established newest-first convention within a section."
+  - artifact: "UPGRADE.md"
+    status: "not-applicable"
+    note: "No existing instance needs to change anything to stay conformant — a reference document about the hipocampo repository's own history, not a schema or behavior change any content repository implements."
+  - artifact: "MIGRATIONS.md"
+    status: "not-applicable"
+    note: "Minor-scope, purely additive change per decisions/0023's operational test."
+  - artifact: "docs/vocabulary-dictionary.md, docs/step-classification.md"
+    status: "not-applicable"
+    note: "Unrelated to this Change Set's scope (docs/taxonomy.md's own lineage cells only)."
+
+validation:
+  commands:
+    - "python3 scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "Run on the branch before opening the PR: see PR description for the actual output."
+  notes: "This Change Set does not touch document frontmatter (SPEC.md section 2), any Decision Record, or any internal heading the validator's link resolution depends on beyond what Lote E1 already checked — the schema-field coverage report and link resolution are both unaffected by this diff. Semantic completeness and citation accuracy of the backfilled cells remains human review, per docs/change-management.md's own stated limits — the same limit already true of Lote E1's current-state cells."
