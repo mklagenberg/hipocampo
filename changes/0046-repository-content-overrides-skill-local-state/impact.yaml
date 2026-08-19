@@ -1,0 +1,50 @@
+change_set:
+  id: "0046-repository-content-overrides-skill-local-state"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0046-repository-content-overrides-skill-local-state.md"
+
+impact:
+  - artifact: "SPEC.md"
+    status: "updated"
+    note: "Section 8's invariants list grows from five to six items — new Invariant 6: content declared in the repository always overrides locally-cached or customized skill state. New explanatory paragraph after the Invariant-3-exception paragraph, covering scope (generic, not a closed file list), the no-duplicate-field condition, and the relationship to the existing agent precedence hierarchy."
+  - artifact: "decisions/0046-repository-content-overrides-skill-local-state.md"
+    status: "updated"
+    note: "New Decision Record, Status: Accepted."
+  - artifact: "moda.yaml"
+    status: "updated"
+    note: "New component `skill-repository-precedence`, sourced from SPEC.md section 8 and decisions/0046."
+  - artifact: "conformance/moda.yaml"
+    status: "updated"
+    note: "inputs_outputs_and_invariants gains decisions/0046 as evidence plus a note that the invariants list grows to six. packaging_and_synchronization gains decisions/0046 and the SPEC.md#8 anchor as evidence, and its notes distinguish this durable, generic resolution rule from Lote C's one-time retirement of the router — status stays partial, since the invariant states a rule but introduces no automated drift-detection mechanism. evolution evidence gains decisions/0046 as the fourth lote of the v2.0.0 taxonomy revision."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "New [Unreleased] entries for decisions/0046, this Change Set, and every consumer-file update listed above."
+  - artifact: "UPGRADE.md"
+    status: "not-applicable"
+    note: "No existing instance needs to change anything to stay conformant. The invariant governs the personal skill's own behavior, not any content repository's schema or frontmatter; AGENTS.md's 'instance type' field remains merely recommended for retirement, not required to be removed."
+  - artifact: "MIGRATIONS.md"
+    status: "not-applicable"
+    note: "Minor-scope, additive change per decisions/0023's operational test — no existing instance becomes formally incompatible with no action. Does not touch the '1.x -> 2.0' section Lote A started."
+  - artifact: "docs/change-management.md"
+    status: "reviewed"
+    note: "The regra_normativa trigger definition already covers what this Change Set fires — no change needed to the trigger table itself."
+  - artifact: "skill/references/personalization.md, skill/SKILL.md, skill/references/instantiation.md"
+    status: "reviewed"
+    note: "No consumer-file edit needed. These files already describe the skill deferring to repository-declared state where relevant (personalization.md's discovery-not-storage posture, decisions/0044) — Invariant 6 formalizes the general principle those files already assume in practice, rather than changing what any of them instructs the agent to do."
+  - artifact: "scripts/validate_hipocampo.py"
+    status: "not-applicable"
+    note: "The validator checks this repository's own structural integrity (Decision Record template compliance, internal link resolution, version consistency) — it has no mechanism for, and this Change Set does not ask it to gain, detecting skill-copy-versus-repository drift on a real instance. Flagged explicitly in proposal.md's 'Known, not addressed here' rather than silently assumed covered."
+  - artifact: "existing real vaults (hipocampo-personal-vault, hipocampo-concepts, hipocampo-company, hipocampo-company-vault)"
+    status: "not-applicable"
+    note: "Real content repositories are never edited from this repository (SPEC.md section 1). The invariant governs skill behavior, not repository content — no vault needs any change to remain conformant."
+
+validation:
+  commands:
+    - "python3 scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "Run on the branch before opening the PR: see PR description for the actual output."
+  notes: "This Change Set adds one new Decision Record (template-checked by validate_hipocampo.py) and edits an existing SPEC.md section with no new headings, so no new heading anchors are introduced — internal link resolution is checked against the existing section 8 anchor plus the new decisions/0046 references throughout. It does not touch document frontmatter (SPEC.md section 2) — the schema-field coverage report is unaffected. Semantic completeness of the invariant's wording and its interaction with the agent precedence hierarchy remains human review, per docs/change-management.md's own stated limits."
