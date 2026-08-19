@@ -5,7 +5,7 @@ skill:
   version: "1.0.0"
   core_path: "skill/"
   source_repository: "https://github.com/mklagenberg/hipocampo"
-  source_commit: "<filled in at the v2.0.0 cut>"
+  source_commit: "02ea7732c4dbe369ec9dcc8c3444e14c5ec82541"
 
 methodology:
   compatibility: "^2.0.0"
