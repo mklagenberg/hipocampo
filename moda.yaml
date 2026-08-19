@@ -42,6 +42,8 @@ documentation:
   structural_validation: "scripts/validate_hipocampo.py"
   release_checklist: "RELEASE-CHECKLIST.md"
   evaluation_scenarios: "docs/evaluation-scenarios.md"
+  taxonomy_map: "docs/taxonomy.md"
+  step_classification: "docs/step-classification.md"
   git_workflow: "decisions/0014-mandatory-release-routine.md"
 
 components:
@@ -120,6 +122,14 @@ components:
   - id: "evaluation-scenarios"
     kind: "reference"
     source: "docs/evaluation-scenarios.md"
+    lifecycle: "embedded"
+  - id: "taxonomy-map"
+    kind: "reference"
+    source: "docs/taxonomy.md, decisions/0047-taxonomy-map.md"
+    lifecycle: "embedded"
+  - id: "step-classification"
+    kind: "model"
+    source: "docs/step-classification.md, decisions/0048-step-classification-scheme.md"
     lifecycle: "embedded"
   - id: "personal-skill"
     kind: "skill"
