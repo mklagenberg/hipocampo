@@ -18,8 +18,8 @@ Canonical de:para reference for every controlled-vocabulary field this methodolo
 |---|---|---|---|---|
 | `source` | document frontmatter (`SPEC.md`, section 2) | `conversa` | `conversation` | `decisions/0035` |
 | `source` | document frontmatter | `interno` | `internal` | `decisions/0035` |
-| `domain` | `hipocampo.yaml`, `instance.domain` / `scaffold.profile`'s meaning (`SPEC.md`, section 2-C) | `pessoal` | `personal` | `decisions/0029`, `0035` |
-| `domain` | `hipocampo.yaml` | `empresa` | `company` | `decisions/0029`, `0035` |
+| `domain` (superseded, `decisions/0041` — kept for an instance that hasn't migrated to `entity`/`role`) | `hipocampo.yaml`, `instance.domain` / `scaffold.profile`'s meaning (`SPEC.md`, section 2-C) | `pessoal` | `personal` | `decisions/0029`, `0035`, `0041` |
+| `domain` (superseded, see above) | `hipocampo.yaml` | `empresa` | `company` | `decisions/0029`, `0035`, `0041` |
 | exposure `tier` | `SPEC.md` section 2-C / `decisions/0029` concept (confidential vs. public access) | `confidencial` | `confidential` | `decisions/0029`, `0035` |
 | exposure `tier` | same | `público` | `public` | `decisions/0029`, `0035` |
 | curation-level `tier` | `hipocampo.yaml`, `instance.tier` / scaffold profile `tier` input (`decisions/0033`) — **a different concept from exposure `tier` above; see the note below** | `conteudo` | `content` | `decisions/0033`, `0035` |
@@ -30,9 +30,10 @@ Canonical de:para reference for every controlled-vocabulary field this methodolo
 
 ## Known, unresolved inconsistencies (not fixed by this dictionary)
 
-- **Two different things are both called `tier`.** `SPEC.md` section 2-C and `decisions/0029` define an *exposure* tier (`confidential`/`public` — who can read it). `decisions/0033` and the scaffold profiles (`scaffold/profiles/pessoal.yaml`/`empresa.yaml`) define a *curation-level* tier (`content`/`vault` — how the repository's LICENSE and visibility range are structured) under the same field name, `instance.tier` in `hipocampo.yaml`. Both value sets are translated to English by `decisions/0035`, but which concept `tier` actually names is not resolved here — flagged for a future decision.
-- **`domain` and `AGENTS.md`'s "Instance type" are two vocabularies for a related-but-distinct concept**, deliberately not harmonized (`decisions/0033`). Both are now independently in English, but still two separate fields an operator fills in separately.
+- **Two different things are both called `tier`.** `SPEC.md` section 2-C and `decisions/0029` define an *exposure* tier (`confidential`/`public` — who can read it). `decisions/0033` and the scaffold profiles (`scaffold/profiles/pessoal.yaml`/`empresa.yaml`) define a *curation-level* tier (`content`/`vault` — how the repository's LICENSE and visibility range are structured) under the same field name, `instance.tier` in `hipocampo.yaml`. Both value sets are translated to English by `decisions/0035`, but which concept `tier` actually names is not resolved here — flagged for a future decision, unaffected by the entity model (`decisions/0041`).
+- **`AGENTS.md`'s "Instance type" is recommended for retirement, not yet removed.** `instance.domain` (`hipocampo.yaml`) is superseded by `instance.entity`/`instance.role` (`decisions/0041`) — `entity`+`role` now derive the information "Instance type" existed to carry. This is a change from the earlier state (`decisions/0033`), where the two fields were deliberately left as permanently separate, unharmonized vocabularies. No real instance has had "Instance type" removed by this dictionary update; that remains a per-instance `UPGRADE.md`/`MIGRATIONS.md` action.
 
 ## Change history
 
 - `decisions/0035-controlled-vocabulary-dictionary.md` (this file's origin) — initial dictionary, covering `source`, `domain`, both `tier` concepts, and `AGENTS.md`'s `Instance type`.
+- `decisions/0041-entity-model-and-vault-vocabulary.md` — `instance.domain` (`hipocampo.yaml`) superseded by `instance.entity`/`instance.role`/`instance.scope_description`; "vault" redefined as a generic noun for any knowledge repository (previously implied confidential-only, via the `-vault` suffix asymmetry); `AGENTS.md`'s "Instance type" field recommended for retirement rather than treated as a permanent, unharmonized second vocabulary.

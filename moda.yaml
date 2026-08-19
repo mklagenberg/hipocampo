@@ -51,7 +51,11 @@ components:
     lifecycle: "embedded"
   - id: "repository-taxonomy"
     kind: "model"
-    source: "SPEC.md#2-c-repository-type-taxonomy-domain-and-tier"
+    source: "SPEC.md#2-c-repository-type-taxonomy-entity-and-vault"
+    lifecycle: "embedded"
+  - id: "multi-vault-design-premises"
+    kind: "model"
+    source: "SPEC.md#2-d-multi-vault-and-multi-entity-design-premises, decisions/0040-multi-vault-multi-entity-design-premises.md"
     lifecycle: "embedded"
   - id: "rem-ritual"
     kind: "procedure"
@@ -107,7 +111,7 @@ components:
     lifecycle: "embedded"
   - id: "vault-manifest"
     kind: "schema"
-    source: "decisions/0033-hipocampo-yaml-per-vault-manifest.md, decisions/0034-repository-and-vault-language-policy.md (scaffold/skeleton/hipocampo.yaml)"
+    source: "decisions/0033-hipocampo-yaml-per-vault-manifest.md, decisions/0034-repository-and-vault-language-policy.md, decisions/0041-entity-model-and-vault-vocabulary.md (scaffold/skeleton/hipocampo.yaml)"
     lifecycle: "embedded"
 
 packages:
