@@ -7,10 +7,11 @@ description: >
   personal or corporate Hipocampo repository; to run the frontmatter audit, the
   REM ritual, or the weekly structural audit; to instantiate a new vault from
   a scaffold profile (`scaffold/profiles/`); to resolve `$alias:path.md`
-  cross-repository; or at the start of a session, to check whether a new version of the
+  cross-repository; to run the Bootstrap mechanic when no personal anchor vault is
+  discovered yet; or at the start of a session, to check whether a new version of the
   methodology has been published. Generic template — does not hardcode the name of any personal or
   corporate repository; requires personalization before first real use (see
-  `references/personalizacao.md`).
+  `references/personalization.md`).
 ---
 
 # Hipocampo Skill
@@ -23,7 +24,15 @@ This file is just the router — each section below says when to act and points 
 
 ## Before first use: mandatory personalization
 
-This copy only knows one universal repository (`mklagenberg/hipocampo`) — no personal or corporate repository. Read **`references/personalization.md`** and fill in the repository router (and, if applicable, the multi-account identity table) before operating on any real knowledge.
+This copy only knows one universal repository (`mklagenberg/hipocampo`) — no personal or corporate repository. Read **`references/personalization.md`** and record the one thing that stays genuinely local: the address of the user's own personal anchor vault. Everything else — every other entity and vault the user has access to, and their own identity facts — is discovered from that vault's manifest at the start of each session, not filled in here.
+
+## Discovering vaults and entities (session start)
+
+Before operating on any real knowledge, read the manifest of the user's own anchor vault (address from `references/personalization.md`) and cache what it declares — every entity/vault address and identity field — in sensory memory for the rest of the session; never persisted to disk, rediscovered fresh next session. If no anchor vault is recorded yet, or its manifest can't be read, that is the trigger condition for the Bootstrap mechanic below, not an error to work around. Full procedure: `hipocampo/SPEC.md`, section 12-A; `decisions/0044-vault-and-entity-discovery.md`.
+
+## Bootstrap: first-time instantiation
+
+When discovery above finds no personal anchor vault: walk the user through creating one first, even if what actually brought them here was an invitation to someone else's entity — a personal anchor is always the prerequisite, never optional. Four actions in order: Select, Orient (conversational, first vault only), Instantiate (skeleton), Interview (`profile.md`, then Instantiate content, through the usual write gate). Full procedure: `hipocampo/SPEC.md`, section 12-B; `decisions/0045-bootstrap-mechanic-and-profile-md.md`.
 
 ## Checking for a new release (session start)
 
@@ -31,7 +40,7 @@ Compare the version declared in this instance's `AGENTS.md`/`hipocampo.yaml` aga
 
 ## Instantiating a new vault
 
-When the user asks to create a new content repository: read the corresponding profile at `hipocampo/scaffold/profiles/pessoal.yaml` or `hipocampo/scaffold/profiles/empresa.yaml`, collect the declared `inputs` (repository name, tier, owner identity) directly from the user, and generate the declared `outputs` (`AGENTS.md`, `CLAUDE.md`, `LICENSE`, `registry.md`, `example/example-note.md`, `hipocampo.yaml`, `POST-INSTANTIATION.md`) via the GitHub MCP — never copying someone else's file without review, always presenting the full plan before any write (invariant 5). There is no longer a "Use this template" button (`hipocampo-toolkit` was consolidated and archived, decision 0032) — the agent is itself the instantiation mechanism. Full procedure: **`references/instantiation.md`**.
+When the user asks to create a new content repository: read the corresponding profile at `hipocampo/scaffold/profiles/pessoal.yaml` or `hipocampo/scaffold/profiles/empresa.yaml`, collect the declared `inputs` (repository name, tier, owner identity) directly from the user, and generate the declared `outputs` (`AGENTS.md`, `CLAUDE.md`, `LICENSE`, `registry.md`, `example/example-note.md`, `hipocampo.yaml`, `POST-INSTANTIATION.md`) via the GitHub MCP — never copying someone else's file without review, always presenting the full plan before any write (invariant 5). There is no longer a "Use this template" button (`hipocampo-toolkit` was consolidated and archived, decision 0032) — the agent is itself the instantiation mechanism. This is the **Instantiate (skeleton)**/**Instantiate (content)** portion of the Bootstrap mechanic above when it's a user's very first vault; the same procedure, called directly, for any later one. Full procedure: **`references/instantiation.md`**.
 
 ## Reading and writing documents (CRUD)
 

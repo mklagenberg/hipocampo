@@ -24,20 +24,13 @@ Hipocampo stores knowledge as plain text files (`.md`, markdown) inside a git re
 | **Template** | A repository marked as a "model" — using it creates a new repository with the same starting files, without inheriting the original's commit history. |
 | **Organization (org)** | A GitHub account that represents a group/company, not a person. Corporate repositories usually live in an org, not in anyone's personal account. |
 
-## Step by step: creating a repository from a template
+## How a repository actually gets created
 
-This is what you do to instantiate Hipocampo from `hipocampo-toolkit` (see `GETTING-STARTED.md`, section 2). With no assumption of prior knowledge:
+There is no "Use this template" button anymore — `hipocampo-toolkit` was consolidated into this repository's `scaffold/` and archived (`decisions/0032`). An AI agent, operating the Hipocampo skill, creates the repository for you directly through GitHub's API: you don't click anything on github.com yourself. What you do instead is answer the agent's questions (repository name, which entity it belongs to, who owns it) and confirm the plan it presents before it writes anything (invariant 5, `SPEC.md` section 8) — the full step-by-step is `GETTING-STARTED.md`, section 2, and, if this is genuinely your first repository ever, the conversational walkthrough in `docs/getting-started-non-technical.md` is meant to carry you through this without needing to read either document yourself first.
 
-1. Go to the `hipocampo-toolkit` repository page on GitHub (`github.com/mklagenberg/hipocampo-toolkit`).
-2. Near the top of the page, to the right of the repository name, there's a green **"Use this template"** button. Click it and choose **"Create a new repository"** from the menu that appears.
-3. You'll land on a new repository creation screen. Fill in:
-   - **Owner** — your personal account, or the company organization, if you have permission to create repositories there (see "Organization" in the glossary above).
-   - **Repository name** — the name of your content repository (e.g., `my-second-brain` or whatever name your instance will use).
-   - **Visibility** — choose **Private**. This is mandatory under the methodology (see `SPEC.md`, section 8) — never choose Public here.
-4. Click the green **"Create repository from template"** button. Within a few seconds you'll have a new repository, with the same files as `hipocampo-toolkit`, but without its commit history — it's a clean copy, starting from zero.
-5. From here, follow `hipocampo-toolkit/POST-INSTANTIATION.md` — the template doesn't leave anything ready to use on its own; there's a mandatory first-setup checklist (swapping the inherited license, installing your own copy of the skill, among other steps).
+**Visibility is still always Private** — this is mandatory under the methodology (`SPEC.md`, section 8) and the agent creates it that way by default; you never need to (and never should) choose otherwise.
 
-**If the repository needs to live inside an organization (e.g., a company) and you don't see the organization in the "Owner" list:** you probably don't have permission to create repositories there — ask whoever administers the organization to create the repository, or to grant you that permission.
+**If the repository needs to live inside an organization (e.g., a company) and the agent reports it can't create it there:** you probably don't have permission to create repositories in that organization — ask whoever administers the organization to create the repository, or to grant you that permission.
 
 ## Why GitHub specifically
 

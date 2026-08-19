@@ -1,39 +1,27 @@
-# Mandatory personalization — repository router and identity
+# Mandatory personalization — the bootstrap seed
 
 This generic skill (`hipocampo/skill/SKILL.md`) only knows one universal repository, the same for any user: `mklagenberg/hipocampo` (the methodology itself — spec, decisions, scaffold). It **does not** know any personal or corporate repository — hardcoding one would break the ability of any person or company to adopt the same skill.
 
-Before real use, whoever adopts the methodology saves their own personalized copy (e.g., via `save_skill`), filling in the two tables below.
+**This file no longer holds a repository router or a multi-account identity table.** Both were retired (`decisions/0044-vault-and-entity-discovery.md`) — every entity/vault address, and every git-handle identity fact, is now discovered at the start of each session from the user's own anchor vault's manifest (`SPEC.md`, section 12-A) and, for identity specifically, from `profile.md` (`SPEC.md`, section 12-B) — never hand-filled here, and never a second source of truth that could drift from what the repositories themselves declare.
 
-## Repository router
+## What actually needs personalizing
 
-```
-| Role                            | Repository                 |
-|----------------------------------|----------------------------|
-| Personal concepts (public*)      | [fill in: owner/repo]      |
-| Personal vault                   | [fill in: owner/repo]      |
-| Corporate content                | [fill in: owner/repo]      |
-| Corporate vault                  | [fill in: owner/repo]      |
-```
+One thing, and only one: which repository is the user's own personal anchor vault. This is the one piece of information discovery cannot bootstrap itself from, because it is the address of the very first manifest to read. Until a user has instantiated their personal anchor vault (`SPEC.md` section 12-B, the Bootstrap mechanic), there is nothing yet to point at.
 
-\* "public" here just means "least restricted within the personal scope" — no content repository is public to the internet (invariant 1, see `invariants.md`).
-
-Not every instance has all four roles — fill in only what exists. Without this table filled in, the skill doesn't know where to read/write knowledge beyond the methodology itself.
-
-## Multi-account author identity (fill in if applicable)
-
-If the same person operates more than one git account that resolve to the same human `author` (e.g., a personal account and an account tied to an employer):
+**This is an open item, not yet resolved by the methodology.** `decisions/0044` and `decisions/0045` both note that this pointer's exact name and where it lives (a config field in this skill copy, an environment value, something else) haven't been designed. Until that's decided, whoever personalizes this copy should record the anchor vault's address in whatever form their own AI environment supports remembering between sessions — a line at the top of this file is a reasonable stopgap:
 
 ```
-| Git account           | Role                       |
-|------------------------|----------------------------|
-| [fill in: @handle]     | Personal                    |
-| [fill in: @handle]     | Professional/corporate      |
+My personal anchor vault: [fill in: owner/repo]
 ```
 
-Never fill this in on the generic template copy — only on the personal copy. Invitation direction between personal and corporate instance: the personal account always invites the professional one into the **personal** second brain, never the reverse (`hipocampo/SPEC.md`, section 12; decision 0020).
+Once the anchor vault exists and is recorded this way, every other repository — additional personal vaults, any corporate entity's vaults — is discovered automatically from there. Nothing else in this file needs to be filled in by hand.
 
-## Example of using the router
+## First use, with nothing filled in yet
+
+If this copy has no anchor vault recorded and the user hasn't instantiated one yet, that is exactly the condition that triggers the Bootstrap mechanic (`SPEC.md` section 12-B) — the skill doesn't ask the user to fill in a table first; it walks them through creating their personal anchor vault, then records its address here.
+
+## Example
 
 > User: "save this decision about project X in my second brain"
 >
-> If "project X" is clearly work context, the personalized skill knows (from the table above) that "corporate content" is `owner-empresa/repo-corporativo`, not the personal vault. If the instance doesn't yet have the table filled in, the skill doesn't guess — it asks which repository the user wants to save to.
+> The agent reads the user's anchor vault manifest (discovered from the pointer above), finds which entity/vault "project X" belongs to from what that manifest declares, and confirms with the user if more than one candidate fits — it never guesses when a `scope_description` doesn't resolve the ambiguity by itself (`SPEC.md` section 12-A; section 14, "insufficient evidence").

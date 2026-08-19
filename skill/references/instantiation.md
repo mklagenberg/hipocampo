@@ -2,6 +2,8 @@
 
 There is no longer a "Use this template" button (`hipocampo-toolkit` was consolidated and archived, decision 0032). The agent operating this skill is itself the instantiation mechanism — it follows this procedure instead of pointing the user to GitHub.
 
+This procedure is what the Bootstrap mechanic's **Instantiate (skeleton)** action invokes (`SPEC.md` section 12-B, `decisions/0045-bootstrap-mechanic-and-profile-md.md`) — Bootstrap wraps it with a **Select** step beforehand (which profile/entity, fixed to personal-anchor on a user's very first vault) and an **Interview** step afterward (collecting `profile.md`'s fields, then writing the plan's confirmed content — **Instantiate (content)**). Nothing in this file's own procedure changes because of that; only its place in the larger mechanic does.
+
 ## Procedure
 
 1. **Choose the profile.** `hipocampo/scaffold/profiles/pessoal.yaml` (`personal` domain, decision 0002) or `hipocampo/scaffold/profiles/empresa.yaml` (`company` domain — the profile *filenames* stay as literal tokens the scaffold engine references programmatically, per PR #27; only the vocabulary they generate changed). If it isn't obvious from the user's request, ask.
