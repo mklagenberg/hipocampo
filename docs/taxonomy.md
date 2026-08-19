@@ -1,52 +1,56 @@
 # Taxonomy map
 
-A single index of every controlled field, enum, and named concept this methodology defines — what it is, where it's authoritatively defined, and (where already known) when it was introduced or last changed. This document doesn't re-argue any rationale — every row points at the `SPEC.md` section and/or Decision Record that actually carries it. See `decisions/0047-taxonomy-map.md` for why this document exists and why this first version stops short of full retroactive coverage.
+A single index of every controlled field, enum, and named concept this methodology defines — what it is, where it's authoritatively defined, and when it was introduced or last changed. This document doesn't re-argue any rationale — every row points at the `SPEC.md` section and/or Decision Record that actually carries it. See `decisions/0047-taxonomy-map.md` for why this document exists and why it originally shipped in two lotes.
 
 **Distinct from `docs/vocabulary-dictionary.md`.** That document is narrowly scoped to pt-BR ↔ English value equivalence for controlled-vocabulary fields (`decisions/0035`) — it never goes out of scope. This document is broader and orthogonal: it indexes every structural concept the methodology defines, controlled-vocabulary or not (a behavioral taxonomy like Dispatcher/Routine/Mechanic/Action has no pt-BR/English pair to track, but still belongs here), together with a version lineage vocabulary alone doesn't carry. Where a field also has a pt-BR/English pair, this document points at the dictionary instead of repeating it.
 
 ## Status of this document
 
-**Current-state coverage: complete for this revision.** Every row below reflects the schema and concepts as they stand after Lote D of the v2.0.0 taxonomy revision (`decisions/0040` through `0046`).
+**Coverage: complete, current state and lineage.** Lote E1 (`decisions/0047`) established this document's structure and populated current-state coverage completely, plus the lineage for everything that changed during the v2.0.0 taxonomy revision itself (Lotes A–D, `decisions/0040`–`0046`), already known at the time. Every cell that predated `v1.9.0` was left `TBD — Lote E2`, explicitly, rather than guessed at.
 
-**Retroactive lineage: partial by design, not oversight.** The "Introduced" and "Last changed" columns are filled in for everything that changed during the v2.0.0 taxonomy revision itself (Lotes A–D, `decisions/0040`–`0046`), because that lineage was already known at the moment of writing this document — no separate research needed. Everything that predates v1.9.0 is marked `TBD — Lote E2`, explicitly, rather than left blank or guessed at. Walking `CHANGELOG.md` from `v1.0.0` forward to reconstruct that older lineage is real, separate work — this repository's own `decisions/0031` precedent limited a Change Set backfill to a single representative PR by proportionality, but that precedent doesn't transfer here: there, the backfill only had to validate a template, one sample was enough; here, the document's entire value proposition is completeness, since the confusion motivating this taxonomy revision came mostly from decisions older than v1.9.0. A map that only covers "from here forward" would resolve half the problem and leave the other half exactly as confusing as it is today. See `decisions/0047` and the planning note in section 12 of the taxonomy revision's own sequencing for why this split into two lotes rather than one.
+**Lote E2 (this revision) fills every remaining `TBD` cell**, by walking `CHANGELOG.md` from `[1.0.0]` forward and cross-referencing the `decisions/` directory listing. Two things worth stating plainly about how that walk was done, per this repository's own "no silent caps" discipline:
+
+- **A field's real version is the tagged release it shipped in — `v1.0.0` through `v1.9.0` — cited by the Decision Record (if any) that introduced or changed it.** Everything cited in this document as **"Unreleased"** was added to `SPEC.md` after the `v1.9.0` tag (2026-07-29) and has never shipped in a tagged release — it currently lives in `CHANGELOG.md`'s own `[Unreleased]` section, awaiting the eventual `v2.0.0` cut. This includes almost the entire second half of the Decision Record range (`decisions/0015` through `decisions/0048`): `AGENTS.md` as canonical instruction file, the frontmatter and structural audit rituals, multi-account identity, the SemVer operational criterion, `UPGRADE.md`, the skill's client-side-only status, Promote/Depromote/Redbutton, the repository type taxonomy, the Change Set mechanism itself, the scaffold/manifest consolidation, the English translation and vocabulary dictionary, the deterministic validator, failure/recovery behavior, evaluation scenarios, and the entire v2.0.0 taxonomy revision (Lotes A–E). None of this has a real version number yet — "Unreleased" is a single bucket, not a sequence; where `CHANGELOG.md`'s own bullet order implies a rough chronology (newest work prepended to the top of the `[Unreleased]` section, oldest at the bottom), the "Lote" labels already in this document (and the `decisions/0040`+ numbering) are the only reliable ordering signal within that bucket.
+- **Not every field traces to a single, exclusively-dedicated Decision Record.** A few rows below cite a DR that established the *concept* (e.g. "instance type" as a distinction between repositories) separately from a later DR that made it an explicit, declared field (e.g. requiring it to live in `AGENTS.md`). Where that split exists, both are cited, with a short note on which is which — collapsing them into one date would overclaim precision the source material doesn't have. Likewise, `domain` (superseded by `entity` in Lote A) is attributed to `decisions/0002`, which establishes the multi-repository architecture underlying the personal/corporate split but does not itself name a `domain` frontmatter field — the field's exact origin as a schema entry is the `v1.0.0` base schema ("`type`, `category`, `temporality`, `ttl`, `context_anchor`, `related`, `visibility`, `author`/`owner`, among others"); `decisions/0002` is cited because it's the DR that actually explains *why* that split exists, per this document's own precedent for the analogous `AGENTS.md` "Instance type" row.
+- **Decisions `0001`–`0005`** (Apache-2.0 licensing, this multi-repository architecture, the "Hipocampo" naming, `$alias:` syntax, `category` vs. `type: framework`) are cited only in aggregate, matching how `CHANGELOG.md`'s own `[1.0.0]` entry cites them — as "foundational Decision Records," not attributed individually to specific schema fields. This document doesn't split that aggregate further; doing so would require re-deriving attributions `CHANGELOG.md` itself never made.
 
 ## 1. Document frontmatter fields (`SPEC.md`, section 2)
 
 | Field | Enum / type | Introduced | Last changed | Source |
 |---|---|---|---|---|
-| `title` | free string | TBD — Lote E2 | — | `SPEC.md` §2 |
-| `date` | date | TBD — Lote E2 | — | `SPEC.md` §2 |
-| `updated` | date | TBD — Lote E2 | — | `SPEC.md` §2 |
-| `source` | `url \| conversation \| internal` (deprecated pt-BR: `conversa`, `interno` — see `docs/vocabulary-dictionary.md`) | TBD — Lote E2 | v(Fase E) English canonicalization | `SPEC.md` §2, `decisions/0035` |
-| `tags` | free list | TBD — Lote E2 | — | `SPEC.md` §2 |
-| `type` | `note \| reference \| decision \| project \| person \| case \| framework \| company` | TBD — Lote E2 | — | `SPEC.md` §3 |
-| `category` | optional free string | TBD — Lote E2 | — | `SPEC.md` §4 |
-| `temporality` | `evergreen \| ephemeral \| contextual \| historical` | TBD — Lote E2 | — | `SPEC.md` §5 |
-| `ttl` | concrete date, never the literal `"evergreen"` | TBD — Lote E2 | — | `SPEC.md` §5 |
-| `context_anchor` | required only when `temporality: contextual` | TBD — Lote E2 | — | `SPEC.md` §5 |
-| `status` | `draft \| active \| stale \| archived \| superseded` | TBD — Lote E2 | — | `SPEC.md` §2 |
-| `related` | list, local or `$alias:` cross-repo | TBD — Lote E2 | — | `SPEC.md` §2, §6 |
-| `superseded_by` | same syntax as `related` | TBD — Lote E2 | — | `SPEC.md` §2, §6 |
-| `revision` / `revision_note` | integer / free string | TBD — Lote E2 | — | `SPEC.md` §2 |
-| `visibility` | `public \| internal \| confidential \| restricted` | TBD — Lote E2 | — | `SPEC.md` §2 |
-| `author` | `Real Name - @github-username`, or `@section-name` (historical only) | TBD — Lote E2 | — | `SPEC.md` §2, `decisions/0006` |
-| `contributors` | list, same identity rules as `author` | TBD — Lote E2 | — | `SPEC.md` §2, `decisions/0006` |
-| `owner` | company name, only for a work-context document | TBD — Lote E2 | — | `SPEC.md` §2 |
-| `contains_subjective_content` | boolean, relevant only when `owner` is filled in | TBD — Lote E2 | — | `SPEC.md` §2, `decisions/0026` |
-| `curation_status` | `staged \| permanent`, relevant only in `company-confidential` | TBD — Lote E2 | — | `SPEC.md` §2, §2-C, `decisions/0029` |
-| `license` | `LicenseRef-<idstring>`, always derived from `visibility` | TBD — Lote E2 | — | `SPEC.md` §2, `decisions/0007` |
+| `title` | free string | v1.0.0 | — | `SPEC.md` §2 |
+| `date` | date | v1.0.0 | — | `SPEC.md` §2 |
+| `updated` | date | v1.0.0 | — | `SPEC.md` §2 |
+| `source` | `url \| conversation \| internal` (deprecated pt-BR: `conversa`, `interno` — see `docs/vocabulary-dictionary.md`) | v1.0.0 | Unreleased — Fase E, English canonicalization | `SPEC.md` §2, `decisions/0035` |
+| `tags` | free list | v1.0.0 | — | `SPEC.md` §2 |
+| `type` | `note \| reference \| decision \| project \| person \| case \| framework \| company` | v1.0.0 | — | `SPEC.md` §3 |
+| `category` | optional free string | v1.0.0 | — | `SPEC.md` §4 |
+| `temporality` | `evergreen \| ephemeral \| contextual \| historical` | v1.0.0 | — | `SPEC.md` §5 |
+| `ttl` | concrete date, never the literal `"evergreen"` | v1.0.0 | — | `SPEC.md` §5 |
+| `context_anchor` | required only when `temporality: contextual` | v1.0.0 | — | `SPEC.md` §5 |
+| `status` | `draft \| active \| stale \| archived \| superseded` | v1.0.0 | — | `SPEC.md` §2 |
+| `related` | list, local or `$alias:` cross-repo | v1.0.0 | — | `SPEC.md` §2, §6 |
+| `superseded_by` | same syntax as `related` | v1.0.0 | Unreleased — gained cross-repository `$alias:` syntax | `SPEC.md` §2, §6, `decisions/0027` |
+| `revision` / `revision_note` | integer / free string | v1.0.0 | — | `SPEC.md` §2 |
+| `visibility` | `public \| internal \| confidential \| restricted` | v1.0.0 | — | `SPEC.md` §2 |
+| `author` | `Real Name - @github-username`, or `@section-name` (historical only) | v1.0.0 | v1.1.0 — `@section-name` historical-reference syntax added | `SPEC.md` §2, `decisions/0006` |
+| `contributors` | list, same identity rules as `author` | v1.1.0 (credit mechanism, `CONTRIBUTORS.md`) | Unreleased — added to the schema's central field listing; already in use, just never listed there | `SPEC.md` §2, `decisions/0006`, `decisions/0026` |
+| `owner` | company name, only for a work-context document | v1.0.0 | — | `SPEC.md` §2 |
+| `contains_subjective_content` | boolean, relevant only when `owner` is filled in | Unreleased | — | `SPEC.md` §2, `decisions/0026` |
+| `curation_status` | `staged \| permanent`, relevant only in `company-confidential` | Unreleased | — | `SPEC.md` §2, §2-C, `decisions/0029` |
+| `license` | `LicenseRef-<idstring>`, always derived from `visibility` | v1.1.0 | — | `SPEC.md` §2, `decisions/0007` |
 
 ## 2. Repository/vault-level taxonomy (`SPEC.md`, section 2-C/2-D)
 
 | Concept | Values | Introduced | Last changed | Source |
 |---|---|---|---|---|
-| `entity` | extensible identifier, supersedes `domain` | TBD — Lote E2 (`domain`) | Lote A, v2.0.0-unreleased — `domain` superseded by `entity` | `SPEC.md` §2-C, `decisions/0041` |
+| `entity` | extensible identifier, supersedes `domain` | v1.0.0 (`domain`, base schema; `decisions/0002` explains the underlying architecture without naming the field) | Lote A, v2.0.0-unreleased — `domain` superseded by `entity` | `SPEC.md` §2-C, `decisions/0002`, `0041` |
 | `role` | `anchor \| additional` | Lote A, v2.0.0-unreleased | — | `SPEC.md` §2-C, `decisions/0041` |
 | `scope_description` | required only when `role: additional` | Lote A, v2.0.0-unreleased | — | `SPEC.md` §2-C, `decisions/0041` |
-| Exposure tier | `confidential \| public`, carried by repository naming convention | TBD — Lote E2 | Lote A: no longer implied by the `-vault` suffix | `SPEC.md` §2-C/§2-D, `decisions/0029`, `0041` |
-| `instance.language` | BCP-47 tag, default `"en"` | TBD — Lote E2 | — | `decisions/0033`, `0034` |
-| `instance.tier` (curation-level — **a different concept from exposure tier above, known unresolved name collision**) | `content \| vault` | TBD — Lote E2 | — | `decisions/0033`, `SPEC.md` §2-C "Known, separate inconsistency" |
-| `AGENTS.md` "Instance type" (recommended for retirement) | `corporate \| personal` | TBD — Lote E2 | Lote A: recommended for retirement in favor of `entity`+`role` | `SPEC.md` §2-A, §11, `decisions/0022`, `0041` |
+| Exposure tier | `confidential \| public`, carried by repository naming convention | Unreleased — formally named a pre-existing informal practice | Lote A: no longer implied by the `-vault` suffix | `SPEC.md` §2-C/§2-D, `decisions/0029`, `0041` |
+| `instance.language` | BCP-47 tag, default `"en"` | Unreleased — Fase E | — | `decisions/0033`, `0034` |
+| `instance.tier` (curation-level — **a different concept from exposure tier above, known unresolved name collision**) | `content \| vault` | Unreleased | — | `decisions/0033`, `SPEC.md` §2-C "Known, separate inconsistency" |
+| `AGENTS.md` "Instance type" (recommended for retirement) | `corporate \| personal` | v1.3.0 (concept referenced by the sensitive-data policy); Unreleased — declared as an explicit, required `AGENTS.md` field | Lote A: recommended for retirement in favor of `entity`+`role` | `SPEC.md` §2-A, §11, `decisions/0009`, `0022`, `0041` |
 | Multi-vault/multi-entity design premises | 3 premises (multi-vault by design; confidential-first; anchor as existence guarantee) | Lote A, v2.0.0-unreleased | — | `SPEC.md` §2-D, `decisions/0040` |
 
 ## 3. Identity artifacts
@@ -54,17 +58,17 @@ A single index of every controlled field, enum, and named concept this methodolo
 | Concept | Fields | Introduced | Source |
 |---|---|---|---|
 | `profile.md` | `name`, `preferred_name`, `emails`, `github_handles`, `updated` | Lote C, v2.0.0-unreleased | `SPEC.md` §12-B, `decisions/0045` |
-| Multi-account author identity | recorded in `AGENTS.md` of the least-restricted personal repository | TBD — Lote E2 | `SPEC.md` §12, `decisions/0020` |
+| Multi-account author identity | recorded in `AGENTS.md` of the least-restricted personal repository | Unreleased | `SPEC.md` §12, `decisions/0020` |
 
 ## 4. Behavioral taxonomy (`SPEC.md`, section 5-D)
 
 | Concept | Members | Introduced | Source |
 |---|---|---|---|
 | Dispatcher | schedules routines | Lote B, v2.0.0-unreleased | `SPEC.md` §5-D, `decisions/0042` |
-| Routine | REM (§5-A), frontmatter audit (§5-B), weekly structural audit (§5-C) | Lote B, v2.0.0-unreleased (naming); routines themselves predate it | `SPEC.md` §5-D, `decisions/0043` |
-| Mechanic — CRUD | Create, Read, Update, Delete | TBD — Lote E2 (mechanic itself predates the naming, formally named in Lote B) | `SPEC.md` §2-B, §5-D, `decisions/0012`, `0043` |
-| Mechanic — Publication | Promote, Depromote | TBD — Lote E2 (predates naming); formally named Lote B | `SPEC.md` §13, §5-D, `decisions/0027`, `0043` |
-| Mechanic — Sequenced-removal | Redbutton | TBD — Lote E2 (predates naming); formally named Lote B | `SPEC.md` §13, §5-D, `decisions/0027`, `0028`, `0043` |
+| Routine | REM (§5-A): v1.2.0. Frontmatter audit (§5-B): Unreleased. Weekly structural audit (§5-C): Unreleased. Collectively named "Routine": Lote B | `SPEC.md` §5-D, `decisions/0008`, `0017`, `0019`, `0043` |
+| Mechanic — CRUD | Create, Read, Update, Delete | Named "CRUD": v1.5.0. Recategorized as a Mechanic: Lote B | `SPEC.md` §2-B, §5-D, `decisions/0012`, `0043` |
+| Mechanic — Publication | Promote, Depromote | Unreleased. Recategorized as a Mechanic: Lote B | `SPEC.md` §13, §5-D, `decisions/0027`, `0043` |
+| Mechanic — Sequenced-removal | Redbutton | Unreleased; trigger broadened, also Unreleased. Recategorized as a Mechanic: Lote B | `SPEC.md` §13, §5-D, `decisions/0027`, `0028`, `0043` |
 | Mechanic — Bootstrap | Select, Orient, Instantiate, Interview | Lote C, v2.0.0-unreleased | `SPEC.md` §5-D, §12-B, `decisions/0045` |
 | Vault and entity discovery | manifest read + sensory-memory cache, no stored router | Lote C, v2.0.0-unreleased | `SPEC.md` §12-A, `decisions/0044` |
 
@@ -72,13 +76,13 @@ A single index of every controlled field, enum, and named concept this methodolo
 
 | Action | Variants | Introduced | Source |
 |---|---|---|---|
-| Promote | elegant path, literal path, graduation within the same domain | TBD — Lote E2 (graduation variant: `decisions/0030`) | `SPEC.md` §13, `decisions/0027`, `0030` |
-| Depromote | — | TBD — Lote E2 | `SPEC.md` §13, `decisions/0027` |
-| Redbutton | — | TBD — Lote E2 (trigger broadened by `decisions/0028`) | `SPEC.md` §13, `decisions/0027`, `0028` |
+| Promote | elegant path, literal path, graduation within the same domain | Unreleased (base action); graduation variant: Unreleased | `SPEC.md` §13, `decisions/0027`, `0030` |
+| Depromote | — | Unreleased | `SPEC.md` §13, `decisions/0027` |
+| Redbutton | — | Unreleased; trigger broadened by a later, also-Unreleased DR | `SPEC.md` §13, `decisions/0027`, `0028` |
 
 ## 6. Information-type taxonomy (`decisions/0026`)
 
-Fact, Account, Opinion, Memory — see `SPEC.md` section 2, field `contains_subjective_content`. Not duplicated here; this row exists so the index is complete. Introduced: TBD — Lote E2.
+Fact, Account, Opinion, Memory — see `SPEC.md` section 2, field `contains_subjective_content`. Not duplicated here; this row exists so the index is complete. Introduced: Unreleased.
 
 ## 7. Controlled vocabulary (pt-BR ↔ English)
 
@@ -93,6 +97,6 @@ Not duplicated here — see `docs/step-classification.md` (deterministic / discr
 - `instance.tier` (curation-level) and the exposure tier of section 2-C name two different concepts under the same word `tier` — flagged in `SPEC.md` §2-C, unresolved.
 - `AGENTS.md`'s "Instance type" and `hipocampo.yaml`'s `instance.entity`/`instance.role` currently both exist, with the former recommended for retirement — flagged in `SPEC.md` §2-C and §8 (Invariant 6's no-duplicate-field condition), unresolved until real instances migrate.
 
-## Retroactive backfill — what Lote E2 will do
+## Retroactive backfill — what Lote E2 did
 
-For every `TBD — Lote E2` cell above: walk `CHANGELOG.md` from `[1.0.0]` forward, identify the version each field/value/concept was introduced or last materially changed, and cite the governing Decision Record for that change. Scope is exactly the cells marked `TBD` above — not a rewrite of this document's structure, which this lote (E1) already establishes.
+Every cell marked `TBD — Lote E2` in the Lote E1 revision of this document is now filled in, per the method described in "Status of this document" above: walking `CHANGELOG.md` from `[1.0.0]` forward, cross-referencing the `decisions/` directory listing, and spot-reading a handful of Decision Records directly (`decisions/0002`, `0029`, `0033`) where `CHANGELOG.md`'s own bullet text left the attribution ambiguous, rather than trusting every citation at face value. No cell was left as `TBD` a second time; where the underlying source material itself doesn't support single-date precision (the `entity`/`domain` row, the `AGENTS.md` "Instance type" row), that imprecision is stated explicitly rather than resolved by guessing.
