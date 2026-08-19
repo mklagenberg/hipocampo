@@ -1,0 +1,53 @@
+change_set:
+  id: "0049-onboarding-templates-and-create-invite-action"
+  class: "operational"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0049-onboarding-templates-and-create-invite-action.md"
+
+impact:
+  - artifact: "docs/invite-template.md"
+    status: "updated"
+    note: "Restructured into three scenarios (cold-start / invited-without-personal-vault / invited-with-personal-vault, the latter two collapsed into one template). New 'Creating an invite' section documents the Create Invite action and its language-default rule. Scope narrowed to Claude/ChatGPT."
+  - artifact: "docs/getting-started-non-technical.md"
+    status: "updated"
+    note: "New sections: GitHub account creation, connecting Claude/ChatGPT to GitHub with the right permission scope, installing the skill so it persists globally (Claude Skills feature; ChatGPT Custom Instructions as a live pointer, not an embedded copy). New short paragraph on personal-anchor-first / entities-come-later. Scope narrowed to Claude/ChatGPT."
+  - artifact: "GETTING-STARTED.md"
+    status: "updated"
+    note: "New pointer near the top to the cold-start prompt in docs/invite-template.md, for a first-timer who lands on this document directly."
+  - artifact: "skill/SKILL.md"
+    status: "updated"
+    note: "New 'Creating an invite' section, pointing at docs/invite-template.md and restating the language-default rule."
+  - artifact: "docs/MULTI-TOOL-USAGE.md"
+    status: "updated"
+    note: "Incidental fixes found while cross-referencing tool-connection instructions: stale hipocampo-toolkit/skill/SKILL.md path corrected to hipocampo/skill/SKILL.md; 'five invariants' corrected to 'six' (stale since Lote D added Invariant 6); Claude and ChatGPT tool-specific paragraphs updated with the verified current connector/persistence mechanism (Settings -> Connectors, per-conversation toggle, Claude Skills feature, ChatGPT Custom Instructions character-limit caveat)."
+  - artifact: "SPEC.md"
+    status: "not-applicable"
+    note: "Create Invite is deliberately not added to the formal Dispatcher/Routine/Mechanic/Action taxonomy (decisions/0049, Discarded alternatives) -- no durable write of its own, no gate needed. No other normative change in this Change Set."
+  - artifact: "moda.yaml"
+    status: "not-applicable"
+    note: "No new file added -- the existing onboarding-tutorial and invite-template components' source paths (docs/getting-started-non-technical.md, docs/invite-template.md) are unchanged; skill/SKILL.md is already covered by the existing skill package."
+  - artifact: "conformance/moda.yaml"
+    status: "updated"
+    note: "evolution evidence gains decisions/0049 as the sixth lote of the v2.0.0 taxonomy revision's onboarding work; decomposition_and_control_flow note gains a short mention of Create Invite's deliberate non-inclusion in the formal taxonomy, consistent with the existing note's own proportionality reasoning."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "New [Unreleased] entry describing all of the above."
+  - artifact: "UPGRADE.md"
+    status: "not-applicable"
+    note: "No existing instance needs to change anything to stay conformant -- onboarding/reference content and a skill addition, not a schema or behavior change any content repository implements."
+  - artifact: "MIGRATIONS.md"
+    status: "not-applicable"
+    note: "Minor-scope, purely additive change per decisions/0023's operational test."
+  - artifact: "docs/FUNDAMENTALS.md"
+    status: "reviewed"
+    note: "Its GitHub-account assumption is now addressed by docs/getting-started-non-technical.md's new section instead -- no edit needed to FUNDAMENTALS.md itself, which stays scoped to git/GitHub concepts generally."
+
+validation:
+  commands:
+    - "python3 scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "Run on the branch before opening the PR: see PR description for the actual output."
+  notes: "This Change Set does not touch document frontmatter (SPEC.md section 2). The new Decision Record is template-checked by validate_hipocampo.py. All new cross-references (GETTING-STARTED.md -> docs/invite-template.md, skill/SKILL.md -> docs/invite-template.md, decisions/0049 citations) are checked by the validator's internal link resolution. Semantic and factual accuracy of the Claude/ChatGPT connector instructions -- verified against current product documentation at the time of writing, but this class of detail is explicitly flagged in the document itself as likely to drift -- remains human review, per docs/change-management.md's own stated limits."
