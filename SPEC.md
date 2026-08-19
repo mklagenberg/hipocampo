@@ -103,7 +103,7 @@ Every entity has exactly one mandatory **anchor** vault (private) and may have a
 | `instance.role` | `anchor` (the entity's one mandatory private vault) or `additional` |
 | `instance.scope_description` | required only when `role: additional` — a short statement of what belongs in this vault |
 
-No vault lists its siblings — which other vaults belong to the same entity is never declared by any one vault about another. "All vaults of entity X" is only ever enumerable from the root manifest of a specific user with access to more than one of them; the procedure an agent uses to discover this at runtime is specified separately (a distinct Decision Record, not this one). When an additional vault's `scope_description` alone isn't enough to decide between more than one candidate for a specific item, that is not a new mechanism — it is already covered by section 14's "insufficient evidence" behavior: the agent surfaces the ambiguity rather than guessing.
+No vault lists its siblings — which other vaults belong to the same entity is never declared by any one vault about another. "All vaults of entity X" is only ever enumerable from the root manifest of a specific user with access to more than one of them; the procedure an agent uses to discover this at runtime is specified in section 12-A (`decisions/0044-vault-and-entity-discovery.md`). When an additional vault's `scope_description` alone isn't enough to decide between more than one candidate for a specific item, that is not a new mechanism — it is already covered by section 14's "insufficient evidence" behavior: the agent surfaces the ambiguity rather than guessing.
 
 **Exposure tier** (`confidential`/`public`) is unchanged as a concept, but no longer implied by the word "vault" (section 2-D). It is carried by the repository's own name — a `restricted`/`open` suffix convention (e.g. `<entity>-restricted-vault`, `<entity>-open-vault`) — rather than by which member of a pair happens to carry a `-vault` suffix. There is still no third "structuring" tier as a separate repository: confidential knowledge that is a candidate to eventually become public keeps living in the confidential vault, with the lifecycle intent marked in the document's own frontmatter (`curation_status`, section 2), not by an additional physical separation — this reasoning, from `decisions/0029`, is unchanged by the entity model.
 
@@ -214,11 +214,12 @@ Two related, but separate, changes — both naming what already exists rather th
 - **Mechanic** — the ruleset a family of actions must follow. Not itself an event — the rulebook an action follows when invoked.
 - **Action** — the concrete operation, invocable on demand or by a routine as a building block (for example, REM's Consolidate function invokes the CRUD mechanic's Create action when writing a new document, section 5-A).
 
-Three mechanics, named here for the first time — the actions themselves already existed normatively:
+Four mechanics, named here for the first time — the actions themselves already existed normatively, except Bootstrap, which section 12-B introduces alongside its own naming:
 
 1. **CRUD mechanic** — Create, Read, Update, Delete (section 2-B, `decisions/0012`).
 2. **Publication mechanic** — Promote, Depromote (section 13, `decisions/0027`, `decisions/0030`).
 3. **Sequenced-removal mechanic** — Redbutton (section 13, `decisions/0027`, `decisions/0028`). Kept separate from the publication mechanic because the trigger profile differs (a deliberate curation decision vs. incident response), and each is expected to grow independent depth over time.
+4. **Bootstrap mechanic** — Select, Orient, Instantiate, Interview (section 12-B, `decisions/0045-bootstrap-mechanic-and-profile-md.md`). Event-triggered, not scheduled, like every other mechanic here — it does not join the Dispatcher's routines.
 
 See `decisions/0043-dispatcher-routine-mechanic-action-taxonomy.md` for why "sequenced removal," not "sequenced deletion" — the latter would contradict invariant 3 (section 8), which Redbutton itself respects (tombstone, never a silent physical delete with no trace).
 
@@ -303,9 +304,54 @@ Instances that already existed before this section (v1.6.0 and earlier, when `CL
 
 ## 12. Multi-account author identity
 
-When the person behind `author` operates more than one git account (e.g., personal and one tied to an employer) that need to resolve to the same human `author` (invariant 2), that relationship is recorded in the `AGENTS.md` of the least-restricted personal repository — never in the public `hipocampo`/`hipocampo-toolkit` — and in the custom skill's repository router (never in the generic copy).
+When the person behind `author` operates more than one git account (e.g., personal and one tied to an employer) that need to resolve to the same human `author` (invariant 2), that relationship is recorded in the `AGENTS.md` of the least-restricted personal repository — never in the public `hipocampo`/`hipocampo-toolkit`. It is discovered from there at runtime (section 12-A), not tracked in a separate local file — `profile.md` (section 12-B) is the one place a user's own git-handle facts are recorded outside the repositories themselves.
 
 Between a person's personal instance and corporate instance, the access invitation (repository collaborator) always starts from the personal account inviting the professional one into the **personal** second brain — never the reverse. Personal identity is always the anchor of trust; the employing organization never has standing to grant or deny access to someone's personal knowledge. See `decisions/0020-multi-account-author-identity.md`.
+
+## 12-A. Vault and entity discovery
+
+Section 2-C left the runtime procedure for "which vaults belong to entity X" unspecified, pointing here. This section is that procedure. See `decisions/0044-vault-and-entity-discovery.md` for the full rationale, including why an earlier hub-spoke design was rejected.
+
+**Discovery, not storage.** No repository router is stored anywhere, generic or personal. At the start of a session, the agent reads the manifest of the user's own anchor vault, discovers every entity/vault address and identity field that manifest declares, and caches the result in **sensory memory** (section 5-A) — ephemeral, never versioned in git, rediscovered fresh each new session, not re-asked for within the same one.
+
+**No graph between sibling vaults.** Each vault self-declares only its own `entity`/`role`/`scope_description` (section 2-C) — never a pointer to any sibling vault, anchor or additional. "All vaults of entity X" is only ever computed from a specific user's own root manifest, for whichever of that entity's vaults that user happens to have access to — never from a vault enumerating its own siblings.
+
+**Known limitation.** Access granted outside the Bootstrap mechanic (section 12-B) — for example, a direct GitHub collaborator invite — is not auto-discovered; it requires manual registration in that case, the same posture section 14's "insufficient evidence" behavior already takes toward a gap the agent cannot close on its own.
+
+**Consistency checking.** Without sibling pointers, there is no "does every vault point back correctly" check to run. The weekly structural audit (section 5-C) instead confirms that each vault's own self-declaration is still valid and its address still reachable — no new ritual, an extension of the existing one.
+
+**Step classification (sections 8/14).** Reading and caching the root manifest is deterministic-or-discretionary, ungated. Registering a new vault (the Instantiate action, section 12-B) is gated, per invariant 5, like any other durable write.
+
+**What remains local.** One pointer — which repository is the user's own anchor vault — cannot itself come from any manifest, because it is the address of the first manifest to read. This is not a router; it is a single value, not a table. Neither this section nor `decisions/0044` names where that pointer lives — see `decisions/0045-bootstrap-mechanic-and-profile-md.md` (section 12-B), which creates the anchor vault this pointer refers to, without yet resolving the storage question either.
+
+## 12-B. Bootstrap mechanic: instantiation and profile.md
+
+**Classification.** Bootstrap is a **mechanic** (section 5-D), not a routine — event-triggered, not scheduled; it never joins the Dispatcher's process registry. See `decisions/0045-bootstrap-mechanic-and-profile-md.md`.
+
+**Trigger.** "Discovery attempted, nothing found" (section 12-A: the agent tries to read the user's own anchor-vault manifest and finds none) is the recognized condition that launches Bootstrap — a positive signal to act on, not a generic failure state handled by section 14.
+
+**Personal bootstrap is a prerequisite.** Before any third-party entity, a new user's first vault is always their own personal anchor (section 2-D, premise 3) — the fallback-with-tag mechanism has nowhere to land otherwise. Bootstrap enforces this as its first step, even when what actually brought the user in was an invitation to someone else's entity.
+
+**Four actions, in order:**
+
+1. **Select** — which repository, for which entity. Fixed (personal, anchor) for a user's very first vault; the normal profile/entity choice (`skill/references/instantiation.md`) for any later one.
+2. **Orient** — a conversational walkthrough of what Hipocampo is and why it needs a repository, including platform-specific installation notes (`docs/getting-started-non-technical.md`) — delivered as conversation, not as a link to go read alone. Conditional: only on a user's first (personal) vault, and only with a signal the user doesn't already know what Hipocampo is.
+3. **Instantiate (skeleton)** — the existing scaffolding mechanism (`decisions/0032`, `skill/references/instantiation.md`), creating the repository and its `hipocampo.yaml`. Ordered before Interview — there is nothing to write Interview's answers into until the skeleton exists.
+4. **Interview** — collects `profile.md`'s fields (below). Full depth on a user's very first instantiation; a lighter pass afterward, since `profile.md` already answers identity questions from the second vault onward. A separate step from Orient's conversation — "what is a repository" is onboarding content, not a `profile.md` field. Closes the loop with **Instantiate (content)**, filling the skeleton from step 3, through the same explicit-confirmation gate every other durable write already goes through (invariant 5).
+
+**`profile.md`.** A structured, fixed-schema file — closer in kind to `hipocampo.yaml` (`decisions/0033`) than to a `type: person` content document, and outside the frontmatter/staleness/structural-audit cycle that governs ordinary knowledge documents. Lives at the root of the user's personal anchor vault. Fields:
+
+```yaml
+name: ""                 # full name
+preferred_name: ""       # optional — how the user prefers to be addressed
+emails: []
+github_handles: []       # resolved per entity via discovery (section 12-A), not a separate routing table
+updated: "YYYY-MM-DD"     # date of last confirmed edit
+```
+
+A fixed, small schema by design — a new field is added through its own Decision Record, not through ad hoc capture during an Interview. Capture happens conversationally, but the written result always passes through the same explicit-confirmation gate (invariant 5) as any other durable write — conversational discovery is a capture method, not an exemption from confirmation. `profile.md` is not (yet) an output the scaffold's declarative profile system (`scaffold/profiles/`) generates — the Interview action writes it directly.
+
+**Invite template.** `docs/invite-template.md` provides static, public text for bringing someone else into an entity — content whose only role is to trigger this mechanic in whoever receives it; not itself an action or part of the mechanic.
 
 ## 13. Cross-repository lifecycle actions: Promote, Depromote, Redbutton
 

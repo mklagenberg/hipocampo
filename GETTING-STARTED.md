@@ -26,15 +26,15 @@ You never edit `hipocampo` to store your own knowledge. It's the spec and the sc
 
 ## 2. Instantiate a content repository
 
-There's no longer a "Use this template" button — instantiation is carried out by an AI agent operating the Hipocampo skill (see `skill/references/instantiation.md`), from a profile declared in `scaffold/profiles/` (`pessoal.yaml` or `empresa.yaml`, `decisions/0032`).
+There's no longer a "Use this template" button — instantiation is carried out by an AI agent operating the Hipocampo skill (see `skill/references/instantiation.md`), from a profile declared in `scaffold/profiles/` (`pessoal.yaml` or `empresa.yaml`, `decisions/0032`). If this is genuinely your first vault ever, the agent runs this as part of the Bootstrap mechanic (`SPEC.md`, section 12-B) — including a conversational walkthrough first if you're new to Hipocampo (`docs/getting-started-non-technical.md`) — rather than as a bare instantiation request; for a second or later vault, it's just this procedure directly.
 
-1. Ask the agent to instantiate a new repository, providing: repository name, instance type (`corporativa`/`pessoal`), content owner (individual or company), and curation level (`conteudo` or `vault` — see `SPEC.md`, section 2-C).
+1. Ask the agent to instantiate a new repository, providing: repository name, which **entity** it belongs to and whether it's the entity's **anchor** vault or an **additional** one (`SPEC.md`, section 2-C), curation level (`content` or `vault` — same section), and the owner's identity.
 2. The agent reads the corresponding profile, gathers any missing input, and **presents the complete plan before writing anything** (invariant 5, `SPEC.md` section 8) — repository to create, each file to generate, LICENSE chosen.
 3. After you confirm, the agent creates the repository (**private — not optional**, invariant 1) and generates every output declared in the profile: `AGENTS.md` and `hipocampo.yaml` already filled in with the collected inputs, `LICENSE` already from the right template (`scaffold/license-templates/`), `CLAUDE.md`, `POST-INSTANTIATION.md`, `registry.md`, `example/example-note.md`.
-4. The new repository **does not** get a `skill/` folder — the skill always runs in your AI environment, per person, never per repository (`decisions/0025`). If you don't have one yet, install your own personalized copy from [`skill/SKILL.md`](skill/SKILL.md) + `skill/references/*.md` (this repository, the canonical source), filling in the repository router (`references/personalization.md` in your copy) — including this new repository.
+4. The new repository **does not** get a `skill/` folder — the skill always runs in your AI environment, per person, never per repository (`decisions/0025`). If you don't have one yet, install your own personalized copy from [`skill/SKILL.md`](skill/SKILL.md) + `skill/references/*.md` (this repository, the canonical source). There's no router table to fill in — if this new repository is your personal anchor vault, record its address per `references/personalization.md`; otherwise nothing local needs updating, discovery picks it up automatically from its own manifest (`SPEC.md`, section 12-A).
 5. Once generated, follow the new repository's `POST-INSTANTIATION.md` — now a **verification** checklist, not a manual step-by-step: it confirms the agent generated everything correctly before you store any real knowledge.
 
-Full operational detail (who does what, in what order, what to present before writing): `skill/references/instantiation.md`.
+Full operational detail (who does what, in what order, what to present before writing): `skill/references/instantiation.md`. For the Bootstrap mechanic wrapping this on a first vault: `SPEC.md`, section 12-B.
 
 ## 3. Write your first document
 
