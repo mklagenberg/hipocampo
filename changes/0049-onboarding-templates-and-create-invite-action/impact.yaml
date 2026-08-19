@@ -10,10 +10,10 @@ change_set:
 impact:
   - artifact: "docs/invite-template.md"
     status: "updated"
-    note: "Restructured into three scenarios (cold-start / invited-without-personal-vault / invited-with-personal-vault, the latter two collapsed into one template). New 'Creating an invite' section documents the Create Invite action and its language-default rule. Scope narrowed to Claude/ChatGPT."
+    note: "Restructured into three scenarios (cold-start / invited-without-personal-vault / invited-with-personal-vault, the latter two collapsed into one template). New 'Creating an invite' section documents the Create Invite action and its language-default rule. New vault-orientation prompt (three starter questions) for a Scenario 2/3 recipient once registration completes. Scope note updated to homologation vocabulary; the repository-creation note corrected from 'scope it broader' to 'this capability doesn't exist on the standard connector, use the manual fallback'."
   - artifact: "docs/getting-started-non-technical.md"
     status: "updated"
-    note: "New sections: GitHub account creation, connecting Claude/ChatGPT to GitHub with the right permission scope, installing the skill so it persists globally (Claude Skills feature; ChatGPT Custom Instructions as a live pointer, not an embedded copy). New short paragraph on personal-anchor-first / entities-come-later. Scope narrowed to Claude/ChatGPT."
+    note: "New sections: GitHub account creation, connecting Claude/ChatGPT to GitHub, the github.com/settings/installations 'hidden link' for managing repository access, an honest statement of what each standard connector can and cannot do (repository creation is Cowork/Claude Code only; ChatGPT's standard connector is read-only), a concrete manual-repository-creation fallback, and installing the skill so it persists globally (Claude Skills feature; ChatGPT Custom Instructions as a live pointer, not an embedded copy). New welcome-message template presented once Bootstrap finishes. New short paragraph on personal-anchor-first / entities-come-later. Scope note updated to homologation vocabulary."
   - artifact: "GETTING-STARTED.md"
     status: "updated"
     note: "New pointer near the top to the cold-start prompt in docs/invite-template.md, for a first-timer who lands on this document directly."
@@ -22,7 +22,13 @@ impact:
     note: "New 'Creating an invite' section, pointing at docs/invite-template.md and restating the language-default rule."
   - artifact: "docs/MULTI-TOOL-USAGE.md"
     status: "updated"
-    note: "Incidental fixes found while cross-referencing tool-connection instructions: stale hipocampo-toolkit/skill/SKILL.md path corrected to hipocampo/skill/SKILL.md; 'five invariants' corrected to 'six' (stale since Lote D added Invariant 6); Claude and ChatGPT tool-specific paragraphs updated with the verified current connector/persistence mechanism (Settings -> Connectors, per-conversation toggle, Claude Skills feature, ChatGPT Custom Instructions character-limit caveat)."
+    note: "Incidental fixes found while cross-referencing tool-connection instructions: stale hipocampo-toolkit/skill/SKILL.md path corrected to hipocampo/skill/SKILL.md; 'five invariants' corrected to 'six' (stale since Lote D added Invariant 6); Claude and ChatGPT tool-specific paragraphs updated with the verified current connector/persistence mechanism, including the corrected repository-creation-capability statement. New 'Homologation status' section."
+  - artifact: "docs/AI-MODELS.md"
+    status: "updated"
+    note: "One cross-referencing sentence added to 'GitHub MCP as the common denominator' and one to 'What doesn't matter', so the existing 'no officially supported model' capability claim doesn't read as contradicting the new, narrower homologation-status concept."
+  - artifact: "docs/FAQ-AND-COMMON-ERRORS.md"
+    status: "updated"
+    note: "Two entries fixed per Mauricio's explicit instruction to consider this file: the 'Use this template' instantiation-error entry retitled and rewritten around the actual current error ('my agent says it can't create the repository'); the Apache-2.0-license entry marked historical, since only the retired template mechanism could cause it."
   - artifact: "SPEC.md"
     status: "not-applicable"
     note: "Create Invite is deliberately not added to the formal Dispatcher/Routine/Mechanic/Action taxonomy (decisions/0049, Discarded alternatives) -- no durable write of its own, no gate needed. No other normative change in this Change Set."
@@ -43,7 +49,7 @@ impact:
     note: "Minor-scope, purely additive change per decisions/0023's operational test."
   - artifact: "docs/FUNDAMENTALS.md"
     status: "reviewed"
-    note: "Its GitHub-account assumption is now addressed by docs/getting-started-non-technical.md's new section instead -- no edit needed to FUNDAMENTALS.md itself, which stays scoped to git/GitHub concepts generally."
+    note: "Its GitHub-account assumption is now addressed by docs/getting-started-non-technical.md's new section instead -- no edit needed to FUNDAMENTALS.md itself, which stays scoped to git/GitHub concepts generally. Reviewing it surfaced an unqualified 'the agent creates the repository, you click nothing on github.com' claim that is only true for Cowork/Claude Code -- flagged in proposal.md's 'Known, not addressed here' rather than fixed here, to keep this Change Set's diff scoped to the files it already touches."
 
 validation:
   commands:

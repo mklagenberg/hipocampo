@@ -4,21 +4,21 @@ This document brings together two things: questions that come up repeatedly, and
 
 ## Common instantiation errors
 
-### "I clicked 'Use this template', but the skill doesn't seem to work"
+### "My agent says it can't create the repository itself"
 
-Expected. **"Use this template" copies the repository's skeleton, not the skill installation.** `skill/SKILL.md` arrives in your new repository as a file — but for an AI agent to actually use it, it needs to be personalized (the repository router for your instance filled in) and actually installed (in Cowork, that's `save_skill`; other tools have their own mechanism, see `docs/MULTI-TOOL-USAGE.md`). This step is in `hipocampo-toolkit`'s `POST-INSTANTIATION.md` — if you skipped it, go back there.
+Expected, for the standard Claude.ai/Claude Desktop and ChatGPT connectors — repository creation isn't something either supports, regardless of how broadly you've scoped their repository access (see `docs/getting-started-non-technical.md`, "Connecting your AI tool to GitHub"). Claude Cowork and Claude Code are different — their GitHub connection can create repositories directly. If you're on one of the connector-only tools, create the repository yourself (`docs/getting-started-non-technical.md`, "If your agent can't create the repository itself") and hand the address back to the agent — everything else about instantiation works the same from there.
 
-### "My new repository has an Apache-2.0 license, is that right?"
+### "My new repository has an Apache-2.0 license, is that right?" (historical)
 
-No, it's a known bug in GitHub's template mechanism: it copies the `LICENSE` from `hipocampo-toolkit` (Apache-2.0, correct for the methodology/tooling) into your new repository — but your new repository holds **content**, not methodology, and content should never be Apache-2.0 (see `decisions/0007-content-repo-licensing.md`). Manually swap the `LICENSE` for the right template in `hipocampo-toolkit/license-templates/` (personal or corporate) as soon as you instantiate. This is also in `POST-INSTANTIATION.md`.
+No — but this specific bug is no longer possible under the current instantiation model. It described GitHub's old "Use this template" mechanism copying `hipocampo-toolkit`'s own `LICENSE` (Apache-2.0, correct for the methodology/tooling, wrong for **content**) into a newly templated repository — see `decisions/0007-content-repo-licensing.md`. That template mechanism no longer exists (`decisions/0032`): the agent explicitly selects the right `LICENSE` template (`scaffold/license-templates/`) as part of generating the repository, whether it creates the repository directly or you create it manually first (`docs/getting-started-non-technical.md`). Kept here for historical searchability only.
 
 ### "My `CLAUDE.md` still says an old version of the methodology"
 
 This means the instance hasn't gone through the release routine (see `decisions/0014-mandatory-release-routine.md`) the last few times the methodology evolved — or nobody updated it manually after instantiating. There is no automatic synchronization between repositories (see `decisions/0002`, multi-repo architecture without replication) — it's the responsibility of whoever maintains each instance to follow the `hipocampo` `CHANGELOG.md` and update the local `CLAUDE.md`. The skill, when installed correctly, helps by warning you when there's a new release — but it doesn't apply the update on its own.
 
-### "I can't create the repository from the template inside my GitHub organization"
+### "I can't create the repository inside my GitHub organization"
 
-Probably a permissions issue. Creating a repository from a template inside an organization (instead of your personal account) usually requires an organization admin to enable it, or for you to ask someone with permission to create it on your behalf. It's not a limitation of the methodology — it's a GitHub configuration matter. See the corresponding note in `docs/FUNDAMENTALS.md`.
+Probably a permissions issue, separate from whether your connector can create repositories at all (see the entry above). Creating any new repository inside an organization (instead of your personal account) usually requires an organization admin to enable it, or for you to ask someone with permission to create it on your behalf. It's not a limitation of the methodology — it's a GitHub configuration matter. See the corresponding note in `docs/FUNDAMENTALS.md`.
 
 ### "I migrated an old document and just copied the file, is that right?"
 
