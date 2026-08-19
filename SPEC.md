@@ -91,29 +91,42 @@ Recommended reading rule for the agent: when operating over multiple documents (
 
 In addition, every READ operation includes a light validation of the frontmatter against the norm in this section 2 and the staleness check in section 5 — independent of whether the frontmatter audit (section 5-B, batch ritual) has already gone over that specific document. If validation finds a problem, the agent explicitly flags what's wrong and what needs to be done; in the case of an expired `ttl`, it makes clear that the information is outdated and suggests revalidation by research when the document is `source: url`. The same light validation also recognizes a deprecated pt-BR controlled-vocabulary value (`docs/vocabulary-dictionary.md`) and flags it as a normalization candidate, the same way it flags an expired `ttl`. This validation never changes `status` or any field on its own — it only flags. See `decisions/0018-frontmatter-validation-at-read-time.md` and `decisions/0035-controlled-vocabulary-dictionary.md`.
 
-## 2-C. Repository-type taxonomy: domain and tier
+## 2-C. Repository-type taxonomy: entity and vault
 
-Every Hipocampo content repository classifies along two orthogonal axes — the repository's physical name is free, what matters is the intent:
+Every Hipocampo content repository (a **vault**, section 2-D) belongs to exactly one **entity** — an extensible identifier for the person, organization, or relationship the content belongs to (`personal`, a specific company, a family, or any other grouping an operator introduces), not a fixed two-value enum. `entity` supersedes `domain` (`personal`/`company`, `decisions/0002`/`0029`) — the original two values remain valid entity identifiers, the smallest possible entity set, not deprecated and not required to expand. See `decisions/0041-entity-model-and-vault-vocabulary.md`.
 
-1. **Domain of ownership** (section 2-A, already in use via "instance type" in `AGENTS.md`): `personal` or `company`.
-2. **Exposure tier**, within each domain: `confidential` or `public`.
+Every entity has exactly one mandatory **anchor** vault (private) and may have any number of **additional** vaults beyond it (public, or private with a narrower declared scope) — this is normal multi-vault operation, not an edge case (section 2-D, premise 3). Each vault self-declares, in its own manifest (`hipocampo.yaml`, `decisions/0033`/`0041`):
 
-The four possible pairs already correspond, in the real practice of any multi-repository instance (`decisions/0002`), to distinct physical repositories — no pair requires a new repository beyond what the multi-repo architecture already provides for:
+| Field | Meaning |
+|---|---|
+| `instance.entity` | which entity this vault belongs to |
+| `instance.role` | `anchor` (the entity's one mandatory private vault) or `additional` |
+| `instance.scope_description` | required only when `role: additional` — a short statement of what belongs in this vault |
 
-| Domain | Tier | Role |
-|---|---|---|
-| personal | confidential | personal secrets, access only for the owner |
-| personal | public | personal knowledge shareable without restriction |
-| company | confidential | knowledge restricted to those who need to know (e.g., leadership) |
-| company | public | knowledge already curated, accessible to the whole organization |
+No vault lists its siblings — which other vaults belong to the same entity is never declared by any one vault about another. "All vaults of entity X" is only ever enumerable from the root manifest of a specific user with access to more than one of them; the procedure an agent uses to discover this at runtime is specified separately (a distinct Decision Record, not this one). When an additional vault's `scope_description` alone isn't enough to decide between more than one candidate for a specific item, that is not a new mechanism — it is already covered by section 14's "insufficient evidence" behavior: the agent surfaces the ambiguity rather than guessing.
 
-There is no third "structuring" tier as a separate repository. Confidential corporate knowledge that is a candidate to eventually become public (curation pending from leadership, not a decision to keep it confidential forever) keeps living in the `company-confidential` repository — the lifecycle intent is marked in each document's frontmatter (`curation_status`, section 2), not by an additional physical separation. The same reasoning doesn't apply to the personal domain: since author and curator are the same person, there is no "awaiting third-party curation" stage to mark — personal stays with just two tiers. See `decisions/0029-repository-type-taxonomy.md` for the full rationale, including why a new physical repository was ruled out.
+**Exposure tier** (`confidential`/`public`) is unchanged as a concept, but no longer implied by the word "vault" (section 2-D). It is carried by the repository's own name — a `restricted`/`open` suffix convention (e.g. `<entity>-restricted-vault`, `<entity>-open-vault`) — rather than by which member of a pair happens to carry a `-vault` suffix. There is still no third "structuring" tier as a separate repository: confidential knowledge that is a candidate to eventually become public keeps living in the confidential vault, with the lifecycle intent marked in the document's own frontmatter (`curation_status`, section 2), not by an additional physical separation — this reasoning, from `decisions/0029`, is unchanged by the entity model.
 
-The formal declaration of which domain+tier a specific repository implements is operationalized by an instance manifest — `hipocampo.yaml`, `decisions/0033` — combined with the "instance type" field in `AGENTS.md` (section 2-A/11), which uses its own, separate vocabulary (`decisions/0033` records that divergence; it is not resolved by this section or by the vocabulary dictionary below).
+The formal declaration of which entity+role a specific vault implements is operationalized by the instance manifest (`hipocampo.yaml`, `decisions/0033`/`0041`). `AGENTS.md`'s "instance type" field (`corporate`/`personal`, section 2-A/11) is recommended for retirement, not yet removed from any real instance — `entity`+`role` now derive the same information the field existed to carry, and keeping it as a manually-filled echo of the manifest would reintroduce the same divergence risk this schema change resolves. See `decisions/0041` for the full rationale and migration status.
 
 **Vocabulary note:** `personal`/`company`/`confidential`/`public` are the current canonical values, per `decisions/0035-controlled-vocabulary-dictionary.md`. The original pt-BR values (`pessoal`, `empresa`, `confidencial`, `público`) remain fully valid wherever they already appear — never treated as an error or an incompatibility — and are recognized as equivalent via `docs/vocabulary-dictionary.md`. New content and new instances use the canonical English values going forward.
 
-**Known, separate inconsistency — not addressed here.** `decisions/0033`'s `hipocampo.yaml` manifest and the scaffold profiles (`scaffold/profiles/pessoal.yaml`/`empresa.yaml`) define `instance.tier` with a *different* pair of values (`content`/`vault`, describing repository curation level) than the `confidential`/`public` exposure tier defined in this section and in `decisions/0029`. This predates the vocabulary dictionary and is not a language issue — both value sets are now in English, but they still describe two different things under the same field name `tier`. Flagged here for a future decision; out of scope for `decisions/0035`.
+**Known, separate inconsistency — not addressed here.** `decisions/0033`'s `hipocampo.yaml` manifest and the scaffold profiles (`scaffold/profiles/pessoal.yaml`/`empresa.yaml`) define `instance.tier` with a *different* pair of values (`content`/`vault`, describing repository curation level) than the `confidential`/`public` exposure tier defined in this section and in `decisions/0029`. This predates the vocabulary dictionary and is not a language issue — both value sets are now in English, but they still describe two different things under the same field name `tier`. Flagged here for a future decision; out of scope for `decisions/0035` and unaffected by the entity model.
+
+## 2-D. Multi-vault and multi-entity design premises
+
+Three premises the schema and rituals above are designed around, not incidental properties of them — see `decisions/0040-multi-vault-multi-entity-design-premises.md`:
+
+1. **Multi-vault and multi-entity by design.** Hipocampo works with a single vault, but that is a degraded case, not the target. A single-vault instance gives up the per-repository access separation invariant 4 (section 8) provides.
+2. **Confidential-first, always.** Information is confidential by default; promotion to a public vault is always a later, explicit step (the Promote action, section 13) — with no exception for content that looks "obviously public." There is never a direct write path to a public vault.
+3. **The anchor vault is an existence guarantee, not a universal funnel.** Every entity's anchor guarantees that entity always has at least one private vault. It does not guarantee every user of that entity can reach it — a user without access to a specific entity's anchor still always has *some* private landing place available: at minimum, their own personal entity's anchor.
+
+Two direct consequences of premise 3:
+
+- **Short-term memory is per-vault, not per-entity.** Every vault — anchor or additional — has its own `inbox/` (section 5-A). There is no single, entity-wide capture point.
+- **Fallback with tag.** When the correct destination for a captured item is a specific entity's vault the capturing user cannot access, the item lands in that user's own personal vault's `inbox/` instead, tagged as not permanently belonging there. Distinct from section 14's "insufficient evidence" mode — there the destination is unknown; here it is known but unreachable. The tag's exact field format, and who resolves a tagged item later, are open items.
+
+A user's own personal anchor vault is always the first vault instantiated for that user, before any third-party entity — otherwise the fallback mechanism above has nowhere to land for that user. The mechanism that enforces this ordering is specified separately, as its own bootstrap procedure; this section only establishes the premise it depends on.
 
 ## 3. `type` — enum and expansion criterion
 
