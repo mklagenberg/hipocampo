@@ -18,4 +18,4 @@ Read the target repository's `AGENTS.md` and `hipocampo.yaml` before content ope
 
 ## Updates
 
-On first activation, read the canonical `skill/manifest.yaml`. Reuse a successful normal check for at most `P7D` and a security check for at most `P1D`; when unavailable, report `offline` and continue only with safe repository reads. Never self-update or overwrite the local-state file.
+On first activation, read the canonical `skill/manifest.yaml`. Reuse a successful normal check for at most `P7D` and a security check for at most `P1D`; when unavailable, report `offline` and continue only with safe repository reads. The manifest's skill version is independent from the methodology version. For an offered update, compare the installed package against `skill/package-lock.yaml` from the immutable `updates.release_ref` tag; do not treat `source_commit` as a self-referential update hash and do not install from unverified `main` content. Store only `installed_skill_version`, `installed_package_hash`, and `last_checked` beside the local anchor pointer. Notify, present the change, and wait for confirmation. Never self-update or overwrite the local-state file.

@@ -31,7 +31,7 @@ Mechanical scan of the frontmatter (never the body) of every document in a repos
 
 1. **Atomicity** — do recently consolidated documents (or ones flagged by the queue) still represent a single concept, or should they be split?
 2. **Positioning** — does the `category`/folder structure still make sense? Is any document outside the scope declared in the repository's `AGENTS.md` (section "Scope of this repository")?
-3. **Sensitive data leakage** — does any document contain something the sensitive-data policy (SPEC section 2-A) prohibits for the `instance.policy_profile` declared in `hipocampo.yaml` (`corporate`/`personal`) — never inferred by the agent from the repository name. A legacy `AGENTS.md` declaration is only a compatibility fallback during upgrade.
+3. **Privacy, security, and data provenance** — within the selected audit scope or maintenance queue, does a document contain a credential, non-public financial value, prohibited sensitive data, or a public financial value without its URL/date citation? Public-repository material is anonymized as required by `decisions/0050`. This is not an implicit full-history sweep after a methodology update; findings are queued and remediated progressively through CRUD or REM, with confirmation.
 
 4. **Controlled-vocabulary check on repository-level fields** — `hipocampo.yaml`'s `instance.policy_profile`, `instance.curation_level`, and legacy fields aren't scanned by the daily frontmatter audit (that one only covers document frontmatter). Whenever the structural audit reads the manifest, it checks their values against `hipocampo/docs/vocabulary-dictionary.md` too, and flags a deprecated value the same way as any other finding below — never rewritten on its own.
 

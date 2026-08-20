@@ -2,8 +2,8 @@
 """Validate cross-surface contracts that structural link checks cannot see.
 
 This validator protects the v2.1.0 consistency contracts: the canonical
-manifest fields, six invariants, registered-anchor discovery, and the Codex
-adapter. It intentionally checks a small set of durable agreements rather
+manifest fields, six invariants, registered-anchor discovery, privacy routing,
+and the Codex adapter. It intentionally checks a small set of durable agreements rather
 than attempting to infer methodology semantics from arbitrary prose.
 """
 from __future__ import annotations
@@ -32,11 +32,13 @@ REQUIRED = {
     "skill/references/codex.md": [
         "hipocampo.local.yaml",
         "Never self-update",
+        "package-lock.yaml",
     ],
     "skill/manifest.yaml": [
-        'version: "1.1.0"',
+        'version: "1.2.0"',
         'compatibility: "^2.1.0"',
         'target: "codex"',
+        'package_lock: "skill/package-lock.yaml"',
     ],
     "scaffold/skeleton/hipocampo.yaml": [
         "policy_profile:",
@@ -49,6 +51,16 @@ REQUIRED = {
     ],
     "AGENTS.md": [
         "relationship is `conforms_to`",
+        "## Route by user intent",
+        "skill/package-lock.yaml",
+    ],
+    "CONTRIBUTING.md": [
+        "## Terms and names",
+        "## Privacy and learned safeguards",
+    ],
+    "docs/privacy-and-licensing-boundaries.md": [
+        "Progressive remediation",
+        "Apache-2.0",
     ],
 }
 
@@ -80,6 +92,8 @@ def main() -> int:
     upgrade = (root / "UPGRADE.md").read_text(encoding="utf-8")
     if "router (`skill/references/personalization.md`" in upgrade:
         errors.append("UPGRADE.md: retired router guidance remains active")
+    if "repository-wide inspection" not in upgrade:
+        errors.append("UPGRADE.md: must state progressive, non-sweep privacy adoption")
 
     if errors:
         print(f"validate_contracts: FAILED — {len(errors)} error(s)")

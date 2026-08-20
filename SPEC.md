@@ -8,6 +8,8 @@ This document is the normative specification of the Hipocampo methodology: the f
 
 Hipocampo is an agentic second brain methodology: git + markdown + AI rituals. This repository (`hipocampo`) carries the specification, scaffold, skill, and tooling, never actual instance content. Every knowledge base that implements Hipocampo lives in private repositories, without exception (see invariants, section 8).
 
+**License boundary.** This repository's Apache-2.0 `LICENSE` applies only to the methodology and its tooling. A content-bearing vault has its own proprietary root `LICENSE`, generated from the scaffold for its owner and curation level. Neither license text nor a generic privacy-policy file is copied into a non-content repository, a client-side skill, or host-local adapter state; see `docs/privacy-and-licensing-boundaries.md`.
+
 **Repository language:** this repository is maintained in English — `SPEC.md`, `decisions/`, `docs/`, `skill/`, and `scaffold/` are written and contributed to in English (see `decisions/0034-repository-and-vault-language-policy.md`). A vault (a content repository generated from this methodology) is not bound to this: its own working language is declared in its `hipocampo.yaml` manifest (`instance.language`, `decisions/0033`/`0034`), independent of the language this repository is maintained in.
 
 ## 2. Frontmatter — unified schema
@@ -67,9 +69,11 @@ Always mechanically derived from `visibility`, never set by hand — this avoids
 
 ## 2-A. Sensitive-data policy by instance type
 
-A corporate instance (`owner` filled in with an organization's name) never stores, at any `visibility` level — even `restricted`: contract or NDA content; performance evaluation of an identifiable individual; health note about any person (the instance owner or a third party); personal data (password, personal address, personal phone or email, relative's name); salary figures, amounts paid to a vendor, or project/contract value. Single exception for an absolute figure: a business result delivered to a client in a `type: case` (revenue generated, cost avoided) is the very product of the case, not internal financial exposure. Quantified internal learning (e.g., process savings) is recorded as a percentage variation, never an absolute value.
+A corporate instance (`owner` filled in with an organization's name) never stores, at any `visibility` level — even `restricted`: contract or NDA content; performance evaluation of an identifiable individual; health note about any person (the instance owner or a third party); personal data (personal address, personal phone or email, relative's name); or any non-public financial value (salary, vendor payment, project/contract value, revenue, cost, or business result). Quantified internal learning is recorded as a percentage variation, never as a private absolute value.
 
-Financial data about a third party that is not a direct vendor/business partner (e.g., market intelligence about a competitor, extracted from a public source) is not covered by this restriction — provided the public source is explicitly cited in the document.
+No instance, including a personal one, stores a password, credential, access token, secret key, recovery code, or reproducible exploit material. Record the fact, category, date, secure-storage location by non-secret reference, and remediation — never the secret itself.
+
+A public financial value may be recorded only when its public source is cited in the document with a stable URL and publication or access date. `source: url` alone is not a substitute for the concrete citation. An agent never infers that a value is public from context, reputation, or a search-result snippet.
 
 Full name, title, professional email, professional phone, or professional address — of a colleague or a client contact — are permitted in a corporate instance, always accompanied by a year/date citation: the record is a dated snapshot, never a presumed current state.
 
@@ -77,7 +81,7 @@ Any individual's personal matter (health, personal financial situation) never go
 
 Technical detail of an active vulnerability or exploit (attack payload, query/dork that reveals the compromise, credential, exploitable endpoint) is never recorded verbatim, in any instance, even confidential/restricted — the fact is recorded (the flaw's existence, category, date of the finding) and the response given, never the material that would reproduce or confirm the attack.
 
-When an entire document structurally depends on a banned data type (it can't be fixed by just removing the problematic passage), the agent doesn't decide alone between publishing anyway or discarding it — it flags the violation to the human responsible for the instance and waits for an explicit decision. See `decisions/0009-privacy-policy-by-instance.md`. The weekly structural audit (section 5-C) is the periodic mechanism that checks compliance with this policy, and the Redbutton action (section 13) is the remediation mechanism when a violation is confirmed.
+These rules apply immediately to new content and to a document whenever it is touched by CRUD or REM. Updating the methodology never requires a repository-wide retrospective sweep: a read flags a finding without changing content; an update or REM proposes the smallest compliant remediation and waits for confirmation. The structural audit can inspect a human-selected scope or its maintenance queue, not an implicit full-history inventory. When an entire document structurally depends on a banned data type, the agent flags the violation and waits for an explicit human decision. See `decisions/0009-privacy-policy-by-instance.md` and `decisions/0053-progressive-privacy-licensing-and-skill-integrity.md`.
 
 **Which variant of this policy applies to a repository is never inferred by the agent** from the repository's name or the conversation's context — it is read from `instance.policy_profile` (`corporate` or `personal`) in that repository's `hipocampo.yaml`. A legacy `AGENTS.md` “Instance type” declaration remains a read-only compatibility fallback for a v2 instance until it is upgraded. See `decisions/0052-consistency-contracts-anchor-registration-and-codex-distribution.md`.
 

@@ -28,7 +28,15 @@ Before opening a PR, run the repository's own structural validator from its root
 python3 scripts/validate_hipocampo.py --root .
 ```
 
-It checks Decision Record template compliance, internal markdown link resolution, and `README.md`/`CHANGELOG.md` version consistency — deterministically, no AI judgment involved (`decisions/0036-deterministic-validation-of-repository-structure.md`). It also runs automatically in CI on every PR against `main` (`.github/workflows/validate.yml`). A clean run is necessary, not sufficient — it catches structural defects, not whether the change is a good idea or complete; that remains human review.
+It checks Decision Record template compliance, internal markdown link resolution, and `README.md`/`CHANGELOG.md` version consistency — deterministically, no AI judgment involved (`decisions/0036-deterministic-validation-of-repository-structure.md`). It also runs automatically in CI on every PR against `main` (`.github/workflows/validate.yml`). A clean run is necessary, not sufficient — it catches structural defects, not whether the change is a good idea or complete; that remains human review. Run every declared validator, including `validate_skill_docs.py`, `validate_contracts.py`, `validate_skill_package.py`, and `validate_change.py` when they apply; verify the actual remote branch after publication rather than treating a local result as proof.
+
+## Terms and names
+
+Before introducing a new canonical term, alias, enum value, schema field, routine, mechanic, action, or other named concept, search for an existing term and classify the proposal. In the same Change Set, record every accepted canonical term in `docs/taxonomy.md`, every controlled value or alias in `docs/vocabulary-dictionary.md`, and the authoritative Decision Record or SPEC section that owns it. If no registry change is applicable, say why in the Change Set's terminology-review note; do not silently invent competing vocabulary.
+
+## Privacy and learned safeguards
+
+Never put a real entity, person, or personal handle into this public methodology repository; use the placeholders required by `decisions/0050`. Never paste a credential, secret, non-public financial value, or sensitive finding into a proposal, audit, example, CI output, or issue. For a public financial value, cite its public URL and date. Do not claim a GitHub write, CI result, release, or package installation happened until it has been independently checked. A package provenance field cannot self-reference its own commit: use the release tag and package lock for update integrity instead.
 
 ## Pull requests and releases
 

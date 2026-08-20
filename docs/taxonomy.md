@@ -95,6 +95,7 @@ Not duplicated here — see `docs/step-classification.md` (deterministic / discr
 ## Known cross-references and name collisions (collected here, not duplicated)
 
 - Legacy `instance.tier` and `AGENTS.md` “Instance type” remain readable only as compatibility aliases; new manifests use `instance.curation_level` and `instance.policy_profile` (`decisions/0052`).
+- New named methodology concepts are admitted only after the term-governance check in `docs/vocabulary-dictionary.md`; the taxonomy records the concept and its authoritative source, while the dictionary records controlled values and aliases.
 
 ## Retroactive backfill — what Lote E2 did
 

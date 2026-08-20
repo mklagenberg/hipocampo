@@ -2,10 +2,11 @@ manifest_version: "1.0"
 
 skill:
   name: "hipocampo"
-  version: "1.1.0"
+  version: "1.2.0"
   core_path: "skill/"
   source_repository: "https://github.com/mklagenberg/hipocampo"
   source_commit: "02ea7732c4dbe369ec9dcc8c3444e14c5ec82541"
+  package_lock: "skill/package-lock.yaml"
 
 methodology:
   compatibility: "^2.1.0"
@@ -24,11 +25,15 @@ adapters:
     version: "1.0.0"
     package: "personal client-side copy, saved by the operator (decision 0025) — no packaged/distributed package of its own yet"
   - target: "codex"
-    version: "1.1.0"
+    version: "1.2.0"
     package: "skill/agents/openai.yaml plus skill/references/codex.md; local anchor state remains outside the packaged source"
 
 updates:
-  manifest: "https://github.com/mklagenberg/hipocampo/blob/main/skill/manifest.yaml"
+  availability_manifest: "https://github.com/mklagenberg/hipocampo/blob/main/skill/manifest.yaml"
+  immutable_package: "https://github.com/mklagenberg/hipocampo/tree/<release-tag>/skill/"
+  release_ref: "v2.1.0"
+  package_lock: "skill/package-lock.yaml"
+  package_hash_algorithm: "sha256"
   advisories: "https://github.com/mklagenberg/hipocampo/blob/main/CHANGELOG.md (a formal security advisory channel does not exist yet — see ROADMAP.md)"
   check_on_first_activation: true
   normal_ttl: "P7D"

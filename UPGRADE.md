@@ -38,6 +38,7 @@ This document is updated with every methodology release (mandatory step of the r
 
 ### Privacy
 
+- [ ] **[Recommended, progressive since v2.1.0]** Apply the current privacy rules to every new document immediately and to existing documents when they are read, updated, or processed by REM. Do not launch a repository-wide inspection merely because the methodology was updated. A finding is reported first; any remediation remains explicitly confirmed. In particular, never retain credentials or non-public financial values, and retain a public financial value only with its public URL and date citation.
 - [ ] **[Informative]** There's a formal, narrow exception to the "a document is never physically deleted" invariant, for the legal obligation to erase personal data (LGPD Art. 16 / GDPR Art. 17) — always a human decision, never the agent's. See `decisions/0010-legal-deletion-exception.md`. No action needed unless the case actually occurs.
 
 ## Recommended reading, no action needed on the repository

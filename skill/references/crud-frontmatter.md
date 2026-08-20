@@ -10,6 +10,8 @@ When operating on multiple documents (search, triage, staleness), always read th
 
 Every READ operation — even a one-off query, outside any scheduled ritual — validates the document's frontmatter against the norm (section 2 schema) and the staleness check (section 5) **at the moment of reading**, regardless of whether the batch frontmatter audit (reference `routines.md`) has already gone through that document.
 
+The same touchpoint performs a proportional privacy check of the body actually needed for the request: obvious credentials, non-public financial values, and a public financial value without its URL/date citation are findings. READ reports without rewriting; CREATE, UPDATE, and REM must make new or touched content conformant through an explicitly confirmed plan. Do not turn a methodology upgrade into a full-repository inspection.
+
 If the validation finds a problem, explicitly flag what it is and what to do. Never change `status` or any field on your own as part of this validation — only flag it. Concrete cases:
 
 - **Expired `ttl`:** warn that the information may be outdated. If `source: url`, suggest revalidation via research (the same trigger that activates the `deep-research` skill) before treating the content as current.
