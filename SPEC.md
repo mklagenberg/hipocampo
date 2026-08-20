@@ -1,12 +1,12 @@
 # Hipocampo — SPEC
 
-Version: 2.0.0 · Follows [SemVer](https://semver.org/lang/pt-BR/)
+Version: 2.1.0 · Follows [SemVer](https://semver.org/lang/pt-BR/)
 
 This document is the normative specification of the Hipocampo methodology: the frontmatter schema, the retrieval rules, and the conventions that any instance (content repository) must follow to be considered compatible with a version of Hipocampo. It is not a usage manual — for that, see [GETTING-STARTED.md](GETTING-STARTED.md). It is not a document of limitations — for that, see [DISCLAIMER.md](DISCLAIMER.md). It is not a best-practices guide — for that, see [BEST-PRACTICES.md](BEST-PRACTICES.md). It is not an upgrade guide for an existing instance — for that, see [UPGRADE.md](UPGRADE.md).
 
 ## 1. Scope
 
-Hipocampo is an agentic second brain methodology: git + markdown + AI rituals. This repository (`hipocampo`) and `hipocampo-toolkit` are the only two public repositories of the methodology — they carry the spec and the tooling, never actual content. Every knowledge base that implements Hipocampo lives in private repositories, without exception (see invariants, section 8).
+Hipocampo is an agentic second brain methodology: git + markdown + AI rituals. This repository (`hipocampo`) carries the specification, scaffold, skill, and tooling, never actual instance content. Every knowledge base that implements Hipocampo lives in private repositories, without exception (see invariants, section 8).
 
 **Repository language:** this repository is maintained in English — `SPEC.md`, `decisions/`, `docs/`, `skill/`, and `scaffold/` are written and contributed to in English (see `decisions/0034-repository-and-vault-language-policy.md`). A vault (a content repository generated from this methodology) is not bound to this: its own working language is declared in its `hipocampo.yaml` manifest (`instance.language`, `decisions/0033`/`0034`), independent of the language this repository is maintained in.
 
@@ -79,7 +79,7 @@ Technical detail of an active vulnerability or exploit (attack payload, query/do
 
 When an entire document structurally depends on a banned data type (it can't be fixed by just removing the problematic passage), the agent doesn't decide alone between publishing anyway or discarding it — it flags the violation to the human responsible for the instance and waits for an explicit decision. See `decisions/0009-privacy-policy-by-instance.md`. The weekly structural audit (section 5-C) is the periodic mechanism that checks compliance with this policy, and the Redbutton action (section 13) is the remediation mechanism when a violation is confirmed.
 
-**Which variant of this policy applies to a repository is never inferred by the agent** from the repository's name or the conversation's context — it is read from the "instance type" field (`corporate` or `personal` — deprecated pt-BR values `corporativa`/`pessoal` remain valid and equivalent, see `docs/vocabulary-dictionary.md`), mandatorily declared in the "Repository scope" block of that repository's `AGENTS.md` (section 11). See `decisions/0022-instance-type-declared-in-agents-md.md`.
+**Which variant of this policy applies to a repository is never inferred by the agent** from the repository's name or the conversation's context — it is read from `instance.policy_profile` (`corporate` or `personal`) in that repository's `hipocampo.yaml`. A legacy `AGENTS.md` “Instance type” declaration remains a read-only compatibility fallback for a v2 instance until it is upgraded. See `decisions/0052-consistency-contracts-anchor-registration-and-codex-distribution.md`.
 
 ## 2-B. CRUD mechanics and frontmatter-first reading
 
@@ -100,6 +100,8 @@ Every entity has exactly one mandatory **anchor** vault (private) and may have a
 | `instance.entity` | which entity this vault belongs to |
 | `instance.role` | `anchor` (the entity's one mandatory private vault) or `additional` |
 | `instance.scope_description` | required only when `role: additional` — a short statement of what belongs in this vault |
+| `instance.policy_profile` | `personal` or `corporate` — the sensitive-data policy this vault follows |
+| `instance.curation_level` | `content` or `vault` — the repository's curation and license shape, distinct from exposure tier |
 
 No vault lists its siblings — which other vaults belong to the same entity is never declared by any one vault about another. "All vaults of entity X" is only ever enumerable from the root manifest of a specific user with access to more than one of them; the procedure an agent uses to discover this at runtime is specified in section 12-A (`decisions/0044-vault-and-entity-discovery.md`). When an additional vault's `scope_description` alone isn't enough to decide between more than one candidate for a specific item, that is not a new mechanism — it is already covered by section 14's "insufficient evidence" behavior: the agent surfaces the ambiguity rather than guessing.
 
@@ -109,7 +111,7 @@ The formal declaration of which entity+role a specific vault implements is opera
 
 **Vocabulary note:** `personal`/`company`/`confidential`/`public` are the current canonical values, per `decisions/0035-controlled-vocabulary-dictionary.md`. The original pt-BR values (`pessoal`, `empresa`, `confidencial`, `público`) remain fully valid wherever they already appear — never treated as an error or an incompatibility — and are recognized as equivalent via `docs/vocabulary-dictionary.md`. New content and new instances use the canonical English values going forward.
 
-**Known, separate inconsistency — not addressed here.** `decisions/0033`'s `hipocampo.yaml` manifest and the scaffold profiles (`scaffold/profiles/pessoal.yaml`/`empresa.yaml`) define `instance.tier` with a *different* pair of values (`content`/`vault`, describing repository curation level) than the `confidential`/`public` exposure tier defined in this section and in `decisions/0029`. This predates the vocabulary dictionary and is not a language issue — both value sets are now in English, but they still describe two different things under the same field name `tier`. Flagged here for a future decision; out of scope for `decisions/0035` and unaffected by the entity model.
+`instance.curation_level` (`content`/`vault`) is distinct from the `confidential`/`public` exposure tier defined above. New manifests use `curation_level`; a v2 manifest using `instance.tier` for this meaning remains valid as a deprecated compatibility alias until the next MAJOR release. `instance.policy_profile`, not a duplicated free-text declaration in `AGENTS.md`, selects the sensitive-data policy. See `decisions/0052-consistency-contracts-anchor-registration-and-codex-distribution.md`.
 
 **Full taxonomy index.** For a consolidated map of every controlled field and named concept across this schema, the vault manifest, and `AGENTS.md` — current state and full retroactive version lineage back to `v1.0.0` — see `docs/taxonomy.md` (`decisions/0047-taxonomy-map.md`).
 
@@ -195,9 +197,9 @@ The frontmatter audit never decides disposition — it only reports. Disposition
 
 ## 5-C. Weekly structural audit
 
-New ritual, recommended weekly cadence, with three functions: (1) reviewing the atomicity of already-consolidated documents; (2) reviewing positioning — whether the `category`/folder structure still makes sense, whether a document is outside the scope of the repository it lives in (see section 11, scope declared in `AGENTS.md`); (3) checking for sensitive-data leaks against the policy by instance type (section 2-A) — using as criterion the **instance type** (`corporate`/`personal` — deprecated pt-BR values `corporativa`/`pessoal` remain valid, see `docs/vocabulary-dictionary.md`) declared in the same "Repository scope" block of `AGENTS.md` (section 11), never inferred by the agent (see `decisions/0022-instance-type-declared-in-agents-md.md`). This is the first periodic verification mechanism for that policy, which has existed as a rule since v1.3.0 with no formal check until now. A finding from function 3 can trigger the Redbutton action (section 13, `decisions/0028`).
+New ritual, recommended weekly cadence, with four functions: (1) reviewing the atomicity of already-consolidated documents; (2) reviewing positioning — whether the `category`/folder structure still makes sense, whether a document is outside the scope of the repository it lives in (see section 11); (3) checking for sensitive-data leaks against the policy profile declared in `hipocampo.yaml` (section 2-A), never inferred from the repository name; and (4) validating controlled vocabulary in repository-level manifest fields. This is the first periodic verification mechanism for the sensitive-data policy, which has existed as a rule since v1.3.0 with no formal check until now. A finding from function 3 can trigger the Redbutton action (section 13, `decisions/0028`).
 
-The structural audit is also the touchpoint for controlled-vocabulary fields that live outside document frontmatter and so are never seen by the frontmatter audit (section 5-B) — `AGENTS.md`'s "Instance type" field and `hipocampo.yaml`'s `instance.domain`/`instance.tier` (section 2-C). Whenever the audit reads either file, it checks their values against `docs/vocabulary-dictionary.md` the same way, and flags a deprecated value as a normalization candidate — never rewritten on its own.
+The structural audit is also the touchpoint for controlled-vocabulary fields that live outside document frontmatter and so are never seen by the frontmatter audit (section 5-B) — `hipocampo.yaml`'s `instance.policy_profile`, `instance.curation_level`, and legacy fields. Whenever the audit reads the manifest, it checks those values against `docs/vocabulary-dictionary.md` the same way, and flags a deprecated value as a normalization candidate — never rewritten on its own.
 
 Any finding is always presented to the responsible human before any action — moving, splitting, or removing a document never happens on its own (invariant 5). See `decisions/0019-weekly-structural-audit.md` and `decisions/0035-controlled-vocabulary-dictionary.md`.
 
@@ -277,7 +279,7 @@ Invariant 6 governs a different axis than the agent precedence hierarchy below: 
 1. Explicit user request in the current conversation — within the limits of the invariants.
 2. Extension/override documented locally in the instance.
 3. Base rule from this `SPEC.md`.
-4. Default convention from `hipocampo-toolkit`, in the absence of everything else.
+4. Default convention from the scaffold profile that generated the instance, in the absence of everything else.
 
 No layer overrides an invariant. If a request would violate an invariant, the agent follows the invariant and explicitly says so — it never silently complies nor silently refuses.
 
@@ -299,7 +301,7 @@ Bringing in content from outside Hipocampo (a legacy system, an export from anot
 
 ## 11. Instruction file: AGENTS.md and CLAUDE.md
 
-`AGENTS.md` is the canonical operational instruction file for any Hipocampo instance — invariants, local extensions (section 8), frontmatter reference, and the **repository scope**: what should and shouldn't be stored there, and where whatever doesn't belong goes instead, plus the **instance type** (`corporate` or `personal` — deprecated pt-BR values `corporativa`/`pessoal` remain valid, `docs/vocabulary-dictionary.md`, see section 2-A). These items are mandatory, never implicit — same principle as local extensions — and are the source the maintenance rituals (REM, section 5-A; structural audit, section 5-C) consult to decide whether a document belongs in the repository it's in and which variant of the sensitive-data policy applies.
+`AGENTS.md` is the canonical operational instruction file for any Hipocampo instance — invariants, local extensions (section 8), frontmatter reference, and the **repository scope**: what should and should not be stored there, and where anything out of scope goes instead. The sensitive-data policy is read from the manifest's `instance.policy_profile`; it is not duplicated in `AGENTS.md`. These items are mandatory, never implicit, and are the source the maintenance rituals consult to decide whether a document belongs in the repository it is in.
 
 `CLAUDE.md` continues to exist in every instance, but as a thin pointer — a few lines, referring to `AGENTS.md` as the source of truth, without duplicating content. See `decisions/0015-agents-md-canonical-instruction-file.md`.
 
@@ -307,7 +309,7 @@ Instances that already existed before this section (v1.6.0 and earlier, when `CL
 
 ## 12. Multi-account author identity
 
-When the person behind `author` operates more than one git account (e.g., personal and one tied to an employer) that need to resolve to the same human `author` (invariant 2), that relationship is recorded in the `AGENTS.md` of the least-restricted personal repository — never in the public `hipocampo`/`hipocampo-toolkit`. It is discovered from there at runtime (section 12-A), not tracked in a separate local file — `profile.md` (section 12-B) is the one place a user's own git-handle facts are recorded outside the repositories themselves.
+When the person behind `author` operates more than one git account (e.g., personal and one tied to an employer) that need to resolve to the same human `author` (invariant 2), that relationship is recorded in the `AGENTS.md` of the least-restricted personal repository — never in the public methodology repository. It is discovered from there at runtime (section 12-A), not tracked in a separate local file — `profile.md` (section 12-B) is the one place a user's own git-handle facts are recorded outside the repositories themselves.
 
 Between a person's personal instance and corporate instance, the access invitation (repository collaborator) always starts from the personal account inviting the professional one into the **personal** second brain — never the reverse. Personal identity is always the anchor of trust; the employing organization never has standing to grant or deny access to someone's personal knowledge. See `decisions/0020-multi-account-author-identity.md`.
 
@@ -315,17 +317,17 @@ Between a person's personal instance and corporate instance, the access invitati
 
 Section 2-C left the runtime procedure for "which vaults belong to entity X" unspecified, pointing here. This section is that procedure. See `decisions/0044-vault-and-entity-discovery.md` for the full rationale, including why an earlier hub-spoke design was rejected.
 
-**Discovery, not storage.** No repository router is stored anywhere, generic or personal. At the start of a session, the agent reads the manifest of the user's own anchor vault, discovers every entity/vault address and identity field that manifest declares, and caches the result in **sensory memory** (section 5-A) — ephemeral, never versioned in git, rediscovered fresh each new session, not re-asked for within the same one.
+**Discovery from registered addresses, not a client-side router.** At the start of a session, the agent reads the manifest of the user's own anchor vault. Its optional `discovery.registered_repositories` list contains operator-confirmed repository addresses only; the agent reads each target manifest to discover its entity, role, scope, and identity metadata, then caches the result in **sensory memory** (section 5-A) — ephemeral, never versioned in git, rediscovered fresh each new session, not re-asked for within the same one.
 
 **No graph between sibling vaults.** Each vault self-declares only its own `entity`/`role`/`scope_description` (section 2-C) — never a pointer to any sibling vault, anchor or additional. "All vaults of entity X" is only ever computed from a specific user's own root manifest, for whichever of that entity's vaults that user happens to have access to — never from a vault enumerating its own siblings.
 
-**Known limitation.** Access granted outside the Bootstrap mechanic (section 12-B) — for example, a direct GitHub collaborator invite — is not auto-discovered; it requires manual registration in that case, the same posture section 14's "insufficient evidence" behavior already takes toward a gap the agent cannot close on its own.
+**Registration after an external invite.** Access granted outside the Bootstrap mechanic (section 12-B) — for example, a direct GitHub collaborator invite — is not auto-discovered. The agent first reads the invited repository's manifest, presents the repository address and its declared scope to the user, and adds only that address to the personal anchor's `discovery.registered_repositories` after explicit confirmation. This is a gated durable write; it never copies the target's entity, role, or scope into the anchor.
 
 **Consistency checking.** Without sibling pointers, there is no "does every vault point back correctly" check to run. The weekly structural audit (section 5-C) instead confirms that each vault's own self-declaration is still valid and its address still reachable — no new ritual, an extension of the existing one.
 
 **Step classification (sections 8/14).** Reading and caching the root manifest is deterministic-or-discretionary, ungated. Registering a new vault (the Instantiate action, section 12-B) is gated, per invariant 5, like any other durable write.
 
-**What remains local.** One pointer — which repository is the user's own anchor vault — cannot itself come from any manifest, because it is the address of the first manifest to read. This is not a router; it is a single value, not a table. Neither this section nor `decisions/0044` names where that pointer lives — see `decisions/0045-bootstrap-mechanic-and-profile-md.md` (section 12-B), which creates the anchor vault this pointer refers to, without yet resolving the storage question either.
+**What remains local.** One pointer — which repository is the user's own anchor vault — cannot itself come from any manifest, because it is the address of the first manifest to read. It is stored in client-local adapter state as `anchor_repository`, never committed to a vault, and is not a router. Each host adapter names its storage mechanism; the portable core only requires the field and the first-activation check.
 
 ## 12-B. Bootstrap mechanic: instantiation and profile.md
 

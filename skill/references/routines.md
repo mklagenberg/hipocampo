@@ -27,13 +27,13 @@ Mechanical scan of the frontmatter (never the body) of every document in a repos
 >
 > REM ritual, "update old memories" function: since it's `ephemeral` and has passed its deadline without renewal, the section 5 rule already pre-flags it as "suggestion: archive/supersede". The agent presents: "`case-acme.md` has a `ttl` expired 40 days ago, `ephemeral` — I suggest marking `status: archived`. Confirm?" — never applies it on its own.
 
-## 3. Structural audit — weekly, three functions
+## 3. Structural audit — weekly, four functions
 
 1. **Atomicity** — do recently consolidated documents (or ones flagged by the queue) still represent a single concept, or should they be split?
 2. **Positioning** — does the `category`/folder structure still make sense? Is any document outside the scope declared in the repository's `AGENTS.md` (section "Scope of this repository")?
-3. **Sensitive data leakage** — does any document contain something the sensitive-data policy (SPEC section 2-A) prohibits for the **instance type** declared in `AGENTS.md` (field "Instance type": `corporate`/`personal` — deprecated pt-BR values `corporativa`/`pessoal` remain valid and equivalent, see `hipocampo/docs/vocabulary-dictionary.md`) — never inferred by the agent from the repository name. See decision 0022.
+3. **Sensitive data leakage** — does any document contain something the sensitive-data policy (SPEC section 2-A) prohibits for the `instance.policy_profile` declared in `hipocampo.yaml` (`corporate`/`personal`) — never inferred by the agent from the repository name. A legacy `AGENTS.md` declaration is only a compatibility fallback during upgrade.
 
-4. **Controlled-vocabulary check on repository-level fields** — `AGENTS.md`'s "Instance type" and `hipocampo.yaml`'s `instance.domain`/`instance.tier` aren't scanned by the daily frontmatter audit (that one only covers document frontmatter). Whenever the structural audit reads either file, it checks their values against `hipocampo/docs/vocabulary-dictionary.md` too, and flags a deprecated pt-BR value the same way as any other finding below — never rewritten on its own. See decision 0035.
+4. **Controlled-vocabulary check on repository-level fields** — `hipocampo.yaml`'s `instance.policy_profile`, `instance.curation_level`, and legacy fields aren't scanned by the daily frontmatter audit (that one only covers document frontmatter). Whenever the structural audit reads the manifest, it checks their values against `hipocampo/docs/vocabulary-dictionary.md` too, and flags a deprecated value the same way as any other finding below — never rewritten on its own.
 
 Any finding from the four functions is always presented to the responsible human before any action — moving, splitting, or removing a document never happens on its own. See decision 0019 and decision 0035.
 

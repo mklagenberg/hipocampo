@@ -10,7 +10,7 @@ What changes between tools is only **how** each one connects to GitHub — not w
 
 ## Homologation status
 
-The principle above is platform-agnostic by design: any AI environment with access to git, GitHub, and a GitHub MCP (or equivalent git-integration mechanism) can operate an already-set-up instance, whether or not it's listed below. What varies is *homologation* — whether this repository's onboarding materials (`docs/getting-started-non-technical.md`, `docs/invite-template.md`) have actually been written and checked against a given tool's current connector and skill-persistence mechanics. As of this writing, only **Claude** (including Cowork) and **ChatGPT** are homologated for walking a first-timer through onboarding end to end (`decisions/0049`). Every tool below should still work for operating an instance that's already up and running — homologation is specifically about the onboarding walkthrough, not about whether a tool can run Hipocampo at all. See `docs/AI-MODELS.md` for why the methodology doesn't otherwise certify or benchmark any specific model — that's a separate, broader claim than homologation status.
+The principle above is platform-agnostic by design: any AI environment with access to git, GitHub, and a GitHub MCP (or equivalent git-integration mechanism) can operate an already-set-up instance, whether or not it's listed below. What varies is *homologation* — whether this repository's onboarding materials (`docs/getting-started-non-technical.md`, `docs/invite-template.md`) have actually been written and checked against a given tool's current connector and skill-persistence mechanics. Claude (including Cowork) and ChatGPT remain homologated for a first-timer's chat-first walkthrough. Codex has a declared operational adapter in `skill/agents/openai.yaml`, but its full onboarding walkthrough remains intentionally unhomologated. Every tool below should still work for operating an instance that's already up and running — homologation is specifically about the onboarding walkthrough, not about whether a tool can run Hipocampo at all.
 
 ## Specifics by tool
 
@@ -21,6 +21,8 @@ The principle above is platform-agnostic by design: any AI environment with acce
 **Gemini** — connects via Gemini extensions/tools with GitHub access, or via Gemini CLI/API when the GitHub MCP is available in the environment.
 
 **GitHub Copilot** — already runs inside GitHub/the IDE itself, with native access to the repository it's operating on — it doesn't need an external MCP to reach the host it already lives on. The skill's instruction can be kept as a Copilot custom instruction file (e.g., `.github/copilot-instructions.md`) in addition to the `CLAUDE.md` already used by other tools.
+
+**Codex** — use the packaged adapter (`skill/agents/openai.yaml`) and keep the single `anchor_repository` pointer in the adapter's private `hipocampo.local.yaml`, never in a vault or in the packaged skill source. The adapter uses GitHub-aware tools for remote operations and treats repository declarations as authoritative over local state.
 
 **Antigravity** (and other IDEs/agents with configurable MCP) — same principle as the tools above: connect the GitHub MCP, load the personalized Hipocampo skill instruction, operate normally.
 

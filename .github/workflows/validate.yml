@@ -24,6 +24,8 @@ jobs:
         run: python scripts/validate_hipocampo.py --root .
       - name: Validate skill docs against scaffold profiles
         run: python scripts/validate_skill_docs.py --root .
+      - name: Validate cross-surface methodology contracts
+        run: python scripts/validate_contracts.py --root .
       - name: Validate Change Set structure
         run: python scripts/validate_change.py --root .
       - name: Resolve change validation base

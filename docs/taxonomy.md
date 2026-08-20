@@ -49,8 +49,8 @@ A single index of every controlled field, enum, and named concept this methodolo
 | `scope_description` | required only when `role: additional` | Lote A, v2.0.0 | — | `SPEC.md` §2-C, `decisions/0041` |
 | Exposure tier | `confidential \| public`, carried by repository naming convention | v2.0.0 — formally named a pre-existing informal practice | Lote A: no longer implied by the `-vault` suffix | `SPEC.md` §2-C/§2-D, `decisions/0029`, `0041` |
 | `instance.language` | BCP-47 tag, default `"en"` | v2.0.0 — Fase E | — | `decisions/0033`, `0034` |
-| `instance.tier` (curation-level — **a different concept from exposure tier above, known unresolved name collision**) | `content \| vault` | v2.0.0 | — | `decisions/0033`, `SPEC.md` §2-C "Known, separate inconsistency" |
-| `AGENTS.md` "Instance type" (recommended for retirement) | `corporate \| personal` | v1.3.0 (concept referenced by the sensitive-data policy); v2.0.0 — declared as an explicit, required `AGENTS.md` field | Lote A: recommended for retirement in favor of `entity`+`role` | `SPEC.md` §2-A, §11, `decisions/0009`, `0022`, `0041` |
+| `instance.curation_level` | `content \| vault`, distinct from exposure tier | v2.1.0 | — | `SPEC.md` §2-C, `decisions/0052` |
+| `instance.policy_profile` | `corporate \| personal`, sole sensitive-data-policy selector | v2.1.0 | — | `SPEC.md` §2-A, §11, `decisions/0052` |
 | Multi-vault/multi-entity design premises | 3 premises (multi-vault by design; confidential-first; anchor as existence guarantee) | Lote A, v2.0.0 | — | `SPEC.md` §2-D, `decisions/0040` |
 
 ## 3. Identity artifacts
@@ -94,8 +94,7 @@ Not duplicated here — see `docs/step-classification.md` (deterministic / discr
 
 ## Known cross-references and name collisions (collected here, not duplicated)
 
-- `instance.tier` (curation-level) and the exposure tier of section 2-C name two different concepts under the same word `tier` — flagged in `SPEC.md` §2-C, unresolved.
-- `AGENTS.md`'s "Instance type" and `hipocampo.yaml`'s `instance.entity`/`instance.role` currently both exist, with the former recommended for retirement — flagged in `SPEC.md` §2-C and §8 (Invariant 6's no-duplicate-field condition), unresolved until real instances migrate.
+- Legacy `instance.tier` and `AGENTS.md` “Instance type” remain readable only as compatibility aliases; new manifests use `instance.curation_level` and `instance.policy_profile` (`decisions/0052`).
 
 ## Retroactive backfill — what Lote E2 did
 

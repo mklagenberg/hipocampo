@@ -1,0 +1,6 @@
+interface:
+  display_name: "Hipocampo"
+  short_description: "Operate a Hipocampo knowledge instance safely through GitHub."
+  default_prompt: "Use $hipocampo to consult or organize my Hipocampo knowledge."
+policy:
+  allow_implicit_invocation: true

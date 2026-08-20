@@ -2,13 +2,13 @@ manifest_version: "1.0"
 
 skill:
   name: "hipocampo"
-  version: "1.0.0"
+  version: "1.1.0"
   core_path: "skill/"
   source_repository: "https://github.com/mklagenberg/hipocampo"
   source_commit: "02ea7732c4dbe369ec9dcc8c3444e14c5ec82541"
 
 methodology:
-  compatibility: "^2.0.0"
+  compatibility: "^2.1.0"
 
 adapters:
   - target: "claude"
@@ -23,6 +23,9 @@ adapters:
   - target: "github-copilot"
     version: "1.0.0"
     package: "personal client-side copy, saved by the operator (decision 0025) — no packaged/distributed package of its own yet"
+  - target: "codex"
+    version: "1.1.0"
+    package: "skill/agents/openai.yaml plus skill/references/codex.md; local anchor state remains outside the packaged source"
 
 updates:
   manifest: "https://github.com/mklagenberg/hipocampo/blob/main/skill/manifest.yaml"

@@ -10,25 +10,29 @@ description: >
   cross-repository; to run the Bootstrap mechanic when no personal anchor vault is
   discovered yet; or at the start of a session, to check whether a new version of the
   methodology has been published. Generic template — does not hardcode the name of any personal or
-  corporate repository; requires personalization before first real use (see
+  corporate repository; requires a local anchor pointer before first real use (see
   `references/personalization.md`).
 ---
 
 # Hipocampo Skill
 
-Operates any instance of the [Hipocampo](https://github.com/mklagenberg/hipocampo) methodology via the GitHub MCP. Published as a generic template at `hipocampo/skill/SKILL.md` — **never use it as-is, without personalizing it first.**
+Operates any instance of the [Hipocampo](https://github.com/mklagenberg/hipocampo) methodology via the GitHub MCP. Published as a generic template at `hipocampo/skill/SKILL.md` — **never use it without a configured local anchor pointer.**
 
-**Hipocampo version this copy follows:** ^2.0.0 (see `hipocampo/CHANGELOG.md`). When personalizing, confirm it matches your instance's `AGENTS.md`. See also `manifest.yaml`, in this same directory, for the machine-readable compatibility range.
+**Hipocampo version this copy follows:** ^2.1.0 (see `hipocampo/CHANGELOG.md`). Confirm it matches the instance manifest. See also `manifest.yaml`, in this same directory, for the machine-readable compatibility range.
 
 This file is just the router — each section below says when to act and points to the reference file with the full procedure. The norms themselves (schema, rules, rationale) live in `hipocampo/SPEC.md` and the Decision Records — this skill never re-explains them, it only operates them.
 
-## Before first use: mandatory personalization
+## Before first use: local anchor state
 
-This copy only knows one universal repository (`mklagenberg/hipocampo`) — no personal or corporate repository. Read **`references/personalization.md`** and record the one thing that stays genuinely local: the address of the user's own personal anchor vault. Everything else — every other entity and vault the user has access to, and their own identity facts — is discovered from that vault's manifest at the start of each session, not filled in here.
+This copy only knows one universal repository (`mklagenberg/hipocampo`) — no personal or corporate repository. Read **`references/personalization.md`** and record the one thing that stays genuinely local: `anchor_repository`, the address of the user's own personal anchor vault. Store it only in the host adapter's local-state file, never in this source file or a repository. Everything else is discovered from registered addresses in that anchor at session start.
 
 ## Discovering vaults and entities (session start)
 
-Before operating on any real knowledge, read the manifest of the user's own anchor vault (address from `references/personalization.md`) and cache what it declares — every entity/vault address and identity field — in sensory memory for the rest of the session; never persisted to disk, rediscovered fresh next session. If no anchor vault is recorded yet, or its manifest can't be read, that is the trigger condition for the Bootstrap mechanic below, not an error to work around. Full procedure: `hipocampo/SPEC.md`, section 12-A; `decisions/0044-vault-and-entity-discovery.md`.
+Before operating on any real knowledge, read the manifest of the user's own anchor vault. Read every address in its `discovery.registered_repositories` list, then read each target manifest for entity, role, scope, and identity metadata. Cache the result only in sensory memory for the session. If no anchor vault is recorded, Bootstrap is triggered; if an existing anchor cannot be read, report the unavailable source rather than treating it as Bootstrap. Full procedure: `hipocampo/SPEC.md`, section 12-A.
+
+## Registering an invited vault
+
+An invitation does not establish trusted discovery. Read the invited repository's manifest first, present its address and declared scope, and write only its address into the personal anchor's `discovery.registered_repositories` after the user explicitly confirms. Never copy entity, role, or scope into the anchor and never infer registration from access alone.
 
 ## Bootstrap: first-time instantiation
 
@@ -44,7 +48,7 @@ When the user asks to invite someone into a vault (e.g., "create an invite for [
 
 ## Instantiating a new vault
 
-When the user asks to create a new content repository: read the corresponding profile at `hipocampo/scaffold/profiles/pessoal.yaml` or `hipocampo/scaffold/profiles/empresa.yaml`, collect the declared `inputs` (repository name, tier, owner identity) directly from the user, and generate the declared `outputs` (`AGENTS.md`, `CLAUDE.md`, `LICENSE`, `registry.md`, `example/exemplo-nota.md`, `hipocampo.yaml`, `POST-INSTANTIATION.md`) via the GitHub MCP — never copying someone else's file without review, always presenting the full plan before any write (invariant 5). There is no longer a "Use this template" button (`hipocampo-toolkit` was consolidated and archived, decision 0032) — the agent is itself the instantiation mechanism. This is the **Instantiate (skeleton)**/**Instantiate (content)** portion of the Bootstrap mechanic above when it's a user's very first vault; the same procedure, called directly, for any later one. Full procedure: **`references/instantiation.md`**.
+When the user asks to create a new content repository: read the corresponding profile at `hipocampo/scaffold/profiles/pessoal.yaml` or `hipocampo/scaffold/profiles/empresa.yaml`, collect the declared inputs (repository name, `curation_level`, owner identity) directly from the user, and generate the declared outputs via the GitHub MCP — never copying someone else's file without review, always presenting the full plan before any write (invariant 5). The profile supplies the manifest's `policy_profile`; never duplicate it in `AGENTS.md`. This is the **Instantiate (skeleton)**/**Instantiate (content)** portion of the Bootstrap mechanic above when it's a user's very first vault; the same procedure, called directly, for any later one. Full procedure: **`references/instantiation.md`**.
 
 ## Reading and writing documents (CRUD)
 

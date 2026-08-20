@@ -11,7 +11,7 @@ artifact:
   full_name: "Hipocampo — agentic second brain methodology"
   kind: "methodology"
   domain: "personal-and-corporate-knowledge-management"
-  version: "2.0.0"
+  version: "2.1.0"
   status: "active"
   language: "en"
   repository: "https://github.com/mklagenberg/hipocampo"
@@ -148,12 +148,12 @@ components:
 packages:
   specification:
     role: "normative-specification"
-    version: "2.0.0"
+    version: "2.1.0"
     source: "SPEC.md"
     source_kind: "local"
   decisions:
     role: "durable-decision-records"
-    version: "2.0.0"
+    version: "2.1.0"
     source: "decisions/"
     source_kind: "local"
   skill:

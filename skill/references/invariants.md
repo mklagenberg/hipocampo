@@ -1,6 +1,6 @@
 # Invariants — what and why
 
-Five rules that no Hipocampo instance overrides, under any circumstance (`hipocampo/SPEC.md`, section 8). Each one exists for a specific structural reason, not arbitrary convention — it's important to know why, in order to recognize when a new situation still falls under the rule, even when it isn't obvious at first glance.
+Six rules that no Hipocampo instance overrides, under any circumstance (`hipocampo/SPEC.md`, section 8). Each one exists for a specific structural reason, not arbitrary convention — it's important to know why, in order to recognize when a new situation still falls under the rule, even when it isn't obvious at first glance.
 
 ## 1. No knowledge repository is public to the internet
 
@@ -21,3 +21,7 @@ Same logic as invariant 1, applied within a repository with multiple people: Git
 ## 5. The agent never writes, edits, or deletes content without an explicit user request in the current conversation
 
 A human control point against autonomous drift. Even the recurring rituals (frontmatter audit, REM, structural audit) only get as far as a **proposed plan** on their own — actually executing any content change always waits for explicit confirmation in that conversation. "Running the REM" is not the same thing as "applying the REM's decisions without review".
+
+## 6. Content declared in the repository overrides locally cached or customized skill state
+
+The repository's `AGENTS.md`, `hipocampo.yaml`, `profile.md`, and other declared structured content are authoritative over an installed skill's local state. Re-read the repository when there is a conflict; never resolve it by trusting a cached router, remembered identity, or a hand-edited skill copy. This does not authorize a write: it only decides which declared state governs the operation.
