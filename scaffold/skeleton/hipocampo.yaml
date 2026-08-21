@@ -5,7 +5,7 @@
 # type' field (corporate | personal, or the deprecated pt-BR corporativa |
 # pessoal) is recommended for retirement now that entity+role derive the same
 # information — not yet removed from any real instance (see decisions/0041).
-# Tier note: 'instance.tier' below (content | vault, repository curation level,
+# Curation note: 'instance.curation_level' below (content | vault, repository curation level,
 # hipocampo/decisions/0033) is a DIFFERENT concept from the confidential/public
 # exposure tier in hipocampo/SPEC.md section 2-C / hipocampo/decisions/0029 — a
 # pre-existing mismatch, flagged in hipocampo/decisions/0035, not resolved by
@@ -18,7 +18,7 @@
 
 hipocampo:
   manifest_version: "1.0"
-  compatibility: "^2.0.0"
+  compatibility: "^2.1.0"
   verified_against: "<fill in: version of hipocampo/SPEC.md at instantiation time>"
   verified_commit: "<fill in: commit of hipocampo/main used as the scaffold source>"
 
@@ -27,8 +27,15 @@ instance:
   entity: "<fill in: entity identifier, e.g. personal, or a specific company/family name>"
   role: "<fill in: anchor | additional>"
   scope_description: "<fill in only when role: additional — what belongs in this vault; omit entirely when role: anchor>"
-  tier: "<fill in: content | vault>"
+  policy_profile: "<fill in: personal | corporate — selects the sensitive-data policy>"
+  curation_level: "<fill in: content | vault>"
   language: "en"
+
+# Present only in an anchor vault. This is an operator-confirmed address list,
+# not a router: each listed repository remains authoritative for its own
+# entity, role, and scope declaration.
+discovery:
+  registered_repositories: []
 
 scaffold:
   profile: "<fill in: pessoal | empresa>"    # scaffold profile id — literal filename token, not translated (PR #27)

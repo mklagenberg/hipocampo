@@ -1,0 +1,48 @@
+change_set:
+  id: "0052-consistency-contracts-and-codex-distribution"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0052-consistency-contracts-anchor-registration-and-codex-distribution.md"
+    - "decisions/0044-vault-and-entity-discovery.md"
+    - "decisions/0046-repository-content-overrides-skill-local-state.md"
+
+impact:
+  - artifact: "SPEC.md"
+    status: "updated"
+    note: "Defines authoritative projections, anchor registration, curation_level, policy_profile, and compatible legacy reads."
+  - artifact: "decisions/0052-consistency-contracts-anchor-registration-and-codex-distribution.md"
+    status: "updated"
+    note: "Records the durable structural choices behind the new contracts."
+  - artifact: "skill/SKILL.md, skill/manifest.yaml, skill/agents/openai.yaml, skill/references/codex.md, skill/references/instantiation.md, skill/references/invariants.md, skill/references/personalization.md, skill/references/routines.md"
+    status: "updated"
+    note: "Synchronizes invariant 6, local anchor state, registration procedure, manifest compatibility, and the Codex adapter."
+  - artifact: "scaffold/profiles/empresa.yaml, scaffold/profiles/pessoal.yaml, scaffold/skeleton/AGENTS.md, scaffold/skeleton/POST-INSTANTIATION.md, scaffold/skeleton/hipocampo.yaml"
+    status: "updated"
+    note: "Generates the new unambiguous manifest fields and instance guidance."
+  - artifact: "docs/MULTI-TOOL-USAGE.md, docs/step-classification.md, docs/taxonomy.md, docs/vocabulary-dictionary.md, docs/change-management.md"
+    status: "updated"
+    note: "Updates taxonomy, vocabulary, step classification, change management, and host guidance."
+  - artifact: "scripts/validate_contracts.py, .github/workflows/validate.yml"
+    status: "updated"
+    note: "Adds deterministic cross-surface contract validation to CI."
+  - artifact: "moda.yaml, conformance/moda.yaml, AGENTS.md"
+    status: "updated"
+    note: "Synchronizes repository identity, conformance disclosures, and audit evidence."
+  - artifact: "CHANGELOG.md, UPGRADE.md, RELEASE-CHECKLIST.md"
+    status: "updated"
+    note: "Records the pending 2.1.0 change, compatible adoption actions, and the complete release-validation gate."
+  - artifact: "README.md, MIGRATIONS.md"
+    status: "reviewed"
+    note: "No release is being cut in this change; README retains the released 2.0.0 version and MIGRATIONS.md requires no entry for a backward-compatible minor release."
+
+validation:
+  commands:
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_skill_docs.py --root ."
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_contracts.py --root ."
+  evidence: []
+  notes: "Diff coverage is run against the PR base after the remote branch is created."

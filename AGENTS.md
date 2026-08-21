@@ -21,7 +21,7 @@ Don't turn this file into an encyclopedia. Detailed knowledge lives in the linke
 <!-- moda:disclosure:start -->
 This repository is being structured and evaluated with [MODA](https://github.com/mklagenberg/moda) — an open framework for organizing, designing, auditing, packaging, and evolving agentic methodologies.
 
-Before changing the methodology's structure, read `moda.yaml`, `conformance/moda.yaml`, and the latest audit in `audits/moda/`. Do not claim conformance without evidence produced against the declared MODA version — today the declared relationship is `audited_against` (retrospective, `claim_stage: mapped`, `conformance_result: partial`), not `conforms_to`. Do not migrate structure silently.
+Before changing the methodology's structure, read `moda.yaml`, `conformance/moda.yaml`, and the latest audit in `audits/moda/`. Do not claim conformance beyond the evidence produced against the declared MODA version — today the declared relationship is `conforms_to` (retrospective, `claim_stage: mapped`, `conformance_result: partial`), not full conformance. Do not migrate structure silently.
 <!-- moda:disclosure:end -->
 
 ## Working rules

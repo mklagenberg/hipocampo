@@ -7,7 +7,7 @@ framework:
 subject:
   id: "hipocampo"
   kind: "methodology"
-  version: "2.0.0"
+  version: "2.1.0"
   adoption_mode: "retrospective"
 
 assessment:
@@ -27,7 +27,7 @@ controls:
     evidence: ["BEST-PRACTICES.md", "GETTING-STARTED.md"]
   inputs_outputs_and_invariants:
     status: "satisfied"
-    evidence: ["SPEC.md#2-frontmatter-unified-schema", "SPEC.md#8-extensioncustomization-and-agent-precedence", "DISCLAIMER.md", "decisions/0046-repository-content-overrides-skill-local-state.md"]
+    evidence: ["SPEC.md#2-frontmatter-unified-schema", "SPEC.md#8-extensioncustomization-and-agent-precedence", "DISCLAIMER.md", "decisions/0046-repository-content-overrides-skill-local-state.md", "decisions/0052-consistency-contracts-anchor-registration-and-codex-distribution.md"]
     notes: ["The invariants list grows from five to six this round: repository content always overrides locally-cached or customized skill state (decisions/0046) — a trust boundary distinct in kind from the other five (skill-versus-repository authority, not a content/access/deletion rule), closing a blind spot none of the existing rituals could see because none of them operate on the local skill copy at all."]
   decomposition_and_control_flow:
     status: "partial"
@@ -76,7 +76,7 @@ controls:
     notes: ["The Change Set mechanism exists and is documented, with a backfill exercise (PR #22) and several prospective Change Sets (0032/0033, 0038/0039) validating the template in both modes. This evidence list is illustrative, not an exhaustive index of every Change Set folder — changes/0035-.../ and changes/0036-0037-.../ also exist but aren't cited here; a pre-existing gap, flagged in PR #30, left to Mau's discretion rather than fixed opportunistically. Deterministic validation of impact.yaml's own schema, and of coverage against the actual diff, now exists (scripts/validate_change.py, run in CI on every PR, added 2026-08-19) — this closes the specific gap this note previously named ('no deterministic validation comparing impact.yaml against the actual diff'). Still partial, not satisfied: coverage matching is heuristic (impact.yaml's `artifact` field is free text, sometimes several paths in one string, not MODA's own structured `paths: [...]` list — a deliberate schema adaptation, decisions/0031), so the check catches an uncovered protected-path change but doesn't verify that a declared 'updated' entry is semantically accurate — that remains human review, same limit docs/change-management.md's 'Completion rule' already states."]
   repository_contract:
     status: "partial"
-    evidence: ["README.md", "AGENTS.md", "moda.yaml", "CHANGELOG.md", "ROADMAP.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "docs/change-management.md", "changes/", "scaffold/", "scripts/validate_hipocampo.py", "scripts/validate_skill_docs.py", "scripts/validate_change.py", ".github/workflows/validate.yml", "RELEASE-CHECKLIST.md"]
+    evidence: ["README.md", "AGENTS.md", "moda.yaml", "CHANGELOG.md", "ROADMAP.md", "decisions/", "UPGRADE.md", "MIGRATIONS.md", "docs/change-management.md", "changes/", "scaffold/", "scripts/validate_hipocampo.py", "scripts/validate_skill_docs.py", "scripts/validate_change.py", "scripts/validate_contracts.py", ".github/workflows/validate.yml", "RELEASE-CHECKLIST.md"]
     notes: ["Change-management policy satisfied (docs/change-management.md); scaffold mechanism is now declarative (scaffold/, Phase D); a minimal release-gate checklist now exists (RELEASE-CHECKLIST.md, decisions/0037, closes minor finding 2). Deterministic validation of the repository's own structure now genuinely exists and runs in CI (scripts/validate_hipocampo.py, scripts/validate_skill_docs.py, scripts/validate_change.py, .github/workflows/validate.yml, decisions/0036 — Fase G, closes MODA self-audit major finding 4) — corrected 2026-08-19: this note, and docs/change-management.md's 'Deterministic and human checking' section, previously cited .github/workflows/validate.yml as existing evidence before the workflow file actually existed in the repository; found during a v2.0.0 personal-skill revalidation and fixed alongside adding the two new validators. Still partial by design, not oversight: no branch-protection rule enforcing the CI check is declared (a GitHub repository setting no available tool configures — manual follow-up for Mau, same category as archiving hipocampo-toolkit), and MODA's full ten-gate release model was deliberately not adopted (decisions/0037, proportionality)."]
 
 exceptions: []

@@ -4,7 +4,7 @@ profile:
   purpose: "Generates a Hipocampo content repository whose owner is a company (e.g., hipocampo-company, hipocampo-company-vault)."
 
 methodology:
-  compatibility: "^2.0.0"
+  compatibility: "^2.1.0"
 
 engine:
   version: "1.0.0"
@@ -15,10 +15,10 @@ inputs:
   - id: "repository_name"
     required: true
     description: "Name of the new repository to be created (e.g., hipocampo-company-vault)."
-  - id: "tier"
+  - id: "curation_level"
     required: true
     enum: ["content", "vault"]
-    description: "Repository curation level: 'content' (receives public/internal/confidential/restricted visibility) or 'vault' (confidential/restricted only — LICENSE keeps only sections c/d). Deprecated pt-BR value for 'content' is 'conteudo' — see hipocampo/docs/vocabulary-dictionary.md."
+    description: "Repository curation level: 'content' (receives public/internal/confidential/restricted visibility) or 'vault' (confidential/restricted only — LICENSE keeps only sections c/d). This is distinct from exposure tier."
   - id: "company_legal_name"
     required: true
     description: "Legal (registered) name of the company that owns the content."
@@ -57,7 +57,7 @@ outputs:
   - path: "LICENSE"
     operation: "generate"
     ownership: "generated-once"
-    note: "Generated from scaffold/license-templates/LICENSE-corporativo.md, adjusted by tier (see license-templates/README.md)."
+    note: "Generated from scaffold/license-templates/LICENSE-corporativo.md, adjusted by curation_level (see license-templates/README.md)."
   - path: "registry.md"
     operation: "generate"
     ownership: "managed-structure"
@@ -69,7 +69,7 @@ outputs:
   - path: "hipocampo.yaml"
     operation: "generate"
     ownership: "managed-structure"
-    note: "Vault manifest (hipocampo/decisions/0033, hipocampo/decisions/0034, hipocampo/decisions/0035, hipocampo/decisions/0041); entity/role/scope_description filled from the collected inputs, language defaults to 'en' unless overridden by the collected input."
+    note: "Vault manifest; entity/role/scope_description and curation_level are collected inputs, policy_profile is corporate for this profile, and language defaults to 'en' unless overridden by the collected input."
 
 conflicts:
   default: "stop-and-report"

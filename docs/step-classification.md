@@ -21,7 +21,7 @@ These three aren't a strict pipeline (discretionary always before gated, determi
 | REM ritual (§5-A) | Consolidate — commit the resulting document | Gated | Invariant 5, same as any write. |
 | REM ritual (§5-A) | Update old memories — decide disposition of a flagged item | Discretionary | Revalidate/archive/supersede/fix-field is a judgment call. |
 | REM ritual (§5-A) | Update old memories — commit the disposition | Gated | Invariant 5. |
-| Weekly structural audit (§5-C) | Review atomicity/placement/sensitive-data-leak, produce findings | Discretionary | Judgment call on each of the three functions. |
+| Weekly structural audit (§5-C) | Review atomicity/placement/sensitive-data-leak/repository-level vocabulary, produce findings | Discretionary | Judgment call on each of the four functions. |
 | Weekly structural audit (§5-C) | Act on a finding (move/split/remove/Redbutton) | Gated | "Any finding is always presented to the responsible human before any action" (§5-C). |
 | Dispatcher (§5-D) | Trigger a routine on schedule | Deterministic | Fixed order today; dynamic scheduling from per-routine metadata is an open question, not yet built (`decisions/0042`). |
 
