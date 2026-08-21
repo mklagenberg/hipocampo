@@ -2,7 +2,7 @@
 
 Version history of the methodology itself. Follows [SemVer](https://semver.org/lang/pt-BR/) — see SPEC.md, section 9.
 
-## [Unreleased]
+## [2.1.1] — 2026-08-21
 
 ### Fixed
 - **Strict private content-license boundary** (`changes/0056-strict-private-content-license-boundary`) — corrects an unsafe contradiction in the old content-license templates and `visibility: public` prose. Every content vault remains private and proprietary for its declared owner; `visibility` and `LicenseRef` values only govern handling among already authorized users and never grant copying, redistribution, publication, sublicensing, external indexing, or a public repository. Existing vaults correct the root license structurally, without an update-triggered document sweep. This is a PATCH security correction: the private/proprietary boundary was already the methodology's declared contract.
