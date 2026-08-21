@@ -38,4 +38,4 @@ This repository is being evaluated and brought into conformance with [MODA](http
 - Latest audit: [`audits/moda/2026-08-17-v1.0.0-self-audit.md`](audits/moda/2026-08-17-v1.0.0-self-audit.md)
 <!-- moda:disclosure:end -->
 
-Current version: **2.0.0** ([SemVer](https://semver.org/lang/pt-BR/)).
+Current version: **2.1.0** ([SemVer](https://semver.org/lang/pt-BR/)).

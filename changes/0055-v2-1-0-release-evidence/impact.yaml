@@ -1,0 +1,32 @@
+change_set:
+  id: "0055-v2-1-0-release-evidence"
+  class: "editorial"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0031-change-set-mechanism.md"
+    - "decisions/0037-minimal-release-gate-checklist.md"
+
+impact:
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Dates the already-implemented v2.1.0 release entry and aligns its final skill-package version reference."
+  - artifact: "README.md"
+    status: "updated"
+    note: "Publishes v2.1.0 as the current methodology version."
+  - artifact: "SPEC.md, UPGRADE.md, MIGRATIONS.md"
+    status: "reviewed"
+    note: "No new contract, instance action, or migration is introduced by release evidence."
+
+validation:
+  commands:
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_skill_docs.py --root ."
+    - "python scripts/validate_skill_package.py --root ."
+    - "python scripts/validate_contracts.py --root ."
+    - "python scripts/validate_change.py --root . --base <main-before-release-evidence> --head HEAD"
+    - "git diff --check <main-before-release-evidence>..HEAD"
+  evidence:
+    - "Local and pull-request validation pass before the manual tag and GitHub Release handoff."
+  notes: "This Change Set records release evidence only. It does not alter the methodology, its compatibility contract, or the progressive upgrade posture."
