@@ -60,7 +60,7 @@ outputs:
   - path: "LICENSE"
     operation: "generate"
     ownership: "generated-once"
-    note: "Generated from scaffold/license-templates/LICENSE-pessoal.md, adjusted by curation_level (see license-templates/README.md)."
+    note: "Generated only because this profile creates a content-bearing vault, from scaffold/license-templates/LICENSE-pessoal.md and adjusted by curation_level (see license-templates/README.md)."
   - path: "registry.md"
     operation: "generate"
     ownership: "managed-structure"

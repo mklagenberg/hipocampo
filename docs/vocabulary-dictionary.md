@@ -35,6 +35,10 @@ Canonical de:para reference for every controlled-vocabulary field this methodolo
 
 ## Change history
 
+## Term governance
+
+Before a contribution introduces a canonical term, alias, enum value, schema field, or named operating concept, it searches this dictionary and `docs/taxonomy.md`. An accepted term is registered in both surfaces when applicable, with its owning SPEC section or Decision Record; a Change Set records the terminology review even when the result is not applicable. Free prose and existing user-authored `category` values remain outside this controlled vocabulary.
+
 - `decisions/0035-controlled-vocabulary-dictionary.md` (this file's origin) — initial dictionary, covering `source`, `domain`, both historical `tier` concepts, and `AGENTS.md`'s `Instance type`.
 - `decisions/0052-consistency-contracts-anchor-registration-and-codex-distribution.md` — resolves the field-name collision with `instance.curation_level` and moves the policy selector to `instance.policy_profile`.
 - `decisions/0041-entity-model-and-vault-vocabulary.md` — `instance.domain` (`hipocampo.yaml`) superseded by `instance.entity`/`instance.role`/`instance.scope_description`; "vault" redefined as a generic noun for any knowledge repository (previously implied confidential-only, via the `-vault` suffix asymmetry); `AGENTS.md`'s "Instance type" field recommended for retirement rather than treated as a permanent, unharmonized second vocabulary.

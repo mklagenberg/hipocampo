@@ -4,6 +4,20 @@ Hipocampo is a public methodology repository. This file is the canonical agent e
 
 ## Start with the map
 
+## Route by user intent
+
+Classify the request before loading documents. Read only the listed path, then expand only when the request requires it:
+
+| User intent | Required route | Write boundary |
+|---|---|---|
+| Already operates Hipocampo | Target vault's `AGENTS.md` and `hipocampo.yaml`; relevant SPEC rule | Never infer a target vault or write permission. |
+| New to Hipocampo | `README.md`, `GETTING-STARTED.md`, `DISCLAIMER.md`, and `docs/FUNDAMENTALS.md` | Orientation only until the user explicitly asks to instantiate. |
+| Wants to know or install the methodology | `README.md`, `GETTING-STARTED.md`, `skill/SKILL.md`, and the relevant host adapter | Installation is client-side and always confirmed. |
+| Wants to update the skill | `skill/manifest.yaml`, `skill/package-lock.yaml`, host adapter, `UPGRADE.md` | Compare version and package hash; notify and wait for confirmation. |
+| Wants to update vaults | Each target vault's `AGENTS.md`/manifest, `UPGRADE.md`, `MIGRATIONS.md`, `CHANGELOG.md` | No repository-wide sweep; remediate progressively through CRUD or REM. |
+| Wants focused methodology context | `README.md`, then only the relevant SPEC section and Decision Records | Read-only unless a separate change is requested. |
+| Wants the complete methodology | `README.md`, `DISCLAIMER.md`, full `SPEC.md`, taxonomy, vocabulary, CHANGELOG, UPGRADE, conformance, and latest audit | State reading scope and limits. |
+
 Load only the context needed for the current task:
 
 1. Read `README.md` for the repository's identity and navigation.
@@ -41,6 +55,7 @@ Before changing the methodology's structure, read `moda.yaml`, `conformance/moda
 - Use a short-lived branch and PR for normal change; keep `main` as the only permanent integration branch.
 - Update `CHANGELOG.md` for a notable behavior or contract change.
 - Record a durable structural choice in `decisions/`.
+- Before accepting a new named term or controlled value, update the taxonomy and vocabulary surfaces in the same Change Set, or record why neither applies.
 - Update `ROADMAP.md` when direction changes; never use it as a task backlog or changelog.
 - Update `UPGRADE.md` for adoption action required by a backward-compatible release.
 - Update `MIGRATIONS.md` for an incompatible change.

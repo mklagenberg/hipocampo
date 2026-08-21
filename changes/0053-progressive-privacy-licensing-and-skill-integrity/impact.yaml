@@ -1,0 +1,41 @@
+change_set:
+  id: "0053-progressive-privacy-licensing-and-skill-integrity"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0053-progressive-privacy-licensing-and-skill-integrity.md"
+    - "decisions/0007-content-repo-licensing.md"
+    - "decisions/0009-privacy-policy-by-instance.md"
+    - "decisions/0050-no-nominal-entity-citation-in-methodology-repository.md"
+
+impact:
+  - artifact: "SPEC.md, decisions/0053-progressive-privacy-licensing-and-skill-integrity.md"
+    status: "updated"
+    note: "Defines prospective privacy requirements, progressive remediation, and licensing/update boundaries."
+  - artifact: "AGENTS.md, CONTRIBUTING.md, docs/taxonomy.md, docs/vocabulary-dictionary.md"
+    status: "updated"
+    note: "Adds intent routing, contribution safeguards, and terminology governance."
+  - artifact: "skill/SKILL.md, skill/manifest.yaml, skill/package-lock.yaml, skill/references/codex.md, skill/references/crud-frontmatter.md, skill/references/routines.md, scaffold/license-templates/README.md, scaffold/profiles/empresa.yaml, scaffold/profiles/pessoal.yaml, scaffold/skeleton/AGENTS.md"
+    status: "updated"
+    note: "Projects privacy, content-license boundaries, package integrity, and progressive adoption into operations."
+  - artifact: "scripts/validate_contracts.py, scripts/validate_skill_package.py, .github/workflows/validate.yml"
+    status: "updated"
+    note: "Adds deterministic validation for the new named contracts and package lock."
+  - artifact: "README.md, CHANGELOG.md, UPGRADE.md, RELEASE-CHECKLIST.md, docs/change-management.md, docs/privacy-and-licensing-boundaries.md, conformance/moda.yaml"
+    status: "updated"
+    note: "Publishes navigation and the pending v2.1.0 minor change."
+  - artifact: "MIGRATIONS.md, ROADMAP.md"
+    status: "reviewed"
+    note: "No incompatible migration or direction change: existing vaults are remediated progressively through CRUD or REM."
+
+validation:
+  commands:
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_skill_docs.py --root ."
+    - "python scripts/validate_skill_package.py --root ."
+    - "python scripts/validate_contracts.py --root ."
+    - "python scripts/validate_change.py --root ."
+  evidence: []
+  notes: "Diff coverage is executed against the PR base before publication. Terminology review: accepted terms are progressive remediation, package lock, and privacy/security/provenance; their governing sources are this Change Set and decision 0053."

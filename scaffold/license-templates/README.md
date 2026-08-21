@@ -1,6 +1,6 @@
 # LICENSE templates — how the agent uses this
 
-When the agent instantiates a new content repository (see `hipocampo/skill/references/instantiation.md`), it generates the root `LICENSE` from one of these templates — it never copies the methodology's Apache-2.0 (`hipocampo/LICENSE`), which is correct for `hipocampo` but wrong for a content repository, even a private one, because the license text itself would already assert a usage permission that isn't the intent (see `hipocampo/decisions/0007-content-repo-licensing.md`).
+When the agent instantiates a new content repository (see `hipocampo/skill/references/instantiation.md`), it generates the root `LICENSE` from one of these templates — it never copies the methodology's Apache-2.0 (`hipocampo/LICENSE`), which is correct for `hipocampo` but wrong for a content repository, even a private one, because the license text itself would already assert a usage permission that isn't the intent (see `hipocampo/decisions/0007-content-repo-licensing.md`). These templates are only for content-bearing vaults. Never copy a content `LICENSE` or generic privacy-policy file into the methodology repository, a client-side skill, adapter state, or any non-content repository.
 
 ## How the agent chooses
 
