@@ -1,0 +1,37 @@
+change_set:
+  id: "0056-strict-private-content-license-boundary"
+  class: "normative"
+  semver: "patch"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0007-content-repo-licensing.md"
+    - "decisions/0054-private-proprietary-content-license-boundary.md"
+    - "decisions/0053-progressive-privacy-licensing-and-skill-integrity.md"
+
+impact:
+  - artifact: "SPEC.md, decisions/0054-private-proprietary-content-license-boundary.md"
+    status: "updated"
+    note: "Corrects the normative distinction between private handling classifications and legal permission."
+  - artifact: "scaffold/license-templates/LICENSE-pessoal.md, scaffold/license-templates/LICENSE-corporativo.md, scaffold/license-templates/README.md, scaffold/profiles/pessoal.yaml, scaffold/profiles/empresa.yaml, scaffold/skeleton/hipocampo.yaml"
+    status: "updated"
+    note: "Makes all generated content licenses strictly private/proprietary and projects the patch compatibility into scaffold outputs."
+  - artifact: "UPGRADE.md, CHANGELOG.md, docs/privacy-and-licensing-boundaries.md, docs/vocabulary-dictionary.md, docs/taxonomy.md"
+    status: "updated"
+    note: "Publishes adoption guidance, pending PATCH notes, and the license boundary."
+  - artifact: "moda.yaml, conformance/moda.yaml, scripts/validate_contracts.py"
+    status: "updated"
+    note: "Synchronizes methodology version projections and their deterministic contract check."
+  - artifact: "MIGRATIONS.md, ROADMAP.md, skill/"
+    status: "reviewed"
+    note: "No incompatible schema migration, direction change, or client-skill package change: the scaffold source supplies the corrected instantiation artifact."
+
+validation:
+  commands:
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_skill_docs.py --root ."
+    - "python scripts/validate_skill_package.py --root ."
+    - "python scripts/validate_contracts.py --root ."
+    - "python scripts/validate_change.py --root ."
+  evidence: []
+  notes: "Diff coverage is run against the PR base. No new controlled value is introduced: public/internal/confidential/restricted remain existing visibility values; the correction only removes an unsafe license interpretation."

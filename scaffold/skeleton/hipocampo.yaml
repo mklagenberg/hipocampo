@@ -18,7 +18,7 @@
 
 hipocampo:
   manifest_version: "1.0"
-  compatibility: "^2.1.0"
+  compatibility: "^2.1.1"
   verified_against: "<fill in: version of hipocampo/SPEC.md at instantiation time>"
   verified_commit: "<fill in: commit of hipocampo/main used as the scaffold source>"
 

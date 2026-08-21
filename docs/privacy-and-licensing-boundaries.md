@@ -2,7 +2,7 @@
 
 ## Separate artifacts, separate purposes
 
-`hipocampo/LICENSE` is Apache-2.0 for the public methodology, scaffold, skill source, and tooling. It never grants rights over knowledge held by a vault. A content-bearing vault receives its own proprietary `LICENSE`, generated from the personal or corporate template and mechanically aligned with document visibility.
+`hipocampo/LICENSE` is Apache-2.0 for the public methodology, scaffold, skill source, and tooling. It never grants rights over knowledge held by a vault. A content-bearing vault receives its own strictly private proprietary `LICENSE`, generated from the personal or corporate template. Its `visibility` and `license` frontmatter fields are internal governance references, never an open permission to copy, publish, redistribute, or expose content outside the authorized private context.
 
 Privacy is a methodology rule, not a generic file copied into every repository. Do not copy a content-vault `LICENSE`, a privacy-policy template, or content governance language into a client-side skill, host adapter, anchor-state file, or another non-content repository.
 
@@ -10,7 +10,7 @@ Privacy is a methodology rule, not a generic file copied into every repository. 
 
 New content, and content touched by CRUD or REM, never retains credentials or non-public financial values. A public financial value is usable only with a public URL and publication or access date in the document. These rules do not require an upgrade-triggered inspection of all historical content: READ flags a finding; UPDATE or REM presents the smallest safe remediation for confirmation.
 
-The public methodology repository contains no real instance content and follows the stricter anonymization rule of `decisions/0050`. Knowledge vaults remain private by invariant; if a future public repository is considered, do not copy identifiable content into it without an explicit privacy review and anonymization.
+The public methodology repository contains no real instance content and follows the stricter anonymization rule of `decisions/0050`. Knowledge vaults remain private by invariant; if external publication is considered, create it only from explicitly authorized and anonymized derivative material, never by making a knowledge vault public.
 
 ## Progressive remediation and audit boundary
 

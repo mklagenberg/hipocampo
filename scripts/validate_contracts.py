@@ -15,7 +15,7 @@ from pathlib import Path
 
 REQUIRED = {
     "SPEC.md": [
-        "Version: 2.1.0",
+        "Version: 2.1.1",
         "instance.policy_profile",
         "instance.curation_level",
         "discovery.registered_repositories",
