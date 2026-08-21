@@ -1,6 +1,6 @@
 # LICENSE templates — how the agent uses this
 
-When the agent instantiates a new content repository (see `hipocampo/skill/references/instantiation.md`), it generates the root `LICENSE` from one of these templates — it never copies the methodology's Apache-2.0 (`hipocampo/LICENSE`), which is correct for `hipocampo` but wrong for a content repository, even a private one, because the license text itself would already assert a usage permission that isn't the intent (see `hipocampo/decisions/0007-content-repo-licensing.md`). These templates are only for content-bearing vaults. Never copy a content `LICENSE` or generic privacy-policy file into the methodology repository, a client-side skill, adapter state, or any non-content repository.
+When the agent instantiates a new content repository (see `hipocampo/skill/references/instantiation.md`), it generates the root `LICENSE` from one of these templates — it never copies the methodology's Apache-2.0 (`hipocampo/LICENSE`), which is correct for `hipocampo` but wrong for a content repository, even a private one, because the license text itself would already assert a usage permission that isn't the intent (see `hipocampo/decisions/0007-content-repo-licensing.md`). These templates are only for content-bearing vaults. They are strictly private and proprietary for their declared holder: `visibility` is a handling classification, never an open license. Never copy a content `LICENSE` or generic privacy-policy file into the methodology repository, a client-side skill, adapter state, or any non-content repository.
 
 ## How the agent chooses
 
@@ -8,7 +8,7 @@ When the agent instantiates a new content repository (see `hipocampo/skill/refer
    - **`LICENSE-pessoal.md`** — if the owner is a natural person.
    - **`LICENSE-corporativo.md`** — if the owner is a company.
 2. It fills in the placeholders (`[FULL NAME]`/`[@github-username]` or `[COMPANY NAME]`) from the inputs collected from the user.
-3. If the repository is at the "vault" level (only receives `visibility: confidential`/`restricted`, never `public`/`internal` — see `hipocampo/SPEC.md`, section 2), it keeps only sections (c) and (d) of the template, following the adjustment note within the template itself.
+3. If the repository is at the "vault" level (only receives `visibility: confidential`/`restricted`, never `public`/`internal` — see `hipocampo/SPEC.md`, section 2), it uses the same strict-private template and declares that narrower curation boundary.
 4. It saves the result as `LICENSE` at the root of the new repository.
 
 Confirm the result in step 2 of `POST-INSTANTIATION.md` — this is neither optional nor cosmetic: without it, a private content repository would technically carry an open-source license.

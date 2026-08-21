@@ -29,6 +29,7 @@ This document is updated with every methodology release (mandatory step of the r
 ### Licensing
 
 - [ ] **[Mandatory]** The repository's `LICENSE` is not the Apache-2.0 inherited from the template — it's the `LICENSE-pessoal` or `LICENSE-corporativo` from `scaffold/license-templates/` (the old `hipocampo-toolkit/license-templates/` was consolidated and archived, `decisions/0032`). Common bug in older instances — see `docs/FAQ-AND-COMMON-ERRORS.md`.
+- [ ] **[Mandatory, security correction since v2.1.1]** The content `LICENSE` is strictly private and proprietary for its declared owner. `visibility: public` and legacy `LicenseRef-*-Public` identify only the least-restricted handling class among already authorized users; they never authorize external publication, copying, redistribution, sublicensing, or a public repository. Update this root artifact without using the methodology update as a reason to inspect or rewrite every historical document.
 
 ### Maintenance rituals
 

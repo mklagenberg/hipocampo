@@ -37,8 +37,8 @@ A single index of every controlled field, enum, and named concept this methodolo
 | `contributors` | list, same identity rules as `author` | v1.1.0 (credit mechanism, `CONTRIBUTORS.md`) | v2.0.0 — added to the schema's central field listing; already in use, just never listed there | `SPEC.md` §2, `decisions/0006`, `decisions/0026` |
 | `owner` | company name, only for a work-context document | v1.0.0 | — | `SPEC.md` §2 |
 | `contains_subjective_content` | boolean, relevant only when `owner` is filled in | v2.0.0 | — | `SPEC.md` §2, `decisions/0026` |
-| `curation_status` | `staged \| permanent`, relevant only in `company-confidential` | v2.0.0 | — | `SPEC.md` §2, §2-C, `decisions/0029` |
-| `license` | `LicenseRef-<idstring>`, always derived from `visibility` | v1.1.0 | — | `SPEC.md` §2, `decisions/0007` |
+| `curation_status` | `staged \| permanent`, relevant only in a restricted corporate vault | v2.0.0 | v2.1.1 — promotion target clarified as broader-access private, never public | `SPEC.md` §2, §2-C, `decisions/0029`, `0054` |
+| `license` | `LicenseRef-<idstring>`, always derived from `visibility`; never an open license | v1.1.0 | v2.1.1 — private/proprietary boundary clarified | `SPEC.md` §2, `decisions/0007`, `0054` |
 
 ## 2. Repository/vault-level taxonomy (`SPEC.md`, section 2-C/2-D)
 
@@ -47,10 +47,11 @@ A single index of every controlled field, enum, and named concept this methodolo
 | `entity` | extensible identifier, supersedes `domain` | v1.0.0 (`domain`, base schema; `decisions/0002` explains the underlying architecture without naming the field) | Lote A, v2.0.0 — `domain` superseded by `entity` | `SPEC.md` §2-C, `decisions/0002`, `0041` |
 | `role` | `anchor \| additional` | Lote A, v2.0.0 | — | `SPEC.md` §2-C, `decisions/0041` |
 | `scope_description` | required only when `role: additional` | Lote A, v2.0.0 | — | `SPEC.md` §2-C, `decisions/0041` |
-| Exposure tier | `confidential \| public`, carried by repository naming convention | v2.0.0 — formally named a pre-existing informal practice | Lote A: no longer implied by the `-vault` suffix | `SPEC.md` §2-C/§2-D, `decisions/0029`, `0041` |
+| Visibility handling classification | `public \| internal \| confidential \| restricted`; never legal permission | v1.0.0 | v2.1.1 — `public` constrained to the authorized private context | `SPEC.md` §2, §2-C/§2-D, `decisions/0007`, `0054` |
 | `instance.language` | BCP-47 tag, default `"en"` | v2.0.0 — Fase E | — | `decisions/0033`, `0034` |
 | `instance.curation_level` | `content \| vault`, distinct from exposure tier | v2.1.0 | — | `SPEC.md` §2-C, `decisions/0052` |
 | `instance.policy_profile` | `corporate \| personal`, sole sensitive-data-policy selector | v2.1.0 | — | `SPEC.md` §2-A, §11, `decisions/0052` |
+| Operational vault descriptor | `personal-open-vault`, `personal-restricted-vault`, `company-open-vault`, `company-restricted-vault`; prose only, derived from manifest fields | v2.1.1 | — | `docs/vocabulary-dictionary.md`, `SPEC.md` §2-C, `decisions/0054` |
 | Multi-vault/multi-entity design premises | 3 premises (multi-vault by design; confidential-first; anchor as existence guarantee) | Lote A, v2.0.0 | — | `SPEC.md` §2-D, `decisions/0040` |
 
 ## 3. Identity artifacts

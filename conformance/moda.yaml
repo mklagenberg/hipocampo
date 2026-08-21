@@ -7,7 +7,7 @@ framework:
 subject:
   id: "hipocampo"
   kind: "methodology"
-  version: "2.1.0"
+  version: "2.1.1"
   adoption_mode: "retrospective"
 
 assessment:

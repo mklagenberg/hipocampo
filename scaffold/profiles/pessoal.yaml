@@ -4,7 +4,7 @@ profile:
   purpose: "Generates a Hipocampo content repository whose owner is a natural person (e.g., hipocampo-concepts, hipocampo-personal-vault)."
 
 methodology:
-  compatibility: "^2.1.0"
+  compatibility: "^2.1.1"
 
 engine:
   version: "1.0.0"
@@ -18,7 +18,7 @@ inputs:
   - id: "curation_level"
     required: true
     enum: ["content", "vault"]
-    description: "Repository curation level: 'content' (receives public/internal/confidential/restricted visibility) or 'vault' (confidential/restricted only — LICENSE keeps only sections c/d). This is distinct from exposure tier."
+    description: "Repository curation level: 'content' (uses public/internal/confidential/restricted handling classifications) or 'vault' (confidential/restricted only). Every generated content LICENSE is strictly private and proprietary; visibility never grants an open license."
   - id: "owner_full_name"
     required: true
     description: "Full name of the content owner, a natural person."

@@ -26,7 +26,9 @@ Canonical de:para reference for every controlled-vocabulary field this methodolo
 | `instance.policy_profile` | `hipocampo.yaml` | `corporativa` | `corporate` | `decisions/0022`, `0035`, `0052` |
 | `instance.policy_profile` | `hipocampo.yaml` | `pessoal` | `personal` | `decisions/0022`, `0035`, `0052` |
 
-**Compound repository-descriptor labels** (used in prose, not a single field's literal value — built by combining `domain`+exposure `tier`): `empresa-confidencial` → `company-confidential`; `empresa-público` → `company-public`; `pessoal-confidencial` → `personal-confidential`; `pessoal-público` → `personal-public`.
+**Legacy compound repository descriptors** (used in prose, never a manifest field) were built from `domain`+exposure `tier`: `empresa-confidencial` → `company-confidential`; `empresa-público` → `company-public`; `pessoal-confidencial` → `personal-confidential`; `pessoal-público` → `personal-public`.
+
+**Current operational descriptors** are prose labels assembled from the manifest rather than a controlled field: `personal-open-vault` = personal entity/policy, `role: additional`, `curation_level: content`; `personal-restricted-vault` = personal entity/policy, `role: anchor`, `curation_level: vault`; `company-open-vault` = corporate policy, `role: anchor`, `curation_level: content`; `company-restricted-vault` = corporate policy, `role: additional`, `curation_level: vault`. The real `instance.entity` remains extensible and authoritative (for example, it is not replaced by the generic word `company`). `open` and `restricted` describe relative access posture only: every such vault remains private and proprietary, and neither descriptor grants legal permission beyond its root `LICENSE`.
 
 ## Compatibility aliases
 
@@ -42,3 +44,4 @@ Before a contribution introduces a canonical term, alias, enum value, schema fie
 - `decisions/0035-controlled-vocabulary-dictionary.md` (this file's origin) — initial dictionary, covering `source`, `domain`, both historical `tier` concepts, and `AGENTS.md`'s `Instance type`.
 - `decisions/0052-consistency-contracts-anchor-registration-and-codex-distribution.md` — resolves the field-name collision with `instance.curation_level` and moves the policy selector to `instance.policy_profile`.
 - `decisions/0041-entity-model-and-vault-vocabulary.md` — `instance.domain` (`hipocampo.yaml`) superseded by `instance.entity`/`instance.role`/`instance.scope_description`; "vault" redefined as a generic noun for any knowledge repository (previously implied confidential-only, via the `-vault` suffix asymmetry); `AGENTS.md`'s "Instance type" field recommended for retirement rather than treated as a permanent, unharmonized second vocabulary.
+- `decisions/0054-private-proprietary-content-license-boundary.md` — `open`/`public` vocabulary is constrained to private-context handling and relative posture; it never confers an open license or publication permission.
