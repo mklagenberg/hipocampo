@@ -28,5 +28,4 @@ validation:
     - "python scripts/validate_change.py --root . --base <base> --head <head>"
     - "git diff --check <base> <head>"
   evidence: []
-  notes:
-    - "The target tag and GitHub Release are intentionally deferred until this Change Set is merged."
+  notes: "The target tag and GitHub Release are intentionally deferred until this Change Set is merged."
