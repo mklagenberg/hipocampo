@@ -1,0 +1,32 @@
+change_set:
+  id: "0057-v2-1-1-release-evidence"
+  class: "editorial"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0031-change-set-mechanism.md"
+    - "decisions/0037-minimal-release-gate-checklist.md"
+
+impact:
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Dates the v2.1.1 PATCH release entry."
+  - artifact: "README.md"
+    status: "updated"
+    note: "Updates the current-version marker to 2.1.1."
+  - artifact: "SPEC.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/"
+    status: "reviewed"
+    note: "No additional release-evidence change required."
+
+validation:
+  commands:
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_skill_docs.py --root ."
+    - "python scripts/validate_skill_package.py --root ."
+    - "python scripts/validate_contracts.py --root ."
+    - "python scripts/validate_change.py --root . --base <base> --head <head>"
+    - "git diff --check <base> <head>"
+  evidence: []
+  notes:
+    - "The target tag and GitHub Release are intentionally deferred until this Change Set is merged."
