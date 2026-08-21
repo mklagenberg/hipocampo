@@ -42,9 +42,9 @@ impact:
   - artifact: "skill/, scaffold/"
     status: "reviewed"
     note: "Section 14 governs agent judgment under failure, not a mechanical skill procedure or a scaffold output — nothing in skill/references/*.md or scaffold/ needs to change for this Change Set. Revisit if a future release operationalizes section 14 into a checklist the skill runs."
-  - artifact: "org-gauge/gauge-latam-observacoes.md (hipocampo-company, real content)"
+  - artifact: "org-acme/acme-latam-observacoes.md (hipocampo-company, real content -- entity name anonymized 2026-08-19, see note)"
     status: "not-applicable"
-    note: "Cited by decisions/0026 and scenario 1 as real evidence, but this Change Set only adds the rule/reference in the hipocampo repository — remediating the actual document is a separate, real-content action outside this repository's scope (SPEC.md section 1)."
+    note: "Cited by decisions/0026 and scenario 1 as real evidence, but this Change Set only adds the rule/reference in the hipocampo repository — remediating the actual document is a separate, real-content action outside this repository's scope (SPEC.md section 1). Addendum (2026-08-19, changes/0051-anonymize-nominal-entity-citations, decisions/0050): the artifact path above originally named the real entity; it was redacted to the anonymized placeholder shown (org-acme/acme-latam-observacoes.md) per the repository's standing no-nominal-entity-citation policy. This is a narrow, logged exception to this document's own 'never edited after acceptance' status (docs/change-management.md), made only to remove an identifying token — the Change Set's substantive decision, classification, and evidence are otherwise unchanged."
 
 validation:
   commands:
