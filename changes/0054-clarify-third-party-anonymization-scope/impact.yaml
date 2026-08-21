@@ -1,0 +1,39 @@
+change_set:
+  id: "0054-clarify-third-party-anonymization-scope"
+  class: "operational"
+  semver: "patch"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0050-no-nominal-entity-citation-in-methodology-repository.md"
+
+impact:
+  - artifact: "decisions/0050-no-nominal-entity-citation-in-methodology-repository.md"
+    status: "updated"
+    note: "Clarifies that the unconditional anonymization rule covers real, identifiable third parties; permits only necessary provenance references to the repository's own operator."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Documents the corrective scope clarification under Unreleased."
+  - artifact: "SPEC.md"
+    status: "not-applicable"
+    note: "No content-instance contract or normative specification rule changes."
+  - artifact: "UPGRADE.md"
+    status: "not-applicable"
+    note: "No existing instance action is required."
+  - artifact: "MIGRATIONS.md"
+    status: "not-applicable"
+    note: "Patch-scope internal correction with no compatibility boundary."
+  - artifact: "conformance/moda.yaml"
+    status: "not-applicable"
+    note: "No MODA control or evidence mapping changes."
+
+validation:
+  commands:
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_skill_docs.py --root ."
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_change.py --root . --base <main-before-change> --head HEAD"
+    - "git diff --check <main-before-change>..HEAD"
+  evidence:
+    - "Local validation recorded before publication."
+  notes: "The scope is deliberately narrow: it clarifies the identity boundary without restoring any real, identifiable third-party citation."
