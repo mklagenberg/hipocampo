@@ -305,6 +305,8 @@ Cutting a release (tag + published GitHub Release) doesn't need to happen for ev
 
 Before a release routine is considered complete, **[RELEASE-CHECKLIST.md](RELEASE-CHECKLIST.md)** operationalizes the steps above into a single concrete run-through, and **`scripts/validate_hipocampo.py`** (run automatically in CI on every pull request against `main`, `.github/workflows/validate.yml`) deterministically checks the methodology repository's own structural integrity — Decision Record template compliance, internal link resolution, and version consistency between `README.md` and `CHANGELOG.md`. See `decisions/0036-deterministic-validation-of-repository-structure.md` and `decisions/0037-minimal-release-gate-checklist.md`.
 
+The boundary of every deterministic check is declared in [`docs/verification-boundaries.md`](docs/verification-boundaries.md). A passing structural, package, contract, compatibility, or Change Set validator does not prove semantic truth, remote reachability, operator authorization, or universal pre-execution enforcement.
+
 ## 10. Migrating pre-existing content
 
 Bringing in content from outside Hipocampo (a legacy system, an export from another tool) or from a previous version of the methodology never copies the original file directly into the destination repository. The frontmatter is always rewritten from scratch, per the current schema (section 2); the body is adjusted per the current rules of atomicity, naming, and privacy (section 2-A), documenting in `revision_note` what was preserved verbatim and what was changed, and why. See `decisions/0011-migration-never-direct-copy.md`. The same discipline is reused by the Promote action's elegant path (section 13).

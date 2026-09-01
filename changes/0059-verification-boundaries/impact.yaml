@@ -1,0 +1,30 @@
+change_set:
+  id: "0059-verification-boundaries"
+  class: "normative"
+  semver: "minor"
+  status: "proposed"
+  backfill: false
+  decisions:
+    - "decisions/0058-canonical-compatibility-contract.md"
+
+impact:
+  - artifact: "docs/verification-boundaries.md, scripts/validate_boundaries.py"
+    status: "updated"
+    note: "Adds the canonical registry and deterministic check for verification boundaries."
+  - artifact: "SPEC.md, conformance/moda.yaml"
+    status: "updated"
+    note: "References the boundary registry and keeps conformance claims proportional to evidence."
+  - artifact: "README.md, CHANGELOG.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/"
+    status: "reviewed"
+    note: "No new vault field, skill behavior, scaffold output, or release entry is claimed by this boundary registry."
+
+validation:
+  commands:
+    - "python scripts/validate_boundaries.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_skill_docs.py --root ."
+    - "python scripts/validate_skill_package.py --root ."
+    - "python scripts/validate_contracts.py --root ."
+    - "python scripts/validate_change.py --root ."
+  evidence: []
+  notes: "Semantic coverage and environment-specific enforcement remain human review."

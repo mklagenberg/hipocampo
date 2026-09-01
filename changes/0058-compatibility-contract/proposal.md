@@ -43,6 +43,15 @@ If the matrix or validator rejects a valid tuple, correct the contract through
 a new reviewed Change Set. Never bypass an unknown result by treating it as
 compatible.
 
+## Semantic review
+
+Reviewed against the committed diff `9fdb2cb` and the current repository
+contracts. The declared updated surfaces match the implementation. `README.md`
+and `MIGRATIONS.md` were intentionally left unchanged because no methodology
+release was cut and no migration was introduced. The skill behavior change
+warrants independent candidate version `1.3.0`; publication remains a separate
+human release gate.
+
 ## Status
 
-`proposed`
+`implemented locally`

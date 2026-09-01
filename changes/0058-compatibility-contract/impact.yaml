@@ -2,7 +2,7 @@ change_set:
   id: "0058-compatibility-contract"
   class: "normative"
   semver: "minor"
-  status: "proposed"
+  status: "implemented"
   backfill: false
   decisions:
     - "decisions/0058-canonical-compatibility-contract.md"
@@ -35,4 +35,4 @@ validation:
     - "python scripts/validate_skill_package.py --root ."
     - "python scripts/validate_contracts.py --root ."
   evidence: []
-  notes: "Run validate_change.py against the PR base before merge."
+  notes: "Validated locally after implementation; remote merge, skill publication, and methodology release remain separate gates."
