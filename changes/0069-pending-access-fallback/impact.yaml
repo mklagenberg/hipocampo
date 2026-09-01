@@ -1,0 +1,20 @@
+change_set:
+  id: "0069-pending-access-fallback"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0058-canonical-compatibility-contract.md"
+impact:
+  - artifact: "docs/access-pending-fallback.md"
+    status: "updated"
+    note: "Defines diagnosis and provisional fallback guardrails."
+  - artifact: "docs/access-fallback-fixtures.yaml"
+    status: "updated"
+    note: "Covers access failures and sensitive cross-entity blocking."
+validation:
+  commands:
+    - "python scripts/validate_access_fallback.py --root ."
+  evidence: []
+  notes: "Provisional policy remains subject to MRL-0004 review."

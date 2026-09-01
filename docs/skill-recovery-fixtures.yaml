@@ -1,0 +1,10 @@
+schema_version: "1.0"
+fixtures:
+  - id: missing-installation
+    action: recover-with-verification
+  - id: unexpected-version
+    action: block-unverified
+  - id: interrupted-update
+    action: rollback
+  - id: unverifiable-source
+    action: blocked

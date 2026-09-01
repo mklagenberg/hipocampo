@@ -1,0 +1,16 @@
+schema_version: "1.0"
+fixtures:
+  - id: invite-pending
+    action: pending-record
+  - id: insufficient-permission
+    action: blocked
+  - id: incorrect-address
+    action: blocked
+  - id: connector-unavailable
+    action: same-entity-fallback
+  - id: tool-unavailable
+    action: blocked
+  - id: permitted-non-sensitive-pending
+    action: pending-record
+  - id: cross-entity-sensitive
+    action: blocked

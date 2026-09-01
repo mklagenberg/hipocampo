@@ -1,0 +1,20 @@
+change_set:
+  id: "0066-contract-drift-routing"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0058-canonical-compatibility-contract.md"
+impact:
+  - artifact: "docs/contract-drift-procedure.md"
+    status: "updated"
+    note: "Defines drift classification and routing."
+  - artifact: "docs/contract-drift-fixtures.yaml"
+    status: "updated"
+    note: "Covers continuation, reread, compatibility and blocking paths."
+validation:
+  commands:
+    - "python scripts/validate_contract_drift.py --root ."
+  evidence: []
+  notes: "No automatic contract migration is introduced."

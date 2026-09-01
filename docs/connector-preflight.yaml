@@ -1,0 +1,41 @@
+schema_version: "1.0"
+purpose: "Record the minimum tested capability boundary before an access flow."
+host: codex-local
+identity: local-agent-session
+target: deliverable-workspace
+operations:
+  - id: inspect-contract
+    capability: documentation
+    status: observed
+    evidence: local-repository-files
+    decision: allow_read
+  - id: read-local-repository
+    capability: read
+    status: observed
+    evidence: local-filesystem
+    decision: allow_read
+  - id: write-local-repository
+    capability: write
+    status: observed
+    evidence: workspace-write-permission
+    decision: allow_after_explicit_request
+  - id: remote-read
+    capability: read
+    status: not_tested
+    evidence: null
+    decision: block_until_tested
+  - id: remote-write
+    capability: write
+    status: not_tested
+    evidence: null
+    decision: block_until_tested
+  - id: repository-creation-or-invite
+    capability: create_or_invite
+    status: not_tested
+    evidence: null
+    decision: block_until_tested
+rules:
+  - capability presence never proves authorization
+  - not_tested never becomes allow by inference
+  - credentials and secrets are never recorded
+  - a capability result is scoped to host, identity, target, and operation

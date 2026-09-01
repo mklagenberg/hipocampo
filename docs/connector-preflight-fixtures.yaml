@@ -1,0 +1,14 @@
+schema_version: "1.0"
+fixtures:
+  - id: local-read-observed
+    status: observed
+    decision: allow_read
+  - id: remote-write-not-tested
+    status: not_tested
+    decision: block_until_tested
+  - id: missing-capability
+    status: unavailable
+    decision: block_until_tested
+  - id: authorization-not-proven
+    status: declared_only
+    decision: block_until_tested

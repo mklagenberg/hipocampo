@@ -27,6 +27,12 @@ SCRIPTS = (
     "validate_validation_loop.py",
     "validate_enforcement_policy.py",
     "validate_nominal_citations.py",
+    "validate_connector_preflight.py",
+    "validate_vault_session_view.py",
+    "validate_contract_drift.py",
+    "validate_skill_recovery.py",
+    "validate_bootstrap_invitation.py",
+    "validate_access_fallback.py",
 )
 
 

@@ -1,0 +1,20 @@
+change_set:
+  id: "0064-connector-preflight"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "../management/SDD/decisions/DEC-0006-preflight-de-capacidades-do-conector.md"
+impact:
+  - artifact: "docs/connector-preflight.yaml, docs/connector-preflight-fixtures.yaml"
+    status: "updated"
+    note: "Declares local observed capabilities and blocks untested operations."
+  - artifact: "scripts/validate_connector_preflight.py"
+    status: "updated"
+    note: "Validates capability scope and negative decisions without side effects."
+validation:
+  commands:
+    - "python scripts/validate_connector_preflight.py --root ."
+  evidence: []
+  notes: "Remote capability, account authorization, creation, and invitation remain untested."

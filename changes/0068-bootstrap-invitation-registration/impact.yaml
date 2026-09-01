@@ -1,0 +1,20 @@
+change_set:
+  id: "0068-bootstrap-invitation-registration"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0058-canonical-compatibility-contract.md"
+impact:
+  - artifact: "docs/bootstrap-invitation-procedure.md"
+    status: "updated"
+    note: "Defines preflight and confirmation gates."
+  - artifact: "docs/bootstrap-invitation-fixtures.yaml"
+    status: "updated"
+    note: "Covers capable, inaccessible and incompatible invitations."
+validation:
+  commands:
+    - "python scripts/validate_bootstrap_invitation.py --root ."
+  evidence: []
+  notes: "No remote invitation or repository creation was executed."

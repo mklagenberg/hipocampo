@@ -1,0 +1,10 @@
+schema_version: "1.0"
+fixtures:
+  - id: same-entity-specialized
+    expected: allow_read
+  - id: ambiguous-entity
+    expected: blocked
+  - id: incompatible-vault
+    expected: blocked
+  - id: context-isolation
+    expected: isolated
