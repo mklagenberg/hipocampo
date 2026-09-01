@@ -1,5 +1,7 @@
 # Taxonomy map
 
+**Contract revision:** `1.0` — compatibility states added by Change Set `0058`.
+
 A single index of every controlled field, enum, and named concept this methodology defines — what it is, where it's authoritatively defined, and when it was introduced or last changed. This document doesn't re-argue any rationale — every row points at the `SPEC.md` section and/or Decision Record that actually carries it. See `decisions/0047-taxonomy-map.md` for why this document exists and why it originally shipped in two lotes.
 
 **Distinct from `docs/vocabulary-dictionary.md`.** That document is narrowly scoped to pt-BR ↔ English value equivalence for controlled-vocabulary fields (`decisions/0035`) — it never goes out of scope. This document is broader and orthogonal: it indexes every structural concept the methodology defines, controlled-vocabulary or not (a behavioral taxonomy like Dispatcher/Routine/Mechanic/Action has no pt-BR/English pair to track, but still belongs here), together with a version lineage vocabulary alone doesn't carry. Where a field also has a pt-BR/English pair, this document points at the dictionary instead of repeating it.
@@ -92,6 +94,17 @@ Not duplicated here — see `docs/vocabulary-dictionary.md`, which already carri
 ## 8. Step-behavior taxonomy
 
 Not duplicated here — see `docs/step-classification.md` (deterministic / discretionary / gated), introduced in the same lote as this document.
+
+## 9. Compatibility decision states
+
+| Concept | Values | Introduced | Last changed | Source |
+|---|---|---|---|---|
+| Compatibility decision state | `compatible` \| `compatible_with_upgrade` \| `migration_required` \| `unsupported_or_unknown` \| `access_unavailable` | Change Set 0058, unreleased | — | `COMPATIBILITY.yaml`, `SPEC.md` §2-E, `decisions/0058-canonical-compatibility-contract.md` |
+
+These are operational decision states, not document frontmatter values and not
+epistemic types. Their permitted action and precedence are authoritative in
+`COMPATIBILITY.yaml`; the term registry and governance notes are in
+`docs/vocabulary-dictionary.md`.
 
 ## Known cross-references and name collisions (collected here, not duplicated)
 

@@ -1,0 +1,38 @@
+change_set:
+  id: "0058-compatibility-contract"
+  class: "normative"
+  semver: "minor"
+  status: "proposed"
+  backfill: false
+  decisions:
+    - "decisions/0058-canonical-compatibility-contract.md"
+
+impact:
+  - artifact: "COMPATIBILITY.yaml, SPEC.md"
+    status: "updated"
+    note: "Adds the canonical compatibility decision surface and normative read/write gate."
+  - artifact: "docs/compatibility.md, docs/compatibility-fixtures.yaml, docs/compatibility-vault-fixture.yaml, scripts/validate_compatibility.py"
+    status: "updated"
+    note: "Documents and deterministically validates the five compatibility states."
+  - artifact: "docs/taxonomy.md, docs/vocabulary-dictionary.md"
+    status: "updated"
+    note: "Registers the compatibility decision states and their governance without treating them as epistemic types or frontmatter values."
+  - artifact: "skill/SKILL.md, skill/manifest.yaml, skill/package-lock.yaml"
+    status: "updated"
+    note: "Routes the client-side skill through the canonical compatibility contract and prepares skill package version 1.3.0 because behavior changed."
+  - artifact: "CHANGELOG.md, UPGRADE.md, moda.yaml, conformance/moda.yaml"
+    status: "updated"
+    note: "Synchronizes the new compatibility contract in release, adoption, and conformance disclosures."
+  - artifact: "README.md, MIGRATIONS.md"
+    status: "reviewed"
+    note: "README retains the current released version; no migration is introduced by this compatible capability."
+
+validation:
+  commands:
+    - "python scripts/validate_compatibility.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_skill_docs.py --root ."
+    - "python scripts/validate_skill_package.py --root ."
+    - "python scripts/validate_contracts.py --root ."
+  evidence: []
+  notes: "Run validate_change.py against the PR base before merge."

@@ -1,6 +1,8 @@
 # Vocabulary dictionary — deprecated pt-BR values ↔ current English values
 
-Canonical de:para reference for every controlled-vocabulary field this methodology defines, since `decisions/0035-controlled-vocabulary-dictionary.md` made English the canonical vocabulary. **A deprecated value in the "pt-BR" column is never an error, never a schema violation, and never breaks compatibility with any instance.** It is fully equivalent to its English counterpart, permanently — there is no removal deadline.
+**Contract revision:** `1.0` — compatibility decision states added by Change Set `0058`.
+
+Canonical de:para reference for every controlled-vocabulary field this methodology defines, since `decisions/0035-controlled-vocabulary-dictionary.md` made English the canonical vocabulary. **A deprecated value in the "pt-BR" column is never an error, never a schema violation, and never breaks compatibility with any instance.** It is fully equivalent to its English counterpart, permanently — there is no removal deadline. This document also registers controlled operational terms that have no pt-BR alias pair, so new terms remain discoverable and governed in one place.
 
 ## How to use this dictionary
 
@@ -34,6 +36,24 @@ Canonical de:para reference for every controlled-vocabulary field this methodolo
 
 - `instance.tier: conteudo | content | vault` is a legacy curation-level field accepted only for manifests created before v2.1.0. New manifests use `instance.curation_level`.
 - An `AGENTS.md` “Instance type” declaration is a legacy fallback only when `instance.policy_profile` is absent. Once the manifest field is added, remove the duplicate declaration in the same confirmed update.
+
+## Compatibility decision states
+
+These controlled operational values are defined in `COMPATIBILITY.yaml`, not in
+document frontmatter. They are not language aliases and must not be confused
+with epistemic types or with the `status` field:
+
+| Term | Meaning | Permitted action |
+|---|---|---|
+| `compatible` | Required declarations, integrity and ranges align. | Allow, subject to other gates. |
+| `compatible_with_upgrade` | The tuple is operable and a non-blocking upgrade is recommended. | Allow with notice. |
+| `migration_required` | A known incompatible methodology transition exists. | Block until migration is confirmed. |
+| `unsupported_or_unknown` | A declaration is missing, malformed, unsupported or unestablished. | Block until reviewed. |
+| `access_unavailable` | A required source cannot be read. | Block until access is restored. |
+
+The values are introduced by Change Set `0058-compatibility-contract`. Their
+precedence and complete contract remain in `COMPATIBILITY.yaml`; this table is
+the vocabulary registry, not a second rule source.
 
 ## Change history
 

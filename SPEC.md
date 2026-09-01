@@ -134,6 +134,12 @@ Two direct consequences of premise 3:
 
 A user's own personal anchor vault is always the first vault instantiated for that user, before any third-party entity — otherwise the fallback mechanism above has nowhere to land for that user. The mechanism that enforces this ordering is specified separately, as its own bootstrap procedure; this section only establishes the premise it depends on.
 
+## 2-E. Compatibility decision gate
+
+The repository's canonical compatibility contract is [`COMPATIBILITY.yaml`](COMPATIBILITY.yaml). Before a durable operation on a vault, the agent evaluates the declared skill, methodology, and vault tuple through that contract when the surface is available. The result is one of five states: `compatible`, `compatible_with_upgrade`, `migration_required`, `unsupported_or_unknown`, or `access_unavailable`.
+
+Only `compatible` and `compatible_with_recommended_alignment` permit the operation to continue, subject to every other invariant and write gate. `migration_required`, `unsupported_or_unknown`, and `access_unavailable` block the operation. In particular, an unknown state is never treated as compatible by default. The contract is a decision surface, not a replacement for [`UPGRADE.md`](UPGRADE.md) or [`MIGRATIONS.md`](MIGRATIONS.md): those documents explain the remediation after the gate identifies the state.
+
 ## 3. `type` — enum and expansion criterion
 
 | Value | Usage |

@@ -2,7 +2,7 @@ lock_version: "1.0"
 
 package:
   name: "hipocampo"
-  version: "1.2.0"
+  version: "1.3.0"
   hash_algorithm: "sha256"
   release_ref: "v2.1.0"
   source_repository: "https://github.com/mklagenberg/hipocampo"
@@ -12,7 +12,7 @@ package:
     - path: "agents/openai.yaml"
       sha256: "42d941b74a205a4ac8f5f8996c2974c69b0d1326c4146ba6036a43d54f53bab6"
     - path: "manifest.yaml"
-      sha256: "d992ac63c0faf08cbd84adb2db4aa857f8ae19ee1cebb6240090520243d4e854"
+      sha256: "8b4a0ed855b90fd92e50f81f600e3d44b0fbe4d26da11eccb84fbfa59c4beb95"
     - path: "references/codex.md"
       sha256: "9278c1b99c1f49eecf0a148cb242d2e8651e4eed2bbbf3895aa642f08c196299"
     - path: "references/crud-frontmatter.md"
@@ -34,4 +34,4 @@ package:
     - path: "references/routines.md"
       sha256: "fb0626762943c1068825c1cbea0209c85ed720444751e5f7b1ca2d2293f1aeb9"
     - path: "SKILL.md"
-      sha256: "8c75204a0f3993e7f6e76788c17ad01e91b8b07be4d64b17d93818b77482a66c"
+      sha256: "a64e66cf9ba0777a58a9888c44ba86833a5628f19c499c540f32d6c8ec5ab883"

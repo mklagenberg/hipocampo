@@ -2,7 +2,7 @@ manifest_version: "1.0"
 
 skill:
   name: "hipocampo"
-  version: "1.2.0"
+  version: "1.3.0"
   core_path: "skill/"
   source_repository: "https://github.com/mklagenberg/hipocampo"
   source_commit: "02ea7732c4dbe369ec9dcc8c3444e14c5ec82541"

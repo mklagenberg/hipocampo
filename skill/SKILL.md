@@ -18,7 +18,12 @@ description: >
 
 Operates any instance of the [Hipocampo](https://github.com/mklagenberg/hipocampo) methodology via the GitHub MCP. Published as a generic template at `hipocampo/skill/SKILL.md` — **never use it without a configured local anchor pointer.**
 
-**Hipocampo version this copy follows:** ^2.1.0 (see `hipocampo/CHANGELOG.md`). Confirm it matches the instance manifest. See also `manifest.yaml`, in this same directory, for the machine-readable compatibility range.
+**Skill package version:** 1.3.0 candidate. **Hipocampo version this copy follows:** ^2.1.0 (see `hipocampo/CHANGELOG.md`). Confirm it matches the instance manifest. See also `manifest.yaml`, in this same directory, for the machine-readable compatibility range.
+
+Before any durable operation, consult the methodology repository's
+`COMPATIBILITY.yaml` when available. Continue only for `compatible` or
+`compatible_with_upgrade`; stop and explain the next action for
+`migration_required`, `unsupported_or_unknown`, or `access_unavailable`.
 
 This file is just the router — each section below says when to act and points to the reference file with the full procedure. The norms themselves (schema, rules, rationale) live in `hipocampo/SPEC.md` and the Decision Records — this skill never re-explains them, it only operates them.
 

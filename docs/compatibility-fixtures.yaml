@@ -1,0 +1,42 @@
+fixtures:
+  - id: "current-compatible-tuple"
+    expected: "compatible"
+    skill_version: "1.3.0"
+    skill_methodology_range: "^2.1.0"
+    methodology_version: "2.1.1"
+    vault_range: "^2.1.1"
+    package_integrity: true
+    sources_available: true
+    vault_fixture: true
+  - id: "unknown-methodology-version"
+    expected: "unsupported_or_unknown"
+    skill_version: "1.3.0"
+    skill_methodology_range: "^2.1.0"
+    methodology_version: ""
+    vault_range: "^2.1.1"
+    package_integrity: true
+    sources_available: true
+  - id: "migration-required-vault"
+    expected: "migration_required"
+    skill_version: "1.3.0"
+    skill_methodology_range: "^2.1.0"
+    methodology_version: "2.1.1"
+    vault_range: "^1.9.0"
+    package_integrity: true
+    sources_available: true
+  - id: "unavailable-source"
+    expected: "access_unavailable"
+    skill_version: "1.3.0"
+    skill_methodology_range: "^2.1.0"
+    methodology_version: "2.1.1"
+    vault_range: "^2.1.1"
+    package_integrity: true
+    sources_available: false
+  - id: "unverified-package"
+    expected: "unsupported_or_unknown"
+    skill_version: "1.3.0"
+    skill_methodology_range: "^2.1.0"
+    methodology_version: "2.1.1"
+    vault_range: "^2.1.1"
+    package_integrity: false
+    sources_available: true

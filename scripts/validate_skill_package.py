@@ -28,8 +28,8 @@ def main() -> int:
         return 1
     package = lock.get("package", {}) if isinstance(lock, dict) else {}
     files = package.get("files", []) if isinstance(package, dict) else []
-    if package.get("version") != "1.2.0":
-        errors.append("package-lock: package.version must be 1.2.0")
+    if package.get("version") != "1.3.0":
+        errors.append("package-lock: package.version must be 1.3.0")
     if package.get("hash_algorithm") != "sha256":
         errors.append("package-lock: package.hash_algorithm must be sha256")
     expected: dict[str, str] = {}

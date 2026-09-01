@@ -1,0 +1,55 @@
+schema_version: "1.0"
+
+# Canonical compatibility contract for the methodology, its client-side skill,
+# and a content-vault manifest. This file is normative; the validator below
+# checks the self-declared current tuple and the fixtures in docs/.
+methodology:
+  id: "hipocampo"
+  version: "2.1.1"
+  supported_vault_range: "^2.1.0"
+  specification: "SPEC.md"
+  taxonomy: "docs/taxonomy.md"
+  vocabulary: "docs/vocabulary-dictionary.md"
+  taxonomy_revision: "1.0"
+  vocabulary_revision: "1.0"
+
+skill:
+  required_version: "1.3.0"
+  manifest: "skill/manifest.yaml"
+  package_lock: "skill/package-lock.yaml"
+  package_integrity_required: true
+  methodology_compatibility_source: "skill/manifest.yaml:methodology.compatibility"
+
+vault:
+  manifest: "hipocampo.yaml"
+  required_fields:
+    - "hipocampo.manifest_version"
+    - "hipocampo.compatibility"
+    - "hipocampo.verified_against"
+    - "hipocampo.verified_commit"
+    - "instance.policy_profile"
+    - "instance.curation_level"
+
+states:
+  - id: "compatible"
+    action: "allow"
+    meaning: "All required declarations are available, verified, and within the supported range."
+  - id: "compatible_with_upgrade"
+    action: "allow_with_notice"
+    meaning: "The tuple is operable, but a non-blocking version or package alignment is recommended."
+  - id: "migration_required"
+    action: "block_until_migrated"
+    meaning: "The vault is on a formally incompatible methodology contract and needs migration."
+  - id: "unsupported_or_unknown"
+    action: "block_until_reviewed"
+    meaning: "A declaration is absent, malformed, unsupported, or cannot be established."
+  - id: "access_unavailable"
+    action: "block_until_access_restored"
+    meaning: "A required source cannot be read, so compatibility cannot be established."
+
+precedence:
+  - "access_unavailable"
+  - "unsupported_or_unknown"
+  - "migration_required"
+  - "compatible_with_upgrade"
+  - "compatible"

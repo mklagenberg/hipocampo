@@ -14,6 +14,8 @@ This document is updated with every methodology release (mandatory step of the r
 
 ### Canonical file and skill
 
+- [ ] **[Recommended, since the compatibility contract]** Before a durable operation, evaluate the tuple of client-side skill, methodology, and vault manifest through `COMPATIBILITY.yaml` when available. Continue only for `compatible` or `compatible_with_recommended_alignment`; follow this guide or `MIGRATIONS.md` when the result is blocked. Existing vaults do not need a new field solely because this contract was introduced.
+
 - [ ] **[Recommended, since SPEC section 11]** `AGENTS.md` is the instance's canonical instruction file — not `CLAUDE.md`. If your instance still only uses `CLAUDE.md`, create `AGENTS.md` with the complete content (invariants, scope, local extensions) and leave `CLAUDE.md` as a thin, few-line pointer. See `decisions/0015-agents-md-canonical-instruction-file.md`.
 - [ ] **[Recommended, since v2.1.0]** `hipocampo.yaml` declares `instance.policy_profile` (`personal` or `corporate`) — the sole criterion the structural audit uses to select the sensitive-data policy. A legacy `AGENTS.md` “Instance type” declaration remains readable until this manifest field is added; never keep both as active sources of truth.
 - [ ] **[Mandatory, since v2.0.0]** This repository **does not have** its own `skill/` folder. The skill always runs client-side, per person/AI environment — never per repository (see `decisions/0025-skill-is-client-side-never-per-repository.md`). If your instance still carries a `skill/` folder (inherited from the old "Use this template"), delete it — it never had a functional effect, and keeping it suggests a wrong mental model ("each repo has its own skill").

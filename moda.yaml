@@ -38,6 +38,7 @@ documentation:
   migrations: "MIGRATIONS.md"
   decisions: "decisions/"
   decision_policy: "SPEC.md#7-decision-record-vs-type-decision"
+  compatibility_contract: "COMPATIBILITY.yaml"
   change_management: "docs/change-management.md"
   validation: "audits/moda/2026-08-17-v1.0.0-self-audit.md"
   structural_validation: "scripts/validate_hipocampo.py"

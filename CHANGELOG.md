@@ -2,6 +2,11 @@
 
 Version history of the methodology itself. Follows [SemVer](https://semver.org/lang/pt-BR/) — see SPEC.md, section 9.
 
+## [Unreleased]
+
+### Added
+- **Canonical compatibility contract** (`COMPATIBILITY.yaml`, `docs/compatibility.md`, and `scripts/validate_compatibility.py`) — makes skill/methodology/vault compatibility an explicit five-state decision, blocks unknown or unavailable states, and adds deterministic positive and negative fixtures. Existing vaults remain valid without migration; adoption is progressive.
+
 ## [2.1.1] — 2026-08-21
 
 ### Fixed

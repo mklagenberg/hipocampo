@@ -35,7 +35,7 @@ REQUIRED = {
         "package-lock.yaml",
     ],
     "skill/manifest.yaml": [
-        'version: "1.2.0"',
+        'version: "1.3.0"',
         'compatibility: "^2.1.0"',
         'target: "codex"',
         'package_lock: "skill/package-lock.yaml"',

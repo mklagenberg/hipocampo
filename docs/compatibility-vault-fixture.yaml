@@ -1,0 +1,8 @@
+hipocampo:
+  manifest_version: "1.0"
+  compatibility: "^2.1.1"
+  verified_against: "2.1.1"
+  verified_commit: "fixture-commit"
+instance:
+  policy_profile: "personal"
+  curation_level: "vault"
