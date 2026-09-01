@@ -1,0 +1,102 @@
+schema_version: "1.0"
+purpose: "Declare the proof boundary of each deterministic verification surface."
+entries:
+  - id: repository-structure
+    mechanism: scripts/validate_hipocampo.py
+    inputs: repository markdown, frontmatter, links, and required files
+    outputs: structural errors and warnings
+    coverage: schema, links, and repository-contract invariants
+    rule_revision: "1.0"
+    legacy_treatment: validates the current corpus; historical exceptions remain explicit
+    limits: cannot prove semantic completeness, truth, or author intent
+    human_or_environmental_boundary: semantic review and operator acceptance
+  - id: declared-contracts
+    mechanism: scripts/validate_contracts.py
+    inputs: SPEC.md, manifests, and named contract surfaces
+    outputs: cross-surface consistency result
+    coverage: required declarations and version synchronization
+    rule_revision: "1.0"
+    legacy_treatment: protected paths are checked; legacy prose is not rewritten automatically
+    limits: text presence is not semantic sufficiency
+    human_or_environmental_boundary: contract interpretation and change approval
+  - id: skill-package
+    mechanism: scripts/validate_skill_package.py
+    inputs: skill files and skill/package-lock.yaml
+    outputs: file-set and hash result
+    coverage: package completeness and raw SHA-256 integrity
+    rule_revision: "1.0"
+    legacy_treatment: package lock is authoritative for the candidate package
+    limits: hashes do not prove instruction safety or runtime behavior
+    human_or_environmental_boundary: skill review, installation, and host execution
+  - id: compatibility
+    mechanism: scripts/validate_compatibility.py
+    inputs: COMPATIBILITY.yaml, package lock, and optional vault manifest
+    outputs: compatibility state and validation errors
+    coverage: declared methodology/skill/vault tuple, hashes, and known states
+    rule_revision: "1.0"
+    legacy_treatment: unknown or missing legacy fields block rather than get inferred
+    limits: cannot reach remote sources or decide semantic authority
+    human_or_environmental_boundary: access restoration, migration, and operator acceptance
+  - id: change-set
+    mechanism: scripts/validate_change.py
+    inputs: changes/* and protected repository paths
+    outputs: Change Set schema and coverage result
+    coverage: required metadata, links, and protected-path heuristics
+    rule_revision: "1.0"
+    legacy_treatment: existing Change Sets are checked without retroactive normalization
+    limits: impact statements may be inaccurate despite passing structure
+    human_or_environmental_boundary: semantic impact review and publication decision
+  - id: skill-documentation
+    mechanism: scripts/validate_skill_docs.py
+    inputs: skill instructions and scaffold references
+    outputs: documentation consistency result
+    coverage: declared output paths and superseded-field references
+    rule_revision: "1.0"
+    legacy_treatment: legacy aliases remain readable where explicitly documented
+    limits: cannot execute host adapters or prove user-facing behavior
+    human_or_environmental_boundary: host-specific runtime verification
+  - id: provenance-presence
+    mechanism: human/source-specific verification
+    inputs: declared sources, hashes, and release references
+    outputs: presence and lineage assessment
+    coverage: reference presence and reproducible pointer checks
+    rule_revision: "1.0"
+    legacy_treatment: unavailable sources remain marked unavailable
+    limits: presence is not authenticity, freshness, or truth
+    human_or_environmental_boundary: independent source retrieval and judgment
+  - id: destructive-action-enforcement
+    mechanism: host-specific capability
+    inputs: proposed operation, scope, authorization, and environment state
+    outputs: allow, deny, or blocked-unavailable before execution
+    coverage: only adapters that expose a pre-execution barrier
+    rule_revision: "1.0"
+    legacy_treatment: absence of an adapter is a block/limitation, never an allow
+    limits: no repository-wide universal runtime barrier is claimed
+    human_or_environmental_boundary: host enforcement and explicit authorization
+  - id: validation-revalidation-loop
+    mechanism: scripts/validate_validation_loop.py
+    inputs: failure record, authoritative contract, correction scope, and regression result
+    outputs: revalidate or stop decision
+    coverage: bounded correction sequence and explicit escalation conditions
+    rule_revision: "1.0"
+    legacy_treatment: does not rewrite historical failures or infer missing evidence
+    limits: cannot decide semantic truth or policy intent
+    human_or_environmental_boundary: scope change, authority, and host decision
+  - id: bounded-enforcement-policy
+    mechanism: scripts/validate_enforcement_policy.py
+    inputs: synthetic operation, authorization, and adapter availability
+    outputs: allow, deny, or blocked-unavailable simulation
+    coverage: four declared pre-execution policy classes
+    rule_revision: "1.0"
+    legacy_treatment: absent adapter blocks; it is never treated as permission
+    limits: simulation does not intercept a real operation
+    human_or_environmental_boundary: host adapter enforcement
+  - id: nominal-citation-review
+    mechanism: scripts/validate_nominal_citations.py
+    inputs: explicitly supplied new or changed text files
+    outputs: non-placeholder handle findings
+    coverage: bounded @handle heuristic with an explicit allowlist
+    rule_revision: "1.0"
+    legacy_treatment: legacy corpus is not scanned or rewritten automatically
+    limits: handles are not identity proof; heuristic can miss or flag text
+    human_or_environmental_boundary: human identity and source review

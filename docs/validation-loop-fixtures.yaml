@@ -1,0 +1,26 @@
+schema_version: "1.0"
+scenarios:
+  - id: correct-and-regress
+    failure: structural
+    source: available
+    scope_change: false
+    repeated_without_evidence: false
+    expected: revalidate
+  - id: unavailable-authority
+    failure: compatibility
+    source: unavailable
+    scope_change: false
+    repeated_without_evidence: false
+    expected: stop
+  - id: policy-change
+    failure: contract
+    source: available
+    scope_change: true
+    repeated_without_evidence: false
+    expected: stop
+  - id: no-progress
+    failure: semantic
+    source: available
+    scope_change: false
+    repeated_without_evidence: true
+    expected: stop

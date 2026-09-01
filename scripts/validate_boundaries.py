@@ -12,7 +12,9 @@ REQUIRED = (
     "Outside the validator",
     "Current mechanism",
     "A missing barrier is reported as a",
-    "does not yet have a universal runtime enforcement layer",
+    "not have a universal runtime enforcement layer",
+    "verification-boundaries.yaml",
+    "Every new verification declares its input boundary",
 )
 SCRIPTS = (
     "validate_hipocampo.py",
@@ -21,6 +23,10 @@ SCRIPTS = (
     "validate_compatibility.py",
     "validate_change.py",
     "validate_skill_docs.py",
+    "validate_verification_boundaries.py",
+    "validate_validation_loop.py",
+    "validate_enforcement_policy.py",
+    "validate_nominal_citations.py",
 )
 
 

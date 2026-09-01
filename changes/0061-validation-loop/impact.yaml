@@ -1,0 +1,20 @@
+change_set:
+  id: "0061-validation-loop"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0058-canonical-compatibility-contract.md"
+impact:
+  - artifact: "docs/validation-loop.md, docs/validation-loop-fixtures.yaml"
+    status: "updated"
+    note: "Defines correction, revalidation, regression, and explicit stop conditions."
+  - artifact: "scripts/validate_validation_loop.py"
+    status: "updated"
+    note: "Checks the expected decision shape without changing repository content."
+validation:
+  commands:
+    - "python scripts/validate_validation_loop.py --root ."
+  evidence: []
+  notes: "Policy intent, semantic correctness, and authoritative-source judgment remain human boundaries."

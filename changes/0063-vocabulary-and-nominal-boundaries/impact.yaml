@@ -1,0 +1,21 @@
+change_set:
+  id: "0063-vocabulary-and-nominal-boundaries"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0058-canonical-compatibility-contract.md"
+impact:
+  - artifact: "scripts/validate_compatibility.py"
+    status: "updated"
+    note: "Derives compatibility-state coverage from the canonical contract."
+  - artifact: "scripts/validate_nominal_citations.py, docs/vocabulary-dictionary.md"
+    status: "updated"
+    note: "Adds a bounded opt-in heuristic without a third-party identity list."
+validation:
+  commands:
+    - "python scripts/validate_compatibility.py --root ."
+    - "python scripts/validate_nominal_citations.py <explicit-changed-files>"
+  evidence: []
+  notes: "The heuristic is not identity proof and does not audit or rewrite the legacy corpus."

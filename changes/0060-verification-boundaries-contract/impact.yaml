@@ -1,0 +1,21 @@
+change_set:
+  id: "0060-verification-boundaries-contract"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0058-canonical-compatibility-contract.md"
+impact:
+  - artifact: "docs/verification-boundaries.yaml, scripts/validate_verification_boundaries.py"
+    status: "updated"
+    note: "Makes each deterministic proof boundary executable and explicit."
+  - artifact: "docs/verification-boundaries.md, scripts/validate_boundaries.py"
+    status: "updated"
+    note: "Connects the structured registry to the readable boundary map."
+validation:
+  commands:
+    - "python scripts/validate_verification_boundaries.py --root ."
+    - "python scripts/validate_boundaries.py --root ."
+  evidence: []
+  notes: "Semantic truth, authorization, and host enforcement remain outside this contract."

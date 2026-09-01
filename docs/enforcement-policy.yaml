@@ -1,0 +1,31 @@
+schema_version: "1.0"
+purpose: "Bounded pre-execution decisions for operations that require a barrier."
+rules:
+  - id: destructive-delete
+    operation: delete
+    decision: deny_without_explicit_authorization
+    barrier: pre_execution
+    unavailable_behavior: blocked_unavailable
+    covered_adapters: host-specific adapters exposing a pre-execution hook
+    proof_scope: decision emitted before the adapter call; no filesystem proof
+  - id: unrequested-write
+    operation: write
+    decision: deny_without_in_scope_request
+    barrier: pre_execution
+    unavailable_behavior: blocked_unavailable
+    covered_adapters: host-specific adapters exposing a pre-execution hook
+    proof_scope: request and scope fields are present; no intent inference
+  - id: unknown-compatibility
+    operation: durable_methodology_operation
+    decision: deny_until_reviewed
+    barrier: pre_execution
+    unavailable_behavior: blocked_unavailable
+    covered_adapters: compatibility-aware workflow adapters
+    proof_scope: state is known and allowed; no semantic authority decision
+  - id: credential-exposure
+    operation: external_submission
+    decision: deny_without_credential_boundary
+    barrier: pre_execution
+    unavailable_behavior: blocked_unavailable
+    covered_adapters: host-specific adapters exposing a credential check
+    proof_scope: credential boundary is declared; no secret validity proof

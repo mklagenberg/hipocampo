@@ -55,6 +55,11 @@ The values are introduced by Change Set `0058-compatibility-contract`. Their
 precedence and complete contract remain in `COMPATIBILITY.yaml`; this table is
 the vocabulary registry, not a second rule source.
 
+Nominal-citation review is an opt-in check over explicitly supplied new or
+changed files. `scripts/validate_nominal_citations.py` uses placeholders and
+the project operator handle only; it does not retain a third-party name list
+and does not rewrite or audit the legacy corpus.
+
 ## Change history
 
 ## Term governance

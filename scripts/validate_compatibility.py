@@ -124,14 +124,18 @@ def main() -> int:
         errors.append(f"{vault_path}: compatibility declaration does not cover the canonical methodology version")
 
     expected_states = {item["id"] for item in contract["states"]}
-    if expected_states != {
-        "compatible", "compatible_with_upgrade", "migration_required",
-        "unsupported_or_unknown", "access_unavailable",
-    }:
-        errors.append("COMPATIBILITY.yaml: state vocabulary is incomplete")
+    if not expected_states:
+        errors.append("COMPATIBILITY.yaml: state vocabulary is empty")
+    taxonomy_text = (root / "docs" / "taxonomy.md").read_text(encoding="utf-8")
+    dictionary_text = (root / "docs" / "vocabulary-dictionary.md").read_text(encoding="utf-8")
+    for state_id in expected_states:
+        if state_id not in taxonomy_text:
+            errors.append(f"docs/taxonomy.md: missing contract state {state_id!r}")
+        if state_id not in dictionary_text:
+            errors.append(f"docs/vocabulary-dictionary.md: missing contract state {state_id!r}")
     for relative, required in {
-        "docs/taxonomy.md": ["Compatibility decision state", "compatible_with_upgrade", "migration_required"],
-        "docs/vocabulary-dictionary.md": ["Compatibility decision states", "compatible_with_upgrade", "access_unavailable"],
+        "docs/taxonomy.md": ["Compatibility decision state"],
+        "docs/vocabulary-dictionary.md": ["Compatibility decision states"],
     }.items():
         text = (root / relative).read_text(encoding="utf-8")
         for snippet in required:

@@ -1,0 +1,20 @@
+change_set:
+  id: "0062-bounded-enforcement-policy"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0058-canonical-compatibility-contract.md"
+impact:
+  - artifact: "docs/enforcement-policy.yaml"
+    status: "updated"
+    note: "Declares four bounded pre-execution policy classes and unavailable behavior."
+  - artifact: "scripts/validate_enforcement_policy.py"
+    status: "updated"
+    note: "Runs non-mutating allow/deny/blocked simulations."
+validation:
+  commands:
+    - "python scripts/validate_enforcement_policy.py --root ."
+  evidence: []
+  notes: "The simulation does not intercept real host operations; adapters remain environment-specific."
