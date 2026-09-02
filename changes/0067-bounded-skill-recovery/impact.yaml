@@ -1,0 +1,20 @@
+change_set:
+  id: "0067-bounded-skill-recovery"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0058-canonical-compatibility-contract.md"
+impact:
+  - artifact: "docs/skill-recovery-runbook.md"
+    status: "updated"
+    note: "Defines bounded recovery and rollback."
+  - artifact: "docs/skill-recovery-fixtures.yaml"
+    status: "updated"
+    note: "Adds failure-surface fixtures."
+validation:
+  commands:
+    - "python scripts/validate_skill_recovery.py --root ."
+  evidence: []
+  notes: "No skill package version or remote installation was changed."

@@ -1,0 +1,12 @@
+schema_version: "1.0"
+fixtures:
+  - id: content-change
+    action: continue
+  - id: instruction-change
+    action: reread
+  - id: contract-change
+    action: blocked
+  - id: methodology-version-change
+    action: compatibility-route
+  - id: unavailable
+    action: blocked

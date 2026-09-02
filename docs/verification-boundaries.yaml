@@ -100,3 +100,57 @@ entries:
     legacy_treatment: legacy corpus is not scanned or rewritten automatically
     limits: handles are not identity proof; heuristic can miss or flag text
     human_or_environmental_boundary: human identity and source review
+  - id: connector-preflight
+    mechanism: scripts/validate_connector_preflight.py
+    inputs: host, identity, target, operation and observed evidence
+    outputs: observed, blocked, or not-tested capability state
+    coverage: six declared local and remote operation classes
+    rule_revision: "1.0"
+    legacy_treatment: unavailable or untested capabilities remain blocked
+    limits: local observation is not remote authorization
+    human_or_environmental_boundary: connector and explicit human authorization
+  - id: ephemeral-vault-session-view
+    mechanism: scripts/validate_vault_session_view.py
+    inputs: session-view contract and heterogeneous-vault fixtures
+    outputs: transient isolation and blocking assessment
+    coverage: target ambiguity, incompatibility and context isolation
+    rule_revision: "1.0"
+    legacy_treatment: no historical session state is rewritten
+    limits: validator does not provide runtime session memory
+    human_or_environmental_boundary: host/session adapter and target authority
+  - id: contract-drift-routing
+    mechanism: scripts/validate_contract_drift.py
+    inputs: drift classifications and declared actions
+    outputs: deterministic routing assessment
+    coverage: five contract-drift classes
+    rule_revision: "1.0"
+    legacy_treatment: historical contracts are not migrated automatically
+    limits: cannot determine semantic sufficiency of a new contract
+    human_or_environmental_boundary: human review and authoritative contract
+  - id: skill-recovery
+    mechanism: scripts/validate_skill_recovery.py
+    inputs: recovery failure surfaces and rollback fixtures
+    outputs: bounded recovery coverage
+    coverage: missing, unexpected, interrupted and unverifiable package states
+    rule_revision: "1.0"
+    legacy_treatment: known-good installation is preserved
+    limits: no remote release or credential validation
+    human_or_environmental_boundary: host package manager and authorization
+  - id: bootstrap-invitation
+    mechanism: scripts/validate_bootstrap_invitation.py
+    inputs: onboarding procedure and invitation fixtures
+    outputs: confirmation and compatibility gate assessment
+    coverage: create, manual fallback, inaccessible, incompatible and no-write paths
+    rule_revision: "1.0"
+    legacy_treatment: no vault content is copied during registration
+    limits: does not execute remote invitations or repository creation
+    human_or_environmental_boundary: connector authority and human confirmation
+  - id: pending-access-fallback
+    mechanism: scripts/validate_access_fallback.py
+    inputs: access failure and fallback fixtures
+    outputs: diagnosis and sensitive-transfer blocking assessment
+    coverage: seven pending-access and fallback classes
+    rule_revision: "1.0"
+    legacy_treatment: no legacy content is promoted or declassified
+    limits: hierarchy and confidentiality policy remain unresolved
+    human_or_environmental_boundary: human authorization and MRL-0004 policy

@@ -1,0 +1,14 @@
+schema_version: "1.0"
+fixtures:
+  - id: capable-create
+    action: create-after-confirmation
+  - id: incapable-manual-fallback
+    action: blocked-until-authorized
+  - id: invitation-accessible-compatible
+    action: register-address
+  - id: invitation-inaccessible
+    action: blocked
+  - id: invitation-incompatible
+    action: blocked
+  - id: no-write-before-confirmation
+    action: blocked

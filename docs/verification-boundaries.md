@@ -24,6 +24,12 @@ revision, legacy treatment, limits, and the human or environmental boundary.
 | Nominal citations | Placeholder/handle heuristic on explicitly supplied changed files | Legacy corpus, aliases, and identity truth | `validate_nominal_citations.py`; human review and source-specific verification |
 | Validation/revalidation loop | Failure classification and stop/revalidate scenarios | Semantic correction and policy intent | `validate_validation_loop.py`; human review and authoritative-source access |
 | Bounded enforcement policy | Non-mutating allow/deny/blocked simulations | Real host interception | `validate_enforcement_policy.py`; host-specific adapter |
+| Connector preflight | Local capability observations and untested-operation blocking | Remote authorization and host enforcement | `validate_connector_preflight.py`; connector and human authorization |
+| Ephemeral vault session view | Required transient context and blocking fixtures | Runtime session memory and target authority | `validate_vault_session_view.py`; host/session adapter |
+| Contract drift routing | Five declared classifications and actions | Semantic contract interpretation | `validate_contract_drift.py`; human review |
+| Skill recovery | Recovery-surface and rollback fixture coverage | Remote release access and installation authority | `validate_skill_recovery.py`; host package manager |
+| Bootstrap/invitation | Confirmation and no-write-before-confirmation fixtures | Remote invitation and repository creation | `validate_bootstrap_invitation.py`; connector authority |
+| Pending access fallback | Failure diagnosis and sensitive cross-entity blocking fixtures | Vault hierarchy and confidentiality policy | `validate_access_fallback.py`; human authorization |
 
 ## Classification rule
 

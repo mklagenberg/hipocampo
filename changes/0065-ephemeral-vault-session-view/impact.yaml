@@ -1,0 +1,20 @@
+change_set:
+  id: "0065-ephemeral-vault-session-view"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0058-canonical-compatibility-contract.md"
+impact:
+  - artifact: "docs/vault-session-view.md"
+    status: "updated"
+    note: "Defines transient per-vault context and isolation."
+  - artifact: "docs/vault-session-fixtures.yaml"
+    status: "updated"
+    note: "Adds deterministic heterogeneous-vault fixtures."
+validation:
+  commands:
+    - "python scripts/validate_vault_session_view.py --root ."
+  evidence: []
+  notes: "No session observation is persisted to Git."
