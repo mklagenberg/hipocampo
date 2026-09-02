@@ -13,6 +13,9 @@ impact:
   - artifact: "scripts/validate_connector_preflight.py"
     status: "updated"
     note: "Validates capability scope and negative decisions without side effects."
+  - artifact: "docs/verification-boundaries.md, docs/verification-boundaries.yaml, scripts/validate_boundaries.py"
+    status: "updated"
+    note: "Registers the new verification boundaries and deterministic validators."
 validation:
   commands:
     - "python scripts/validate_connector_preflight.py --root ."
