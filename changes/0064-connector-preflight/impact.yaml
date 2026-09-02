@@ -5,7 +5,7 @@ change_set:
   status: "implemented"
   backfill: false
   decisions:
-    - "../management/SDD/decisions/DEC-0006-preflight-de-capacidades-do-conector.md"
+    - "decisions/0058-canonical-compatibility-contract.md"
 impact:
   - artifact: "docs/connector-preflight.yaml, docs/connector-preflight-fixtures.yaml"
     status: "updated"
