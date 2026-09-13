@@ -1,0 +1,25 @@
+change_set:
+  id: "0094-v3-f0-script-level-classification"
+  class: "operational"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0094-v3-f0-script-level-classification.md"
+impact:
+  - artifact: "decisions/0094-v3-f0-script-level-classification.md, docs/v3-f0-script-classification.yaml, scripts/v3_f0_engine.py"
+    status: "updated"
+    note: "Adds script-level classification and proof boundaries."
+  - artifact: "scripts/validate_v3_f0.py, docs/v3-f0-contract.md"
+    status: "updated"
+    note: "Validates inventory coverage and candidate boundary."
+  - artifact: "SPEC.md, skill/, scaffold/"
+    status: "reviewed"
+    note: "Released surfaces remain unchanged."
+validation:
+  commands:
+    - "python scripts/validate_v3_f0.py"
+    - "python scripts/validate_change.py --root ."
+  evidence:
+    - "docs/v3-f0-script-classification.yaml"
+  notes: "Candidate only; no release activation."

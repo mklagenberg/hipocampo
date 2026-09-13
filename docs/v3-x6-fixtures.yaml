@@ -1,0 +1,24 @@
+schema_version: "1.0"
+status: unreleased-v3-candidate
+fixtures:
+  - id: event-success-bounded
+    layer: durable_operational
+    expected: redacted-event-with-proof-limits
+  - id: event-sensitive-payload
+    layer: durable_operational
+    expected: secret-and-source-body-redacted
+  - id: session-not-authorized
+    layer: transient_session
+    expected: discard-transient-context
+  - id: session-explicit-capture
+    layer: sensory_capture
+    expected: capture-authorized-only
+  - id: correlation-inaccessible-frontier
+    layer: durable_operational
+    expected: ids-and-frontier-without-source-body
+  - id: capability-unavailable
+    layer: durable_operational
+    expected: limitation-disclosed-and-dependent-use-blocked
+  - id: revocation-partial-reach
+    layer: durable_operational
+    expected: reach-matrix-and-proportional-block

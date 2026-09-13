@@ -4,7 +4,59 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **V3 synthetic vault inventory gate (Change Set 0100):** adds four
+  vault-shaped profiles covering personal and corporate anchors, an additional
+  vault with a bounded inaccessible artifact frontier, and an inaccessible
+  invited vault. The deterministic evaluator distinguishes `ready`,
+  `authorization_required`, `partial` and `blocked`; no real vault is read.
+- **V3 synthetic migration gate (Change Set 0099):** adds sanitized fixtures
+  and deterministic outcomes for complete, incomplete, ambiguous,
+  privacy-unknown, rollback-missing, target-contract-missing,
+  approval-required, partial and unsafe V2.2 fallback cases. No real-vault
+  migration or V3 activation is performed.
+- **V3 supersession of V2.2 (Change Set 0098):** records V3 as the sovereign
+  future contract, maps V2.2 Change Sets `0058`–`0069` to explicit
+  incorporated, superseded, retained, deferred or retired dispositions, and
+  adds the candidate `2.x -> 3.0` migration boundary. V2.2 remains readable
+  historical input; no real vault migration, publication or activation is
+  performed.
+- **V3 candidate — F0 deterministic review (Change Sets 0094–0097):** adds
+  script-level classification, phase-specific verification, layered evidence,
+  hardcode review and typed contextual outcomes. Semantic truth remains outside
+  deterministic proof; no migration, publication or activation is performed.
+- **V3 candidate — MRL-0006 execution (Change Sets 0089–0093):** adds bounded
+  operational events, session/cache boundaries, CRUD audit metadata,
+  correlation, host-capability classification and revocation reach. No durable
+  host enforcement, migration, remote transport, publication or activation is
+  performed.
+- **V3 candidate — selective Package delivery (Change Set 0075):** added
+  bounded in-memory authority succession, conciliation states, purpose-aware
+  Package gates, source/package-authority separation, and sent/received ledger
+  context. This does not activate V3 for existing instances.
+- **V3 candidate — L4R semantic closure (Change Set 0077):** adds logical
+  authority resolution, deterministic Package identity and fingerprinting,
+  REM-pending local receipt, paired sent/received ledger events, and
+  bidirectional audit with explicit partial frontiers. Semantic decisions remain
+  governed and are not replaced by deterministic enforcement. This does not
+  activate V3 for existing instances.
+- **V3 candidate — X4 execution (Change Sets 0078–0083):** adds the joint
+  source/destination policy evaluator, typed multivault resolution, distinct
+  transfer and retraction primitives, pre-injection privacy gates, processed
+  destination-bound ingress, and scoped profile/violation audit behavior. The
+  candidate is validated in memory and does not activate V3, migrate vaults,
+  transport remotely, or publish a release.
+- **V3 candidate — MRL-0005 execution (Change Sets 0084–0088):** adds the
+  canonical vocabulary and alias boundary, layered documentation architecture,
+  methodology-license versus vault-privacy boundary, English structural
+  language policy, offline surface authority, and external-reference policy.
+  The candidate remains unreleased and does not activate V3 or migrate vaults.
+
 ### Added
+- **Unreleased V3 entity-aware CRUD and vault-profile candidate** (`changes/0074-v3-entity-aware-crud-and-vault-profiles`) — distinguishes `entity`, `team`, and `personal` vault policy profiles from anchor/additional roles and from Owner, Authority, Curator, User, and Source; adds entity-bound split and intra/inter-entity transfer fixtures. No V2 activation, migration, remote transport, synchronization, or publication is performed.
+- **Unreleased V3 Artifact representation candidate** (`changes/0073-v3-artifact-representation-and-provenance-contract`) — defines material representations, layered provenance, hash/version integrity, explicit accessibility, and provider-agnostic external destination references with bounded in-memory validation. No migration, connector, or remote fetch is performed.
+- **Unreleased V3 Record–Chunk CRUD candidate** (`changes/0072-v3-record-chunk-crud-contract`) — defines governed CRUD for Records, contextual Chunks, Collections, Artifacts, and Packages, with fail-closed integrity fixtures and an in-memory validator. No migration or remote transport is performed.
+- **Unreleased V3 Record state and queue candidate** (`changes/0071-v3-record-state-and-queue-contract`) — defines independent processing, maturity, epistemic, and staleness dimensions; separates frontmatter, staleness, and semantic queues; and adds deterministic scanner/normalizer fixtures. This is a major unreleased candidate and does not activate V3 behavior or migrate existing instances.
+- **V3 semantic evaluation boundary** (`changes/0070-v3-semantic-evaluation-boundary`) — adds a reusable, sanitized fixture envelope and a structural validator for exercising epistemic, maturity, provenance, conflict, and access cases. The validator explicitly does not decide semantic truth; V3 remains unreleased and its normative contract is not changed by this preparation increment.
 - **Canonical compatibility contract** (`COMPATIBILITY.yaml`, `docs/compatibility.md`, and `scripts/validate_compatibility.py`) — makes skill/methodology/vault compatibility an explicit five-state decision, blocks unknown or unavailable states, and adds deterministic positive and negative fixtures. Existing vaults remain valid without migration; adoption is progressive.
 
 ## [2.1.1] — 2026-08-21

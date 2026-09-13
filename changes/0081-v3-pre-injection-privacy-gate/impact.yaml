@@ -1,0 +1,28 @@
+change_set:
+  id: "0081-v3-pre-injection-privacy-gate"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0074-v3-entity-aware-crud-and-vault-profiles.md"
+    - "decisions/0053-progressive-privacy-licensing-and-skill-integrity.md"
+    - "decisions/0040-multi-vault-multi-entity-design-premises.md"
+impact:
+  - artifact: "docs/v3-pre-injection-privacy-contract.md, docs/v3-privacy-gate-fixtures.yaml"
+    status: "updated"
+    note: "Defines the implemented distributed privacy checks before every declared passage."
+  - artifact: "scripts/v3_privacy_gate.py, scripts/validate_v3_privacy_gate.py, scripts/validate_v3_x4.py"
+    status: "updated"
+    note: "Implements and exercises the X4.4 pre-injection privacy boundary."
+  - artifact: "SPEC.md, ROADMAP.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "No released security guarantee, migration or publication is claimed."
+validation:
+  commands:
+    - "python scripts/validate_v3_privacy_gate.py"
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "changes/0081-v3-pre-injection-privacy-gate/proposal.md"
+  notes: "The implementation separates deterministic policy traceability from semantic judgment and host enforcement."

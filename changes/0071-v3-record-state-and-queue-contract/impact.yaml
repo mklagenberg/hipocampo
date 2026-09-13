@@ -1,0 +1,35 @@
+change_set:
+  id: "0071-v3-record-state-and-queue-contract"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0071-v3-record-state-and-queue-contract.md"
+    - "decisions/0026-account-vs-opinion-in-corporate-instance.md"
+    - "decisions/0027-promote-depromote-redbutton.md"
+impact:
+  - artifact: "decisions/0071-v3-record-state-and-queue-contract.md, docs/v3-contract.md, docs/v3-crosswalk-v2-v3.yaml"
+    status: "updated"
+    note: "Defines the unreleased V3 candidate contract and independent dimensions."
+  - artifact: "scripts/v3_queue_engine.py, scripts/scan_v3_queues.py, scripts/normalize_frontmatter_queue.py"
+    status: "updated"
+    note: "Implements deterministic queue scanning and supported frontmatter normalization."
+  - artifact: "scripts/validate_v3_queues.py, docs/v3-queue-fixtures.yaml"
+    status: "updated"
+    note: "Exercises positive, idempotent, and blocked queue paths in a temporary vault."
+  - artifact: "SPEC.md, CHANGELOG.md"
+    status: "updated"
+    note: "Points from the active specification and Unreleased changelog to the candidate without activating V3 for existing instances."
+  - artifact: "UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "No released compatibility, migration, skill package, scaffold, or MODA version is changed; these are future V3 release-gate surfaces."
+validation:
+  commands:
+    - "python scripts/validate_v3_queues.py --root ."
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "docs/v3-contract.md"
+    - "docs/v3-queue-fixtures.yaml"
+  notes: "The contract is a major, unreleased candidate; runtime authorization, semantic truth, migration, and publication remain outside this Change Set."

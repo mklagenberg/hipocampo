@@ -1,0 +1,30 @@
+change_set:
+  id: "0100-v3-synthetic-vault-inventories"
+  class: "operational"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0100-v3-synthetic-vault-inventory-gate.md"
+impact:
+  - artifact: "decisions/0100-v3-synthetic-vault-inventory-gate.md, docs/v3-synthetic-vault-inventories.yaml"
+    status: "updated"
+    note: "Defines per-vault synthetic inventory states and bounded artifact frontiers."
+  - artifact: "scripts/v3_inventory_engine.py, scripts/validate_v3_inventory.py"
+    status: "updated"
+    note: "Evaluates and validates synthetic vault inventory outcomes."
+  - artifact: "docs/v3-f0-script-classification.yaml, docs/v3-v22-resolution-matrix.yaml, MIGRATIONS.md"
+    status: "updated"
+    note: "Connects inventory evidence to F0 and the V2.2-to-V3 migration boundary."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Records the synthetic vault inventory gate in the unreleased V3 candidate."
+validation:
+  commands:
+    - "python scripts/validate_v3_inventory.py"
+    - "python scripts/validate_v3_migration.py"
+    - "python scripts/validate_v3_f0.py"
+    - "python scripts/validate_change.py --root ."
+  evidence:
+    - "docs/v3-synthetic-vault-inventories.yaml"
+  notes: "Synthetic inventory outcomes do not prove real-vault access, migration readiness or remote authorization."

@@ -1,0 +1,25 @@
+change_set:
+  id: "0076-v3-roadmap-reconciliation"
+  class: "operational"
+  semver: "patch"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0071-v3-record-state-and-queue-contract.md"
+    - "decisions/0074-v3-entity-aware-crud-and-vault-profiles.md"
+impact:
+  - artifact: "ROADMAP.md"
+    status: "updated"
+    note: "Adds the current v3.0.0/LTE direction while preserving the historical v2 roadmap."
+  - artifact: "SPEC.md, CHANGELOG.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "No released contract, migration, skill, scaffold or MODA declaration is activated or changed by roadmap synchronization."
+validation:
+  commands:
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_contracts.py --root ."
+  evidence:
+    - "ROADMAP.md"
+    - "changes/0076-v3-roadmap-reconciliation/proposal.md"
+  notes: "Roadmap synchronization does not prove the candidate V3 contract, migration, host enforcement or publication."

@@ -1,0 +1,31 @@
+version: "v3-f0-candidate-1"
+scope:
+  - scripts/v3_*.py
+  - scripts/normalize_frontmatter_queue.py
+  - scripts/scan_v3_queues.py
+statuses: [resolved, justified, reviewed]
+findings:
+  - surface: taxonomy-and-vocabulary
+    status: resolved
+    owner: scripts/v3_vocabulary.py
+    note: "Canonical vocabulary is routed through the vocabulary surface."
+  - surface: entity-vault-and-privacy
+    status: reviewed
+    owner: docs/v3-f0-verification-matrix.yaml
+    note: "Context is checked by phase; no universal entity or vault is assumed."
+  - surface: paths-and-types
+    status: justified
+    owner: scripts/v3_*.py
+    note: "Local paths and object kinds are bounded implementation constants, not authority."
+  - surface: states-and-error-results
+    status: resolved
+    owner: scripts/v3_f0_engine.py
+    note: "Typed outcomes and blocking behavior are explicit."
+  - surface: authority-and-revocation
+    status: justified
+    owner: scripts/v3_event_engine.py
+    note: "Authority and reach are contract inputs; no host capability is presumed."
+  - surface: version-and-rule-revision
+    status: reviewed
+    owner: scripts/v3_event_engine.py
+    note: "Rule revision is recorded in the operational envelope."

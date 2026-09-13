@@ -1,0 +1,32 @@
+version: "v3-f0-candidate-1"
+fixtures:
+  - id: f0-complete-execution
+    phase: execution
+    required: [contract, privacy_scope]
+    observed: [contract, privacy_scope]
+    blocking: [contract_incompatible, privacy_unknown]
+    expected: completed
+  - id: f0-partial-semantic-observation
+    phase: review
+    required: [semantic_truth]
+    observed: []
+    blocking: []
+    expected: partial
+  - id: f0-blocked-publication-privacy
+    phase: publication
+    required: [privacy_destination, human_approval]
+    observed: [human_approval]
+    blocking: [privacy_destination]
+    expected: blocked
+  - id: f0-authorization-required-migration
+    phase: migration
+    required: [mapping, human_approval]
+    observed: [mapping]
+    blocking: [approval_missing]
+    expected: authorization_required
+  - id: f0-retraction-unreachable-surface
+    phase: retraction
+    required: [reach_matrix, invalidation, future_use_block]
+    observed: [reach_matrix, future_use_block]
+    blocking: [invalidation]
+    expected: blocked

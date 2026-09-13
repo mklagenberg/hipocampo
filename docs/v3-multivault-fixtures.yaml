@@ -1,0 +1,9 @@
+cases:
+  - id: entity-personal-to-entity-company-to-entity-client
+    relations: [cross_entity_delivery]
+  - id: inaccessible-origin
+    coverage: partial
+  - id: successor-cycle
+    finding: successor_cycle
+  - id: authority-collision
+    finding: authority_collision

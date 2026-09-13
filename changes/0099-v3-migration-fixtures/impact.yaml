@@ -1,0 +1,29 @@
+change_set:
+  id: "0099-v3-migration-fixtures"
+  class: "operational"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0099-v3-migration-fixture-gate.md"
+impact:
+  - artifact: "decisions/0099-v3-migration-fixture-gate.md, docs/v3-migration-fixtures.yaml"
+    status: "updated"
+    note: "Defines and exercises the synthetic migration preflight gate."
+  - artifact: "scripts/v3_migration_engine.py, scripts/validate_v3_migration.py"
+    status: "updated"
+    note: "Evaluates mapping, privacy, rollback, target contract, approval and unsafe fallback conditions."
+  - artifact: "docs/v3-v22-resolution-matrix.yaml, docs/v3-f0-script-classification.yaml, MIGRATIONS.md"
+    status: "updated"
+    note: "Links the migration evidence into the V3 resolution and F0 boundaries."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Records the synthetic migration gate in the unreleased V3 candidate."
+validation:
+  commands:
+    - "python scripts/validate_v3_migration.py"
+    - "python scripts/validate_v3_f0.py"
+    - "python scripts/validate_change.py --root ."
+  evidence:
+    - "docs/v3-migration-fixtures.yaml"
+  notes: "Synthetic gate evidence does not prove real-vault migration, remote authorization or V3 activation."

@@ -1,0 +1,75 @@
+schema_version: "1.1"
+fixture_policy:
+  privacy: sanitized-no-real-content
+  purpose: "exercise Record–Chunk–Collection–Artifact–Package integrity"
+  runtime_limit: "in-memory contract exercise; no real vault or transport"
+cases:
+  - id: valid-record-with-chunk
+    operation: create
+    expected: allow
+  - id: orphan-chunk
+    operation: create
+    expected: block
+  - id: weaker-chunk-visibility
+    operation: create
+    expected: block
+  - id: inactive-collection
+    operation: create
+    expected: block
+  - id: chunk-read-with-parent-context
+    operation: read
+    expected: allow-with-context
+  - id: physical-move
+    operation: move
+    expected: identity-and-membership-preserved
+  - id: partial-package
+    operation: package
+    expected: allow-with-explicit-partial-context
+  - id: incompatible-destination
+    operation: package
+    expected: block
+  - id: stale-current-send
+    operation: package
+    expected: block
+  - id: artifact-version-change
+    operation: artifact-update
+    expected: record-not-silently-updated
+  - id: duplicate-chunk-id
+    operation: create
+    expected: block
+  - id: tag-does-not-membership
+    operation: create
+    expected: collection-required
+  - id: entity-aware-source-lineage
+    operation: update
+    expected: allow-with-source-and-local-mode
+  - id: user-cannot-create-governed-content
+    operation: create
+    expected: block
+  - id: authority-resolution-required
+    operation: update
+    expected: block
+  - id: team-vault-requires-scope
+    operation: vault-validation
+    expected: block
+  - id: intra-entity-delivery
+    operation: send
+    expected: allow
+  - id: inter-entity-delivery-needs-owner-approval
+    operation: send
+    expected: block
+  - id: governed-inter-entity-delivery
+    operation: send
+    expected: allow
+  - id: personal-project-governed-split
+    operation: split
+    expected: allow-with-lineage
+  - id: mutable-chunk-cannot-be-shared
+    operation: split
+    expected: block
+  - id: cross-entity-split-needs-delivery-governance
+    operation: split
+    expected: block
+  - id: governed-package-retains-transfer-context
+    operation: package
+    expected: allow-with-transfer-context

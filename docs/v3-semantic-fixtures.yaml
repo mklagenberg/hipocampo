@@ -1,0 +1,91 @@
+schema_version: "1.0"
+fixture_policy:
+  kind: semantic-evaluation
+  privacy: sanitized-no-real-content
+  status: unreleased-v3-preparation
+  validator_limit: "structure only; semantic adequacy remains reviewed"
+cases:
+  - id: reported-not-confirmed
+    input_kind: reported-statement
+    expected_epistemic: Account
+    expected_maturity: new-or-provisional
+    required_guard: "do not present as confirmed fact"
+    negative_behavior: "do not upgrade by retrieval ranking or recency"
+    review_boundary: human-semantic-review
+  - id: causal-hypothesis
+    input_kind: causal-interpretation
+    expected_epistemic: Hypothesis
+    expected_maturity: provisional
+    required_guard: "preserve evidence and limits"
+    negative_behavior: "do not state the causal claim as established"
+    review_boundary: human-semantic-review
+  - id: temporal-conflict
+    input_kind: conflicting-time-bounded-statements
+    expected_epistemic: unresolved-conflict
+    expected_maturity: review-required
+    required_guard: "retain both provenance and validity windows"
+    negative_behavior: "do not choose solely by newest date"
+    review_boundary: human-semantic-review
+  - id: decision-candidate
+    input_kind: proposed-action
+    expected_epistemic: decision-candidate
+    expected_maturity: provisional
+    required_guard: "separate proposal from approved decision"
+    negative_behavior: "do not treat intention as a decision"
+    review_boundary: explicit-human-decision
+  - id: new-versus-curated
+    input_kind: new-item-conflicting-with-curated-record
+    expected_epistemic: unresolved-conflict
+    expected_maturity: new
+    required_guard: "use curated record for current knowledge and surface the pending item"
+    negative_behavior: "do not replace curated knowledge silently"
+    review_boundary: REM-or-human-review
+  - id: duplicate-scope
+    input_kind: overlapping-records-with-different-scope
+    expected_epistemic: unresolved-conflict
+    expected_maturity: review-required
+    required_guard: "preserve separate provenance and visibility"
+    negative_behavior: "do not merge without semantic review"
+    review_boundary: human-semantic-review
+  - id: multimodal-divergence
+    input_kind: text-table-or-chart-divergence
+    expected_epistemic: Account
+    expected_maturity: review-required
+    required_guard: "flag representation divergence"
+    negative_behavior: "do not select a representation silently"
+    review_boundary: human-semantic-review
+  - id: inaccessible-artifact
+    input_kind: unavailable-artifact
+    expected_epistemic: insufficient-evidence
+    expected_maturity: blocked
+    required_guard: "state the access limitation"
+    negative_behavior: "do not reconstruct missing content as fact"
+    review_boundary: host-or-human-review
+  - id: partial-package
+    input_kind: partial-selection-without-context
+    expected_epistemic: context-incomplete
+    expected_maturity: blocked
+    required_guard: "carry parent context and provenance"
+    negative_behavior: "do not present a partial selection as complete"
+    review_boundary: human-semantic-review
+  - id: translation-modality-shift
+    input_kind: translation-changing-obligation-strength
+    expected_epistemic: projection-divergence
+    expected_maturity: review-required
+    required_guard: "preserve source authority and flag the shift"
+    negative_behavior: "do not silently normalize may into must"
+    review_boundary: human-semantic-review
+  - id: isolated-observation
+    input_kind: single-observation-generalized
+    expected_epistemic: Account
+    expected_maturity: provisional
+    required_guard: "retain observation scope"
+    negative_behavior: "do not generalize one observation into a universal fact"
+    review_boundary: human-semantic-review
+  - id: stale-source
+    input_kind: expired-source-backed-record
+    expected_epistemic: revalidation-required
+    expected_maturity: stale
+    required_guard: "revalidate before presenting as current"
+    negative_behavior: "do not treat expired material as current guidance"
+    review_boundary: research-or-human-review

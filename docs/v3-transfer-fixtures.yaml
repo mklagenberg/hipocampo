@@ -1,0 +1,9 @@
+cases:
+  - id: delivered-not-published
+    publication: not_performed
+  - id: received-pending-rem
+    current_use: false
+  - id: accepted-after-rem
+    current_use: true
+  - id: retracted
+    preserve_history: true

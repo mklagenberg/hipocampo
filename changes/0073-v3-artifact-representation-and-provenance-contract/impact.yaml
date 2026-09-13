@@ -1,0 +1,35 @@
+change_set:
+  id: "0073-v3-artifact-representation-and-provenance-contract"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0073-v3-artifact-representation-and-provenance-contract.md"
+    - "decisions/0025-skill-is-client-side-never-per-repository.md"
+    - "decisions/0038-failure-and-recovery-behavior.md"
+    - "decisions/0053-progressive-privacy-licensing-and-skill-integrity.md"
+    - "decisions/0071-v3-record-state-and-queue-contract.md"
+    - "decisions/0072-v3-record-chunk-crud-contract.md"
+impact:
+  - artifact: "decisions/0073-v3-artifact-representation-and-provenance-contract.md, docs/v3-artifact-contract.md, docs/v3-artifact-fixtures.yaml"
+    status: "updated"
+    note: "Defines the unreleased Artifact representation and provenance contract."
+  - artifact: "scripts/v3_artifact_engine.py, scripts/validate_v3_artifacts.py"
+    status: "updated"
+    note: "Implements and exercises bounded in-memory Artifact behavior."
+  - artifact: "SPEC.md, CHANGELOG.md, docs/verification-boundaries.yaml"
+    status: "updated"
+    note: "Links and registers the candidate without activating V3 for existing instances."
+  - artifact: "UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "No released migration, skill package, scaffold, MODA version, or current v2 contract is changed."
+validation:
+  commands:
+    - "python scripts/validate_v3_artifacts.py --root ."
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "docs/v3-artifact-contract.md"
+    - "docs/v3-artifact-fixtures.yaml"
+  notes: "In-memory tests prove representation and provenance rules only; external access, semantic adequacy, migration, runtime enforcement, and publication remain outside this Change Set."

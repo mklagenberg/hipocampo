@@ -1,0 +1,42 @@
+schema_version: "1.0"
+fixture_policy:
+  privacy: sanitized-no-real-content
+  purpose: "exercise selective Package, authority succession, conciliation and revalidation"
+  runtime_limit: "in-memory contract exercise; no real vault or transport"
+cases:
+  - id: hereditary-successor-selected
+    operation: authority-resolution
+    expected: allow
+  - id: inaccessible-authority-chain
+    operation: authority-resolution
+    expected: block
+  - id: discussion-package-with-unresolved-conflict
+    operation: package
+    expected: allow-explicit-conflict
+  - id: current-use-unresolved-conflict
+    operation: package
+    expected: block
+  - id: irreconcilable-perspectives-without-destination-acceptance
+    operation: package
+    expected: block
+  - id: explicitly-accepted-multiple-perspectives
+    operation: package
+    expected: allow
+  - id: current-use-stale-source
+    operation: package
+    expected: block
+  - id: missing-package-authority
+    operation: package
+    expected: block
+  - id: partial-package-keeps-lineage
+    operation: package
+    expected: allow-with-context
+  - id: sent-and-received-ledger-direction
+    operation: package
+    expected: allow-with-ledger-context
+  - id: current-use-package-revalidation
+    operation: revalidation
+    expected: allow
+  - id: stale-source-after-delivery
+    operation: revalidation
+    expected: block

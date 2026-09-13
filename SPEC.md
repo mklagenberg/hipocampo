@@ -2,7 +2,7 @@
 
 Version: 2.1.1 · Follows [SemVer](https://semver.org/lang/pt-BR/)
 
-This document is the normative specification of the Hipocampo methodology: the frontmatter schema, the retrieval rules, and the conventions that any instance (content repository) must follow to be considered compatible with a version of Hipocampo. It is not a usage manual — for that, see [GETTING-STARTED.md](GETTING-STARTED.md). It is not a document of limitations — for that, see [DISCLAIMER.md](DISCLAIMER.md). It is not a best-practices guide — for that, see [BEST-PRACTICES.md](BEST-PRACTICES.md). It is not an upgrade guide for an existing instance — for that, see [UPGRADE.md](UPGRADE.md).
+This document is the normative specification of the Hipocampo methodology: the frontmatter schema, the retrieval rules, and the conventions that any instance (content repository) must follow to be considered compatible with a version of Hipocampo. The active released contract is v2.1.1. The unreleased V3 candidate contracts are documented separately in [docs/v3-contract.md](docs/v3-contract.md), [docs/v3-crud-contract.md](docs/v3-crud-contract.md), and [docs/v3-artifact-contract.md](docs/v3-artifact-contract.md); they do not activate V3 behavior for existing instances. It is not a usage manual — for that, see [GETTING-STARTED.md](GETTING-STARTED.md). It is not a document of limitations — for that, see [DISCLAIMER.md](DISCLAIMER.md). It is not a best-practices guide — for that, see [BEST-PRACTICES.md](BEST-PRACTICES.md). It is not an upgrade guide for an existing instance — for that, see [UPGRADE.md](UPGRADE.md).
 
 ## 1. Scope
 
@@ -138,7 +138,7 @@ A user's own personal anchor vault is always the first vault instantiated for th
 
 The repository's canonical compatibility contract is [`COMPATIBILITY.yaml`](COMPATIBILITY.yaml). Before a durable operation on a vault, the agent evaluates the declared skill, methodology, and vault tuple through that contract when the surface is available. The result is one of five states: `compatible`, `compatible_with_upgrade`, `migration_required`, `unsupported_or_unknown`, or `access_unavailable`.
 
-Only `compatible` and `compatible_with_recommended_alignment` permit the operation to continue, subject to every other invariant and write gate. `migration_required`, `unsupported_or_unknown`, and `access_unavailable` block the operation. In particular, an unknown state is never treated as compatible by default. The contract is a decision surface, not a replacement for [`UPGRADE.md`](UPGRADE.md) or [`MIGRATIONS.md`](MIGRATIONS.md): those documents explain the remediation after the gate identifies the state.
+Only `compatible` and `compatible_with_upgrade` permit the operation to continue, subject to every other invariant and write gate. `migration_required`, `unsupported_or_unknown`, and `access_unavailable` block the operation. In particular, an unknown state is never treated as compatible by default. The contract is a decision surface, not a replacement for [`UPGRADE.md`](UPGRADE.md) or [`MIGRATIONS.md`](MIGRATIONS.md): those documents explain the remediation after the gate identifies the state.
 
 ## 3. `type` — enum and expansion criterion
 

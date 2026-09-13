@@ -154,3 +154,93 @@ entries:
     legacy_treatment: no legacy content is promoted or declassified
     limits: hierarchy and confidentiality policy remain unresolved
     human_or_environmental_boundary: human authorization and MRL-0004 policy
+  - id: semantic-fixtures
+    mechanism: scripts/validate_semantic_fixtures.py
+    inputs: docs/v3-semantic-fixtures.yaml
+    outputs: fixture-envelope errors or structural success
+    coverage: epistemic, maturity, provenance, conflict, and access-boundary cases
+    rule_revision: "1.0"
+    legacy_treatment: no external corpus is copied or rewritten
+    limits: cannot judge semantic truth, authority, freshness, or production behavior
+    human_or_environmental_boundary: semantic review, research, and explicit human decision
+  - id: v3-crud-contract
+    mechanism: scripts/validate_v3_crud.py
+    inputs: docs/v3-crud-fixtures.yaml and in-memory Record/Chunk/Collection/Artifact/Package objects
+    outputs: contract allow/block result
+    coverage: identity, parent context, Collections, monotonic restrictions, partial Packages, and Artifact versioning
+    rule_revision: "v3.0.0-1"
+    legacy_treatment: v2 instances remain readable and are not migrated
+    limits: cannot prove remote transport, authorization, migration safety, or runtime enforcement
+    human_or_environmental_boundary: vault adapter, migration review, and human publication gate
+  - id: v3-artifact-contract
+    mechanism: scripts/validate_v3_artifacts.py
+    inputs: docs/v3-artifact-fixtures.yaml and in-memory Artifact/Record representations
+    outputs: Artifact contract allow/block result
+    coverage: material representation, version/hash integrity, accessibility, privacy monotonicity, external references, and reconstruction
+    rule_revision: "v3.0.0-2"
+    legacy_treatment: v2 instances remain readable and are not migrated
+    limits: cannot fetch external objects, prove authorization or truth, perform transcription, migrate vaults, or enforce runtime access
+    human_or_environmental_boundary: source access, semantic adequacy, migration review, connector policy, and human publication gate
+  - id: v3-l4r-ledger-audit
+    mechanism: scripts/v3_audit_engine.py
+    inputs: local vault snapshots, Records, Packages, and packages-sent/packages-received ledger entries
+    outputs: coverage, integrity, circulation, governance, verified nodes, frontiers, and deterministic findings
+    coverage: logical authority snapshot, bilateral pairing, fingerprints, selected content references, inaccessible frontiers, and backward/forward circulation
+    rule_revision: "v3.0.0-3"
+    legacy_treatment: v2 instances remain readable and are not migrated
+    limits: cannot prove semantic truth, remote authorization, transport security, host permissions, or human semantic correctness
+    human_or_environmental_boundary: REM, semantic conciliation, destination acceptance, privacy policy, and human publication gate
+  - id: v3-x4-policy-evaluator
+    mechanism: scripts/v3_policy_engine.py
+    inputs: source policy, destination policy, purpose, visibility, and boundary context
+    outputs: explainable permitido/redigido/provisório/bloqueado result
+    coverage: independent origin/destination authorization, redaction, provisional semantic state, and fail-closed objective boundaries
+    rule_revision: "v3.0.0-4"
+    legacy_treatment: v2 instances remain readable and are not migrated
+    limits: cannot decide semantic truth or enforce a remote host boundary
+    human_or_environmental_boundary: policy ownership, semantic judgment, remote authorization, and publication gate
+  - id: v3-x4-multivault-resolution
+    mechanism: scripts/v3_multivault_engine.py
+    inputs: vault graph, typed relations, authorities, and accessible frontier
+    outputs: visible graph, coverage, cycles, collisions, and privacy-bounded findings
+    coverage: typed relations, hereditary cycles, authority collisions, and inaccessible frontiers
+    rule_revision: "v3.0.0-5"
+    legacy_treatment: v2 instances remain readable and are not migrated
+    limits: cannot grant access, select semantic truth, or authorize remote transport
+    human_or_environmental_boundary: vault access, entity contract, semantic conciliation, and operator authorization
+  - id: v3-x4-transfer-retraction
+    mechanism: scripts/v3_transfer_engine.py
+    inputs: Package, source/destination policies, receipt, REM result, and retraction control data
+    outputs: delivery, pending/current receipt, or additive retraction event
+    coverage: separation of delivery/publication, REM gate, current-use state, and history-preserving tombstone
+    rule_revision: "v3.0.0-6"
+    legacy_treatment: v2 instances remain readable and are not migrated
+    limits: does not transport, migrate, delete history, or prove semantic acceptance
+    human_or_environmental_boundary: destination acceptance, REM, semantic review, and publication gate
+  - id: v3-x4-privacy-gate
+    mechanism: scripts/v3_privacy_gate.py
+    inputs: passage, identity, destination, purpose, minimization, restrictions, and environment authorization
+    outputs: passage-level allow/block decisions without content duplication
+    coverage: retrieval, compilation, injection, export, cache, embedding, telemetry, and external processing
+    rule_revision: "v3.0.0-7"
+    legacy_treatment: v2 instances remain readable and are not migrated
+    limits: cannot guarantee host security or decide semantic truth
+    human_or_environmental_boundary: host enforcement, external provider contract, privacy policy, and human review
+  - id: v3-x4-processed-ingress
+    mechanism: scripts/v3_ingress_engine.py
+    inputs: destination-bound content, authorized environment, approvals, and queue findings
+    outputs: minimized/redacted local new/pending_rem representation and separated findings
+    coverage: no raw inbox, READ no-write, redaction, declassification approval, REM double check, and three queues
+    rule_revision: "v3.0.0-8"
+    legacy_treatment: v2 instances remain readable and are not migrated
+    limits: cannot prove semantic adequacy or replace REM/human curation
+    human_or_environmental_boundary: destination boundary, processing environment, REM, semantic review, and approval
+  - id: v3-x4-profile-audit
+    mechanism: scripts/v3_profile_engine.py
+    inputs: scoped profile links, actor role, audit event, and vault boundary
+    outputs: accepted/revoked profile result and additive local audit event
+    coverage: role separation, expiry, revocation, local violation record, authorization, and correction linkage
+    rule_revision: "v3.0.0-9"
+    legacy_treatment: v2 instances remain readable and are not migrated
+    limits: does not replace Git, host permissions, or semantic governance
+    human_or_environmental_boundary: vault membership, Git versioning, operator authorization, and closure decision

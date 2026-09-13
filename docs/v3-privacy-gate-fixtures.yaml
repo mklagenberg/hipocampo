@@ -1,0 +1,13 @@
+passages:
+  - retrieval
+  - compilation
+  - injection
+  - export
+  - cache
+  - embedding
+  - telemetry
+  - external_processing
+adversarial:
+  - secret_not_authorized
+  - revealing_metadata
+  - external_environment_unauthorized

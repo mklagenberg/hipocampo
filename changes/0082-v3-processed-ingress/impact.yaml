@@ -1,0 +1,30 @@
+change_set:
+  id: "0082-v3-processed-ingress"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0071-v3-record-state-and-queue-contract.md"
+    - "decisions/0073-v3-artifact-representation-and-provenance-contract.md"
+    - "decisions/0074-v3-entity-aware-crud-and-vault-profiles.md"
+    - "decisions/0040-multi-vault-multi-entity-design-premises.md"
+    - "decisions/0053-progressive-privacy-licensing-and-skill-integrity.md"
+impact:
+  - artifact: "docs/v3-processed-ingress-contract.md, docs/v3-ingress-fixtures.yaml"
+    status: "updated"
+    note: "Defines the implemented destination-boundary processing, REM double check and separate deterministic/semantic queues."
+  - artifact: "scripts/v3_ingress_engine.py, scripts/validate_v3_ingress.py, scripts/validate_v3_x4.py"
+    status: "updated"
+    note: "Implements and exercises the X4.5 processed-ingress boundary."
+  - artifact: "SPEC.md, ROADMAP.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "No raw inbox, migration, connector or release activation is introduced by this proposal."
+validation:
+  commands:
+    - "python scripts/validate_v3_ingress.py"
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "changes/0082-v3-processed-ingress/proposal.md"
+  notes: "The implementation preserves semantic uncertainty and destination privacy boundaries."

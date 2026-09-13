@@ -1,0 +1,95 @@
+schema_version: "1.0"
+status: "unreleased-v3-candidate"
+authority: "decisions/0099-v3-migration-fixture-gate.md"
+cases:
+  - id: "complete-migration"
+    source_version: "2.2.0"
+    target_version: "3.0.0"
+    mapping: complete
+    privacy: proven
+    rollback: tested
+    target_contract: verified
+    human_approval: present
+    unsafe_raw_fallback: false
+    expected: ready
+  - id: "approval-required"
+    source_version: "2.2.0"
+    target_version: "3.0.0"
+    mapping: complete
+    privacy: proven
+    rollback: tested
+    target_contract: verified
+    human_approval: missing
+    unsafe_raw_fallback: false
+    expected: authorization_required
+  - id: "mapping-missing"
+    source_version: "2.2.0"
+    target_version: "3.0.0"
+    mapping: missing
+    privacy: proven
+    rollback: tested
+    target_contract: verified
+    human_approval: present
+    unsafe_raw_fallback: false
+    expected: blocked
+  - id: "mapping-ambiguous"
+    source_version: "2.2.0"
+    target_version: "3.0.0"
+    mapping: ambiguous
+    privacy: proven
+    rollback: tested
+    target_contract: verified
+    human_approval: present
+    unsafe_raw_fallback: false
+    expected: blocked
+  - id: "privacy-unproven"
+    source_version: "2.2.0"
+    target_version: "3.0.0"
+    mapping: complete
+    privacy: unknown
+    rollback: tested
+    target_contract: verified
+    human_approval: present
+    unsafe_raw_fallback: false
+    expected: blocked
+  - id: "rollback-missing"
+    source_version: "2.2.0"
+    target_version: "3.0.0"
+    mapping: complete
+    privacy: proven
+    rollback: missing
+    target_contract: verified
+    human_approval: present
+    unsafe_raw_fallback: false
+    expected: blocked
+  - id: "target-contract-missing"
+    source_version: "2.2.0"
+    target_version: "3.0.0"
+    mapping: complete
+    privacy: proven
+    rollback: tested
+    target_contract: missing
+    human_approval: present
+    unsafe_raw_fallback: false
+    expected: blocked
+  - id: "unsafe-v22-fallback"
+    source_version: "2.2.0"
+    target_version: "3.0.0"
+    mapping: complete
+    privacy: proven
+    rollback: tested
+    target_contract: verified
+    human_approval: present
+    unsafe_raw_fallback: true
+    expected: blocked
+  - id: "partial-preparation"
+    source_version: "2.2.0"
+    target_version: "3.0.0"
+    mapping: complete
+    privacy: proven
+    rollback: tested
+    target_contract: verified
+    human_approval: present
+    unsafe_raw_fallback: false
+    semantic_review: partial
+    expected: partial
