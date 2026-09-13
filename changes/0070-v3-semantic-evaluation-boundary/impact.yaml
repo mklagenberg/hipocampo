@@ -1,0 +1,33 @@
+change_set:
+  id: "0070-v3-semantic-evaluation-boundary"
+  class: "operational"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0039-minimal-evaluation-scenarios.md"
+    - "decisions/0053-progressive-privacy-licensing-and-skill-integrity.md"
+impact:
+  - artifact: "changes/0070-v3-semantic-evaluation-boundary/proposal.md, changes/0070-v3-semantic-evaluation-boundary/impact.yaml"
+    status: "updated"
+    note: "Declares the bounded operational evaluation contract and its limits."
+  - artifact: "docs/v3-semantic-evaluation-boundary.md, docs/v3-semantic-fixtures.yaml"
+    status: "updated"
+    note: "Adds reusable semantic fixture guidance without making the V3 contract normative."
+  - artifact: "scripts/validate_semantic_fixtures.py"
+    status: "updated"
+    note: "Validates fixture shape and review-boundary declarations only."
+  - artifact: "docs/verification-boundaries.yaml, CHANGELOG.md"
+    status: "updated"
+    note: "Registers the new structural check and records it under Unreleased."
+  - artifact: "SPEC.md, UPGRADE.md, MIGRATIONS.md, moda.yaml, conformance/moda.yaml, skill/, scaffold/"
+    status: "not-applicable"
+    note: "No normative V3 contract, instance migration, skill behavior, scaffold, or release version is changed by this evaluation increment."
+validation:
+  commands:
+    - "python scripts/validate_semantic_fixtures.py --root ."
+    - "python scripts/validate_change.py --root ."
+  evidence:
+    - "docs/v3-semantic-evaluation-boundary.md"
+    - "docs/v3-semantic-fixtures.yaml"
+  notes: "The validator proves package structure only; semantic conclusions require the sanitized management exercise and human review."

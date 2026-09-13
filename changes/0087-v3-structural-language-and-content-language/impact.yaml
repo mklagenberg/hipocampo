@@ -1,0 +1,26 @@
+change_set:
+  id: "0087-v3-structural-language-and-content-language"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0087-v3-structural-language-and-content-language.md"
+impact:
+  - artifact: "decisions/0087-v3-structural-language-and-content-language.md, docs/v3-language-policy.md, docs/v3-x5-fixtures.yaml"
+    status: "updated"
+    note: "Defines English structural language and local content language."
+  - artifact: "docs/v3-contract.md, CHANGELOG.md, ROADMAP.md"
+    status: "updated"
+    note: "Discloses the candidate language boundary."
+  - artifact: "SPEC.md, skill/, scaffold/"
+    status: "reviewed"
+    note: "No released language contract or existing vault is migrated."
+validation:
+  commands:
+    - "python scripts/validate_v3_x5.py"
+    - "python scripts/validate_skill_docs.py --root ."
+    - "python scripts/validate_change.py --root ."
+  evidence:
+    - "docs/v3-language-policy.md"
+  notes: "Content language is local; structural vocabulary remains English."

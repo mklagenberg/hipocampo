@@ -1,0 +1,28 @@
+change_set:
+  id: "0078-v3-joint-policy-evaluator"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0074-v3-entity-aware-crud-and-vault-profiles.md"
+    - "decisions/0071-v3-record-state-and-queue-contract.md"
+    - "decisions/0040-multi-vault-multi-entity-design-premises.md"
+impact:
+  - artifact: "docs/v3-policy-evaluator-contract.md, docs/v3-policy-evaluator-fixtures.yaml"
+    status: "updated"
+    note: "Defines the implemented source/destination policy intersection and its explainable result vocabulary."
+  - artifact: "scripts/v3_policy_engine.py, scripts/validate_v3_policy_evaluator.py, scripts/validate_v3_x4.py"
+    status: "updated"
+    note: "Implements and exercises the X4.1 policy evaluator."
+  - artifact: "SPEC.md, ROADMAP.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "No released contract, migration, skill, scaffold, MODA declaration or publication is activated."
+validation:
+  commands:
+    - "python scripts/validate_v3_policy_evaluator.py"
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "changes/0078-v3-joint-policy-evaluator/proposal.md"
+  notes: "In-memory validation proves policy intersection and explanation behavior; semantic truth, remote authorization and host enforcement remain outside this Change Set."

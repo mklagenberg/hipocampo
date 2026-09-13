@@ -1,0 +1,37 @@
+change_set:
+  id: "0077-v3-l4r-semantic-closure"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0071-v3-record-state-and-queue-contract.md"
+    - "decisions/0074-v3-entity-aware-crud-and-vault-profiles.md"
+impact:
+  - artifact: "scripts/v3_crud_engine.py, scripts/v3_package_engine.py, scripts/v3_audit_engine.py, scripts/validate_v3_package_delivery.py, scripts/validate_v3_l4r_closure.py"
+    status: "updated"
+    note: "Implements logical authority, deterministic Package assembly, REM-pending receipt, bilateral ledgers, and deterministic graph audit."
+  - artifact: "docs/v3-package-delivery-contract.md, docs/v3-ledger-audit-contract.md, docs/v3-contract.md"
+    status: "updated"
+    note: "Documents the L4R closure and its semantic/deterministic verification boundary."
+  - artifact: "docs/verification-boundaries.yaml"
+    status: "updated"
+    note: "Declares the V3 L4R audit verification surface and limits."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Records the unreleased V3 candidate increment without activating V3 for existing instances."
+  - artifact: "SPEC.md, ROADMAP.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "Released v2 specification, migration, skill, scaffold and MODA declaration remain unchanged by this unreleased candidate."
+validation:
+  commands:
+    - "python scripts/validate_v3_package_delivery.py --root ."
+    - "python scripts/validate_v3_l4r_closure.py"
+    - "python scripts/validate_v3_crud.py"
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "docs/v3-ledger-audit-contract.md"
+    - "docs/verification-boundaries.yaml"
+    - "scripts/validate_v3_l4r_closure.py"
+  notes: "In-memory validation proves declared Package and audit behavior only; semantic truth, remote authorization, transport, migration, runtime enforcement and publication remain outside this Change Set."

@@ -1,0 +1,20 @@
+schema_version: "1.0"
+status: unreleased-v3-candidate
+states: [proven, observational, unavailable, authorization_required]
+capabilities:
+  - id: local-versioned-event-write
+    state: proven
+    evidence: "local checkout and git diff"
+    scope: "management and candidate deliverable repositories"
+  - id: remote-cache-invalidation
+    state: unavailable
+    evidence: null
+    scope: "no remote host enforcement was tested"
+  - id: external-backup-revocation
+    state: observational
+    evidence: "not controlled by this checkout"
+    scope: "external storage and backups"
+  - id: explicit-capture-authorization
+    state: authorization_required
+    evidence: "per-operation user confirmation"
+    scope: "sensory capture"

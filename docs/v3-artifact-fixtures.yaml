@@ -1,0 +1,33 @@
+schema_version: "1.0"
+purpose: "Exercise V3 Artifact identity, representation, provenance and access boundaries."
+cases:
+  - id: artifact-with-material-representation
+    expected: pass
+    property: semantic Artifact has representation content and exact version/hash
+  - id: semantic-artifact-reference-only
+    expected: block
+    property: reference alone cannot satisfy semantic dependence
+  - id: missing-artifact
+    expected: block
+    property: a missing Artifact is explicit and cannot be reconstructed
+  - id: divergent-artifact-version
+    expected: block
+    property: hash/version divergence blocks reconstruction and flags review
+  - id: inaccessible-artifact
+    expected: pass-with-limitation
+    property: restricted/unavailable state remains explicit with bounded representation
+  - id: representation-weaker-visibility
+    expected: block
+    property: representation cannot widen Record or Artifact visibility
+  - id: external-destination-reference
+    expected: pass-with-limitation
+    property: provider-agnostic reference is preserved without connector or access grant
+  - id: hash-does-not-prove-truth
+    expected: pass-with-limitation
+    property: hash supports integrity identity only, not truth or authority
+  - id: artifact-update-does-not-rewrite-record
+    expected: pass
+    property: new Artifact version leaves the used Record representation unchanged
+  - id: reconstruct-used-version
+    expected: pass
+    property: exact linked Artifact version can be reconstructed and verified

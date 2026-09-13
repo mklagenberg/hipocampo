@@ -1,0 +1,29 @@
+change_set:
+  id: "0084-v3-canonical-vocabulary-and-aliases"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0084-v3-canonical-vocabulary-and-aliases.md"
+impact:
+  - artifact: "decisions/0084-v3-canonical-vocabulary-and-aliases.md, docs/v3-vocabulary-and-aliases.md, docs/v3-vocabulary-fixtures.yaml"
+    status: "updated"
+    note: "Defines candidate canonical terms, aliases and ambiguity behavior."
+  - artifact: "scripts/v3_vocabulary.py, scripts/validate_v3_vocabulary.py, scripts/validate_v3_x5.py"
+    status: "updated"
+    note: "Implements and validates deterministic alias routing."
+  - artifact: "docs/v3-contract.md, docs/vocabulary-dictionary.md, README.md, CHANGELOG.md, ROADMAP.md"
+    status: "updated"
+    note: "Adds candidate navigation without activating V3."
+  - artifact: "SPEC.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "Released contract and adoption surfaces remain unchanged."
+validation:
+  commands:
+    - "python scripts/validate_v3_vocabulary.py"
+    - "python scripts/validate_v3_x5.py"
+    - "python scripts/validate_change.py --root ."
+  evidence:
+    - "docs/v3-vocabulary-fixtures.yaml"
+  notes: "Candidate only; no vault migration or publication."

@@ -1,0 +1,29 @@
+change_set:
+  id: "0080-v3-transfer-retraction"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0071-v3-record-state-and-queue-contract.md"
+    - "decisions/0073-v3-artifact-representation-and-provenance-contract.md"
+    - "decisions/0074-v3-entity-aware-crud-and-vault-profiles.md"
+    - "decisions/0040-multi-vault-multi-entity-design-premises.md"
+impact:
+  - artifact: "docs/v3-transfer-retraction-contract.md, docs/v3-transfer-fixtures.yaml"
+    status: "updated"
+    note: "Defines the implemented distinct delivery, receipt, acceptance, current-use and retraction states."
+  - artifact: "scripts/v3_transfer_engine.py, scripts/validate_v3_transfer.py, scripts/validate_v3_x4.py"
+    status: "updated"
+    note: "Implements and exercises the X4.3 transfer and retraction boundary."
+  - artifact: "SPEC.md, ROADMAP.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "No V2 instance, transport, migration or release is activated."
+validation:
+  commands:
+    - "python scripts/validate_v3_transfer.py"
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "changes/0080-v3-transfer-retraction/proposal.md"
+  notes: "The in-memory surface does not prove remote transport, runtime enforcement or semantic acceptance."

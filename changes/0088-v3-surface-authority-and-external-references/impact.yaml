@@ -1,0 +1,27 @@
+change_set:
+  id: "0088-v3-surface-authority-and-external-references"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0088-v3-surface-authority-and-external-references.md"
+impact:
+  - artifact: "decisions/0088-v3-surface-authority-and-external-references.md, docs/v3-surface-authority-contract.md, docs/v3-external-reference-policy.md, docs/v3-x5-fixtures.yaml"
+    status: "updated"
+    note: "Defines candidate authority precedence, offline behavior and external reference boundaries."
+  - artifact: "scripts/validate_v3_x5.py, docs/v3-contract.md, README.md, CHANGELOG.md, ROADMAP.md"
+    status: "updated"
+    note: "Adds integrated deterministic validation and human navigation."
+  - artifact: "SPEC.md, skill/, scaffold/, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "Released and package surfaces remain unchanged until a future V3 release gate."
+validation:
+  commands:
+    - "python scripts/validate_v3_x5.py"
+    - "python scripts/validate_contracts.py --root ."
+    - "python scripts/validate_change.py --root ."
+  evidence:
+    - "docs/v3-surface-authority-contract.md"
+    - "docs/v3-external-reference-policy.md"
+  notes: "Cross-surface completeness remains subject to human review beyond deterministic checks."

@@ -1,0 +1,25 @@
+change_set:
+  id: "0095-v3-f0-phase-verification-matrix"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0095-v3-f0-phase-verification-matrix.md"
+impact:
+  - artifact: "decisions/0095-v3-f0-phase-verification-matrix.md, docs/v3-f0-verification-matrix.yaml"
+    status: "updated"
+    note: "Defines phase-specific checks, blocking results and evidence."
+  - artifact: "docs/v3-f0-fixtures.yaml, scripts/validate_v3_f0.py"
+    status: "updated"
+    note: "Exercises complete, partial, authorization-required and blocked outcomes."
+  - artifact: "SPEC.md, skill/, scaffold/"
+    status: "reviewed"
+    note: "Released surfaces remain unchanged."
+validation:
+  commands:
+    - "python scripts/validate_v3_f0.py"
+    - "python scripts/validate_change.py --root ."
+  evidence:
+    - "docs/v3-f0-verification-matrix.yaml"
+  notes: "Candidate only; migration and publication remain gated."

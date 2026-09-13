@@ -1,0 +1,32 @@
+change_set:
+  id: "0098-v3-v22-resolution"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0098-v3-supersession-and-v22-resolution.md"
+impact:
+  - artifact: "decisions/0098-v3-supersession-and-v22-resolution.md, docs/v3-v22-resolution-matrix.yaml"
+    status: "updated"
+    note: "Defines V3 sovereignty and the disposition of V2.2 capabilities."
+  - artifact: "docs/v3-crosswalk-v2-v3.yaml, MIGRATIONS.md"
+    status: "updated"
+    note: "Extends the V3 crosswalk and documents the unreleased 2.x to 3.0 migration boundary."
+  - artifact: "SPEC.md, UPGRADE.md"
+    status: "updated"
+    note: "Reconciles the compatibility state vocabulary to compatible_with_upgrade."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Records the unreleased V3 resolution increment."
+validation:
+  commands:
+    - "python scripts/validate_compatibility.py"
+    - "python scripts/validate_contracts.py"
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_v3_f0.py"
+  evidence:
+    - "docs/v3-v22-resolution-matrix.yaml"
+    - "docs/v3-crosswalk-v2-v3.yaml"
+    - "MIGRATIONS.md"
+  notes: "Validation covers structure and declared boundaries; it does not prove real-vault migration, remote authorization or V3 activation."

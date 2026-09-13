@@ -1,0 +1,64 @@
+schema_version: "1.0"
+status: "unreleased-v3-candidate"
+authority: "decisions/0100-v3-synthetic-vault-inventory-gate.md"
+profiles:
+  - id: "synthetic-personal-anchor"
+    entity: "entity-personal-example"
+    role: "anchor"
+    source_version: "2.2.0"
+    target_version: "3.0.0"
+    access: available
+    mapping: complete
+    privacy: proven
+    rollback: tested
+    target_contract: verified
+    human_approval: present
+    artifact_frontier: complete
+    external_reference_preserved: true
+    unsafe_raw_fallback: false
+    expected: ready
+  - id: "synthetic-corporate-anchor-approval-pending"
+    entity: "entity-corporate-example"
+    role: "anchor"
+    source_version: "2.2.0"
+    target_version: "3.0.0"
+    access: available
+    mapping: complete
+    privacy: proven
+    rollback: tested
+    target_contract: verified
+    human_approval: missing
+    artifact_frontier: complete
+    external_reference_preserved: true
+    unsafe_raw_fallback: false
+    expected: authorization_required
+  - id: "synthetic-additional-artifact-frontier"
+    entity: "entity-corporate-example"
+    role: "additional"
+    source_version: "2.2.0"
+    target_version: "3.0.0"
+    access: available
+    mapping: complete
+    privacy: proven
+    rollback: tested
+    target_contract: verified
+    human_approval: present
+    artifact_frontier: partial
+    external_reference_preserved: true
+    unsafe_raw_fallback: false
+    expected: partial
+  - id: "synthetic-invited-vault-inaccessible"
+    entity: "entity-invited-example"
+    role: "additional"
+    source_version: "2.2.0"
+    target_version: "3.0.0"
+    access: unavailable
+    mapping: unknown
+    privacy: unknown
+    rollback: unknown
+    target_contract: unknown
+    human_approval: missing
+    artifact_frontier: unavailable
+    external_reference_preserved: false
+    unsafe_raw_fallback: false
+    expected: blocked

@@ -1,0 +1,9 @@
+cases:
+  - id: accepted-curator
+    status: accepted
+  - id: revoked-membership
+    status: not_authorized
+  - id: local-violation
+    audit: recorded
+  - id: additive-correction
+    audit: preserved

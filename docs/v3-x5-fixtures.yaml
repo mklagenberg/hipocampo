@@ -1,0 +1,15 @@
+schema_version: "1.0"
+status: unreleased-v3-candidate
+fixtures:
+  - id: local-extension-additive
+    surfaces: [SPEC, hipocampo.yaml, AGENTS.md, local-contract.md, README.md]
+    expected: "local extension adds or restricts without redefining canonical terms"
+  - id: offline-missing-spec
+    surfaces: [skill, local-manifest]
+    expected: "report limitation and block normative operation"
+  - id: external-reference
+    surfaces: [research, README]
+    expected: "comparison label; no adopted dependency"
+  - id: language
+    surfaces: [frontmatter, manifest, content-body]
+    expected: "English structure; locally declared content language; English default"

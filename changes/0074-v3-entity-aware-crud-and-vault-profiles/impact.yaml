@@ -1,0 +1,36 @@
+change_set:
+  id: "0074-v3-entity-aware-crud-and-vault-profiles"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0074-v3-entity-aware-crud-and-vault-profiles.md"
+    - "decisions/0040-multi-vault-multi-entity-design-premises.md"
+    - "decisions/0041-entity-model-and-vault-vocabulary.md"
+    - "decisions/0071-v3-record-state-and-queue-contract.md"
+    - "decisions/0072-v3-record-chunk-crud-contract.md"
+    - "decisions/0073-v3-artifact-representation-and-provenance-contract.md"
+impact:
+  - artifact: "decisions/0074-v3-entity-aware-crud-and-vault-profiles.md, docs/v3-contract.md, docs/v3-crud-contract.md"
+    status: "updated"
+    note: "Defines the unreleased entity-aware CRUD, role, Source, split, profile, and transfer contract."
+  - artifact: "docs/taxonomy.md, docs/vocabulary-dictionary.md, CHANGELOG.md"
+    status: "updated"
+    note: "Registers candidate V3 profiles and governance terms without changing the released v2 contract."
+  - artifact: "scripts/v3_crud_engine.py, scripts/validate_v3_crud.py, docs/v3-crud-fixtures.yaml"
+    status: "updated"
+    note: "Implements and exercises bounded in-memory entity-aware CRUD and transfer behavior."
+  - artifact: "SPEC.md, ROADMAP.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "The active v2 contract, migration instructions, released skill, scaffold, MODA declaration, and roadmap direction are not activated or migrated by this unreleased V3 candidate."
+validation:
+  commands:
+    - "python scripts/validate_v3_crud.py --root ."
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_contracts.py --root ."
+  evidence:
+    - "docs/v3-crud-contract.md"
+    - "docs/v3-crud-fixtures.yaml"
+  notes: "In-memory validation proves contract behavior only; semantic entity applicability, remote authorization, transport, migration, runtime enforcement, and publication remain outside this Change Set."

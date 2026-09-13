@@ -1,6 +1,8 @@
 # Taxonomy map
 
-**Contract revision:** `1.0` — compatibility states added by Change Set `0058`.
+**Contract revision:** `1.1` — unreleased V3 candidate profiles and governance
+terms added by Change Set `0074`; compatibility states originated in Change Set
+`0058`.
 
 A single index of every controlled field, enum, and named concept this methodology defines — what it is, where it's authoritatively defined, and when it was introduced or last changed. This document doesn't re-argue any rationale — every row points at the `SPEC.md` section and/or Decision Record that actually carries it. See `decisions/0047-taxonomy-map.md` for why this document exists and why it originally shipped in two lotes.
 
@@ -110,6 +112,16 @@ epistemic types. Their permitted action and precedence are authoritative in
 
 - Legacy `instance.tier` and `AGENTS.md` “Instance type” remain readable only as compatibility aliases; new manifests use `instance.curation_level` and `instance.policy_profile` (`decisions/0052`).
 - New named methodology concepts are admitted only after the term-governance check in `docs/vocabulary-dictionary.md`; the taxonomy records the concept and its authoritative source, while the dictionary records controlled values and aliases.
+
+## 10. Unreleased V3 entity-aware governance concepts
+
+| Concept | Values / meaning | Introduced | Source |
+|---|---|---|---|
+| Vault profile | `entity` | `team` | `personal`; policy profile, not authority or maturity | V3 candidate, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
+| Governance role | `Owner` | `Authority` | `Curator` | `User`; orthogonal permissions and accountability | V3 candidate, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
+| `Source` | Provenance origin such as person, conversation, observation, Artifact, Record, vault, or external system | V3 candidate, Change Set `0074` | `decisions/0074`, `docs/v3-contract.md` |
+| Entity-bound split | Explicit Source-preserving decomposition into Records/Chunks for compatible entity and scope boundaries | V3 candidate, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
+| Transfer mode | `local` | `intra-entity` | `inter-entity`; different destination gates | V3 candidate, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
 
 ## Retroactive backfill — what Lote E2 did
 

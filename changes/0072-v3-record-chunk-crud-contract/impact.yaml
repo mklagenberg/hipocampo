@@ -1,0 +1,34 @@
+change_set:
+  id: "0072-v3-record-chunk-crud-contract"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0072-v3-record-chunk-crud-contract.md"
+    - "decisions/0012-crud-frontmatter-first-mechanics.md"
+    - "decisions/0018-frontmatter-validation-at-read-time.md"
+    - "decisions/0038-failure-and-recovery-behavior.md"
+    - "decisions/0039-minimal-evaluation-scenarios.md"
+impact:
+  - artifact: "decisions/0072-v3-record-chunk-crud-contract.md, docs/v3-crud-contract.md, docs/v3-crud-fixtures.yaml"
+    status: "updated"
+    note: "Defines the unreleased CRUD and Package integrity contract."
+  - artifact: "scripts/v3_crud_engine.py, scripts/validate_v3_crud.py"
+    status: "updated"
+    note: "Implements and exercises the bounded in-memory contract behavior."
+  - artifact: "SPEC.md, CHANGELOG.md, docs/verification-boundaries.yaml"
+    status: "updated"
+    note: "Links the candidate contract and registers its validation boundary without activating V3 for existing instances."
+  - artifact: "UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "No released migration, skill package, scaffold, MODA version, or current v2 contract is changed."
+validation:
+  commands:
+    - "python scripts/validate_v3_crud.py --root ."
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "docs/v3-crud-contract.md"
+    - "docs/v3-crud-fixtures.yaml"
+  notes: "In-memory tests prove contract behavior only; no remote transport, authorization, migration, or runtime enforcement is claimed."

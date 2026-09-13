@@ -1,0 +1,11 @@
+cases:
+  - id: allowed-intra-entity
+    outcome: permitido
+  - id: redacted-cross-entity
+    outcome: redigido
+  - id: semantic-provisional
+    outcome: provisório
+  - id: destination-denied
+    outcome: bloqueado
+  - id: boundary-not-evaluable
+    outcome: bloqueado
