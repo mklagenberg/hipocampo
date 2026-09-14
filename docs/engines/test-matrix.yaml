@@ -3,6 +3,9 @@ policy:
   privacy: sanitized-no-real-content
   semantic_limit: "semantic cases require human or agent review; the validator checks envelope completeness only"
   mutation_rule: "all Record mutations cross Record CRUD"
+  normative_basis: "v3-constitutional-test-basis.yaml"
+  deterministic_bindings: "engines/deterministic-case-bindings.yaml"
+  semantic_revalidation_command: "python scripts/validate_v3_semantic_constitutional_revalidation.py --root ."
 engines:
   - id: crud
     name: "Record CRUD"
@@ -20,6 +23,10 @@ engines:
         fixture_ref: "v3-semantic-fixtures.yaml#duplicate-scope"
         expected_disposition: blocked
         review_boundary: human-semantic-review
+      - id: CRUD-S-003
+        fixture_ref: "v3-semantic-fixtures.yaml#constitutional-rule-without-exception"
+        expected_disposition: blocked
+        review_boundary: explicit-human-decision
 
   - id: artifact-provenance
     name: "Artifact & Provenance"
@@ -110,9 +117,9 @@ engines:
     name: "Governance"
     contract: "docs/v3-policy-evaluator-contract.md"
     modules: ["scripts/v3_policy_engine.py", "scripts/v3_privacy_gate.py", "scripts/v3_profile_engine.py", "scripts/v3_multivault_engine.py"]
-    deterministic_commands: ["python scripts/validate_v3_policy_evaluator.py", "python scripts/validate_v3_privacy_gate.py", "python scripts/validate_v3_multivault.py"]
+    deterministic_commands: ["python scripts/validate_v3_policy_evaluator.py", "python scripts/validate_v3_privacy_gate.py", "python scripts/validate_v3_multivault.py", "python scripts/validate_v3_constitutional_cases.py"]
     write_boundary: "governance decision; Record changes through CRUD"
-    deterministic_cases: [block-unauthorized-destination, validate-profile, detect-authority-cycle, require-inter-entity-minimization]
+    deterministic_cases: [block-unauthorized-destination, validate-profile, detect-authority-cycle, require-inter-entity-minimization, block-constitutional-exception-without-record, require-bounded-exception, require-rejudgment-after-amendment, block-non-waivable-override]
     semantic_cases:
       - id: GOV-S-001
         fixture_ref: "v3-semantic-fixtures.yaml#inaccessible-artifact"
@@ -120,6 +127,14 @@ engines:
         review_boundary: host-or-human-review
       - id: GOV-S-002
         fixture_ref: "v3-semantic-fixtures.yaml#decision-candidate"
+        expected_disposition: needs_review
+        review_boundary: explicit-human-decision
+      - id: GOV-S-003
+        fixture_ref: "v3-semantic-fixtures.yaml#bounded-constitutional-exception"
+        expected_disposition: needs_review
+        review_boundary: explicit-human-decision
+      - id: GOV-S-004
+        fixture_ref: "v3-semantic-fixtures.yaml#constitutional-amendment-rejudgment"
         expected_disposition: needs_review
         review_boundary: explicit-human-decision
 
@@ -198,3 +213,7 @@ engines:
         fixture_ref: "v3-semantic-fixtures.yaml#inaccessible-artifact"
         expected_disposition: blocked
         review_boundary: host-or-human-review
+      - id: LEARN-S-005
+        fixture_ref: "v3-semantic-fixtures.yaml#exception-by-analogy"
+        expected_disposition: blocked
+        review_boundary: explicit-human-decision

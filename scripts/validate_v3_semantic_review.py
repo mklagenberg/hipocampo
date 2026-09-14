@@ -58,9 +58,11 @@ def main() -> int:
     args = parser.parse_args()
     root = Path(args.root).resolve()
     path = root / args.review
+    basis_path = root / "docs/v3-constitutional-test-basis.yaml"
     errors: list[str] = []
     try:
         data = yaml.safe_load(path.read_text(encoding="utf-8"))
+        basis_data = yaml.safe_load(basis_path.read_text(encoding="utf-8"))
     except (OSError, yaml.YAMLError) as exc:
         print(f"validate_v3_semantic_review: FAILED — {exc}")
         return 1
@@ -85,8 +87,8 @@ def main() -> int:
     if not isinstance(reconciliation, dict):
         errors.append("scope_reconciliation must be a mapping")
     else:
-        if reconciliation.get("canonical_case_count") != 24:
-            errors.append("canonical_case_count must be 24")
+        if reconciliation.get("canonical_case_count") != 28:
+            errors.append("canonical_case_count must be 28")
         if not reconciliation.get("corrected_conflicts"):
             errors.append("scope reconciliation must record corrected conflicts")
 
@@ -111,12 +113,16 @@ def main() -> int:
         if sha is not None and (not isinstance(sha, str) or len(sha) != 64):
             errors.append(f"{label}.sha256 must be a 64-character hash when present")
 
+    basis_cases = basis_data.get("cases", []) if isinstance(basis_data, dict) else []
+    basis_map = {item.get("review_id"): item for item in basis_cases if isinstance(item, dict)}
+    if len(basis_cases) != 28:
+        errors.append(f"constitutional basis must contain 28 entries, found {len(basis_cases)}")
     cases = data.get("cases")
     if not isinstance(cases, list):
         errors.append("cases must be a list")
         cases = []
-    if len(cases) != 24:
-        errors.append(f"cases must contain 24 entries, found {len(cases)}")
+    if len(cases) != 28:
+        errors.append(f"cases must contain 28 entries, found {len(cases)}")
     case_ids: set[str] = set()
     engines: set[str] = set()
     for index, case in enumerate(cases):
@@ -154,16 +160,28 @@ def main() -> int:
         for field in ("fixture", "decision_basis", "negative_behavior_checked"):
             if not isinstance(case.get(field), str) or not case[field].strip():
                 errors.append(f"{label}.{field} must be non-empty")
+        basis = basis_map.get(case.get("review_id"))
+        if basis is None:
+            errors.append(f"{label} has no constitutional basis")
+        else:
+            if basis.get("expected_disposition") != case.get("final_disposition"):
+                errors.append(f"{label} final disposition differs from constitutional basis")
+            if not isinstance(basis.get("constitution_refs"), list) or not basis["constitution_refs"]:
+                errors.append(f"{label} has no Constitution references")
+            if not isinstance(basis.get("decision_refs"), list) or not basis["decision_refs"]:
+                errors.append(f"{label} has no Decision Record references")
 
     if engines != EXPECTED_ENGINES:
         errors.append(f"engine coverage mismatch: {sorted(engines)}")
+    if set(basis_map) != case_ids:
+        errors.append("constitutional basis review-id coverage does not match semantic review cases")
 
     if errors:
         print(f"validate_v3_semantic_review: FAILED — {len(errors)} error(s)")
         for error in errors:
             print(f"  [FAIL] {error}")
         return 1
-    print("validate_v3_semantic_review: OK — 24 cases, 11 engines, 2 review passes, no Record mutations")
+    print("validate_v3_semantic_review: OK — 28 cases, 11 engines, 2 review passes, no Record mutations")
     return 0
 
 

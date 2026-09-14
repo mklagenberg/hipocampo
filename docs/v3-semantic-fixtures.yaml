@@ -89,3 +89,31 @@ cases:
     required_guard: "revalidate before presenting as current"
     negative_behavior: "do not treat expired material as current guidance"
     review_boundary: research-or-human-review
+  - id: constitutional-rule-without-exception
+    input_kind: specific-rule-conflicting-with-constitution-without-decision-record
+    expected_epistemic: decision-candidate
+    expected_maturity: blocked
+    required_guard: "block the rule until an accepted and scoped exception Decision Record exists"
+    negative_behavior: "do not infer an exception from operational convenience"
+    review_boundary: explicit-human-decision
+  - id: bounded-constitutional-exception
+    input_kind: specific-rule-with-explicit-scoped-exception-decision
+    expected_epistemic: decision-candidate
+    expected_maturity: review-required
+    required_guard: "verify clause, entity, vault, scope, duration, risk and review condition"
+    negative_behavior: "do not generalize a bounded exception by analogy"
+    review_boundary: explicit-human-decision
+  - id: constitutional-amendment-rejudgment
+    input_kind: constitutional-change-affecting-active-specific-rule
+    expected_epistemic: unresolved-conflict
+    expected_maturity: review-required
+    required_guard: "inventory and rejudge affected rules before new use"
+    negative_behavior: "do not silently retain or delete the affected rule"
+    review_boundary: explicit-human-decision
+  - id: exception-by-analogy
+    input_kind: existing-exception-applied-outside-declared-scope
+    expected_epistemic: decision-candidate
+    expected_maturity: blocked
+    required_guard: "keep the exception within its declared scenario, entity, vault, scope and duration"
+    negative_behavior: "do not expand an exception through analogy"
+    review_boundary: explicit-human-decision

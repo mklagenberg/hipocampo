@@ -26,15 +26,34 @@ def main() -> int:
     args = parser.parse_args()
     root = Path(args.root).resolve()
     path = root / "docs/engines/test-matrix.yaml"
+    bindings_path = root / "docs/engines/deterministic-case-bindings.yaml"
+    basis_path = root / "docs/v3-constitutional-test-basis.yaml"
     errors: list[str] = []
     try:
         data = yaml.safe_load(path.read_text(encoding="utf-8"))
+        bindings_data = yaml.safe_load(bindings_path.read_text(encoding="utf-8"))
+        basis_data = yaml.safe_load(basis_path.read_text(encoding="utf-8"))
     except (OSError, yaml.YAMLError) as exc:
         print(f"validate_v3_engine_catalog: FAILED — {exc}")
         return 1
     if not isinstance(data, dict) or data.get("policy", {}).get("privacy") != "sanitized-no-real-content":
         errors.append("catalog policy must declare sanitized-no-real-content")
     engines = data.get("engines", []) if isinstance(data, dict) else []
+    bindings = bindings_data.get("cases", []) if isinstance(bindings_data, dict) else []
+    binding_map: dict[tuple[str, str], dict] = {}
+    for index, binding in enumerate(bindings):
+        if not isinstance(binding, dict):
+            errors.append(f"bindings[{index}] must be a mapping")
+            continue
+        key = (str(binding.get("engine")), str(binding.get("id")))
+        if key in binding_map:
+            errors.append(f"duplicate deterministic binding: {key[0]}/{key[1]}")
+        binding_map[key] = binding
+        for field in ("id", "engine", "assertion_id", "assertion"):
+            if not isinstance(binding.get(field), str) or not binding[field].strip():
+                errors.append(f"bindings[{index}].{field} must be non-empty")
+    basis_cases = basis_data.get("cases", []) if isinstance(basis_data, dict) else []
+    basis_map = {item.get("case_id"): item for item in basis_cases if isinstance(item, dict)}
     if not isinstance(engines, list):
         errors.append("engines must be a list")
         engines = []
@@ -66,6 +85,13 @@ def main() -> int:
         deterministic = engine.get("deterministic_cases")
         if not isinstance(deterministic, list) or len(deterministic) < 2:
             errors.append(f"{label} needs at least two deterministic cases")
+        else:
+            for case_id in deterministic:
+                binding = binding_map.get((engine_id, str(case_id)))
+                if binding is None:
+                    errors.append(f"{label} deterministic case has no executable binding: {case_id}")
+                elif not isinstance(binding.get("command_index"), int) or not 0 <= binding["command_index"] < len(engine.get("deterministic_commands", [])):
+                    errors.append(f"{label} deterministic binding has invalid command index: {case_id}")
         semantic = engine.get("semantic_cases")
         if not isinstance(semantic, list) or len(semantic) < 2:
             errors.append(f"{label} needs at least two semantic cases")
@@ -82,8 +108,28 @@ def main() -> int:
                     errors.append(f"{case_label} has unknown disposition")
                 if case.get("review_boundary") not in REVIEW_BOUNDARIES:
                     errors.append(f"{case_label} has unknown review boundary")
+                basis = basis_map.get(case.get("id"))
+                if basis is None:
+                    errors.append(f"{case_label} has no constitutional basis")
+                else:
+                    if basis.get("expected_disposition") != case.get("expected_disposition"):
+                        errors.append(f"{case_label} disposition differs from constitutional basis")
+                    if not isinstance(basis.get("constitution_refs"), list) or not basis["constitution_refs"]:
+                        errors.append(f"{case_label} has no Constitution references")
+                    if not isinstance(basis.get("decision_refs"), list) or not basis["decision_refs"]:
+                        errors.append(f"{case_label} has no Decision Record references")
     if ids != EXPECTED_ENGINES:
         errors.append(f"engine set mismatch: expected {sorted(EXPECTED_ENGINES)}, got {sorted(ids)}")
+    expected_binding_keys = {(engine["id"], str(case_id)) for engine in engines for case_id in engine.get("deterministic_cases", [])}
+    if set(binding_map) != expected_binding_keys:
+        missing = sorted(expected_binding_keys - set(binding_map))
+        extra = sorted(set(binding_map) - expected_binding_keys)
+        errors.append(f"deterministic binding coverage mismatch: missing={missing}, extra={extra}")
+    expected_semantic_ids = {case.get("id") for engine in engines for case in engine.get("semantic_cases", []) if isinstance(case, dict)}
+    if set(basis_map) != expected_semantic_ids:
+        missing = sorted(expected_semantic_ids - set(basis_map))
+        extra = sorted(set(basis_map) - expected_semantic_ids)
+        errors.append(f"constitutional basis coverage mismatch: missing={missing}, extra={extra}")
     if errors:
         print(f"validate_v3_engine_catalog: FAILED — {len(errors)} error(s)")
         for error in errors:

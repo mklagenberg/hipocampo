@@ -1,0 +1,47 @@
+change_set:
+  id: "0107-v3-constitutional-test-conformance"
+  class: "operational"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0107-v3-constitutional-test-conformance.md"
+
+impact:
+  - artifact: "docs/engines/deterministic-case-bindings.yaml"
+    status: "updated"
+    note: "Binds all matrix deterministic cases to command indexes and observable assertions."
+  - artifact: "docs/v3-constitutional-test-basis.yaml"
+    status: "updated"
+    note: "Adds constitutional clauses, Decision Records, scope and exception metadata for semantic cases."
+  - artifact: "scripts/validate_v3_engine_catalog.py, scripts/validate_v3_engine_suite.py, scripts/validate_v3_semantic_review.py"
+    status: "updated"
+    note: "Validates case bindings and normative-basis coverage without converting semantic judgment into deterministic truth."
+  - artifact: "scripts/validate_v3_constitutional_cases.py"
+    status: "updated"
+    note: "Exercises unrecorded exceptions, bounded scope, amendment rejudgment and non-waivable privacy limits."
+  - artifact: "docs/v3-semantic-fixtures.yaml, docs/v3-semantic-review.yaml, docs/v3-semantic-validation-report.md"
+    status: "updated"
+    note: "Adds constitutional exception and rejudgment cases while preserving prior dispositions."
+  - artifact: "docs/v3-semantic-constitutional-revalidation.yaml, docs/v3-semantic-constitutional-revalidation-report.md, scripts/validate_v3_semantic_constitutional_revalidation.py"
+    status: "updated"
+    note: "Preserves the immediate prior semantic round, records per-case constitutional judgment and delta, and makes revalidation reproducible."
+  - artifact: "SPEC.md, skill/, scaffold/, knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "No released contract, skill, scaffold, vault cache or private capture is changed."
+
+validation:
+  commands:
+    - "python scripts/validate_v3_constitutional_conformance.py --root ."
+    - "python scripts/validate_v3_engine_catalog.py --root ."
+    - "python scripts/validate_v3_engine_suite.py --root ."
+    - "python scripts/validate_v3_semantic_review.py --root ."
+    - "python scripts/validate_v3_crud_use_cases.py --root ."
+    - "python scripts/validate_semantic_fixtures.py --root ."
+  evidence:
+    - "docs/v3-constitutional-test-basis.yaml"
+    - "docs/engines/deterministic-case-bindings.yaml"
+    - "docs/v3-semantic-review.yaml"
+    - "docs/v3-semantic-constitutional-revalidation.yaml"
+    - "docs/v3-semantic-constitutional-revalidation-report.md"
+  notes: "Operational revalidation under the accepted constitutional conformance decision; no normative contract or vault content is changed."

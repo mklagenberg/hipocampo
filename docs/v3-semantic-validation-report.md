@@ -1,21 +1,21 @@
 # V3 semantic validation report
 
-**Change Set:** 0106
+**Change Set:** 0106 + 0107
 **Date:** 2026-09-14
-**Scope:** 24 semantic cases across 11 logical engines
+**Scope:** 28 semantic cases across 11 logical engines
 **Mode:** authorized local vault caches, read-only; sanitized evidence only
 
 ## Result
 
-The semantic review package was executed in four lots and challenged in a
-second pass. All 24 cases have an explicit final disposition. The result is
+The semantic review package was executed in five lots and challenged in a
+second pass. All 28 cases have an explicit final disposition. The result is
 not a blanket approval: the candidate correctly preserves uncertainty and
 routes unresolved meaning to review.
 
 | Disposition | Cases | Meaning in this review |
 |---|---:|---|
-| `blocked` | 10 | Evidence, authority or context is insufficient for safe continuation. |
-| `needs_review` | 9 | A semantic decision remains open to REM or explicit human review. |
+| `blocked` | 12 | Evidence, authority, context or constitutional basis is insufficient for safe continuation. |
+| `needs_review` | 11 | A semantic decision remains open to REM or explicit human review. |
 | `provisional` | 4 | The item may remain provisional without becoming current fact. |
 | `rework_required` | 1 | Contract or test interpretation must be corrected before acceptance. |
 
@@ -63,6 +63,13 @@ classified recurrence as a candidate for review, not as an accepted rule;
 distinguished possible contract rework; and blocked privacy/governance
 incidents until their frontier is reviewed.
 
+### Lote 5 — conformidade constitucional
+
+The new constitutional edge cases blocked an unrecorded exception and an
+exception used by analogy. A bounded exception and a constitutional amendment
+were routed to explicit human decision and rejudgment. No existing disposition
+was relaxed by the constitutional overlay.
+
 ## Adversarial pass
 
 The second pass found no disagreement with the primary final dispositions
@@ -84,6 +91,6 @@ acceptance, stale-source migration, and automatic candidate activation.
 
 The complete case package is in
 [`v3-semantic-review.yaml`](v3-semantic-review.yaml). Its deterministic
-completeness validator checks 24 cases, 11 engines, two review passes,
+completeness validator checks 28 cases, 11 engines, two review passes,
 provenance-hash shape and the no-mutation rule. Structural validators remain
 independent and do not substitute for this semantic report.
