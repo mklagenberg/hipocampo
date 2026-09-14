@@ -58,6 +58,14 @@ entries:
     v3_surface: "typed evidence, contextual blocking and layered F0 verification"
     action: supersede-with-stronger-contract
     note: "V2.2 evidence is regression input; it is not automatically evidence of V3 semantic truth, remote authorization or runtime enforcement."
+  - v2_surface: "V2.2 bounded enforcement policy"
+    v3_surface: "bounded decision simulation, host capability and F0 hardcode-review boundaries"
+    action: supersede-with-stronger-contract
+    note: "V3 preserves explicit allow/deny/blocked outcomes without claiming universal runtime interception; host enforcement and human authorization remain external boundaries."
+  - v2_surface: "V2.2 vocabulary and nominal-citation boundaries"
+    v3_surface: "canonical vocabulary, alias routing, structural language and privacy boundary"
+    action: supersede-with-stronger-contract
+    note: "V3 normalizes only declared vocabulary and routes ambiguity to clarification; identity truth, semantic meaning and privacy review are not inferred from a nominal heuristic."
   - v2_surface: "V2.2 connector preflight"
     v3_surface: "host capability, authorization and revocation boundaries"
     action: supersede-with-stronger-contract
