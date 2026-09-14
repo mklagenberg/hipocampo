@@ -1,0 +1,9 @@
+cases:
+  - id: secret-redaction
+    raw_inbox: false
+  - id: read-only-detection
+    write_performed: false
+  - id: rem-double-check
+    status: passed
+  - id: declassification-without-approval
+    status: blocked

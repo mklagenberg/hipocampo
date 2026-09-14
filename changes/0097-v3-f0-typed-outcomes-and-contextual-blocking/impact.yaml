@@ -1,0 +1,27 @@
+change_set:
+  id: "0097-v3-f0-typed-outcomes-and-contextual-blocking"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0097-v3-f0-typed-outcomes-and-contextual-blocking.md"
+impact:
+  - artifact: "decisions/0097-v3-f0-typed-outcomes-and-contextual-blocking.md, docs/v3-f0-fixtures.yaml"
+    status: "updated"
+    note: "Defines typed outcomes and contextual blocking fixtures."
+  - artifact: "docs/v3-f0-hardcode-review.yaml, scripts/v3_f0_engine.py, scripts/validate_v3_f0.py"
+    status: "updated"
+    note: "Implements and validates typed outcomes and hardcode review."
+  - artifact: "SPEC.md, skill/, scaffold/"
+    status: "reviewed"
+    note: "Released surfaces remain unchanged."
+validation:
+  commands:
+    - "python scripts/validate_v3_f0.py"
+    - "python scripts/validate_v3_x6.py"
+    - "python scripts/validate_change.py --root ."
+  evidence:
+    - "docs/v3-f0-fixtures.yaml"
+    - "docs/v3-f0-hardcode-review.yaml"
+  notes: "Semantic decisions remain outside deterministic proof."

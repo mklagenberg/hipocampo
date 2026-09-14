@@ -1,0 +1,60 @@
+schema_version: "1.0"
+fixture_policy:
+  privacy: sanitized-no-real-content
+  purpose: "exercise every V3 Record mutation through the logical MCP CRUD boundary"
+  semantic_boundary: "fixtures prove review completeness and deterministic enforcement; they do not prove semantic truth"
+cases:
+  - id: UC-CRUD-01-authorized-read
+    operation: read
+    expected: allow-no-write
+  - id: UC-CRUD-02-unauthorized-read
+    operation: read
+    expected: block
+  - id: UC-CRUD-03-valid-create
+    operation: create
+    expected: allow
+  - id: UC-CRUD-04-invalid-structure
+    operation: create
+    expected: block
+  - id: UC-CRUD-05-incomplete-semantic-review
+    operation: create
+    expected: needs-review
+  - id: UC-CRUD-06-versioned-update
+    operation: update
+    expected: allow
+  - id: UC-CRUD-07-concurrent-update
+    operation: update
+    expected: block
+  - id: UC-CRUD-08-immutable-field-update
+    operation: update
+    expected: block
+  - id: UC-CRUD-09-artifact-divergence
+    operation: update
+    expected: preserve-used-version
+  - id: UC-CRUD-10-processed-ingress
+    operation: create
+    expected: allow
+  - id: UC-CRUD-11-raw-ingress
+    operation: create
+    expected: block
+  - id: UC-CRUD-12-current-use-promotion
+    operation: create
+    expected: allow
+  - id: UC-CRUD-13-stale-current-use
+    operation: create
+    expected: block
+  - id: UC-CRUD-14-migration-version-preflight
+    operation: migration
+    expected: block
+  - id: UC-CRUD-15-fingerprint-audit
+    operation: audit
+    expected: block
+  - id: UC-CRUD-16-archive-tombstone
+    operation: delete
+    expected: allow
+  - id: UC-CRUD-17-idempotent-mcp-retry
+    operation: create
+    expected: one-mutation
+  - id: UC-CRUD-18-mcp-bypass
+    operation: unsupported
+    expected: block

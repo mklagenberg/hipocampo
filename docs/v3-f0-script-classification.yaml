@@ -1,0 +1,71 @@
+version: "v3-f0-candidate-1"
+classification_granularity: script
+future_evolution: operation-level-proof-boundaries
+allowed_classes: [deterministic, cognitive, human, hybrid]
+scripts:
+  - path: scripts/normalize_frontmatter_queue.py
+    class: deterministic
+    proof: "normalization result and rule execution"
+  - path: scripts/scan_v3_queues.py
+    class: deterministic
+    proof: "queue scan findings and coverage"
+  - path: scripts/v3_artifact_engine.py
+    class: hybrid
+    proof: "representation, hash and reconstruction checks; semantic truth remains open"
+  - path: scripts/v3_audit_engine.py
+    class: hybrid
+    proof: "audit linkage and accessible frontier; inaccessible sources remain declared"
+  - path: scripts/v3_crud_engine.py
+    class: hybrid
+    proof: "CRUD transition and policy checks; content meaning remains semantic"
+  - path: scripts/v3_mcp_crud_adapter.py
+    class: deterministic
+    proof: "MCP operation allow-list and exclusive routing to the canonical CRUD gateway"
+  - path: scripts/v3_event_engine.py
+    class: deterministic
+    proof: "event envelope, redaction, correlation and reach matrix"
+  - path: scripts/v3_f0_engine.py
+    class: deterministic
+    proof: "F0 inventory, phase matrix, hardcode review and typed outcomes"
+  - path: scripts/v3_ingress_engine.py
+    class: hybrid
+    proof: "ingress state and privacy guards; semantic classification remains open"
+  - path: scripts/v3_multivault_engine.py
+    class: hybrid
+    proof: "scope, authority and visibility guards; conciliation remains semantic"
+  - path: scripts/v3_package_engine.py
+    class: hybrid
+    proof: "Package identity, snapshot and delivery gates; content truth remains open"
+  - path: scripts/v3_policy_engine.py
+    class: hybrid
+    proof: "policy predicate evaluation; unresolved semantic policy is disclosed"
+  - path: scripts/v3_privacy_gate.py
+    class: hybrid
+    proof: "privacy gate predicates and blocked conditions; context interpretation remains human"
+  - path: scripts/v3_profile_engine.py
+    class: hybrid
+    proof: "profile and violation findings; semantic severity remains reviewable"
+  - path: scripts/v3_queue_engine.py
+    class: deterministic
+    proof: "queue separation, idempotency and deterministic normalization"
+  - path: scripts/v3_transfer_engine.py
+    class: hybrid
+    proof: "transfer authorization and provenance; destination meaning remains semantic"
+  - path: scripts/v3_vocabulary.py
+    class: deterministic
+    proof: "canonical vocabulary routing and ambiguity detection"
+  - path: scripts/v3_migration_engine.py
+    class: deterministic
+    proof: "synthetic migration preflight outcome from declared blocking conditions"
+  - path: scripts/v3_learning_engine.py
+    class: hybrid
+    proof: "sanitized signal identity, deduplication and candidate boundary; semantic gap assessment remains reviewed"
+  - path: scripts/validate_v3_migration.py
+    class: deterministic
+    proof: "migration fixture coverage and expected typed outcomes"
+  - path: scripts/v3_inventory_engine.py
+    class: deterministic
+    proof: "synthetic vault inventory readiness from declared access and migration gates"
+  - path: scripts/validate_v3_inventory.py
+    class: deterministic
+    proof: "synthetic vault profile coverage and expected typed outcomes"

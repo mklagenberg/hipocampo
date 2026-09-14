@@ -1,0 +1,200 @@
+schema_version: "1.0"
+policy:
+  privacy: sanitized-no-real-content
+  semantic_limit: "semantic cases require human or agent review; the validator checks envelope completeness only"
+  mutation_rule: "all Record mutations cross Record CRUD"
+engines:
+  - id: crud
+    name: "Record CRUD"
+    contract: "docs/v3-crud-contract.md"
+    modules: ["scripts/v3_crud_engine.py", "scripts/v3_mcp_crud_adapter.py"]
+    deterministic_commands: ["python scripts/validate_v3_crud.py --root .", "python scripts/validate_v3_crud_use_cases.py --root ."]
+    write_boundary: "canonical RecordCrud only"
+    deterministic_cases: [create-valid, update-versioned, reject-stale-write, reject-mcp-bypass]
+    semantic_cases:
+      - id: CRUD-S-001
+        fixture_ref: "v3-semantic-fixtures.yaml#new-versus-curated"
+        expected_disposition: needs_review
+        review_boundary: REM-or-human-review
+      - id: CRUD-S-002
+        fixture_ref: "v3-semantic-fixtures.yaml#duplicate-scope"
+        expected_disposition: blocked
+        review_boundary: human-semantic-review
+
+  - id: artifact-provenance
+    name: "Artifact & Provenance"
+    contract: "docs/v3-artifact-contract.md"
+    modules: ["scripts/v3_artifact_engine.py"]
+    deterministic_commands: ["python scripts/validate_v3_artifacts.py --root ."]
+    write_boundary: "Artifact proposal; Record changes through CRUD"
+    deterministic_cases: [validate-hash, monotonic-version, preserve-used-version, representation-hash-match]
+    semantic_cases:
+      - id: ART-S-001
+        fixture_ref: "v3-semantic-fixtures.yaml#multimodal-divergence"
+        expected_disposition: needs_review
+        review_boundary: human-semantic-review
+      - id: ART-S-002
+        fixture_ref: "v3-semantic-fixtures.yaml#inaccessible-artifact"
+        expected_disposition: blocked
+        review_boundary: host-or-human-review
+
+  - id: ingress
+    name: "Ingress"
+    contract: "docs/v3-processed-ingress-contract.md"
+    modules: ["scripts/v3_ingress_engine.py"]
+    deterministic_commands: ["python scripts/validate_v3_ingress.py"]
+    write_boundary: "sanitized proposal; Record changes through CRUD"
+    deterministic_cases: [require-minimization, require-anonymization, reject-raw-material, read-is-non-mutating]
+    semantic_cases:
+      - id: ING-S-001
+        fixture_ref: "v3-semantic-fixtures.yaml#translation-modality-shift"
+        expected_disposition: needs_review
+        review_boundary: human-semantic-review
+      - id: ING-S-002
+        fixture_ref: "v3-semantic-fixtures.yaml#isolated-observation"
+        expected_disposition: provisional
+        review_boundary: human-semantic-review
+
+  - id: rem-curation
+    name: "REM / Curation"
+    contract: "docs/v3-semantic-evaluation-boundary.md"
+    modules: ["scripts/v3_queue_engine.py", "scripts/scan_v3_queues.py"]
+    deterministic_commands: ["python scripts/validate_v3_queues.py --root .", "python scripts/validate_semantic_fixtures.py --root ."]
+    write_boundary: "queues and review proposal; Record transitions through CRUD"
+    deterministic_cases: [separate-queues, expire-ttl, idempotent-normalization, block-unsupported-queue]
+    semantic_cases:
+      - id: REM-S-001
+        fixture_ref: "v3-semantic-fixtures.yaml#temporal-conflict"
+        expected_disposition: blocked
+        review_boundary: human-semantic-review
+      - id: REM-S-002
+        fixture_ref: "v3-semantic-fixtures.yaml#causal-hypothesis"
+        expected_disposition: provisional
+        review_boundary: human-semantic-review
+
+  - id: package
+    name: "Package"
+    contract: "docs/v3-package-delivery-contract.md"
+    modules: ["scripts/v3_package_engine.py"]
+    deterministic_commands: ["python scripts/validate_v3_package_delivery.py --root ."]
+    write_boundary: "Package and ledger proposal; Record changes through CRUD"
+    deterministic_cases: [select-valid-chunks, preserve-parent-context, calculate-fingerprint, block-weak-destination]
+    semantic_cases:
+      - id: PKG-S-001
+        fixture_ref: "v3-semantic-fixtures.yaml#partial-package"
+        expected_disposition: blocked
+        review_boundary: human-semantic-review
+      - id: PKG-S-002
+        fixture_ref: "v3-semantic-fixtures.yaml#new-versus-curated"
+        expected_disposition: needs_review
+        review_boundary: REM-or-human-review
+
+  - id: delivery-transfer
+    name: "Delivery / Transfer"
+    contract: "docs/v3-transfer-retraction-contract.md"
+    modules: ["scripts/v3_transfer_engine.py"]
+    deterministic_commands: ["python scripts/validate_v3_transfer.py"]
+    write_boundary: "receipt proposal; Record acceptance through CRUD"
+    deterministic_cases: [require-destination-acceptance, hold-for-rem, block-stale-current-use, preserve-retraction-history]
+    semantic_cases:
+      - id: DEL-S-001
+        fixture_ref: "v3-semantic-fixtures.yaml#new-versus-curated"
+        expected_disposition: needs_review
+        review_boundary: REM-or-human-review
+      - id: DEL-S-002
+        fixture_ref: "v3-semantic-fixtures.yaml#reported-not-confirmed"
+        expected_disposition: provisional
+        review_boundary: human-semantic-review
+
+  - id: governance
+    name: "Governance"
+    contract: "docs/v3-policy-evaluator-contract.md"
+    modules: ["scripts/v3_policy_engine.py", "scripts/v3_privacy_gate.py", "scripts/v3_profile_engine.py", "scripts/v3_multivault_engine.py"]
+    deterministic_commands: ["python scripts/validate_v3_policy_evaluator.py", "python scripts/validate_v3_privacy_gate.py", "python scripts/validate_v3_multivault.py"]
+    write_boundary: "governance decision; Record changes through CRUD"
+    deterministic_cases: [block-unauthorized-destination, validate-profile, detect-authority-cycle, require-inter-entity-minimization]
+    semantic_cases:
+      - id: GOV-S-001
+        fixture_ref: "v3-semantic-fixtures.yaml#inaccessible-artifact"
+        expected_disposition: blocked
+        review_boundary: host-or-human-review
+      - id: GOV-S-002
+        fixture_ref: "v3-semantic-fixtures.yaml#decision-candidate"
+        expected_disposition: needs_review
+        review_boundary: explicit-human-decision
+
+  - id: operational-audit
+    name: "Operational Audit"
+    contract: "docs/v3-ledger-audit-contract.md"
+    modules: ["scripts/v3_event_engine.py", "scripts/v3_audit_engine.py"]
+    deterministic_commands: ["python scripts/validate_v3_l4r_closure.py", "python scripts/validate_v3_x6.py --root ."]
+    write_boundary: "bounded meta events, ledgers and audits; Record changes through CRUD"
+    deterministic_cases: [redact-event, pair-ledgers, reject-fingerprint-mismatch, represent-inaccessible-frontier]
+    semantic_cases:
+      - id: AUD-S-001
+        fixture_ref: "v3-semantic-fixtures.yaml#inaccessible-artifact"
+        expected_disposition: blocked
+        review_boundary: host-or-human-review
+      - id: AUD-S-002
+        fixture_ref: "v3-semantic-fixtures.yaml#temporal-conflict"
+        expected_disposition: blocked
+        review_boundary: human-semantic-review
+
+  - id: migration-compatibility
+    name: "Migration / Compatibility"
+    contract: "docs/v3-crosswalk-v2-v3.yaml"
+    modules: ["scripts/v3_migration_engine.py", "scripts/v3_inventory_engine.py"]
+    deterministic_commands: ["python scripts/validate_v3_migration.py --root .", "python scripts/validate_v3_inventory.py --root .", "python scripts/validate_compatibility.py --root ."]
+    write_boundary: "migration proposal; each Record mutation through CRUD"
+    deterministic_cases: [require-source-target-version, require-rollback, block-raw-fallback, preserve-v22-line]
+    semantic_cases:
+      - id: MIG-S-001
+        fixture_ref: "v3-semantic-fixtures.yaml#translation-modality-shift"
+        expected_disposition: needs_review
+        review_boundary: human-semantic-review
+      - id: MIG-S-002
+        fixture_ref: "v3-semantic-fixtures.yaml#stale-source"
+        expected_disposition: blocked
+        review_boundary: research-or-human-review
+
+  - id: maintenance
+    name: "Maintenance"
+    contract: "docs/v3-contract.md"
+    modules: ["scripts/v3_vocabulary.py", "scripts/v3_queue_engine.py", "scripts/normalize_frontmatter_queue.py"]
+    deterministic_commands: ["python scripts/validate_v3_queues.py --root .", "python scripts/validate_v3_x5.py --root .", "python scripts/validate_hipocampo.py --root ."]
+    write_boundary: "queues in meta; Record-document corrections through CRUD"
+    deterministic_cases: [normalize-supported-term, preserve-revision, block-semantic-queue, block-direct-record-write]
+    semantic_cases:
+      - id: MNT-S-001
+        fixture_ref: "v3-semantic-fixtures.yaml#duplicate-scope"
+        expected_disposition: blocked
+        review_boundary: human-semantic-review
+      - id: MNT-S-002
+        fixture_ref: "v3-semantic-fixtures.yaml#reported-not-confirmed"
+        expected_disposition: provisional
+        review_boundary: human-semantic-review
+
+  - id: learning-evolution
+    name: "Learning & Evolution"
+    contract: "docs/engines/learning-evolution.md"
+    modules: ["scripts/v3_learning_engine.py"]
+    deterministic_commands: ["python scripts/validate_v3_learning_engine.py --root ."]
+    write_boundary: "candidate proposal only; methodology changes require Change Set and Record changes require CRUD"
+    deterministic_cases: [sanitize-signal, deduplicate-signal, classify-known-case, block-unreviewed-activation]
+    semantic_cases:
+      - id: LEARN-S-001
+        fixture_ref: "v3-semantic-fixtures.yaml#new-versus-curated"
+        expected_disposition: needs_review
+        review_boundary: REM-or-human-review
+      - id: LEARN-S-002
+        fixture_ref: "v3-semantic-fixtures.yaml#decision-candidate"
+        expected_disposition: needs_review
+        review_boundary: explicit-human-decision
+      - id: LEARN-S-003
+        fixture_ref: "v3-semantic-fixtures.yaml#reported-not-confirmed"
+        expected_disposition: rework_required
+        review_boundary: explicit-human-decision
+      - id: LEARN-S-004
+        fixture_ref: "v3-semantic-fixtures.yaml#inaccessible-artifact"
+        expected_disposition: blocked
+        review_boundary: host-or-human-review

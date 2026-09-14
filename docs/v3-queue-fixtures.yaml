@@ -1,0 +1,23 @@
+schema_version: "1.0"
+fixture_policy:
+  privacy: sanitized-no-real-content
+  purpose: "exercise deterministic queue separation and idempotent normalization"
+cases:
+  - id: deprecated-frontmatter-value
+    queue: frontmatter
+    expected: deterministic-normalization-allowed
+  - id: expired-ttl
+    queue: staleness
+    expected: report-only-disposition-human
+  - id: semantic-duplicate
+    queue: semantic
+    expected: no-automatic-normalizer
+  - id: read-finding
+    queue: frontmatter
+    expected: route-through-create-or-update
+  - id: unknown-provisional-type
+    queue: frontmatter
+    expected: preserve-identifier-no-silent-coercion
+  - id: normalizer-wrong-queue
+    queue: semantic
+    expected: blocked-before-write

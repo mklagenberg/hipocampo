@@ -34,6 +34,34 @@ Canonical de:para reference for every controlled-vocabulary field this methodolo
 
 ## Compatibility aliases
 
+## Unreleased V3 candidate terms
+
+These terms are candidate V3 governance concepts, not changes to the active
+v2.2.0 frontmatter contract:
+
+| Term | Meaning | Governing decision |
+|---|---|---|
+| `entity` profile | Broad entity-scoped vault policy | `decisions/0074` |
+| `team` profile | Collaborative single-entity vault policy | `decisions/0074` |
+| `personal` profile | User-private vault policy | `decisions/0074` |
+| `Owner` | Boundary and policy accountability role | `decisions/0074` |
+| `Authority` | Current-knowledge authority for an entity and scope | `decisions/0074` |
+| `Curator` | Processing and reconciliation role | `decisions/0074` |
+| `User` | Authorized consumer or operator | `decisions/0074` |
+| `Source` | Provenance origin; not a governance role | `decisions/0074` |
+
+### Unreleased V3 conversational aliases
+
+The candidate alias map and ambiguity rules are maintained in
+[`docs/v3-vocabulary-and-aliases.md`](v3-vocabulary-and-aliases.md), with
+fixtures in [`docs/v3-vocabulary-fixtures.yaml`](v3-vocabulary-fixtures.yaml).
+These aliases resolve conversational wording to the canonical V3 vocabulary;
+they do not add new persisted types to the active v2.2.0 contract.
+
+The V3 `Source` concept is broader than the v2 frontmatter `source` field. The
+frontmatter field remains governed by `SPEC.md`; the V3 concept identifies the
+origin of a Record or Chunk and may carry a stable non-secret reference.
+
 - `instance.tier: conteudo | content | vault` is a legacy curation-level field accepted only for manifests created before v2.1.0. New manifests use `instance.curation_level`.
 - An `AGENTS.md` “Instance type” declaration is a legacy fallback only when `instance.policy_profile` is absent. Once the manifest field is added, remove the duplicate declaration in the same confirmed update.
 

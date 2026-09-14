@@ -1,0 +1,96 @@
+schema_version: "1.0"
+status: unreleased-v3-candidate
+policy: "read-compatible; no automatic migration"
+entries:
+  - v2_surface: "frontmatter.status"
+    v3_surface: "legacy status plus processing_state absent"
+    action: preserve
+    note: "A V3 consumer must not infer processing_state or maturity from draft/active alone."
+  - v2_surface: "frontmatter.temporality"
+    v3_surface: "staleness input"
+    action: preserve-and-evaluate
+    note: "historical remains temporal; historical_exempt is a V3 staleness result, not an epistemic type."
+  - v2_surface: "frontmatter.ttl"
+    v3_surface: "staleness input"
+    action: validate
+    note: "A concrete ISO date is required; relative values remain a frontmatter finding."
+  - v2_surface: "frontmatter.type"
+    v3_surface: "canonical vocabulary resolved through alias map"
+    action: preserve-and-resolve
+    note: "Conversational aliases resolve to canonical terms; unknown or ambiguous wording requires clarification and never silently changes the v2 field."
+  - v2_surface: "frontmatter.source"
+    v3_surface: "provenance.source_kind"
+    action: map-only-when-explicit
+    note: "Deprecated vocabulary may be normalized deterministically; meaning and authority are not inferred."
+  - v2_surface: "frontmatter.contains_subjective_content"
+    v3_surface: "corporate responsibility gate"
+    action: preserve
+    note: "The existing Opinion/Memory write gate remains active."
+  - v2_surface: "inbox/ raw capture"
+    v3_surface: "processed ingress with processing_state: new"
+    action: no-silent-migration
+    note: "Historical V2 inbox content is an input to an explicit migration or ingress plan; V3 creates no inbox/ destination and never renames, deletes or copies that content automatically."
+  - v2_surface: "repository LICENSE"
+    v3_surface: "methodology legal license"
+    action: preserve-and-scope
+    note: "The repository license governs the methodology repository; it does not become a generic content_license for vault records."
+  - v2_surface: "vault privacy contract"
+    v3_surface: "vault privacy contract and local extension"
+    action: preserve-and-evaluate
+    note: "Vault content remains subject to the destination vault contract and any additive or more restrictive local extension."
+  - v2_surface: "README.md and human documentation"
+    v3_surface: "human-facing documentation layer"
+    action: preserve-and-disclose
+    note: "README explains and presents the methodology or vault to humans; it is not a competing normative source."
+  - v2_surface: "repository and vault structure"
+    v3_surface: "English structural language plus declared content language"
+    action: preserve-and-declare
+    note: "Structural names and frontmatter remain English; content language is declared when a vault is instantiated, English by default."
+  - v2_surface: "skill, SPEC and accepted Decision Records"
+    v3_surface: "surface authority contract"
+    action: preserve-and-rank
+    note: "SPEC and accepted decisions are canonical; the skill is procedural; README is human-facing; external references are comparative unless explicitly adopted."
+  - v2_surface: "V2.2 compatibility contract and explicit states"
+    v3_surface: "phased compatibility and F0 contract"
+    action: supersede-with-stronger-contract
+    note: "V3 is sovereign. Existing V2.2 declarations remain readable, but V3 execution, publication and migration use the phase-specific gate."
+  - v2_surface: "V2.2 verification boundaries and validation loop"
+    v3_surface: "typed evidence, contextual blocking and layered F0 verification"
+    action: supersede-with-stronger-contract
+    note: "V2.2 evidence is regression input; it is not automatically evidence of V3 semantic truth, remote authorization or runtime enforcement."
+  - v2_surface: "V2.2 bounded enforcement policy"
+    v3_surface: "bounded decision simulation, host capability and F0 hardcode-review boundaries"
+    action: supersede-with-stronger-contract
+    note: "V3 preserves explicit allow/deny/blocked outcomes without claiming universal runtime interception; host enforcement and human authorization remain external boundaries."
+  - v2_surface: "V2.2 vocabulary and nominal-citation boundaries"
+    v3_surface: "canonical vocabulary, alias routing, structural language and privacy boundary"
+    action: supersede-with-stronger-contract
+    note: "V3 normalizes only declared vocabulary and routes ambiguity to clarification; identity truth, semantic meaning and privacy review are not inferred from a nominal heuristic."
+  - v2_surface: "V2.2 connector preflight"
+    v3_surface: "host capability, authorization and revocation boundaries"
+    action: supersede-with-stronger-contract
+    note: "The operation remains blocked when a required remote capability is untested or unavailable."
+  - v2_surface: "V2.2 ephemeral vault session view"
+    v3_surface: "session cache and operational correlation"
+    action: supersede-with-stronger-contract
+    note: "Context stays transient and vault-scoped; cache does not grant authority or access."
+  - v2_surface: "V2.2 contract-drift routing"
+    v3_surface: "surface authority, external-reference and migration gates"
+    action: supersede-with-stronger-contract
+    note: "Contract and methodology-version drift block or route to migration; content drift does not silently alter authority."
+  - v2_surface: "V2.2 skill recovery"
+    v3_surface: "independently versioned skill and host procedure"
+    action: retain-outside-v3-content-contract
+    note: "Verified package, lock and rollback remain skill concerns and are not activated by a V3 vault migration."
+  - v2_surface: "V2.2 Bootstrap and invited-vault registration"
+    v3_surface: "entity-aware vault resolution and governed discovery"
+    action: supersede-with-v3-context
+    note: "Address-only registration remains; V3 adds entity, role, scope, privacy and authority constraints."
+  - v2_surface: "V2.2 pending-access fallback"
+    v3_surface: "privacy-first processed ingress and explicit transfer states"
+    action: supersede-with-v3-policy
+    note: "The provisional fallback is not carried as a V3 permission. Sensitive raw material is never copied automatically."
+  - v2_surface: "V2.2 validators and negative fixtures"
+    v3_surface: "V3 validators plus V2.2 regression fixtures"
+    action: preserve-as-regression
+    note: "Passing a V2.2 validator does not establish V3 compatibility or migration readiness."

@@ -1,0 +1,41 @@
+change_set:
+  id: "0103-v3-canonical-crud-mutation-boundary"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0103-v3-canonical-crud-mutation-boundary.md"
+impact:
+  - artifact: "decisions/0103-v3-canonical-crud-mutation-boundary.md"
+    status: "updated"
+    note: "Records the accepted V3 decision for the exclusive CRUD mutation boundary."
+  - artifact: "scripts/v3_crud_engine.py, scripts/v3_mcp_crud_adapter.py, scripts/normalize_frontmatter_queue.py"
+    status: "updated"
+    note: "Adds the canonical CRUD mutation boundary, semantic review gate, deterministic structural validation and MCP adapter routing."
+  - artifact: "scripts/v3_artifact_engine.py, scripts/v3_ingress_engine.py, scripts/v3_transfer_engine.py, scripts/v3_migration_engine.py, scripts/v3_audit_engine.py"
+    status: "updated"
+    note: "Blocks the five previously identified shortcut paths and preserves provenance, version and fingerprint integrity."
+  - artifact: "scripts/validate_v3_crud_use_cases.py, docs/v3-crud-use-case-fixtures.yaml, docs/v3-crud-governed-use-cases.md"
+    status: "updated"
+    note: "Adds 18 sanitized CRUD use cases exercised through the logical MCP boundary."
+  - artifact: "docs/v3-crud-contract.md, docs/v3-processed-ingress-contract.md, docs/v3-crud-events-contract.md, docs/v3-semantic-evaluation-boundary.md, CHANGELOG.md"
+    status: "updated"
+    note: "Synchronizes the normative boundary, ingress rule, event rule and unreleased candidate changelog."
+  - artifact: "docs/v3-f0-script-classification.yaml"
+    status: "updated"
+    note: "Classifies the MCP CRUD adapter as a deterministic V3 operational surface."
+validation:
+  commands:
+    - "python scripts/validate_v3_crud.py --root ."
+    - "python scripts/validate_v3_crud_use_cases.py --root ."
+    - "python scripts/validate_v3_artifacts.py --root ."
+    - "python scripts/validate_v3_x4.py"
+    - "python scripts/validate_v3_migration.py --root ."
+    - "python scripts/validate_v3_l4r_closure.py"
+    - "python scripts/validate_v3_queues.py --root ."
+  evidence:
+    - "docs/v3-crud-governed-use-cases.md"
+    - "docs/v3-crud-use-case-fixtures.yaml"
+    - "decisions/0103-v3-canonical-crud-mutation-boundary.md"
+  notes: "Fixture-backed implementation only; no V2.2 activation, vault migration, cache change, publication or external write."

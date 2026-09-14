@@ -1,0 +1,26 @@
+change_set:
+  id: "0086-v3-methodology-license-and-vault-privacy"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0086-v3-methodology-license-and-vault-privacy.md"
+impact:
+  - artifact: "decisions/0086-v3-methodology-license-and-vault-privacy.md, docs/v3-license-and-vault-privacy-contract.md, docs/v3-x5-fixtures.yaml"
+    status: "updated"
+    note: "Defines the unreleased license/privacy candidate boundary."
+  - artifact: "docs/v3-contract.md, CHANGELOG.md, ROADMAP.md"
+    status: "updated"
+    note: "Candidate boundary is disclosed without activating v3."
+  - artifact: "SPEC.md, docs/privacy-and-licensing-boundaries.md, scaffold/license-templates/"
+    status: "reviewed"
+    note: "The released v2.1.1 contract is not migrated in this candidate."
+validation:
+  commands:
+    - "python scripts/validate_v3_x5.py"
+    - "python scripts/validate_contracts.py --root ."
+    - "python scripts/validate_change.py --root ."
+  evidence:
+    - "docs/v3-license-and-vault-privacy-contract.md"
+  notes: "No legal permission or access boundary is inferred from a license."

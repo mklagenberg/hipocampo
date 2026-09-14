@@ -1,0 +1,19 @@
+schema_version: "1.0"
+status: unreleased-v3-candidate
+cases:
+  - id: alias-record
+    utterance: "create a note"
+    expected_canonical: "Record"
+    persisted_type: "Record"
+  - id: alias-source
+    utterance: "use the fonte"
+    expected_canonical: "Source"
+    persisted_type: "Source"
+  - id: contextual-methodology
+    utterance: "send this to the second brain"
+    expected_canonical: "Hipocampo"
+    persisted_type: null
+  - id: ambiguous-destination
+    utterance: "save this in the vault"
+    expected_status: "clarification_required"
+    question_must_explain: ["personal vault", "company vault"]

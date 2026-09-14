@@ -1,10 +1,40 @@
 # Roadmap
 
-Last revised: **2026-08-18**
+Last revised: **2026-09-08**
 
 This roadmap communicates direction, not a date commitment. Only an approved release plan or formal milestone creates a delivery commitment. Detailed work lives in Decision Records and PRs; completed work lives in `CHANGELOG.md`.
 
-## Now
+## Current direction — v3.0.0 / LTE
+
+The active released contract remains `v2.2.0`. The next normative boundary is
+one major `v3.0.0`/LTE release; the MRL-0003 through MRL-0006 waves are internal
+execution lineages, not independent releases.
+
+The current direction is governed by Multi Entity, Multi Vault and Privacy
+First. Knowledge circulation is selective Package delivery, not promotion or
+automatic authority transfer. Owner, Authority, Curator, User and Source stay
+distinct. Conflicts may coexist as explicit Chunks, while current-use delivery
+remains fail-closed when authority, conciliation, privacy or staleness is not
+resolved. General derived projections remain deferred by the accepted V3
+decision on derived layers. MRL-0005 now adds a single canonical vocabulary,
+local vault extensions, English structural language, explicit offline
+authority, and labelled external references.
+
+**Status:** X3 and X4 are complete in the checkout. D5.1–D5.6 are accepted,
+MRL-0005/X5, MRL-0006/X6 and F0 are implemented as unreleased V3 candidates.
+No v2 instance migration, remote transport, tag, release or V3 activation has
+occurred.
+
+**Next direction:** validate the F0 closure, then prepare migration v2 → v3,
+the LTE gate and the human publication gate. These remain subsequent
+management stages.
+
+MRL-0006 decisions D6.1–D6.5 and F0 decisions D0.1–D0.4 are accepted in
+management. X6 and F0 candidate contracts are implemented and validated in the
+checkout; the candidate remains unpublished and subject to the migration, LTE
+and human publication gates.
+
+## Historical foundation — v2.0.0, v2.1.1 and v2.2.0
 
 ### Bringing the methodology into MODA conformance — toward v2.0.0
 

@@ -1,0 +1,28 @@
+change_set:
+  id: "0083-v3-profile-violations"
+  class: "normative"
+  semver: "major"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0074-v3-entity-aware-crud-and-vault-profiles.md"
+    - "decisions/0041-entity-model-and-vault-vocabulary.md"
+    - "decisions/0053-progressive-privacy-licensing-and-skill-integrity.md"
+impact:
+  - artifact: "docs/v3-profile-and-violation-audit-contract.md, docs/v3-profile-fixtures.yaml"
+    status: "updated"
+    note: "Defines the implemented scoped profile lifecycle and local Git-versioned violation transparency."
+  - artifact: "scripts/v3_profile_engine.py, scripts/validate_v3_profile.py, scripts/validate_v3_x4.py"
+    status: "updated"
+    note: "Implements and exercises the X4.6 profile and local violation boundary."
+  - artifact: "SPEC.md, ROADMAP.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "No released profile behavior, migration or publication is activated."
+validation:
+  commands:
+    - "python scripts/validate_v3_profile.py"
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "changes/0083-v3-profile-violations/proposal.md"
+  notes: "Runtime enforcement and real-vault security remain future validation surfaces."

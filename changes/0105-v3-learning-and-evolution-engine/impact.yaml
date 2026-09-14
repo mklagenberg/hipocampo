@@ -1,0 +1,35 @@
+change_set:
+  id: "0105-v3-learning-and-evolution-engine"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0105-v3-learning-and-evolution-engine.md"
+impact:
+  - artifact: "scripts/v3_learning_engine.py, scripts/validate_v3_learning_engine.py, docs/engines/learning-evolution-cases.yaml, docs/engines/learning-evolution.md"
+    status: "updated"
+    note: "Adds sanitized signal discovery, deduplication, triage, semantic review and governed case materialization."
+  - artifact: "docs/engines/catalog.md, docs/engines/dependency-map.md, docs/engines/test-matrix.yaml, scripts/validate_v3_engine_catalog.py, scripts/validate_v3_engine_suite.py"
+    status: "updated"
+    note: "Integrates Learning & Evolution as the eleventh logical engine and executes its test assignment."
+  - artifact: "docs/v3-f0-script-classification.yaml"
+    status: "updated"
+    note: "Classifies the Learning & Evolution implementation as a hybrid V3 operational surface."
+  - artifact: "decisions/0105-v3-learning-and-evolution-engine.md, CHANGELOG.md"
+    status: "updated"
+    note: "Records the feedback-loop boundary and unreleased V3 consequence."
+validation:
+  commands:
+    - "python scripts/validate_v3_learning_engine.py --root ."
+    - "python scripts/validate_v3_engine_catalog.py --root ."
+    - "python scripts/validate_v3_engine_suite.py --root ."
+    - "python scripts/validate_semantic_fixtures.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_change.py --root ."
+  evidence:
+    - "docs/engines/learning-evolution.md"
+    - "docs/engines/learning-evolution-cases.yaml"
+    - "docs/engines/test-matrix.yaml"
+    - "decisions/0105-v3-learning-and-evolution-engine.md"
+  notes: "Proposal-only, sanitized and in-memory; no automatic activation, Record write, vault migration, publication or external service."
