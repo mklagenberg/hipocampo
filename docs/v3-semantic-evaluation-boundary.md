@@ -2,7 +2,7 @@
 
 This document describes a reusable evaluation surface prepared for the
 unreleased V3 work. It is not the V3 normative contract and does not change
-the v2.1.1 frontmatter schema.
+the v2.2.0 frontmatter schema.
 
 ## What a semantic fixture tests
 
@@ -39,4 +39,3 @@ Therefore:
 
 See `docs/verification-boundaries.yaml` and
 `decisions/0039-minimal-evaluation-scenarios.md`.
-

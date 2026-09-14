@@ -1,6 +1,6 @@
 # V3 candidate — canonical vocabulary and conversational aliases
 
-**Status:** unreleased V3 candidate. It does not change the active v2.1.1
+**Status:** unreleased V3 candidate. It does not change the active v2.2.0
 contract or migrate existing vaults.
 
 ## Canonical terms

@@ -38,7 +38,7 @@ This repository is being evaluated and brought into conformance with [MODA](http
 - Latest audit: [`audits/moda/2026-08-17-v1.0.0-self-audit.md`](audits/moda/2026-08-17-v1.0.0-self-audit.md)
 <!-- moda:disclosure:end -->
 
-Current version: **2.1.1** ([SemVer](https://semver.org/lang/pt-BR/)).
+Current version: **2.2.0** ([SemVer](https://semver.org/lang/pt-BR/)).
 
 ## Unreleased V3 candidate
 
@@ -46,7 +46,7 @@ The repository also contains an unreleased V3 candidate. Its human-facing
 entry point is [`docs/v3-contract.md`](docs/v3-contract.md), which links the
 candidate contracts for vocabulary, documentation architecture, vault privacy,
 language, surface authority and external references. The released contract
-remains v2.1.1 until a future decision, migration and publication gate.
+remains v2.2.0 until a future decision, migration and publication gate.
 
 MRL-0006 adds candidate operational-trace contracts for layered events,
 session/cache boundaries, CRUD audit metadata, structured correlation,

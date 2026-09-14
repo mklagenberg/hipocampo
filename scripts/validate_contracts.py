@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate cross-surface contracts that structural link checks cannot see.
 
-This validator protects the v2.1.0 consistency contracts: the canonical
+This validator protects the v2.2.0 consistency contracts: the canonical
 manifest fields, six invariants, registered-anchor discovery, privacy routing,
 and the Codex adapter. It intentionally checks a small set of durable agreements rather
 than attempting to infer methodology semantics from arbitrary prose.
@@ -15,7 +15,7 @@ from pathlib import Path
 
 REQUIRED = {
     "SPEC.md": [
-        "Version: 2.1.1",
+        "Version: 2.2.0",
         "instance.policy_profile",
         "instance.curation_level",
         "discovery.registered_repositories",

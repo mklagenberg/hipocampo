@@ -59,6 +59,27 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 - **V3 semantic evaluation boundary** (`changes/0070-v3-semantic-evaluation-boundary`) — adds a reusable, sanitized fixture envelope and a structural validator for exercising epistemic, maturity, provenance, conflict, and access cases. The validator explicitly does not decide semantic truth; V3 remains unreleased and its normative contract is not changed by this preparation increment.
 - **Canonical compatibility contract** (`COMPATIBILITY.yaml`, `docs/compatibility.md`, and `scripts/validate_compatibility.py`) — makes skill/methodology/vault compatibility an explicit five-state decision, blocks unknown or unavailable states, and adds deterministic positive and negative fixtures. Existing vaults remain valid without migration; adoption is progressive.
 
+## [2.2.0] — 2026-09-02
+
+### Added
+- **Canonical compatibility and verification boundaries** (Change Sets
+  `0058`–`0060`) — adds the methodology/skill/vault compatibility contract,
+  explicit verification boundaries and evidence requirements.
+- **Validation loop and bounded enforcement** (Change Sets `0061`–`0062`) —
+  defines repeatable validation outcomes and makes host, authorization and
+  enforcement limits explicit.
+- **Vocabulary, connector and session boundaries** (Change Sets `0063`–`0065`)
+  — establishes canonical vocabulary/privacy boundaries, connector preflight
+  and an ephemeral per-vault session view.
+- **Drift, recovery, onboarding and pending-access controls** (Change Sets
+  `0066`–`0069`) — routes contract drift, bounds skill recovery, formalizes
+  bootstrap invitation registration and provides a non-bypassing pending-access
+  fallback.
+
+This release remains the historical V2.2 baseline for the unreleased V3
+candidate. Existing vaults are not silently migrated by this release-line
+metadata correction.
+
 ## [2.1.1] — 2026-08-21
 
 ### Fixed

@@ -37,7 +37,7 @@ Canonical de:para reference for every controlled-vocabulary field this methodolo
 ## Unreleased V3 candidate terms
 
 These terms are candidate V3 governance concepts, not changes to the active
-v2.1.1 frontmatter contract:
+v2.2.0 frontmatter contract:
 
 | Term | Meaning | Governing decision |
 |---|---|---|
@@ -56,7 +56,7 @@ The candidate alias map and ambiguity rules are maintained in
 [`docs/v3-vocabulary-and-aliases.md`](v3-vocabulary-and-aliases.md), with
 fixtures in [`docs/v3-vocabulary-fixtures.yaml`](v3-vocabulary-fixtures.yaml).
 These aliases resolve conversational wording to the canonical V3 vocabulary;
-they do not add new persisted types to the active v2.1.1 contract.
+they do not add new persisted types to the active v2.2.0 contract.
 
 The V3 `Source` concept is broader than the v2 frontmatter `source` field. The
 frontmatter field remains governed by `SPEC.md`; the V3 concept identifies the

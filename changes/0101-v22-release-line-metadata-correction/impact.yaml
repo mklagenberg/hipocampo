@@ -1,0 +1,38 @@
+change_set:
+  id: "0101-v22-release-line-metadata-correction"
+  class: "normative"
+  semver: "patch"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0101-v22-release-line-metadata-correction.md"
+impact:
+  - artifact: "README.md, SPEC.md, ROADMAP.md, COMPATIBILITY.yaml"
+    status: "updated"
+    note: "Aligns current-release declarations with the published v2.2.0 methodology line."
+  - artifact: "moda.yaml, conformance/moda.yaml, scripts/validate_contracts.py"
+    status: "updated"
+    note: "Aligns metadata and deterministic contract expectations with v2.2.0."
+  - artifact: "docs/v3-contract.md, docs/v3-license-and-vault-privacy-contract.md, docs/v3-vocabulary-and-aliases.md, docs/v3-semantic-evaluation-boundary.md, docs/vocabulary-dictionary.md"
+    status: "updated"
+    note: "Keeps V3 boundary documents anchored to the active v2.2.0 contract."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Adds the historical v2.2.0 release section for Change Sets 0058–0069."
+  - artifact: "docs/v3-v22-resolution-matrix.yaml"
+    status: "updated"
+    note: "Closes the release-line metadata disposition as incorporated with explicit residual gates."
+validation:
+  commands:
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_skill_docs.py --root ."
+    - "python scripts/validate_skill_package.py --root ."
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_contracts.py --root ."
+    - "python scripts/validate_compatibility.py --root ."
+    - "python scripts/validate_v3_f0.py"
+  evidence:
+    - "decisions/0101-v22-release-line-metadata-correction.md"
+    - "docs/v3-v22-resolution-matrix.yaml"
+    - "CHANGELOG.md"
+  notes: "The correction does not rewrite v2.2.0, migrate a vault, publish V3 or change the compatibility lower bounds."

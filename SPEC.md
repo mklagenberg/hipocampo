@@ -1,8 +1,8 @@
 # Hipocampo — SPEC
 
-Version: 2.1.1 · Follows [SemVer](https://semver.org/lang/pt-BR/)
+Version: 2.2.0 · Follows [SemVer](https://semver.org/lang/pt-BR/)
 
-This document is the normative specification of the Hipocampo methodology: the frontmatter schema, the retrieval rules, and the conventions that any instance (content repository) must follow to be considered compatible with a version of Hipocampo. The active released contract is v2.1.1. The unreleased V3 candidate contracts are documented separately in [docs/v3-contract.md](docs/v3-contract.md), [docs/v3-crud-contract.md](docs/v3-crud-contract.md), and [docs/v3-artifact-contract.md](docs/v3-artifact-contract.md); they do not activate V3 behavior for existing instances. It is not a usage manual — for that, see [GETTING-STARTED.md](GETTING-STARTED.md). It is not a document of limitations — for that, see [DISCLAIMER.md](DISCLAIMER.md). It is not a best-practices guide — for that, see [BEST-PRACTICES.md](BEST-PRACTICES.md). It is not an upgrade guide for an existing instance — for that, see [UPGRADE.md](UPGRADE.md).
+This document is the normative specification of the Hipocampo methodology: the frontmatter schema, the retrieval rules, and the conventions that any instance (content repository) must follow to be considered compatible with a version of Hipocampo. The active released contract is v2.2.0. The unreleased V3 candidate contracts are documented separately in [docs/v3-contract.md](docs/v3-contract.md), [docs/v3-crud-contract.md](docs/v3-crud-contract.md), and [docs/v3-artifact-contract.md](docs/v3-artifact-contract.md); they do not activate V3 behavior for existing instances. It is not a usage manual — for that, see [GETTING-STARTED.md](GETTING-STARTED.md). It is not a document of limitations — for that, see [DISCLAIMER.md](DISCLAIMER.md). It is not a best-practices guide — for that, see [BEST-PRACTICES.md](BEST-PRACTICES.md). It is not an upgrade guide for an existing instance — for that, see [UPGRADE.md](UPGRADE.md).
 
 ## 1. Scope
 

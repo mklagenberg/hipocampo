@@ -1,7 +1,7 @@
 # Hipocampo V3 contract — unreleased candidate
 
 This is the implementation contract for the unreleased `v3.0.0`/LTE work. The
-active released specification remains v2.1.1 until a future release gate
+active released specification remains v2.2.0 until a future release gate
 promotes this candidate. Existing v2 instances remain readable and are not
 migrated by merely reading this document.
 
@@ -155,7 +155,7 @@ The following documents record the unreleased MRL-0005 candidate boundary:
   external references.
 
 These documents are candidate contracts only. They do not activate V3 for
-existing instances, override the released v2.1.1 `SPEC.md`, or constitute a
+existing instances, override the released v2.2.0 `SPEC.md`, or constitute a
 migration plan.
 
 ## MRL-0006 candidate contracts

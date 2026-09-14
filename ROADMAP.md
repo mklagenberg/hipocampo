@@ -6,7 +6,7 @@ This roadmap communicates direction, not a date commitment. Only an approved rel
 
 ## Current direction — v3.0.0 / LTE
 
-The active released contract remains `v2.1.1`. The next normative boundary is
+The active released contract remains `v2.2.0`. The next normative boundary is
 one major `v3.0.0`/LTE release; the MRL-0003 through MRL-0006 waves are internal
 execution lineages, not independent releases.
 
@@ -34,7 +34,7 @@ management. X6 and F0 candidate contracts are implemented and validated in the
 checkout; the candidate remains unpublished and subject to the migration, LTE
 and human publication gates.
 
-## Historical foundation — v2.0.0 and v2.1.1
+## Historical foundation — v2.0.0, v2.1.1 and v2.2.0
 
 ### Bringing the methodology into MODA conformance — toward v2.0.0
 

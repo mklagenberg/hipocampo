@@ -1,6 +1,6 @@
 # V3 candidate — methodology license and vault privacy
 
-**Status:** unreleased V3 candidate. The released v2.1.1 license behavior is
+**Status:** unreleased V3 candidate. The released v2.2.0 license behavior is
 not migrated or silently changed by this document.
 
 ## Boundary
@@ -21,7 +21,7 @@ permission and does not override the vault contract.
 
 ## Compatibility boundary
 
-The active v2.1.1 `SPEC.md` and existing instances remain unchanged until a
+The active v2.2.0 `SPEC.md` and existing instances remain unchanged until a
 future V3 release and explicit migration gate. This candidate records the
 future separation so that implementation, migration and publication cannot
 silently conflate license and privacy.
