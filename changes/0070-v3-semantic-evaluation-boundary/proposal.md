@@ -72,4 +72,3 @@ explicitly and keeps the source read-only.
 The change is operational and has no effect on existing Hipocampo instances.
 Removing the validator and fixture documentation restores the prior evaluation
 surface without changing any instance or deleting any historical evidence.
-

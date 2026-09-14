@@ -27,4 +27,3 @@ it does not claim to make semantic review deterministic.
 - REM rechecks rather than silently curates;
 - external processing requires an authorized environment;
 - mixed-content, redaction and failed-boundary fixtures pass.
-

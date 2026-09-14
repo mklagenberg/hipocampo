@@ -42,4 +42,3 @@ removes the candidate tooling and documentation without deleting Decision
 Records or changing a vault. A future V3 release requires a separate release
 gate, migration plan, skill compatibility decision, and human publication
 action.
-

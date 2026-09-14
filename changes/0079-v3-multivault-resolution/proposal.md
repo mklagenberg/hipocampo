@@ -26,4 +26,3 @@ contains a relationship.
 - inaccessible sources produce partial coverage without disclosure;
 - entity-specific perspectives remain separate;
 - composed personal, company and client fixtures pass.
-

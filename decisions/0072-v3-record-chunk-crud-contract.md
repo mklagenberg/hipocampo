@@ -62,4 +62,3 @@ becoming an apparently complete answer.
 - silently refreshing a Record when an Artifact changes — rejected because a
   reference or hash identifies a version, not an authorization to rewrite
   knowledge.
-

@@ -27,4 +27,3 @@ surfaces.
 - bypass attempts are detected;
 - inaccessible-source existence is not disclosed;
 - semantic interpretation remains explicitly bounded.
-

@@ -26,4 +26,3 @@ the audit log as a second source of truth.
 - audit records include who, when, what, destination and result;
 - corrections are versioned and additive;
 - unauthorized audit reads/writes are rejected by fixtures.
-

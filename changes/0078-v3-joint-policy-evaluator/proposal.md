@@ -28,4 +28,3 @@ The main risk is confusing an explainable policy result with semantic truth.
 - redaction, provisional and blocked outcomes are distinguishable;
 - inaccessible sources are not disclosed through diagnostics;
 - deterministic and semantic verification boundaries are documented.
-

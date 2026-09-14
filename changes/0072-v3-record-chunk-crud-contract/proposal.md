@@ -30,4 +30,3 @@ V2 instances remain readable; no migration runs. Reverting the Change Set
 removes the candidate CRUD tooling without deleting historical decisions or
 changing a vault. V3 publication still requires the release gate and a
 separate migration plan.
-

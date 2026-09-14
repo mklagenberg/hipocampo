@@ -26,4 +26,3 @@ vaults, delete history or activate current use in existing instances.
 - sent and received records can be paired;
 - retraction blocks current use without deleting history;
 - partial and rejected deliveries are covered by fixtures.
-
