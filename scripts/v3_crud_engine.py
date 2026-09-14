@@ -5,6 +5,9 @@ from __future__ import annotations
 from copy import deepcopy
 import hashlib
 import json
+from pathlib import Path
+
+import yaml
 
 
 VISIBILITY_RANK = {"public": 0, "internal": 1, "confidential": 2, "restricted": 3}
@@ -20,6 +23,13 @@ OPERATION_ROLES = {
     "package": {"owner", "curator"},
     "send": {"owner", "curator"},
     "authorize": {"owner", "authority"},
+}
+
+RECORD_STATUSES = {"active", "archived", "superseded", "draft", "provisional"}
+SEMANTIC_DECISIONS = {"accepted", "provisional", "needs_review", "blocked", "rework_required"}
+FULL_RECORD_FIELDS = {
+    "record_id", "record_version", "entity", "scope", "source", "vault", "governance",
+    "physical_path", "status", "visibility", "staleness", "collection_ids", "chunks", "artifacts",
 }
 
 
@@ -187,11 +197,32 @@ def effective_staleness(items: list[dict]) -> str:
     return max((item.get("staleness", "current") for item in items), key=lambda value: _rank(STALENESS_RANK, value))
 
 
-def validate_record(record: dict, active_collections: dict[str, dict]) -> dict:
-    required = {"record_id", "record_version", "physical_path", "status", "visibility", "staleness", "collection_ids", "chunks", "artifacts"}
-    missing = required - record.keys()
+def validate_record_structure(record: dict, active_collections: dict[str, dict]) -> dict:
+    if not isinstance(record, dict):
+        raise ContractError("Record must be a mapping")
+    missing = FULL_RECORD_FIELDS - record.keys()
     if missing:
         raise ContractError(f"missing Record fields: {sorted(missing)}")
+    if not isinstance(record["record_id"], str) or not record["record_id"]:
+        raise ContractError("Record identity must be a non-empty string")
+    if not isinstance(record["record_version"], int) or record["record_version"] < 1:
+        raise ContractError("Record version must be a positive integer")
+    if not isinstance(record["entity"], str) or not record["entity"]:
+        raise ContractError("Record entity is required")
+    if not isinstance(record["scope"], str) or not record["scope"]:
+        raise ContractError("Record scope is required")
+    validate_source(record["source"])
+    validate_vault_contract(record["vault"])
+    governance = record["governance"]
+    if not isinstance(governance, dict) or not governance.get("owner") or not governance.get("authority"):
+        raise ContractError("Record governance requires owner and authority")
+    if not isinstance(record["physical_path"], str) or not record["physical_path"]:
+        raise ContractError("Record physical_path is required")
+    record_path = Path(record["physical_path"])
+    if record_path.is_absolute() or ".." in record_path.parts:
+        raise ContractError("Record physical_path must remain repository-relative")
+    if record["status"] not in RECORD_STATUSES:
+        raise ContractError(f"unknown Record status: {record['status']}")
     _rank(VISIBILITY_RANK, record["visibility"])
     _rank(STALENESS_RANK, record["staleness"])
     collections = record["collection_ids"]
@@ -201,6 +232,8 @@ def validate_record(record: dict, active_collections: dict[str, dict]) -> dict:
         raise ContractError("Record requires active Collection membership")
     seen: set[str] = set()
     for chunk in record["chunks"]:
+        if not isinstance(chunk, dict) or not chunk.get("text_ref"):
+            raise ContractError("Chunk requires a text_ref")
         chunk_id = chunk.get("chunk_id")
         if not chunk_id or chunk_id in seen:
             raise ContractError("Chunk IDs must be unique and non-empty")
@@ -216,6 +249,187 @@ def validate_record(record: dict, active_collections: dict[str, dict]) -> dict:
             raise ContractError("Artifact requires artifact_id and reference")
         _rank(VISIBILITY_RANK, artifact.get("visibility", record["visibility"]))
     return deepcopy(record)
+
+
+def validate_record(record: dict, active_collections: dict[str, dict]) -> dict:
+    """Compatibility name for the deterministic structural validator."""
+    return validate_record_structure(record, active_collections)
+
+
+def validate_semantic_review(review: dict, *, target_id: str, operation: str) -> dict:
+    required = {"review_id", "target_id", "reviewer", "purpose", "evidence_refs", "rationale", "reviewed_at", "decision"}
+    missing = required - review.keys()
+    if missing:
+        raise ContractError(f"semantic review is incomplete: {sorted(missing)}")
+    if review["target_id"] != target_id or not review["review_id"]:
+        raise ContractError("semantic review target does not match Record")
+    if review["decision"] not in SEMANTIC_DECISIONS:
+        raise ContractError(f"unknown semantic decision: {review['decision']}")
+    if not review["reviewer"] or not review["purpose"] or not review["rationale"] or not review["reviewed_at"]:
+        raise ContractError("semantic review requires reviewer, purpose, rationale and timestamp")
+    if not isinstance(review["evidence_refs"], list) or not review["evidence_refs"]:
+        raise ContractError("semantic review requires evidence references")
+    if operation == "current-use" and review["decision"] != "accepted":
+        raise ContractError("current-use requires an accepted semantic review")
+    return deepcopy(review)
+
+
+def validate_record_semantics(record: dict, review: dict | None, *, operation: str) -> dict:
+    if review is None:
+        raise ContractError("Record mutation requires a semantic review")
+    validated = validate_semantic_review(review, target_id=record["record_id"], operation=operation)
+    if operation == "current-use":
+        if record.get("staleness") in {"stale", "revalidation_required"}:
+            raise ContractError("current-use semantic review cannot override stale Record")
+        if record.get("maturity", "curated") != "curated":
+            raise ContractError("current-use requires curated maturity")
+    return validated
+
+
+def _event(operation: str, record: dict, *, actor: str, result: str, reason: str) -> dict:
+    return {
+        "event_type": f"record_{operation}",
+        "record_id": record.get("record_id"),
+        "record_version": record.get("record_version"),
+        "actor": actor,
+        "result": result,
+        "reason": reason,
+    }
+
+
+class RecordCrud:
+    """The only persistence boundary for V3 Record mutations.
+
+    Engines may prepare proposals, but only this gateway commits a Record.
+    The gateway intentionally keeps semantic review separate from structural
+    validation: semantic review supplies a decision; deterministic validation
+    enforces the mutation and versioning rules.
+    """
+
+    def __init__(self, active_collections: dict[str, dict], records: dict[str, dict] | None = None):
+        self.active_collections = deepcopy(active_collections)
+        self._records = deepcopy(records or {})
+        self.events: list[dict] = []
+        self._idempotency: dict[str, dict] = {}
+        for record in self._records.values():
+            validate_record_structure(record, self.active_collections)
+
+    @property
+    def records(self) -> dict[str, dict]:
+        """Read-only snapshot; callers cannot mutate the persistence store."""
+        return deepcopy(self._records)
+
+    def _cached(self, idempotency_key: str | None) -> dict | None:
+        return deepcopy(self._idempotency[idempotency_key]) if idempotency_key in self._idempotency else None
+
+    def _remember(self, idempotency_key: str | None, result: dict) -> dict:
+        if idempotency_key:
+            self._idempotency[idempotency_key] = deepcopy(result)
+        return deepcopy(result)
+
+    def create(self, record: dict, *, semantic_review: dict, actor: str, reason: str, idempotency_key: str | None = None) -> dict:
+        cached = self._cached(idempotency_key)
+        if cached:
+            return cached
+        if not actor or not reason:
+            raise ContractError("Record create requires actor and reason")
+        structural = validate_record_structure(record, self.active_collections)
+        semantic_operation = "current-use" if structural.get("current_use") else "create"
+        validate_record_semantics(structural, semantic_review, operation=semantic_operation)
+        if structural["record_id"] in self._records:
+            raise ContractError("Record already exists")
+        self._records[structural["record_id"]] = structural
+        event = _event("created", structural, actor=actor, result="accepted", reason=reason)
+        self.events.append(event)
+        return self._remember(idempotency_key, {"status": "accepted", "record": structural, "event": event})
+
+    def read(self, record_id: str) -> dict:
+        if record_id not in self._records:
+            raise ContractError("Record not found")
+        return deepcopy(self._records[record_id])
+
+    def update(self, record_id: str, patch: dict, *, expected_version: int, semantic_review: dict,
+               actor: str, reason: str, operation: str = "update", idempotency_key: str | None = None) -> dict:
+        cached = self._cached(idempotency_key)
+        if cached:
+            return cached
+        if not actor or not reason:
+            raise ContractError("Record update requires actor and reason")
+        current = self.read(record_id)
+        if expected_version != current["record_version"]:
+            raise ContractError("stale Record version; reread before update")
+        if patch.get("record_id", record_id) != record_id:
+            raise ContractError("Record identity is immutable")
+        merged = deepcopy(current)
+        for key, value in patch.items():
+            if key == "record_version":
+                raise ContractError("Record version is controlled by CRUD")
+            merged[key] = deepcopy(value)
+        merged["record_version"] = current["record_version"] + 1
+        structural = validate_record_structure(merged, self.active_collections)
+        validate_record_semantics(structural, semantic_review, operation=operation)
+        self._records[record_id] = structural
+        event = _event("updated", structural, actor=actor, result="accepted", reason=reason)
+        event["previous_record_version"] = current["record_version"]
+        self.events.append(event)
+        return self._remember(idempotency_key, {"status": "accepted", "record": structural, "event": event})
+
+    def archive(self, record_id: str, *, expected_version: int, semantic_review: dict, actor: str,
+                reason: str, idempotency_key: str | None = None) -> dict:
+        return self.update(
+            record_id, {"status": "archived", "current_use": False},
+            expected_version=expected_version, semantic_review=semantic_review, actor=actor,
+            reason=reason, operation="delete", idempotency_key=idempotency_key,
+        )
+
+    def apply(self, request: dict) -> dict:
+        """Apply a logical MCP CRUD request; no other operation is accepted."""
+        operation = request.get("operation")
+        if operation == "read":
+            actor = request.get("actor") or {}
+            allowed_vaults = actor.get("authorized_vault_ids")
+            if allowed_vaults is not None:
+                record = self.read(request.get("record_id", ""))
+                if record.get("vault", {}).get("vault_id") not in allowed_vaults:
+                    raise ContractError("actor is not authorized for Record vault")
+            return {"status": "accepted", "record": self.read(request.get("record_id", ""))}
+        common = {
+            "semantic_review": request.get("semantic_review"),
+            "actor": request.get("actor", ""),
+            "reason": request.get("reason", ""),
+            "idempotency_key": request.get("idempotency_key"),
+        }
+        if operation == "create":
+            return self.create(request.get("record", {}), **common)
+        if operation == "update":
+            return self.update(request.get("record_id", ""), request.get("patch", {}), expected_version=request.get("expected_version"), **common)
+        if operation == "delete":
+            return self.archive(request.get("record_id", ""), expected_version=request.get("expected_version"), **common)
+        raise ContractError("MCP request must use the canonical CRUD operations")
+
+
+def persist_record_document(path: Path, frontmatter: dict, body: str, *, expected_revision: int, actor: str, reason: str) -> None:
+    """Persist a document correction through the CRUD module.
+
+    This narrow adapter exists for legacy frontmatter normalization. Queue
+    files remain metadata and are not Records; Record-document writes still
+    have one implementation boundary here.
+    """
+    current = path.read_text(encoding="utf-8")
+    current_frontmatter, _ = _parse_document_for_crud(current)
+    if current_frontmatter.get("revision") != expected_revision:
+        raise ContractError("stale document revision; reread before update")
+    serialized = "---\n" + yaml.safe_dump(frontmatter, sort_keys=False, allow_unicode=True).rstrip() + "\n---" + body
+    path.write_text(serialized, encoding="utf-8")
+
+
+def _parse_document_for_crud(text: str) -> tuple[dict, str]:
+    if not text.startswith("---\n"):
+        return {}, text
+    end = text.find("\n---", 4)
+    if end < 0:
+        return {}, text
+    return yaml.safe_load(text[4:end]) or {}, text[end + 4:]
 
 
 def read_chunk(record: dict, chunk_id: str) -> dict:
@@ -241,10 +455,14 @@ def move_record(record: dict, new_path: str) -> dict:
 
 
 def artifact_update(record: dict, artifact_id: str, new_version: int) -> dict:
+    """Return a governed divergence proposal; never rewrite the Record link."""
     updated = deepcopy(record)
     for artifact in updated["artifacts"]:
         if artifact.get("artifact_id") == artifact_id:
-            artifact["version"] = new_version
+            if not isinstance(new_version, int) or new_version <= artifact.get("version", 0):
+                raise ContractError("Artifact versions must increase monotonically")
+            artifact["review_required"] = True
+            artifact["available_version"] = new_version
             return updated
     raise ContractError("Artifact not found")
 

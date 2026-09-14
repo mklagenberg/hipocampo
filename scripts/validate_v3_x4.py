@@ -62,7 +62,7 @@ def run_x43(errors: list[str]) -> None:
     pending = accept_received({"acceptance": "accepted", "local_record": {"processing_state": "new"}}, rem_status="pending")
     expect(pending["status"] == "pending_rem" and not pending["current_use"], "X4.3 receipt bypassed REM", errors)
     current = accept_received({"acceptance": "accepted", "local_record": {"processing_state": "new"}}, rem_status="passed")
-    expect(current["status"] == "current", "X4.3 accepted receipt did not become current after REM", errors)
+    expect(current["status"] == "pending_crud" and not current["current_use"], "X4.3 receipt bypassed canonical CRUD", errors)
     tombstone = retract_delivery(delivery_id="del-1", package_id="pkg-1", reason="source correction", recorded_by="owner", recorded_at="2026-09-09T12:00:00Z")
     expect(tombstone["tombstone"] and tombstone["preserve_history"] and not tombstone["current_use"], "X4.3 retraction lost history or current-use block", errors)
 
@@ -80,7 +80,7 @@ def run_x44(errors: list[str]) -> None:
 
 
 def run_x45(errors: list[str]) -> None:
-    record = {"record_id": "r1", "destination_vault_id": "vault-company", "source_ref": "pkg-1", "content": "guide\napi_key: SECRET", "frontmatter_findings": ["missing_tag"], "semantic_findings": ["needs_review"], "staleness_findings": []}
+    record = {"record_id": "r1", "destination_vault_id": "vault-company", "source_ref": "pkg-1", "content": "guide\napi_key: SECRET", "minimized": True, "anonymized": True, "redaction_complete": True, "destination_authorized": True, "frontmatter_findings": ["missing_tag"], "semantic_findings": ["needs_review"], "staleness_findings": []}
     destination = {"vault_id": "vault-company", "entity": "entity-company"}
     result = process_ingress(record=record, destination_vault=destination, operation="create", environment_authorized=True)
     local = result["local_record"]

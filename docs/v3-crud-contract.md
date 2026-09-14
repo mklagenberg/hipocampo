@@ -15,7 +15,7 @@ record:
     source_id: "stable-source-id"
     source_kind: "conversation"
   vault:
-    id: "vault-id"
+    vault_id: "vault-id"
     profile: "entity | team | personal"
     role: "anchor | additional"
   governance:
@@ -47,6 +47,30 @@ change without changing identity.
 
 ## CRUD behavior
 
+V3 has one Record mutation boundary. No engine, MCP tool, migration routine,
+queue normalizer, Artifact routine or transfer routine may write a Record
+directly. These components may produce a proposal, finding or semantic review;
+the canonical CRUD gateway alone may commit a Record mutation.
+
+The boundary has two ordered validations:
+
+1. semantic validation establishes that the proposed mutation is contextually
+   admissible, with provenance, authority, privacy, applicability, conflict,
+   maturity and staleness considered;
+2. deterministic validation enforces schema, references, versions, state
+   transitions, immutability, idempotency and atomicity before persistence.
+
+A semantic review does not write by itself. A deterministic pass does not prove
+semantic truth. A mutation requires both when the operation changes governed
+knowledge; mechanical metadata normalization may use the deterministic CRUD
+path without pretending to resolve semantic questions.
+
+The MCP surface is a transport adapter, not a second persistence layer. It may
+expose only the canonical `create`, `read`, `update` and governed `delete`
+operations. A request must carry its actor, reason, expected Record version,
+semantic-review reference when required, and idempotency key. Direct file-write
+tools are outside the V3 contract and must be blocked.
+
 - **Create:** validate the full Record, active Collection membership, unique
   Chunk IDs, Artifact references, and monotonic restrictions before persistence.
 - **Read:** read frontmatter first; a Chunk read includes `record_id`, parent
@@ -59,8 +83,9 @@ change without changing identity.
   deletion, except for the narrow existing legal-remediation mechanism.
 - **Move:** update physical path only; Collection membership and root index
   remain logical and stable.
-- **Artifact update:** version the Artifact and flag the Record for review; do
-  not silently rewrite the Record.
+- **Artifact update:** version the Artifact and submit a CRUD mutation that
+  flags the Record for review; do not silently rewrite the Record link or its
+  historically used version.
 
 ## Entity-aware operation boundary
 
@@ -108,10 +133,19 @@ resolution, and whether the selection came from an explicit governed split.
 
 ## Validation and migration boundary
 
-`scripts/validate_v3_crud.py` exercises the contract with positive and
-negative fixtures. The validator does not perform real vault migration,
-remote transport, or authorization enforcement. A v2→v3 migration remains a
-separate Change Set and must preserve IDs, relations, history, and rollback.
+`scripts/validate_v3_crud.py` exercises the structural contract with positive
+and negative fixtures. `scripts/validate_v3_crud_use_cases.py` exercises the
+18 governed use cases through the logical MCP adapter, including semantic
+review completeness, deterministic version control, Artifact divergence,
+processed ingress, current-use gates, migration fail-closed behavior,
+fingerprint audit and bypass blocking. These validators do not perform real
+vault migration, remote transport, or authorization enforcement. A v2→v3
+migration remains a separate Change Set and must preserve IDs, relations,
+history, and rollback.
+
+The complete use-case matrix and semantic review boundary are in
+`docs/v3-crud-governed-use-cases.md` and
+`docs/v3-crud-use-case-fixtures.yaml`.
 
 See `decisions/0072-v3-record-chunk-crud-contract.md`,
 `docs/v3-contract.md`, and `docs/v3-artifact-contract.md`.

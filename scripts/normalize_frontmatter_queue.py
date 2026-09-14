@@ -12,11 +12,8 @@ from pathlib import Path
 
 import yaml
 
+from v3_crud_engine import ContractError, persist_record_document
 from v3_queue_engine import DEPRECATED_VALUES, parse_document
-
-
-def write_document(path: Path, frontmatter: dict, body: str) -> None:
-    path.write_text("---\n" + yaml.safe_dump(frontmatter, sort_keys=False, allow_unicode=True).rstrip() + "\n---" + body, encoding="utf-8")
 
 
 def main() -> int:
@@ -57,7 +54,18 @@ def main() -> int:
             frontmatter["source"] = new
             frontmatter["revision"] = int(frontmatter.get("revision", 0)) + 1
             frontmatter["revision_note"] = "Deterministic V3 frontmatter vocabulary normalization"
-            write_document(path, frontmatter, body)
+            try:
+                persist_record_document(
+                    path,
+                    frontmatter,
+                    body,
+                    expected_revision=int(frontmatter["revision"]) - 1,
+                    actor="frontmatter-normalizer",
+                    reason="deterministic vocabulary normalization",
+                )
+            except (ContractError, OSError, KeyError, TypeError) as exc:
+                print(f"normalize_frontmatter_queue: FAILED — {path}: {exc}")
+                return 1
             finding["status"] = "resolved"
             finding["resolved_at"] = now
             resolved += 1

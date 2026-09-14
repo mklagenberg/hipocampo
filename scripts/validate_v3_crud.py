@@ -17,6 +17,7 @@ from v3_crud_engine import (
     split_record,
     validate_entity_operation,
     validate_record,
+    validate_record_semantics,
     validate_vault_contract,
 )
 
@@ -33,6 +34,11 @@ def base_record() -> dict:
     return {
         "record_id": "rec-001", "record_version": 1, "physical_path": "records/example.md",
         "status": "active", "visibility": "internal", "staleness": "current",
+        "entity": "entity-a", "scope": "project-alpha",
+        "source": {"source_id": "source-session-001", "source_kind": "conversation", "entity": "entity-a"},
+        "vault": {"vault_id": "entity-a-anchor", "entity": "entity-a", "profile": "entity", "role": "anchor"},
+        "governance": {"owner": "owner-001", "authority": "authority-001"},
+        "maturity": "curated",
         "collection_ids": ["col-general"],
         "chunks": [
             {"chunk_id": "chk-001", "parent_record_id": "rec-001", "text_ref": "section-a"},
@@ -116,8 +122,10 @@ def main() -> int:
     stale["staleness"] = "stale"
     expect_block(lambda: create_package(stale, ["chk-001"], "internal"), "stale current-use package", errors)
     artifact_changed = artifact_update(record, "art-001", 2)
-    if artifact_changed["record_version"] != record["record_version"]:
-        errors.append("artifact update silently changed Record version")
+    if artifact_changed["record_version"] != record["record_version"] or not artifact_changed["artifacts"][0].get("review_required"):
+        errors.append("artifact update did not preserve Record and mark review")
+    if artifact_changed["artifacts"][0].get("version") != record["artifacts"][0].get("version"):
+        errors.append("artifact update silently rewrote used Artifact version")
     duplicate = deepcopy(record)
     duplicate["chunks"][1]["chunk_id"] = "chk-001"
     expect_block(lambda: validate_record(duplicate, active), "duplicate chunk id", errors)

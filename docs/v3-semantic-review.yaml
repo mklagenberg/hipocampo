@@ -1,0 +1,72 @@
+schema_version: "1.0"
+review_policy:
+  status: "executed-agent-review-with-human-gates"
+  privacy: "sanitized-no-real-content"
+  record_mutations: "none"
+  corpus_mode: "authorized-local-cache-read-only"
+  passes: 2
+  semantic_limit: "the package records reviewed dispositions; it does not make semantic truth deterministic"
+
+scope_reconciliation:
+  matrix_cases_before: 22
+  engine_specific_learning_cases: 4
+  canonical_case_count: 24
+  corrected_conflicts:
+    - "LEARN-S-001 changed from accepted to needs_review because recurrence is a review signal, not proof of a new valid rule"
+    - "LEARN-S-003 added to the canonical matrix"
+    - "LEARN-S-004 added to the canonical matrix"
+
+source_snapshots:
+  - id: company-anchor-raw-note
+    scope: "sanitized frontmatter and bounded observation excerpt"
+    sha256: "0caf05d26cee6059c039393b5fb7a17fee4afc784423fefecce7c4d4f011581f"
+  - id: company-anchor-gateway-architecture
+    scope: "sanitized frontmatter and architecture boundary excerpt"
+    sha256: "f24aaae149b54ae493f799a878dab9e78652c488f0edc66181276ec19547265c"
+  - id: personal-anchor-ingress-handover
+    scope: "sanitized frontmatter and ingress/privacy boundary excerpt"
+    sha256: "206ee83f376d91e68afc7d6dfbb92a214ef8f7374e95d09d7f0b01fb371653c8"
+  - id: personal-anchor-checkout-handover
+    scope: "sanitized frontmatter and session handover boundary excerpt"
+    sha256: "07b1d1c29d0184f9b41d32943c959ca321374d8733e966ca3ae88aff6dc8aa7b"
+  - id: personal-anchor-research-error-log
+    scope: "sanitized frontmatter and correction/lesson excerpts"
+    sha256: "9198a056c2646ae2063fab4ea1a0f5ef8c6ed35c773073daef948fe5d17626a9"
+  - id: concepts-epistemic-triage
+    scope: "sanitized frontmatter and fact/inference/hypothesis method"
+    sha256: "f8ea2e3040d47be069bae7f212625504a1d2f7d128664f0d3dfd3895fd932127"
+  - id: concepts-anti-patterns
+    scope: "sanitized frontmatter and MCP/governance boundary excerpt"
+    sha256: "7ba4b36152b456a6560819ebf2d280f267bd3c57cddf8dad9fc25c76a5ee4531"
+  - id: concepts-dimensioning-reference
+    scope: "sanitized frontmatter and context/provenance boundary excerpt"
+    sha256: "ffb7a7dfbe8059720a6e07e735a36c33e296a84721a86cce441170114c74ae7f"
+
+cases:
+  - {review_id: SEM-CRUD-001, lot: 1, engine: crud, fixture: new-versus-curated, source_refs: [company-anchor-raw-note, fixture:new-versus-curated], primary_disposition: needs_review, adversarial_disposition: needs_review, final_disposition: needs_review, decision_basis: "material is explicitly draft/raw and must not replace curated knowledge without REM or human review", negative_behavior_checked: "silent replacement of curated material", mutation: none}
+  - {review_id: SEM-CRUD-002, lot: 1, engine: crud, fixture: duplicate-scope, source_refs: [company-anchor-gateway-architecture, concepts-anti-patterns, fixture:duplicate-scope], primary_disposition: blocked, adversarial_disposition: blocked, final_disposition: blocked, decision_basis: "the two scopes are intentionally distinct; merging requires semantic review and provenance preservation", negative_behavior_checked: "merge based only on topical overlap", mutation: none}
+  - {review_id: SEM-ART-001, lot: 1, engine: artifact-provenance, fixture: multimodal-divergence, source_refs: [concepts-dimensioning-reference, fixture:multimodal-divergence], primary_disposition: needs_review, adversarial_disposition: needs_review, final_disposition: needs_review, decision_basis: "the available evidence does not authorize silently selecting one representation over another", negative_behavior_checked: "selecting text, table or chart without recording divergence", mutation: none}
+  - {review_id: SEM-ART-002, lot: 1, engine: artifact-provenance, fixture: inaccessible-artifact, source_refs: [fixture:inaccessible-artifact], primary_disposition: blocked, adversarial_disposition: blocked, final_disposition: blocked, decision_basis: "an unavailable artifact cannot support an identity or content conclusion", negative_behavior_checked: "reconstructing missing content as fact", mutation: none}
+  - {review_id: SEM-ING-001, lot: 1, engine: ingress, fixture: translation-modality-shift, source_refs: [personal-anchor-ingress-handover, fixture:translation-modality-shift], primary_disposition: needs_review, adversarial_disposition: needs_review, final_disposition: needs_review, decision_basis: "a modality shift can change obligation strength and requires source-authority review", negative_behavior_checked: "normalizing may into must", mutation: none}
+  - {review_id: SEM-ING-002, lot: 1, engine: ingress, fixture: isolated-observation, source_refs: [company-anchor-raw-note, fixture:isolated-observation], primary_disposition: provisional, adversarial_disposition: provisional, final_disposition: provisional, decision_basis: "the source is an explicitly undeveloped observation; scope must remain local", negative_behavior_checked: "generalizing one observation into a universal claim", mutation: none}
+
+  - {review_id: SEM-REM-001, lot: 2, engine: rem-curation, fixture: temporal-conflict, source_refs: [personal-anchor-research-error-log, fixture:temporal-conflict], primary_disposition: blocked, adversarial_disposition: blocked, final_disposition: blocked, decision_basis: "the correction log demonstrates that earlier and later claims require preserved provenance and validity windows", negative_behavior_checked: "choosing only the newest statement", mutation: none}
+  - {review_id: SEM-REM-002, lot: 2, engine: rem-curation, fixture: causal-hypothesis, source_refs: [concepts-epistemic-triage, fixture:causal-hypothesis], primary_disposition: provisional, adversarial_disposition: provisional, final_disposition: provisional, decision_basis: "a causal interpretation remains a hypothesis unless evidence establishes more", negative_behavior_checked: "presenting causal interpretation as established fact", mutation: none}
+  - {review_id: SEM-PKG-001, lot: 2, engine: package, fixture: partial-package, source_refs: [concepts-dimensioning-reference, fixture:partial-package], primary_disposition: blocked, adversarial_disposition: blocked, final_disposition: blocked, decision_basis: "a selected fragment lacks sufficient parent context to be presented as a complete package", negative_behavior_checked: "presenting partial selection as complete", mutation: none}
+  - {review_id: SEM-PKG-002, lot: 2, engine: package, fixture: new-versus-curated, source_refs: [company-anchor-raw-note, fixture:new-versus-curated], primary_disposition: needs_review, adversarial_disposition: needs_review, final_disposition: needs_review, decision_basis: "package composition cannot silently displace the curated destination record", negative_behavior_checked: "packaging new material as current knowledge", mutation: none}
+  - {review_id: SEM-DEL-001, lot: 2, engine: delivery-transfer, fixture: new-versus-curated, source_refs: [company-anchor-raw-note, fixture:new-versus-curated], primary_disposition: needs_review, adversarial_disposition: needs_review, final_disposition: needs_review, decision_basis: "delivery does not resolve the destination semantic conflict or imply acceptance", negative_behavior_checked: "equating transfer with acceptance", mutation: none}
+  - {review_id: SEM-DEL-002, lot: 2, engine: delivery-transfer, fixture: reported-not-confirmed, source_refs: [personal-anchor-research-error-log, fixture:reported-not-confirmed], primary_disposition: provisional, adversarial_disposition: provisional, final_disposition: provisional, decision_basis: "reported material with incomplete confirmation may travel only with its provisional status", negative_behavior_checked: "presenting report as confirmed knowledge", mutation: none}
+
+  - {review_id: SEM-GOV-001, lot: 3, engine: governance, fixture: inaccessible-artifact, source_refs: [fixture:inaccessible-artifact], primary_disposition: blocked, adversarial_disposition: blocked, final_disposition: blocked, decision_basis: "authority cannot be inferred when the underlying artifact and access frontier are unavailable", negative_behavior_checked: "granting authority from absence of evidence", mutation: none}
+  - {review_id: SEM-GOV-002, lot: 3, engine: governance, fixture: decision-candidate, source_refs: [personal-anchor-ingress-handover, fixture:decision-candidate], primary_disposition: needs_review, adversarial_disposition: needs_review, final_disposition: needs_review, decision_basis: "the source describes a proposed operating path, not an approved decision", negative_behavior_checked: "treating intention as decision", mutation: none}
+  - {review_id: SEM-AUD-001, lot: 3, engine: operational-audit, fixture: inaccessible-artifact, source_refs: [fixture:inaccessible-artifact], primary_disposition: blocked, adversarial_disposition: blocked, final_disposition: blocked, decision_basis: "audit can represent an inaccessible frontier but cannot assert the missing artifact contents", negative_behavior_checked: "fabricating an audit conclusion beyond the frontier", mutation: none}
+  - {review_id: SEM-AUD-002, lot: 3, engine: operational-audit, fixture: temporal-conflict, source_refs: [personal-anchor-research-error-log, fixture:temporal-conflict], primary_disposition: blocked, adversarial_disposition: blocked, final_disposition: blocked, decision_basis: "the audit must preserve both event chronology and semantic uncertainty until review", negative_behavior_checked: "collapsing correction history into one untraceable value", mutation: none}
+  - {review_id: SEM-MIG-001, lot: 3, engine: migration-compatibility, fixture: translation-modality-shift, source_refs: [personal-anchor-ingress-handover, fixture:translation-modality-shift], primary_disposition: needs_review, adversarial_disposition: needs_review, final_disposition: needs_review, decision_basis: "migration mapping cannot decide a changed obligation without source and target semantic review", negative_behavior_checked: "copying a changed obligation as equivalent", mutation: none}
+  - {review_id: SEM-MIG-002, lot: 3, engine: migration-compatibility, fixture: stale-source, source_refs: [fixture:stale-source], primary_disposition: blocked, adversarial_disposition: blocked, final_disposition: blocked, decision_basis: "the current caches contain no evidence that makes an expired source current; revalidation is required", negative_behavior_checked: "migrating stale material as current guidance", mutation: none}
+
+  - {review_id: SEM-MNT-001, lot: 4, engine: maintenance, fixture: duplicate-scope, source_refs: [company-anchor-gateway-architecture, concepts-anti-patterns, fixture:duplicate-scope], primary_disposition: blocked, adversarial_disposition: blocked, final_disposition: blocked, decision_basis: "mechanical maintenance cannot decide whether overlapping scope is duplication or intentional separation", negative_behavior_checked: "normalizing by merging distinct scopes", mutation: none}
+  - {review_id: SEM-MNT-002, lot: 4, engine: maintenance, fixture: reported-not-confirmed, source_refs: [personal-anchor-research-error-log, fixture:reported-not-confirmed], primary_disposition: provisional, adversarial_disposition: provisional, final_disposition: provisional, decision_basis: "maintenance preserves the reported status and routes confirmation rather than rewriting it", negative_behavior_checked: "normalizing a report into a fact", mutation: none}
+  - {review_id: SEM-LEARN-001, lot: 4, engine: learning-evolution, fixture: new-versus-curated, source_refs: [personal-anchor-research-error-log, concepts-epistemic-triage, fixture:new-versus-curated], primary_disposition: needs_review, adversarial_disposition: needs_review, final_disposition: needs_review, decision_basis: "repeated signals justify a candidate review, but recurrence alone cannot establish a new rule or gap", negative_behavior_checked: "auto-accepting a candidate from frequency", mutation: none}
+  - {review_id: SEM-LEARN-002, lot: 4, engine: learning-evolution, fixture: decision-candidate, source_refs: [personal-anchor-research-error-log, fixture:decision-candidate], primary_disposition: needs_review, adversarial_disposition: needs_review, final_disposition: needs_review, decision_basis: "a lesson can indicate a bug, documentation gap or new capability; ownership requires semantic review", negative_behavior_checked: "turning a lesson directly into a contract change", mutation: none}
+  - {review_id: SEM-LEARN-003, lot: 4, engine: learning-evolution, fixture: reported-not-confirmed, source_refs: [personal-anchor-research-error-log, fixture:reported-not-confirmed], primary_disposition: rework_required, adversarial_disposition: rework_required, final_disposition: rework_required, decision_basis: "a false positive that implicates the contract requires rework before a new case can be accepted", negative_behavior_checked: "patching the test expectation without reviewing the contract", mutation: none}
+  - {review_id: SEM-LEARN-004, lot: 4, engine: learning-evolution, fixture: inaccessible-artifact, source_refs: [personal-anchor-ingress-handover, fixture:inaccessible-artifact], primary_disposition: blocked, adversarial_disposition: blocked, final_disposition: blocked, decision_basis: "an incident touching privacy or governance cannot become a learning candidate until its access frontier is reviewed", negative_behavior_checked: "retaining sensitive incident content in the learning signal", mutation: none}

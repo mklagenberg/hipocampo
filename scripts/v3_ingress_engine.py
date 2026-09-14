@@ -20,6 +20,10 @@ def process_ingress(*, record: dict, destination_vault: dict, operation: str, en
         raise IngressError("processing environment is not authorized")
     if destination_vault.get("vault_id") != record.get("destination_vault_id"):
         raise IngressError("destination boundary mismatch")
+    required_processing_proofs = ("minimized", "anonymized", "redaction_complete", "destination_authorized")
+    missing_processing_proofs = [field for field in required_processing_proofs if record.get(field) is not True]
+    if missing_processing_proofs:
+        raise IngressError(f"processed ingress requires proof of: {', '.join(missing_processing_proofs)}")
     approvals = approvals or []
     content = str(record.get("content", ""))
     processed = content

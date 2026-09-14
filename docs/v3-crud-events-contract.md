@@ -2,7 +2,9 @@
 
 **Status:** unreleased V3 candidate; derived from D6.3.
 
-Only governed CRUD and exceptional actions emit operational events. The event
+Only governed CRUD and exceptional actions emit operational events. Every
+durable Record mutation is a governed CRUD action; no engine or transport may
+emit a Record write outside that boundary. The event
 contains target identity, actor roles, entity, scope, operation, result,
 approval linkage, rule revision, retention and redaction state. It does not contain a Record,
 Chunk, Artifact or Package body.

@@ -15,7 +15,7 @@ def _identity(entry: dict) -> tuple[str, int]:
     return (entry.get("package_id", ""), int(entry.get("package_version", 0)))
 
 
-def pair_ledger_entries(sent: dict | None, received: dict | None) -> dict:
+def pair_ledger_entries(sent: dict | None, received: dict | None, *, expected_fingerprint: str | None = None) -> dict:
     """Compare one source event and one destination event without semantic judgment."""
     if sent is None and received is None:
         raise ContractError("ledger pair requires at least one entry")
@@ -28,6 +28,8 @@ def pair_ledger_entries(sent: dict | None, received: dict | None) -> dict:
         return {"circulation": "confirmed", "integrity": "broken", "findings": ["ledger_entry_missing_trace_metadata"]}
     if _key(sent) != _key(received):
         return {"circulation": "confirmed", "integrity": "mismatch", "findings": ["package_identity_or_fingerprint_mismatch"]}
+    if expected_fingerprint and (sent.get("fingerprint") != expected_fingerprint or received.get("fingerprint") != expected_fingerprint):
+        return {"circulation": "confirmed", "integrity": "mismatch", "findings": ["record_fingerprint_mismatch"]}
     if sent.get("source_vault_id") != received.get("source_vault_id"):
         return {"circulation": "confirmed", "integrity": "mismatch", "findings": ["source_vault_mismatch"]}
     if sent.get("destination_vault_id") != received.get("destination_vault_id"):
@@ -92,7 +94,7 @@ def audit_delivery_graph(vaults: list[dict], *, start_vault_id: str, start_recor
             if "counterpart_unavailable" not in findings:
                 findings.append("counterpart_unavailable")
             return
-        result = pair_ledger_entries(sent, received)
+        result = pair_ledger_entries(sent, received, expected_fingerprint=fingerprint)
         if result["integrity"] != "valid":
             integrity = result["integrity"]
         if result["circulation"] != "confirmed":

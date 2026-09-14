@@ -4,6 +4,30 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **V3 semantic validation (Change Set 0106):** executes and records two-pass
+  semantic review for 24 cases across 11 logical engines using sanitized,
+  read-only local-cache evidence. Recurrence remains review-bound; no Record,
+  vault, migration, activation or publication is performed.
+
+- **V3 Learning & Evolution engine (Change Set 0105):** adds a logical
+  capability for discovering candidate use cases from sanitized events,
+  audits, validator outcomes and lessons learned. Candidates remain review,
+  Change Set and verification-bound; no automatic activation or Record write is
+  allowed.
+
+- **V3 logical engine organization (Change Set 0104):** defines the initial
+  ten logical engines for explanation, use cases and deterministic/semantic tests without
+  prematurely refactoring source layout. The MCP adapter remains transport
+  infrastructure and Record mutation remains exclusive to CRUD.
+
+- **V3 canonical CRUD mutation boundary (Change Set 0103):** separates
+  semantic Record admissibility from deterministic structural commit, routes
+  the logical MCP surface through one CRUD gateway, preserves Artifact versions
+  during divergence, blocks unsafe ingress and current-use promotion, requires
+  migration versions, validates Record fingerprints and adds 18 governed CRUD
+  use cases. No V3 activation, migration, publication or real-vault write is
+  performed.
+
 - **V3 vault operational namespace and no-inbox topology (Change Set 0102):**
   formalizes `meta/` as the canonical namespace for artifact provenance,
   durable operational events, delivery ledgers, scoped audits and the three

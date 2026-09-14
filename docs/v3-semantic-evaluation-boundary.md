@@ -37,5 +37,10 @@ Therefore:
 - no result authorizes a write, migration, promotion, connector access, or
   publication.
 
+For V3 Record mutations, the reviewed semantic result is an input to the
+canonical CRUD gateway. It never writes a Record directly. The CRUD gateway
+then performs the independent deterministic structural, version, reference,
+state-transition and idempotency checks before committing the mutation.
+
 See `docs/verification-boundaries.yaml` and
 `decisions/0039-minimal-evaluation-scenarios.md`.

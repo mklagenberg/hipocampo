@@ -1,0 +1,39 @@
+change_set:
+  id: "0106-v3-semantic-validation"
+  class: "operational"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0039-minimal-evaluation-scenarios.md"
+
+impact:
+  - artifact: "docs/v3-semantic-review.yaml, docs/v3-semantic-validation-report.md"
+    status: "updated"
+    note: "Adds sanitized semantic evaluation evidence for all 24 scoped V3 cases, including primary and adversarial review passes."
+  - artifact: "scripts/validate_v3_semantic_review.py"
+    status: "updated"
+    note: "Adds deterministic completeness and integrity checks for the semantic evidence package; it does not judge semantic truth."
+  - artifact: "docs/engines/learning-evolution-cases.yaml, docs/engines/test-matrix.yaml"
+    status: "updated"
+    note: "Corrects the recurrence case to needs_review and brings the two additional Learning & Evolution semantic cases into the canonical matrix."
+  - artifact: "SPEC.md, skill/, scaffold/, knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "No released contract, skill, scaffold, vault cache or private capture is changed by this evaluation."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Records the completed semantic-evaluation package under the unreleased V3 candidate."
+
+validation:
+  commands:
+    - "python scripts/validate_v3_semantic_review.py --root ."
+    - "python scripts/validate_v3_engine_catalog.py --root ."
+    - "python scripts/validate_v3_engine_suite.py --root ."
+    - "python scripts/validate_semantic_fixtures.py --root ."
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_change.py --root ."
+  evidence:
+    - "docs/v3-semantic-review.yaml"
+    - "docs/v3-semantic-validation-report.md"
+    - "changes/0106-v3-semantic-validation/proposal.md"
+  notes: "Semantic adequacy remains agent/human-reviewed. The package proves review completeness, provenance envelope, scope reconciliation and no-mutation boundaries; it does not make semantic judgment deterministic."

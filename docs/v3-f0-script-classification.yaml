@@ -18,6 +18,9 @@ scripts:
   - path: scripts/v3_crud_engine.py
     class: hybrid
     proof: "CRUD transition and policy checks; content meaning remains semantic"
+  - path: scripts/v3_mcp_crud_adapter.py
+    class: deterministic
+    proof: "MCP operation allow-list and exclusive routing to the canonical CRUD gateway"
   - path: scripts/v3_event_engine.py
     class: deterministic
     proof: "event envelope, redaction, correlation and reach matrix"
@@ -54,6 +57,9 @@ scripts:
   - path: scripts/v3_migration_engine.py
     class: deterministic
     proof: "synthetic migration preflight outcome from declared blocking conditions"
+  - path: scripts/v3_learning_engine.py
+    class: hybrid
+    proof: "sanitized signal identity, deduplication and candidate boundary; semantic gap assessment remains reviewed"
   - path: scripts/validate_v3_migration.py
     class: deterministic
     proof: "migration fixture coverage and expected typed outcomes"
