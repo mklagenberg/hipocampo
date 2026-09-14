@@ -124,6 +124,40 @@ The staleness queue can be recalculated daily; its content disposition remains
 with REM or the responsible human. The semantic queue has no automatic
 normalizer.
 
+## V3 vault operational namespace
+
+`meta/` is the canonical namespace for operational metadata in every V3
+vault. It is separate from knowledge content: it records how the vault was
+processed, audited, correlated and governed, but it is not itself a source of
+semantic knowledge.
+
+The V3 topology is:
+
+- `meta/README.md` — local explanation of the operational namespace;
+- `meta/artifact-index.yaml` — canonical index of the original Artifact
+  versions used as references, with provenance and traceability metadata;
+- `meta/events/` — durable, bounded operational events, when persistence is
+  required by the event contract;
+- `meta/ledgers/` — local delivery ledgers, including the logical
+  `packages-sent` and `packages-received` streams;
+- `meta/audits/` — scoped audit indexes and detailed violation or control
+  records;
+- `meta/fila-frontmatter.yaml`, `meta/fila-staleness.yaml` and
+  `meta/fila-semantica.yaml` — the three maintenance queues defined above.
+
+`registry.md` remains the cross-vault address and alias registry. It is not an
+Artifact index and does not replace the operational namespace. File
+granularity inside `events/`, `ledgers/` and `audits/` may be selected by the
+vault's local extension, provided that the relevant contract, privacy and
+Git-traceability rules remain satisfied.
+
+V3 does not create or use an `inbox/` directory. Raw or sensory capture stays
+outside the durable V3 vault; material admitted to a vault crosses the
+processed-ingress boundary and may begin with `processing_state: new`. A V2
+`inbox/` is legacy source material for an explicit migration or ingress plan,
+never a V3 destination or an instruction to rename, delete or copy content
+automatically.
+
 ## Migration boundary
 
 V2 frontmatter remains valid for v2 operation. A V3 consumer treats absent V3

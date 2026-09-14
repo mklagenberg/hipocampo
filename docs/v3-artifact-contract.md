@@ -24,6 +24,47 @@ artifact:
 `external_destination` is a reference only. It is not a connector, a
 credential, an authorization grant, or proof that the object can be fetched.
 
+## Provenance index
+
+Each V3 vault maintains its canonical Artifact provenance index at
+`meta/artifact-index.yaml`. The index inventories the original external or
+internal Artifact referenced by knowledge; it does not copy, mirror, cache or
+replicate the Artifact bytes.
+
+An index entry addresses one immutable observation of an Artifact version and
+may contain, at minimum:
+
+```yaml
+- artifact_id: "art-001"
+  version: 1
+  name: "descriptive-original-name"
+  reference: "non-secret-original-path-or-uri"
+  source_kind: "url | local-file | google-drive | onedrive | s3 | other"
+  source_hash: "sha256-of-referenced-version"
+  author: "known-author-or-empty"
+  captured_at: "2026-09-05T12:00:00Z"
+  observed_at: "2026-09-05T12:00:00Z"
+  accessibility: "available | unavailable | restricted"
+  visibility: "internal"
+  notes: "sanitized limitations or identification detail"
+```
+
+The exact optional fields may be extended locally, but the index must retain
+the stable identifier, version, original name or reference when known, source
+kind, hash when available, authorship when known, relevant dates, accessibility,
+visibility and limitations. A Record or Chunk should reference the compact
+`artifact_id`, version and relevant role; it need not repeat the complete
+provenance entry.
+
+The index may refine the envelope's broad `external-storage` source kind into
+the provider-specific values shown above (`google-drive`, `onedrive`, `s3`,
+and so on) without implying that the corresponding connector exists.
+
+The index is an inventory of traceability, not proof of truth, ownership,
+authorization or current availability. It must not contain credentials,
+access tokens or copied restricted content. Any future replication or storage
+gateway is a separate capability and does not follow from this index contract.
+
 ## Material representation
 
 When `semantic_required: true`, the Record link must carry a representation:

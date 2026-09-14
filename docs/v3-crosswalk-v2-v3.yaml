@@ -29,7 +29,7 @@ entries:
   - v2_surface: "inbox/ raw capture"
     v3_surface: "processed ingress with processing_state: new"
     action: no-silent-migration
-    note: "A V3 ingress layer processes material before vault persistence; existing inbox content needs an explicit migration plan."
+    note: "Historical V2 inbox content is an input to an explicit migration or ingress plan; V3 creates no inbox/ destination and never renames, deletes or copies that content automatically."
   - v2_surface: "repository LICENSE"
     v3_surface: "methodology legal license"
     action: preserve-and-scope

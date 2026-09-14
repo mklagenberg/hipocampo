@@ -4,6 +4,11 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **V3 vault operational namespace and no-inbox topology (Change Set 0102):**
+  formalizes `meta/` as the canonical namespace for artifact provenance,
+  durable operational events, delivery ledgers, scoped audits and the three
+  maintenance queues. V3 does not create an `inbox/`; historical V2 inbox
+  content remains only an explicit migration or ingress input.
 - **V3 synthetic vault inventory gate (Change Set 0100):** adds four
   vault-shaped profiles covering personal and corporate anchors, an additional
   vault with a bounded inaccessible artifact frontier, and an inaccessible

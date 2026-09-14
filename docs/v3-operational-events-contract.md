@@ -7,6 +7,10 @@ They are not Records, Packages, ledgers, authority declarations or a second
 source of knowledge. The event proves the occurrence that was recorded and its
 limits; it does not prove semantic truth and is **not a content mirror**.
 
+When a durable event must be persisted in a vault, its canonical namespace is
+`meta/events/`. Transient session context and sensory capture do not become
+durable event files merely because they existed during an operation.
+
 ## Layers
 
 - `transient_session`: temporary context or cache; not durable knowledge;

@@ -1,0 +1,41 @@
+change_set:
+  id: "0102-v3-meta-operational-topology"
+  class: "normative"
+  semver: "minor"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0102-v3-meta-operational-topology-and-no-inbox.md"
+impact:
+  - artifact: "decisions/0102-v3-meta-operational-topology-and-no-inbox.md, docs/v3-contract.md"
+    status: "updated"
+    note: "Declares meta/ as the V3 operational namespace and excludes inbox/ from V3 topology."
+  - artifact: "docs/v3-artifact-contract.md"
+    status: "updated"
+    note: "Adds the canonical Artifact provenance index and separates traceability from replication."
+  - artifact: "docs/v3-operational-events-contract.md, docs/v3-ledger-audit-contract.md, docs/v3-profile-and-violation-audit-contract.md"
+    status: "updated"
+    note: "Maps durable events, ledgers and scoped audits to their meta/ namespaces."
+  - artifact: "docs/v3-crosswalk-v2-v3.yaml"
+    status: "updated"
+    note: "Retains inbox/ only as historical V2 migration input and states that V3 creates no inbox/ destination."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Records the V3 operational namespace and no-inbox boundary."
+validation:
+  commands:
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_skill_docs.py --root ."
+    - "python scripts/validate_skill_package.py --root ."
+    - "python scripts/validate_change.py --root ."
+    - "python scripts/validate_contracts.py --root ."
+    - "python scripts/validate_v3_artifacts.py"
+    - "python scripts/validate_v3_ingress.py"
+    - "python scripts/validate_v3_migration.py"
+    - "python scripts/validate_v3_inventory.py"
+    - "python scripts/validate_v3_f0.py"
+  evidence:
+    - "docs/v3-contract.md"
+    - "docs/v3-artifact-contract.md"
+    - "docs/v3-crosswalk-v2-v3.yaml"
+  notes: "Documentation and contract formalization only; no vault cache, real vault, connector, remote object, publication or V3 activation is changed."

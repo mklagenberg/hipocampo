@@ -6,6 +6,12 @@ applicability, conciliation, or curation.
 
 ## Paired local ledgers
 
+When persisted locally, the ledgers belong under `meta/ledgers/`. Their
+logical streams are:
+
+- `packages-sent` in the generating/source vault;
+- `packages-received` in the destination vault.
+
 Every governed delivery creates two local events when both sides are available:
 
 - `packages-sent` in the generating/source vault;
