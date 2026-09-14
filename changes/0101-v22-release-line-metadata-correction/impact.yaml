@@ -7,6 +7,9 @@ change_set:
   decisions:
     - "decisions/0101-v22-release-line-metadata-correction.md"
 impact:
+  - artifact: "decisions/0101-v22-release-line-metadata-correction.md"
+    status: "updated"
+    note: "Records the decision that closes the v2.2.0 release-line metadata ambiguity without rewriting the historical tag."
   - artifact: "README.md, SPEC.md, ROADMAP.md, COMPATIBILITY.yaml"
     status: "updated"
     note: "Aligns current-release declarations with the published v2.2.0 methodology line."

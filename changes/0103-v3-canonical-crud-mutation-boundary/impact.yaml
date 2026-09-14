@@ -7,6 +7,9 @@ change_set:
   decisions:
     - "decisions/0103-v3-canonical-crud-mutation-boundary.md"
 impact:
+  - artifact: "decisions/0103-v3-canonical-crud-mutation-boundary.md"
+    status: "updated"
+    note: "Records the accepted V3 decision for the exclusive CRUD mutation boundary."
   - artifact: "scripts/v3_crud_engine.py, scripts/v3_mcp_crud_adapter.py, scripts/normalize_frontmatter_queue.py"
     status: "updated"
     note: "Adds the canonical CRUD mutation boundary, semantic review gate, deterministic structural validation and MCP adapter routing."
