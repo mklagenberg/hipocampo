@@ -15,6 +15,7 @@ EXPECTED = {
     "SEM-SPD-004": ("SPD-S-004", "needs_review"),
     "SEM-SPD-005": ("SPD-S-005", "needs_review"),
 }
+CONFIRMED = {"SEM-SPD-001"}
 
 
 def main() -> int:
@@ -53,7 +54,13 @@ def main() -> int:
         case_id, disposition = EXPECTED[review_id]
         if case.get("case_id") != case_id or case.get("agent_disposition") != disposition:
             errors.append(f"{label} does not preserve the assigned case and disposition")
-        if case.get("human_confirmation") != "pending":
+        confirmation = case.get("human_confirmation")
+        if confirmation not in {"pending", "confirmed"}:
+            errors.append(f"{label} must declare pending or confirmed human confirmation")
+        if review_id in CONFIRMED:
+            if confirmation != "confirmed" or not case.get("confirmation_basis"):
+                errors.append(f"{label} must preserve its confirmed human adjudication")
+        elif confirmation != "pending":
             errors.append(f"{label} must remain pending human confirmation")
         if case.get("mutation") != "none":
             errors.append(f"{label} must declare mutation none")
@@ -74,7 +81,9 @@ def main() -> int:
         for error in errors:
             print(f"  [FAIL] {error}")
         return 1
-    print("validate_v3_search_progressive_disclosure_review: OK — 5 agent-reviewed cases pending human confirmation")
+    pending = sum(case.get("human_confirmation") == "pending" for case in cases)
+    confirmed = sum(case.get("human_confirmation") == "confirmed" for case in cases)
+    print(f"validate_v3_search_progressive_disclosure_review: OK — {confirmed} confirmed, {pending} pending human confirmation")
     return 0
 
 

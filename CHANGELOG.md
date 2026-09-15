@@ -4,6 +4,12 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **V3 Search semantic adjudication (Change Set 0112):** records human
+  confirmation of `SPD-S-001` while preserving its `needs_review` disposition;
+  the case awaits inclusion in the next canonical two-pass revalidation. Four
+  other Search semantic cases remain pending. No runtime or release behavior
+  changes.
+
 - **V3 engine catalog state reconciliation (Change Set 0111):** aligns the
   canonical catalog with the implemented local Search & Progressive Disclosure
   runtime while keeping MCP or host integration as a separate future gate. No

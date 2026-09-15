@@ -11,7 +11,8 @@ cases:
     case_id: SPD-S-001
     fixture_ref: "v3-semantic-fixtures.yaml#search-ranking-vs-epistemic-state"
     agent_disposition: needs_review
-    human_confirmation: pending
+    human_confirmation: confirmed
+    confirmation_basis: "FF-DEC-0067; operator selected alternative A on 2026-09-15"
     rationale: "High lexical or semantic relevance is insufficient to establish contextual authority or resolve an epistemic conflict."
     negative_behavior_checked: "A ranked result was not presented as settled knowledge."
     mutation: none
