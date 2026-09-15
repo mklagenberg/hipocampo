@@ -4,6 +4,12 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **V3 Search & Progressive Disclosure runtime (Change Set 0109):** adds the
+  first local read-only execution path through canonical CRUD, explicit scope
+  authorization, disclosure guardrails, stale-source limits, prose-first
+  rendering and executable negative cases. Semantic adequacy remains human
+  review-bound; no deploy, release, migration, MCP or real-vault read occurs.
+
 - **V3 Search & Progressive Disclosure engine (Change Set 0108):** defines a
   logical read-only search boundary with independent relevance, authority,
   privacy, epistemic, evidence and limit dimensions; explicit `L0`–`L4`

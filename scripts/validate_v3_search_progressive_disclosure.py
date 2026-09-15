@@ -11,6 +11,9 @@ from pathlib import Path
 
 import yaml
 
+from v3_crud_engine import RecordCrud
+from v3_search_engine import SearchContractError, search
+
 
 LEVELS = ["L0", "L1", "L2", "L3", "L4"]
 EXPECTED = {
@@ -19,6 +22,145 @@ EXPECTED = {
     "prose-default": ("partial", "L2"),
     "structured-only-on-request": ("accepted", "L2"),
 }
+
+
+def runtime_record(record_id: str, *, text: str, staleness: str = "current", visibility: str = "internal") -> dict:
+    return {
+        "record_id": record_id,
+        "record_version": 1,
+        "physical_path": f"records/{record_id}.md",
+        "status": "active",
+        "visibility": visibility,
+        "staleness": staleness,
+        "entity": "entity-a",
+        "scope": "scope-a",
+        "source": {"source_id": f"source-{record_id}", "source_kind": "conversation", "entity": "entity-a"},
+        "vault": {"vault_id": "vault-a", "entity": "entity-a", "profile": "entity", "role": "anchor"},
+        "governance": {"owner": "owner-a", "authority": "authority-a"},
+        "maturity": "curated",
+        "collection_ids": ["collection-a"],
+        "chunks": [{
+            "chunk_id": f"{record_id}-chunk-1",
+            "parent_record_id": record_id,
+            "text_ref": "section-1",
+            "text": text,
+            "visibility": visibility,
+            "staleness": staleness,
+        }],
+        "artifacts": [{"artifact_id": f"artifact-{record_id}", "role": "supporting", "version": 1, "reference": "sanitized/ref", "visibility": visibility}],
+        "title": "Alpha result",
+        "authority_state": "unknown",
+        "epistemic_status": "unresolved-conflict",
+    }
+
+
+def run_runtime_cases(errors: list[str]) -> None:
+    class SpyCrud(RecordCrud):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.read_calls = 0
+
+        def apply(self, request: dict) -> dict:
+            if request.get("operation") == "read":
+                self.read_calls += 1
+            return super().apply(request)
+
+    crud = SpyCrud(
+        {"collection-a": {"collection_id": "collection-a", "active": True}},
+        {"rec-search": runtime_record("rec-search", text="alpha context")},
+    )
+    base = {
+        "request_id": "search-test-001",
+        "intent": "find alpha context",
+        "query": "alpha",
+        "entity": "entity-a",
+        "vault_scope": ["vault-a"],
+        "authorized_vault_ids": ["vault-a"],
+        "knowledge_scope": "scope-a",
+        "requested_disclosure": "L2",
+    }
+    before = crud.records
+    try:
+        prose = search(crud, base)
+        if prose["presentation"]["mode"] != "prose-default" or "text" not in prose["presentation"]:
+            errors.append("runtime default did not render integrated prose")
+        if "results" in prose["presentation"]:
+            errors.append("runtime default exposed separated result fields")
+        if prose["results"][0]["mutation"] != "none":
+            errors.append("runtime result did not declare mutation none")
+    except SearchContractError as exc:
+        errors.append(f"runtime prose case failed: {exc}")
+
+    try:
+        partial = search(crud, {**base, "requested_disclosure": "L3"})
+        item = partial["results"][0]
+        if partial["status"] != "partial" or item["disclosure_level"] != "L2":
+            errors.append("L3 request without expansion authorization was not reduced to L2")
+        if item["relevance"] <= 0 or item["authority"] != "unknown" or item["epistemic_status"] != "unresolved-conflict":
+            errors.append("relevance was not kept independent from authority and epistemic state")
+    except SearchContractError as exc:
+        errors.append(f"runtime independent-dimensions case failed: {exc}")
+
+    try:
+        blocked = search(crud, {**base, "requested_disclosure": "L4"})
+        item = blocked["results"][0]
+        if blocked["status"] != "blocked" or item["disclosure_level"] != "L0" or "record_envelope" in item:
+            errors.append("unauthorized L4 expansion was not blocked at L0")
+    except SearchContractError as exc:
+        errors.append(f"runtime unauthorized-expansion case failed: {exc}")
+
+    try:
+        structured = search(crud, {**base, "presentation": "structured-on-request", "explicit_structured_request": True})
+        if structured["presentation"]["mode"] != "structured-on-request" or "results" not in structured["presentation"]:
+            errors.append("explicit structured request did not expose separated results")
+    except SearchContractError as exc:
+        errors.append(f"runtime structured case failed: {exc}")
+
+    try:
+        expanded = search(crud, {**base, "request_id": "search-test-expanded", "requested_disclosure": "L4", "explicit_expansion_authorization": True})
+        item = expanded["results"][0]
+        if item["disclosure_level"] != "L4" or "expanded_content" not in item:
+            errors.append("explicitly authorized L4 expansion did not return L4 content")
+    except SearchContractError as exc:
+        errors.append(f"runtime authorized-expansion case failed: {exc}")
+
+    try:
+        search(crud, {**base, "request_id": "search-test-unauthorized-vault", "vault_scope": ["vault-b"], "authorized_vault_ids": ["vault-a"]})
+        errors.append("unauthorized vault scope was not rejected")
+    except SearchContractError:
+        pass
+
+    if crud.records != before or crud.events or crud.read_calls != 5:
+        errors.append("search did not preserve CRUD state while using the canonical read boundary")
+
+    stale_crud = RecordCrud(
+        {"collection-a": {"collection_id": "collection-a", "active": True}},
+        {"rec-stale": runtime_record("rec-stale", text="alpha stale", staleness="stale")},
+    )
+    stale = search(stale_crud, {**base, "request_id": "search-test-stale", "requested_disclosure": "L3"})
+    if stale["results"][0]["disclosure_level"] != "L2" or "source_requires_revalidation" not in stale["results"][0]["limits"]:
+        errors.append("stale source was not limited and surfaced")
+
+    inaccessible_record = runtime_record("rec-inaccessible", text="alpha unavailable")
+    inaccessible_record["source_accessible"] = False
+    inaccessible_crud = RecordCrud(
+        {"collection-a": {"collection_id": "collection-a", "active": True}},
+        {"rec-inaccessible": inaccessible_record},
+    )
+    inaccessible = search(inaccessible_crud, {**base, "request_id": "search-test-inaccessible", "requested_disclosure": "L3"})
+    if inaccessible["status"] != "blocked" or inaccessible["results"][0]["disclosure_level"] != "L0" or "source_access_unavailable" not in inaccessible["results"][0]["limits"]:
+        errors.append("inaccessible evidence was not blocked at L0 with a surfaced limit")
+
+    restricted_record = runtime_record("rec-restricted", text="alpha restricted", visibility="restricted")
+    restricted_crud = RecordCrud(
+        {"collection-a": {"collection_id": "collection-a", "active": True}},
+        {"rec-restricted": restricted_record},
+    )
+    restricted = search(restricted_crud, {**base, "request_id": "search-test-restricted", "requested_disclosure": "L3", "explicit_expansion_authorization": True})
+    if restricted["status"] != "blocked" or restricted["results"][0]["disclosure_level"] != "L1":
+        errors.append("restricted content was not blocked at metadata level")
+    if "text" in restricted["trail"] or "secret" in str(restricted["trail"]).casefold():
+        errors.append("operational trail exposed content or secret material")
 
 
 def main() -> int:
@@ -98,6 +240,7 @@ def main() -> int:
     independent = next((case for case in cases if case.get("id") == "preserve-independent-dimensions"), {})
     if independent.get("relevance") != "high" or independent.get("authority") != "unknown" or independent.get("epistemic_status") != "unresolved-conflict":
         errors.append("independent-dimensions case must keep high relevance separate from authority and epistemic state")
+    run_runtime_cases(errors)
 
     if errors:
         print(f"validate_v3_search_progressive_disclosure: FAILED — {len(errors)} error(s)")

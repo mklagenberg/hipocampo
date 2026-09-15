@@ -22,8 +22,10 @@ A governed request declares, at minimum:
 ```yaml
 request_id: "non-secret-stable-id"
 intent: "didactic description of the retrieval need"
+query: "bounded search terms"
 entity: "entity-id"
 vault_scope: ["vault-id"]
+authorized_vault_ids: ["vault-id"]
 knowledge_scope: "bounded-scope"
 requested_disclosure: "L0 | L1 | L2 | L3 | L4"
 explicit_expansion_authorization: false

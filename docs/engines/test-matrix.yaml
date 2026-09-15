@@ -221,7 +221,7 @@ engines:
   - id: search-progressive-disclosure
     name: "Search & Progressive Disclosure"
     contract: "docs/v3-search-progressive-disclosure-contract.md"
-    modules: ["scripts/validate_v3_search_progressive_disclosure.py"]
+    modules: ["scripts/v3_search_engine.py", "scripts/validate_v3_search_progressive_disclosure.py"]
     deterministic_commands: ["python scripts/validate_v3_search_progressive_disclosure.py --root ."]
     write_boundary: "read-only; Record mutations remain exclusively under canonical Record CRUD"
     deterministic_cases: [reject-unauthorized-expansion, preserve-independent-dimensions, prose-default, structured-only-on-request]

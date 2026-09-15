@@ -1,0 +1,33 @@
+schema_version: "1.0"
+review_policy:
+  kind: candidate-semantic-review
+  privacy: sanitized-no-real-content
+  mutation: none
+  reviewer: agent-adversarial-pass
+  human_confirmation: required
+  semantic_limit: "agent reasoning preserves uncertainty; only human review can close the pending V3 cases"
+cases:
+  - review_id: SEM-SPD-001
+    case_id: SPD-S-001
+    fixture_ref: "v3-semantic-fixtures.yaml#search-ranking-vs-epistemic-state"
+    agent_disposition: needs_review
+    human_confirmation: pending
+    rationale: "High lexical or semantic relevance is insufficient to establish contextual authority or resolve an epistemic conflict."
+    negative_behavior_checked: "A ranked result was not presented as settled knowledge."
+    mutation: none
+  - review_id: SEM-SPD-002
+    case_id: SPD-S-002
+    fixture_ref: "v3-semantic-fixtures.yaml#disclosure-without-authorization"
+    agent_disposition: blocked
+    human_confirmation: pending
+    rationale: "Disclosure escalation is not authorized by relevance, recency or a matching term."
+    negative_behavior_checked: "The request was blocked without inferring permission."
+    mutation: none
+  - review_id: SEM-SPD-003
+    case_id: SPD-S-003
+    fixture_ref: "v3-semantic-fixtures.yaml#inaccessible-search-evidence"
+    agent_disposition: blocked
+    human_confirmation: pending
+    rationale: "An inaccessible evidence frontier cannot support reconstructed content or current-use guidance."
+    negative_behavior_checked: "Missing evidence was surfaced as a limit rather than filled by plausibility."
+    mutation: none
