@@ -1,7 +1,7 @@
 change_set:
   id: "0108-v3-search-progressive-disclosure"
   class: "normative"
-  semver: "minor"
+  semver: "none"
   status: "implemented"
   backfill: false
   decisions:
@@ -10,7 +10,7 @@ change_set:
 impact:
   - artifact: "decisions/0108-v3-search-progressive-disclosure.md, changes/0108-v3-search-progressive-disclosure/proposal.md"
     status: "updated"
-    note: "Records the accepted V3 candidate decision and the Change Set contract, alternatives, risks and recovery boundary."
+    note: "Records the accepted V3 candidate decision and the Change Set contract, alternatives, risks and recovery boundary; release SemVer classification is deferred."
   - artifact: "docs/v3-search-progressive-disclosure-contract.md, docs/v3-search-progressive-disclosure-fixtures.yaml"
     status: "updated"
     note: "Adds the authoritative candidate contract, disclosure scale, independent result envelope and sanitized deterministic fixtures."
