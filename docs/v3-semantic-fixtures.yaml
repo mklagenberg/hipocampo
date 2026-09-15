@@ -117,3 +117,24 @@ cases:
     required_guard: "keep the exception within its declared scenario, entity, vault, scope and duration"
     negative_behavior: "do not expand an exception through analogy"
     review_boundary: explicit-human-decision
+  - id: search-ranking-vs-epistemic-state
+    input_kind: highly-ranked-result-with-uncertain-authority-and-conflict
+    expected_epistemic: unresolved-conflict
+    expected_maturity: review-required
+    required_guard: "preserve relevance separately from authority and epistemic state"
+    negative_behavior: "do not present a highly-ranked result as settled knowledge"
+    review_boundary: human-semantic-review
+  - id: disclosure-without-authorization
+    input_kind: request-for-expanded-content-without-explicit-authorization
+    expected_epistemic: decision-candidate
+    expected_maturity: blocked
+    required_guard: "block disclosure escalation and preserve the requested boundary"
+    negative_behavior: "do not infer permission from relevance, recency or a matching term"
+    review_boundary: explicit-human-decision
+  - id: inaccessible-search-evidence
+    input_kind: relevant-result-with-inaccessible-source-frontier
+    expected_epistemic: insufficient-evidence
+    expected_maturity: blocked
+    required_guard: "state the access limitation and do not reconstruct missing content"
+    negative_behavior: "do not fill an inaccessible evidence frontier by plausibility"
+    review_boundary: host-or-human-review

@@ -30,7 +30,11 @@ def main() -> int:
         print(f"validate_v3_semantic_constitutional_revalidation: FAILED — {exc}")
         return 1
     prior_map = {case.get("review_id"): case for case in prior.get("cases", [])}
-    basis_map = {case.get("review_id"): case for case in basis.get("cases", [])}
+    basis_map = {
+        case.get("review_id"): case
+        for case in basis.get("cases", [])
+        if case.get("review_status") != "pending"
+    }
     cases = current.get("cases", [])
     if current.get("review_policy", {}).get("passes") != 2:
         errors.append("constitutional revalidation must contain two passes")

@@ -114,9 +114,10 @@ def main() -> int:
             errors.append(f"{label}.sha256 must be a 64-character hash when present")
 
     basis_cases = basis_data.get("cases", []) if isinstance(basis_data, dict) else []
-    basis_map = {item.get("review_id"): item for item in basis_cases if isinstance(item, dict)}
-    if len(basis_cases) != 28:
-        errors.append(f"constitutional basis must contain 28 entries, found {len(basis_cases)}")
+    active_basis_cases = [item for item in basis_cases if isinstance(item, dict) and item.get("review_status") != "pending"]
+    basis_map = {item.get("review_id"): item for item in active_basis_cases}
+    if len(active_basis_cases) != 28:
+        errors.append(f"constitutional basis must contain 28 active entries, found {len(active_basis_cases)}")
     cases = data.get("cases")
     if not isinstance(cases, list):
         errors.append("cases must be a list")

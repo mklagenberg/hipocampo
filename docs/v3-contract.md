@@ -10,6 +10,12 @@ REM-pending local receipt, privacy-bounded transparency, and deterministic
 backward/forward Package auditing. These additions remain an unreleased V3
 candidate and do not activate V3 for existing instances.
 
+The Search & Progressive Disclosure candidate adds a bounded read-side engine
+with explicit `L0`–`L4` disclosure levels, independent relevance/authority/
+privacy/epistemic dimensions and prose-first presentation. Its contract is in
+`docs/v3-search-progressive-disclosure-contract.md`; it remains local and
+read-only until a later host and authorization gate.
+
 ## Record and Chunk metadata
 
 The V3 Record or Chunk envelope may carry these independent fields:

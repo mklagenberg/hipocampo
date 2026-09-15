@@ -217,3 +217,24 @@ engines:
         fixture_ref: "v3-semantic-fixtures.yaml#exception-by-analogy"
         expected_disposition: blocked
         review_boundary: explicit-human-decision
+
+  - id: search-progressive-disclosure
+    name: "Search & Progressive Disclosure"
+    contract: "docs/v3-search-progressive-disclosure-contract.md"
+    modules: ["scripts/validate_v3_search_progressive_disclosure.py"]
+    deterministic_commands: ["python scripts/validate_v3_search_progressive_disclosure.py --root ."]
+    write_boundary: "read-only; Record mutations remain exclusively under canonical Record CRUD"
+    deterministic_cases: [reject-unauthorized-expansion, preserve-independent-dimensions, prose-default, structured-only-on-request]
+    semantic_cases:
+      - id: SPD-S-001
+        fixture_ref: "v3-semantic-fixtures.yaml#search-ranking-vs-epistemic-state"
+        expected_disposition: needs_review
+        review_boundary: human-semantic-review
+      - id: SPD-S-002
+        fixture_ref: "v3-semantic-fixtures.yaml#disclosure-without-authorization"
+        expected_disposition: blocked
+        review_boundary: explicit-human-decision
+      - id: SPD-S-003
+        fixture_ref: "v3-semantic-fixtures.yaml#inaccessible-search-evidence"
+        expected_disposition: blocked
+        review_boundary: host-or-human-review

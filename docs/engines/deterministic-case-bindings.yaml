@@ -61,3 +61,8 @@ cases:
   - {id: deduplicate-signal, engine: learning-evolution, command_index: 0, assertion_id: learning.deduplicate_signal, assertion: "repeated signals deduplicate while preserving all source references"}
   - {id: classify-known-case, engine: learning-evolution, command_index: 0, assertion_id: learning.classify_known_case, assertion: "known signal fingerprint is classified as duplicate"}
   - {id: block-unreviewed-activation, engine: learning-evolution, command_index: 0, assertion_id: learning.block_unreviewed_activation, assertion: "unreviewed learning candidate cannot activate a case"}
+
+  - {id: reject-unauthorized-expansion, engine: search-progressive-disclosure, command_index: 0, assertion_id: search.reject_unauthorized_expansion, assertion: "L4 expansion without explicit authorization is blocked and returns L0"}
+  - {id: preserve-independent-dimensions, engine: search-progressive-disclosure, command_index: 0, assertion_id: search.preserve_independent_dimensions, assertion: "high relevance does not upgrade unknown authority or unresolved epistemic state"}
+  - {id: prose-default, engine: search-progressive-disclosure, command_index: 0, assertion_id: search.prose_default, assertion: "default output is didactic prose and preserves material limits"}
+  - {id: structured-only-on-request, engine: search-progressive-disclosure, command_index: 0, assertion_id: search.structured_only_on_request, assertion: "separate fields are allowed only after an explicit structured request"}

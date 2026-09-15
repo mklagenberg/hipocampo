@@ -4,6 +4,13 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **V3 Search & Progressive Disclosure engine (Change Set 0108):** defines a
+  logical read-only search boundary with independent relevance, authority,
+  privacy, epistemic, evidence and limit dimensions; explicit `L0`–`L4`
+  disclosure; prose-first presentation; CRUD-preserving mutation rules; and
+  sanitized local contract tests. No V3 activation, real-vault read, MCP
+  integration, migration or publication is performed.
+
 - **V3 semantic validation (Change Set 0106):** executes and records two-pass
   semantic review for 24 cases across 11 logical engines using sanitized,
   read-only local-cache evidence. Recurrence remains review-bound; no Record,

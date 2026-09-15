@@ -1,8 +1,8 @@
 # Taxonomy map
 
-**Contract revision:** `1.1` — unreleased V3 candidate profiles and governance
-terms added by Change Set `0074`; compatibility states originated in Change Set
-`0058`.
+**Contract revision:** `1.2` — Search & Progressive Disclosure concepts added
+by Change Set `0108`; V3 candidate profiles and governance terms originated in
+Change Set `0074`; compatibility states originated in Change Set `0058`.
 
 A single index of every controlled field, enum, and named concept this methodology defines — what it is, where it's authoritatively defined, and when it was introduced or last changed. This document doesn't re-argue any rationale — every row points at the `SPEC.md` section and/or Decision Record that actually carries it. See `decisions/0047-taxonomy-map.md` for why this document exists and why it originally shipped in two lotes.
 
@@ -122,6 +122,17 @@ epistemic types. Their permitted action and precedence are authoritative in
 | `Source` | Provenance origin such as person, conversation, observation, Artifact, Record, vault, or external system | V3 candidate, Change Set `0074` | `decisions/0074`, `docs/v3-contract.md` |
 | Entity-bound split | Explicit Source-preserving decomposition into Records/Chunks for compatible entity and scope boundaries | V3 candidate, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
 | Transfer mode | `local` | `intra-entity` | `inter-entity`; different destination gates | V3 candidate, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
+
+## 11. Unreleased V3 Search & Progressive Disclosure concepts
+
+| Concept | Values / meaning | Introduced | Source |
+|---|---|---|---|
+| Logical engine | `Search & Progressive Disclosure`; read-side capability, not necessarily a physical module | V3 candidate, Change Set `0108` | `decisions/0108`, `docs/engines/catalog.md` |
+| Disclosure level | `L0` none; `L1` metadata; `L2` Record envelope; `L3` selected Chunk content; `L4` expanded authorized content | V3 candidate, Change Set `0108` | `decisions/0108`, `docs/v3-search-progressive-disclosure-contract.md` |
+| Result dimension | `relevance`, `authority`, `privacy`, `epistemic_status`, `disclosure_level`, `evidence`, `limits`, `retrieval_path` remain independent | V3 candidate, Change Set `0108` | `docs/v3-search-progressive-disclosure-contract.md` |
+| Presentation mode | `prose-default`; `structured-on-request` only after an explicit request | V3 candidate, Change Set `0108` | `decisions/0108`, `docs/v3-search-progressive-disclosure-contract.md` |
+| Search disposition | `accepted`, `blocked`, `needs_review`, `partial`; disposition does not prove semantic truth | V3 candidate, Change Set `0108` | `docs/v3-search-progressive-disclosure-fixtures.yaml`, `docs/engines/test-matrix.yaml` |
+| Search mutation boundary | `none`; Record writes remain exclusively under canonical Record CRUD | V3 candidate, Change Set `0108` | `decisions/0108`, `docs/v3-search-progressive-disclosure-contract.md` |
 
 ## Retroactive backfill — what Lote E2 did
 

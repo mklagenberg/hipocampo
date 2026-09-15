@@ -1,0 +1,40 @@
+schema_version: "1.0"
+fixture_policy:
+  kind: search-progressive-disclosure-contract
+  privacy: sanitized-no-real-content
+  status: unreleased-v3-preparation
+  mutation: none
+  validator_limit: "contract envelope only; relevance, authority and semantic adequacy remain reviewed"
+levels: [L0, L1, L2, L3, L4]
+cases:
+  - id: reject-unauthorized-expansion
+    requested_disclosure: L4
+    explicit_expansion_authorization: false
+    expected_disposition: blocked
+    expected_disclosure_level: L0
+    mutation: none
+  - id: preserve-independent-dimensions
+    requested_disclosure: L3
+    explicit_expansion_authorization: false
+    relevance: high
+    authority: unknown
+    privacy: allowed
+    epistemic_status: unresolved-conflict
+    expected_disposition: needs_review
+    expected_disclosure_level: L2
+    mutation: none
+  - id: prose-default
+    requested_disclosure: L2
+    explicit_expansion_authorization: false
+    presentation: prose-default
+    expected_disposition: partial
+    expected_disclosure_level: L2
+    mutation: none
+  - id: structured-only-on-request
+    requested_disclosure: L2
+    explicit_expansion_authorization: false
+    presentation: structured-on-request
+    explicit_structured_request: true
+    expected_disposition: accepted
+    expected_disclosure_level: L2
+    mutation: none

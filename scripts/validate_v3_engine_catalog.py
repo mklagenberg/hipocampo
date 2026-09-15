@@ -12,6 +12,7 @@ EXPECTED_ENGINES = {
     "crud", "artifact-provenance", "ingress", "rem-curation", "package",
     "delivery-transfer", "governance", "operational-audit",
     "migration-compatibility", "maintenance", "learning-evolution",
+    "search-progressive-disclosure",
 }
 REVIEW_BOUNDARIES = {
     "human-semantic-review", "explicit-human-decision", "REM-or-human-review",

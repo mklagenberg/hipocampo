@@ -1,6 +1,6 @@
 # Roadmap
 
-Last revised: **2026-09-08**
+Last revised: **2026-09-14**
 
 This roadmap communicates direction, not a date commitment. Only an approved release plan or formal milestone creates a delivery commitment. Detailed work lives in Decision Records and PRs; completed work lives in `CHANGELOG.md`.
 
@@ -18,7 +18,9 @@ remains fail-closed when authority, conciliation, privacy or staleness is not
 resolved. General derived projections remain deferred by the accepted V3
 decision on derived layers. MRL-0005 now adds a single canonical vocabulary,
 local vault extensions, English structural language, explicit offline
-authority, and labelled external references.
+authority, and labelled external references. Change Set 0108 adds the logical
+Search & Progressive Disclosure boundary: relevance does not grant authority
+or disclosure, and the default presentation remains didactic prose.
 
 **Status:** X3 and X4 are complete in the checkout. D5.1–D5.6 are accepted,
 MRL-0005/X5, MRL-0006/X6 and F0 are implemented as unreleased V3 candidates.
