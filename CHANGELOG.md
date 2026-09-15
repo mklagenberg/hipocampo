@@ -4,6 +4,11 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **V3 engine catalog state reconciliation (Change Set 0111):** aligns the
+  canonical catalog with the implemented local Search & Progressive Disclosure
+  runtime while keeping MCP or host integration as a separate future gate. No
+  runtime behavior, release contract, deploy, migration or activation changes.
+
 - **V3 Search & Progressive Disclosure test reinforcement (Change Set 0110):**
   adds bounded-context, vault-authorization, authorized-expansion, stale-source
   and restricted-content cases; adds two semantic review candidates for scope

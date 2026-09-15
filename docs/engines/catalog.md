@@ -27,7 +27,7 @@ knowledge truth.
 | Migration / Compatibility | V2.2 to V3 preflight, mapping, rollback and readiness | migration, inventory and compatibility validators |
 | Maintenance | frontmatter, vocabulary, aliases and mechanical queues | vocabulary, queue and normalizer surfaces |
 | Learning & Evolution | discover and qualify new cases from events, logs and lessons learned | `v3_learning_engine.py` |
-| Search & Progressive Disclosure | select relevant material and bound its authorized disclosure | `docs/v3-search-progressive-disclosure-contract.md`; local contract validator |
+| Search & Progressive Disclosure | select relevant material and bound its authorized disclosure | `scripts/v3_search_engine.py`, `docs/v3-search-progressive-disclosure-contract.md`, local runtime and contract validators |
 
 F0 and the `validate_*.py` scripts are Verification infrastructure, not domain
 engines. The MCP adapter is transport infrastructure and may call only the
@@ -51,5 +51,7 @@ is `scripts/validate_v3_engine_suite.py`; semantic cases remain review-bound
 and are checked for valid fixture references and complete review boundaries.
 
 Search & Progressive Disclosure is a logical read-side boundary in the
-unreleased candidate. Its first gate is fixture-backed and local; it is not a
-claim that a runtime search or MCP adapter exists yet.
+unreleased candidate. Its first gate is now implemented as a fixture-backed,
+local read-only runtime through the canonical CRUD read boundary. This does not
+claim that an MCP or host integration exists; that remains a separate future
+capability and authorization gate.
