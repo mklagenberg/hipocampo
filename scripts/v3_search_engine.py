@@ -123,7 +123,11 @@ def _result_envelope(record: dict, request: dict, *, relevance: float, chunks: l
         "record_ref": record["record_id"],
         "relevance": relevance,
         "authority": record.get("authority_state", "unknown"),
-        "privacy": "redacted" if record.get("privacy") == "redacted" else "allowed",
+        "privacy": (
+            "blocked"
+            if record.get("privacy") == "blocked" or record.get("visibility") == "restricted"
+            else "redacted" if record.get("privacy") == "redacted" else "allowed"
+        ),
         "epistemic_status": record.get("epistemic_status", "unknown"),
         "disclosure_level": returned,
         "evidence": [source.get("source_id", "source-unavailable")],

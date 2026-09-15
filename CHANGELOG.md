@@ -4,6 +4,14 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **V3 Search & Progressive Disclosure test reinforcement (Change Set 0110):**
+  adds bounded-context, vault-authorization, authorized-expansion, stale-source
+  and restricted-content cases; adds two semantic review candidates for scope
+  collisions and authorization without epistemic settlement; and aligns the
+  restricted-content privacy envelope with the fail-closed contract. Human
+  semantic confirmation remains pending; no deploy, release, migration, MCP or
+  real-vault read occurs.
+
 - **V3 Search & Progressive Disclosure runtime (Change Set 0109):** adds the
   first local read-only execution path through canonical CRUD, explicit scope
   authorization, disclosure guardrails, stale-source limits, prose-first

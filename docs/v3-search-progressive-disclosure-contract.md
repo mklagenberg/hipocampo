@@ -56,6 +56,9 @@ mutation: "none"
 The output must preserve source provenance, entity, vault, scope, temporal
 limits and epistemic status. A result may be relevant and still be
 `unknown`, `conflicting`, `redacted`, stale, partial or blocked.
+When a record is privacy-blocked or has restricted visibility, the result
+envelope reports `privacy: blocked`; disclosure authorization never changes
+that privacy classification.
 
 ## Disclosure levels
 

@@ -12,6 +12,8 @@ EXPECTED = {
     "SEM-SPD-001": ("SPD-S-001", "needs_review"),
     "SEM-SPD-002": ("SPD-S-002", "blocked"),
     "SEM-SPD-003": ("SPD-S-003", "blocked"),
+    "SEM-SPD-004": ("SPD-S-004", "needs_review"),
+    "SEM-SPD-005": ("SPD-S-005", "needs_review"),
 }
 
 
@@ -72,7 +74,7 @@ def main() -> int:
         for error in errors:
             print(f"  [FAIL] {error}")
         return 1
-    print("validate_v3_search_progressive_disclosure_review: OK — 3 agent-reviewed cases pending human confirmation")
+    print("validate_v3_search_progressive_disclosure_review: OK — 5 agent-reviewed cases pending human confirmation")
     return 0
 
 

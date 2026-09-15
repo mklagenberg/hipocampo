@@ -38,3 +38,34 @@ cases:
     expected_disposition: accepted
     expected_disclosure_level: L2
     mutation: none
+  - id: require-bounded-request-context
+    missing_fields: [knowledge_scope]
+    expected_disposition: blocked
+    expected_disclosure_level: L0
+    mutation: none
+  - id: block-unauthorized-vault-scope
+    vault_scope: [vault-b]
+    authorized_vault_ids: [vault-a]
+    expected_disposition: blocked
+    expected_disclosure_level: L0
+    mutation: none
+  - id: preserve-authorized-expansion
+    requested_disclosure: L4
+    explicit_expansion_authorization: true
+    expected_disposition: accepted
+    expected_disclosure_level: L4
+    mutation: none
+  - id: limit-stale-source
+    requested_disclosure: L3
+    staleness: stale
+    expected_disposition: partial
+    expected_disclosure_level: L2
+    mutation: none
+  - id: block-restricted-content
+    requested_disclosure: L3
+    explicit_expansion_authorization: true
+    visibility: restricted
+    privacy: blocked
+    expected_disposition: blocked
+    expected_disclosure_level: L1
+    mutation: none

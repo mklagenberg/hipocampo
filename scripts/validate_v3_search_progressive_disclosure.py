@@ -21,6 +21,11 @@ EXPECTED = {
     "preserve-independent-dimensions": ("needs_review", "L2"),
     "prose-default": ("partial", "L2"),
     "structured-only-on-request": ("accepted", "L2"),
+    "require-bounded-request-context": ("blocked", "L0"),
+    "block-unauthorized-vault-scope": ("blocked", "L0"),
+    "preserve-authorized-expansion": ("accepted", "L4"),
+    "limit-stale-source": ("partial", "L2"),
+    "block-restricted-content": ("blocked", "L1"),
 }
 
 
@@ -116,10 +121,24 @@ def run_runtime_cases(errors: list[str]) -> None:
     except SearchContractError as exc:
         errors.append(f"runtime structured case failed: {exc}")
 
+    for field in ("query", "entity", "vault_scope", "knowledge_scope"):
+        malformed = dict(base)
+        malformed.pop(field)
+        try:
+            search(crud, malformed)
+            errors.append(f"missing request context was accepted: {field}")
+        except SearchContractError:
+            pass
+
     try:
         expanded = search(crud, {**base, "request_id": "search-test-expanded", "requested_disclosure": "L4", "explicit_expansion_authorization": True})
         item = expanded["results"][0]
-        if item["disclosure_level"] != "L4" or "expanded_content" not in item:
+        if (
+            item["disclosure_level"] != "L4"
+            or "expanded_content" not in item
+            or item["authority"] != "unknown"
+            or item["epistemic_status"] != "unresolved-conflict"
+        ):
             errors.append("explicitly authorized L4 expansion did not return L4 content")
     except SearchContractError as exc:
         errors.append(f"runtime authorized-expansion case failed: {exc}")
@@ -157,7 +176,11 @@ def run_runtime_cases(errors: list[str]) -> None:
         {"rec-restricted": restricted_record},
     )
     restricted = search(restricted_crud, {**base, "request_id": "search-test-restricted", "requested_disclosure": "L3", "explicit_expansion_authorization": True})
-    if restricted["status"] != "blocked" or restricted["results"][0]["disclosure_level"] != "L1":
+    if (
+        restricted["status"] != "blocked"
+        or restricted["results"][0]["disclosure_level"] != "L1"
+        or restricted["results"][0]["privacy"] != "blocked"
+    ):
         errors.append("restricted content was not blocked at metadata level")
     if "text" in restricted["trail"] or "secret" in str(restricted["trail"]).casefold():
         errors.append("operational trail exposed content or secret material")
@@ -247,7 +270,7 @@ def main() -> int:
         for error in errors:
             print(f"  [FAIL] {error}")
         return 1
-    print("validate_v3_search_progressive_disclosure: OK — contract envelope and 4 sanitized fixtures")
+    print("validate_v3_search_progressive_disclosure: OK — contract envelope and 9 sanitized fixtures")
     return 0
 
 

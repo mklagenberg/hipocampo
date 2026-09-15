@@ -31,3 +31,19 @@ cases:
     rationale: "An inaccessible evidence frontier cannot support reconstructed content or current-use guidance."
     negative_behavior_checked: "Missing evidence was surfaced as a limit rather than filled by plausibility."
     mutation: none
+  - review_id: SEM-SPD-004
+    case_id: SPD-S-004
+    fixture_ref: "v3-semantic-fixtures.yaml#search-scope-collision"
+    agent_disposition: needs_review
+    human_confirmation: pending
+    rationale: "A matching term across entities or vaults does not establish shared scope, authority or permission to merge candidates."
+    negative_behavior_checked: "Candidates remained bounded by entity, vault and knowledge scope."
+    mutation: none
+  - review_id: SEM-SPD-005
+    case_id: SPD-S-005
+    fixture_ref: "v3-semantic-fixtures.yaml#authorized-expansion-with-unresolved-conflict"
+    agent_disposition: needs_review
+    human_confirmation: pending
+    rationale: "Authorization controls disclosure but cannot settle conflicting provenance or epistemic status."
+    negative_behavior_checked: "Expanded content did not become settled knowledge merely because disclosure was authorized."
+    mutation: none
