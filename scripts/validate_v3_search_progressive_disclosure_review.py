@@ -15,7 +15,7 @@ EXPECTED = {
     "SEM-SPD-004": ("SPD-S-004", "needs_review"),
     "SEM-SPD-005": ("SPD-S-005", "needs_review"),
 }
-CONFIRMED = {"SEM-SPD-001"}
+CONFIRMED = {"SEM-SPD-001", "SEM-SPD-002"}
 
 
 def main() -> int:

@@ -1,0 +1,41 @@
+change_set:
+  id: "0113-v3-search-semantic-adjudication-s002"
+  class: "operational"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0108-v3-search-progressive-disclosure.md"
+
+impact:
+  - artifact: "docs/v3-search-progressive-disclosure-semantic-review.yaml"
+    status: "updated"
+    note: "Records human confirmation of alternative A for SEM-SPD-002 while preserving blocked."
+  - artifact: "docs/v3-constitutional-test-basis.yaml"
+    status: "updated"
+    note: "Links FF-DEC-0068 and retains pending status until canonical two-pass revalidation."
+  - artifact: "scripts/validate_v3_search_progressive_disclosure_review.py"
+    status: "updated"
+    note: "Adds SEM-SPD-002 to the explicitly confirmed candidate cases."
+  - artifact: "docs/v3-semantic-review.yaml, docs/v3-semantic-constitutional-revalidation.yaml"
+    status: "reviewed"
+    note: "The existing 28-case canonical review and two-pass revalidation remain unchanged until the next dedicated round."
+  - artifact: "SPEC.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, conformance/moda.yaml, moda.yaml"
+    status: "reviewed"
+    note: "No released contract, migration, skill, scaffold or MODA-claim change is authorized."
+  - artifact: "knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "No vault, cache or private artifact was read or changed."
+
+validation:
+  commands:
+    - "python -B scripts/validate_v3_search_progressive_disclosure_review.py --root ."
+    - "python -B scripts/validate_v3_semantic_review.py --root ."
+    - "python -B scripts/validate_v3_semantic_constitutional_revalidation.py --root ."
+    - "python -B scripts/validate_v3_constitutional_conformance.py --root ."
+    - "python -B scripts/validate_change.py --root ."
+  evidence:
+    - "docs/v3-search-progressive-disclosure-semantic-review.yaml"
+    - "docs/v3-constitutional-test-basis.yaml"
+    - "management/SDD/decisions/DEC-0068-adjudicacao-semantica-spd-s002.md"
+  notes: "Local unreleased V3 candidate only; no deploy, release, remote write, vault read or MCP integration."

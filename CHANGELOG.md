@@ -4,6 +4,11 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **V3 Search semantic adjudication for SPD-S-002 (Change Set 0113):** records
+  human confirmation that disclosure expansion remains blocked without explicit
+  authorization. The other three pending Search cases remain pending; no
+  runtime or release behavior changes.
+
 - **V3 Search semantic adjudication (Change Set 0112):** records human
   confirmation of `SPD-S-001` while preserving its `needs_review` disposition;
   the case awaits inclusion in the next canonical two-pass revalidation. Four
