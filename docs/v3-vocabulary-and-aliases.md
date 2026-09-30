@@ -10,6 +10,11 @@ The V3 contract uses one persisted vocabulary for `Record`, `Chunk`,
 `Curator`, `User`, and `Source`. `Source` is provenance, not a governance
 role. An alias is a routing convenience, not a persisted type.
 
+An Artifact-linked Record also declares its material representation as
+`format: prose`. This describes the persisted Record content, not a promise
+that the referenced Artifact can be fetched. Structured metadata can support
+provenance and audit, but it is not a substitute for the prose body.
+
 ## Alias rules
 
 An alias maps to one canonical term within a declared scope. It may be used

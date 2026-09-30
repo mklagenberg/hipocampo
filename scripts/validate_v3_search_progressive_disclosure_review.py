@@ -11,11 +11,11 @@ import yaml
 EXPECTED = {
     "SEM-SPD-001": ("SPD-S-001", "needs_review"),
     "SEM-SPD-002": ("SPD-S-002", "blocked"),
-    "SEM-SPD-003": ("SPD-S-003", "blocked"),
+    "SEM-SPD-003": ("SPD-S-003", "partial"),
     "SEM-SPD-004": ("SPD-S-004", "needs_review"),
     "SEM-SPD-005": ("SPD-S-005", "needs_review"),
 }
-CONFIRMED = {"SEM-SPD-001", "SEM-SPD-002"}
+CONFIRMED = {"SEM-SPD-001", "SEM-SPD-002", "SEM-SPD-003", "SEM-SPD-004", "SEM-SPD-005"}
 
 
 def main() -> int:

@@ -58,3 +58,12 @@ cases:
   - id: UC-CRUD-18-mcp-bypass
     operation: unsupported
     expected: block
+  - id: UC-CRUD-19-read-without-authorization-context
+    operation: read
+    expected: block
+  - id: UC-CRUD-20-read-with-empty-authorization-scope
+    operation: read
+    expected: block
+  - id: UC-CRUD-21-direct-read-without-authorization-context
+    operation: direct-read
+    expected: block

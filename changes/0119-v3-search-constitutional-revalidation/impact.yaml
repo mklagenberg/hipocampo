@@ -1,0 +1,47 @@
+change_set:
+  id: "0119-v3-search-constitutional-revalidation"
+  class: "operational"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0108-v3-search-progressive-disclosure.md"
+    - "decisions/0109-v3-record-content-independent-of-artifact-accessibility.md"
+    - "decisions/0110-v3-search-artifact-freshness-presentation.md"
+    - "decisions/0111-v3-search-scope-collision-candidates.md"
+    - "decisions/0112-v3-search-authorized-disclosure-with-unresolved-conflict.md"
+
+impact:
+  - artifact: "docs/v3-search-constitutional-revalidation.yaml"
+    status: "updated"
+    note: "Adds the separate supplemental file recording primary and adversarial constitutional passes for SPD-S-001 through SPD-S-005 without changing their dispositions."
+  - artifact: "docs/v3-constitutional-test-basis.yaml"
+    status: "updated"
+    note: "Links all five human-confirmed Search cases to accepted decisions and the completed two-pass revalidation run."
+  - artifact: "scripts/validate_v3_semantic_constitutional_revalidation.py, scripts/validate_v3_constitutional_conformance.py, scripts/validate_v3_semantic_review.py"
+    status: "updated"
+    note: "Validates the immutable historical 28-case review separately from the five-case Search supplement and its confirmed basis entries."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Records the unreleased candidate's completed revalidation coverage without implying factual truth or release approval."
+  - artifact: "docs/taxonomy.md, docs/v3-vocabulary-and-aliases.md, docs/v3-search-progressive-disclosure-contract.md, SPEC.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, conformance/moda.yaml, moda.yaml"
+    status: "reviewed"
+    note: "No new methodology vocabulary, aliases, runtime contract or released behavior is introduced."
+  - artifact: "knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "Only versioned project records and sanitized fixtures are used; no vault or Record is read or mutated."
+
+validation:
+  commands:
+    - "python -B scripts/validate_v3_semantic_constitutional_revalidation.py --root ."
+    - "python -B scripts/validate_v3_constitutional_conformance.py --root ."
+    - "python -B scripts/validate_v3_semantic_review.py --root ."
+    - "python -B scripts/validate_v3_search_progressive_disclosure_review.py --root ."
+    - "python -B scripts/validate_v3_engine_suite.py --root ."
+    - "python -B scripts/validate_change.py --root ."
+    - "python -B scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "docs/v3-semantic-constitutional-revalidation.yaml"
+    - "docs/v3-search-constitutional-revalidation.yaml"
+    - "docs/v3-constitutional-test-basis.yaml"
+  notes: "Validation proves consistency and traceability of recorded judgments only; no truth, publication, migration, activation or release claim."

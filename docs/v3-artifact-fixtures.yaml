@@ -6,10 +6,10 @@ cases:
     property: semantic Artifact has representation content and exact version/hash
   - id: semantic-artifact-reference-only
     expected: block
-    property: reference alone cannot satisfy semantic dependence
+    property: reference alone cannot satisfy the Record content contract
   - id: missing-artifact
-    expected: block
-    property: a missing Artifact is explicit and cannot be reconstructed
+    expected: pass-with-limitation
+    property: unresolved Artifact reference limits provenance but does not remove persisted Record prose
   - id: divergent-artifact-version
     expected: block
     property: hash/version divergence blocks reconstruction and flags review
@@ -30,4 +30,7 @@ cases:
     property: new Artifact version leaves the used Record representation unchanged
   - id: reconstruct-used-version
     expected: pass
-    property: exact linked Artifact version can be reconstructed and verified
+    property: exact linked Artifact version can be reconstructed and verified for audit only
+  - id: record-content-independent-of-artifact
+    expected: pass-with-limitation
+    property: Record prose remains readable without fetching or reconstructing the Artifact

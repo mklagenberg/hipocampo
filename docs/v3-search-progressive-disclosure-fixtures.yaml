@@ -55,6 +55,17 @@ cases:
     expected_disposition: accepted
     expected_disclosure_level: L4
     mutation: none
+  - id: preserve-authorized-conflict-at-L4
+    requested_disclosure: L4
+    explicit_expansion_authorization: true
+    epistemic_status: unresolved-conflict
+    expected_disposition: accepted
+    expected_interpretation_status: needs_review
+    expected_disclosure_level: L4
+    expected_candidate_count: 2
+    expected_provenance: separate-per-record
+    merged_conclusion: none
+    mutation: none
   - id: limit-stale-source
     requested_disclosure: L3
     staleness: stale
@@ -68,4 +79,31 @@ cases:
     privacy: blocked
     expected_disposition: blocked
     expected_disclosure_level: L1
+    mutation: none
+  - id: preserve-record-prose-with-inaccessible-artifact
+    requested_disclosure: L3
+    explicit_expansion_authorization: true
+    artifact_accessibility: unavailable
+    observed_at: "2026-09-20T12:00:00Z"
+    expected_disposition: partial
+    expected_disclosure_level: L3
+    expected_presentation: "state the observed version date and that later updates were not verified or reflected; do not say the Artifact is unavailable"
+    mutation: none
+  - id: block-inaccessible-record-content
+    requested_disclosure: L3
+    record_accessibility: unavailable
+    expected_disposition: blocked
+    expected_disclosure_level: L0
+    mutation: none
+  - id: keep-scope-collision-candidates-separate
+    query_term: "delta"
+    requested_entity: entity-a
+    vault_scope: [vault-a, vault-b]
+    authorized_vault_ids: [vault-a, vault-b]
+    knowledge_scope: scope-a
+    out_of_scope_matches: [entity-b, scope-b]
+    expected_disposition: needs_review
+    expected_disclosure_level: L2
+    expected_candidate_count: 2
+    merge: none
     mutation: none

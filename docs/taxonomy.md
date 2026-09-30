@@ -1,8 +1,11 @@
 # Taxonomy map
 
-**Contract revision:** `1.2` — Search & Progressive Disclosure concepts added
-by Change Set `0108`; V3 candidate profiles and governance terms originated in
-Change Set `0074`; compatibility states originated in Change Set `0058`.
+**Contract revision:** `1.4` — Search interpretation status and authorized
+disclosure with unresolved conflict added by Change Set `0118`; Record prose
+and independent Artifact access boundary added by Change Set `0114`; Search &
+Progressive Disclosure concepts were added by Change Set `0108`; V3 candidate
+profiles and governance terms originated in Change Set `0074`; compatibility
+states originated in Change Set `0058`.
 
 A single index of every controlled field, enum, and named concept this methodology defines — what it is, where it's authoritatively defined, and when it was introduced or last changed. This document doesn't re-argue any rationale — every row points at the `SPEC.md` section and/or Decision Record that actually carries it. See `decisions/0047-taxonomy-map.md` for why this document exists and why it originally shipped in two lotes.
 
@@ -132,7 +135,10 @@ epistemic types. Their permitted action and precedence are authoritative in
 | Result dimension | `relevance`, `authority`, `privacy`, `epistemic_status`, `disclosure_level`, `evidence`, `limits`, `retrieval_path` remain independent | V3 candidate, Change Set `0108` | `docs/v3-search-progressive-disclosure-contract.md` |
 | Presentation mode | `prose-default`; `structured-on-request` only after an explicit request | V3 candidate, Change Set `0108` | `decisions/0108`, `docs/v3-search-progressive-disclosure-contract.md` |
 | Search disposition | `accepted`, `blocked`, `needs_review`, `partial`; disposition does not prove semantic truth | V3 candidate, Change Set `0108` | `docs/v3-search-progressive-disclosure-fixtures.yaml`, `docs/engines/test-matrix.yaml` |
+| Search interpretation status | `needs_review \| not_assessed`; independent of operation disposition, disclosure level and truth | V3 candidate, Change Set `0118` | `docs/v3-search-progressive-disclosure-contract.md`, Decision `0112` |
 | Search mutation boundary | `none`; Record writes remain exclusively under canonical Record CRUD | V3 candidate, Change Set `0108` | `decisions/0108`, `docs/v3-search-progressive-disclosure-contract.md` |
+| Artifact representation format | `prose`; persisted material representation carried by the Record | V3 candidate, Change Set `0114` | `decisions/0109`, `docs/v3-artifact-contract.md` |
+| Artifact access boundary | Artifact availability limits direct verification/currentness but does not block readable Record prose | V3 candidate, Change Set `0114` | `decisions/0109`, `docs/v3-search-progressive-disclosure-contract.md` |
 
 ## Retroactive backfill — what Lote E2 did
 

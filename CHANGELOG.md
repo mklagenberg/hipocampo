@@ -4,6 +4,40 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **V3 Search semantic revalidation coverage (Change Set 0119):** preserves the
+  historical 28-case constitutional round and adds a separate two-pass review
+  of the five human-confirmed Search cases; all five dispositions remain
+  unchanged, with no Record mutation or release approval implied.
+
+- **V3 Search authorized disclosure with unresolved conflict (Change Set 0118):**
+  allows explicitly authorized content disclosure while preserving conflicting
+  Records and their provenance separately; operation acceptance is distinct
+  from epistemic resolution, and combined interpretation remains `needs_review`.
+
+- **V3 Search scope-collision handling (Change Set 0117):** confirms that
+  candidates outside the requested entity, vault set or knowledge scope are
+  excluded, while same-term candidates in authorized vaults remain separate
+  and review-bound; matching terms do not merge or select a winner.
+
+- **V3 Search observation-date disclosure (Change Set 0116):** preserves
+  readable Record prose as a partial result when linked Artifact access is
+  unavailable, while default prose states the observed version date and that
+  later updates were not verified or reflected. The structured result retains
+  the internal access limit; `checked_at` is not treated as a content-read
+  timestamp.
+
+- **V3 CRUD read authorization context (Change Set 0115):** Record reads now
+  fail closed when the authorized-vault context is missing, empty or does not
+  include the Record's vault. This validates an explicit local authorization
+  context; it does not provide host authentication or production enforcement.
+
+- **V3 Record content and Artifact accessibility boundary (Change Set 0114):**
+  requires persisted prose for Artifact-linked Records, separates Artifact
+  availability from Record readability, and preserves readable Record content
+  with an explicit Artifact limitation. Artifact reconstruction remains an
+  audit/revalidation operation only; no V3 activation, deploy, release,
+  migration, MCP or real-vault read occurs.
+
 - **V3 Search semantic adjudication for SPD-S-002 (Change Set 0113):** records
   human confirmation that disclosure expansion remains blocked without explicit
   authorization. The other three pending Search cases remain pending; no
@@ -40,6 +74,11 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
   disclosure; prose-first presentation; CRUD-preserving mutation rules; and
   sanitized local contract tests. No V3 activation, real-vault read, MCP
   integration, migration or publication is performed.
+
+- **V3 constitutional test traceability (Change Set 0107):** binds deterministic
+  and semantic cases to the project Constitution and accepted Decision Records,
+  adding executable exception and rejudgment scenarios. It strengthens the
+  candidate's evidence without activating a V3 rule for existing instances.
 
 - **V3 semantic validation (Change Set 0106):** executes and records two-pass
   semantic review for 24 cases across 11 logical engines using sanitized,

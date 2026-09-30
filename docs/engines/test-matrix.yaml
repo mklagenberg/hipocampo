@@ -13,7 +13,7 @@ engines:
     modules: ["scripts/v3_crud_engine.py", "scripts/v3_mcp_crud_adapter.py"]
     deterministic_commands: ["python scripts/validate_v3_crud.py --root .", "python scripts/validate_v3_crud_use_cases.py --root ."]
     write_boundary: "canonical RecordCrud only"
-    deterministic_cases: [create-valid, update-versioned, reject-stale-write, reject-mcp-bypass]
+    deterministic_cases: [create-valid, update-versioned, reject-stale-write, reject-mcp-bypass, read-requires-authorization-context]
     semantic_cases:
       - id: CRUD-S-001
         fixture_ref: "v3-semantic-fixtures.yaml#new-versus-curated"
@@ -34,7 +34,7 @@ engines:
     modules: ["scripts/v3_artifact_engine.py"]
     deterministic_commands: ["python scripts/validate_v3_artifacts.py --root ."]
     write_boundary: "Artifact proposal; Record changes through CRUD"
-    deterministic_cases: [validate-hash, monotonic-version, preserve-used-version, representation-hash-match]
+    deterministic_cases: [validate-hash, monotonic-version, preserve-used-version, representation-hash-match, record-content-independent-of-artifact]
     semantic_cases:
       - id: ART-S-001
         fixture_ref: "v3-semantic-fixtures.yaml#multimodal-divergence"
@@ -224,7 +224,7 @@ engines:
     modules: ["scripts/v3_search_engine.py", "scripts/validate_v3_search_progressive_disclosure.py"]
     deterministic_commands: ["python scripts/validate_v3_search_progressive_disclosure.py --root ."]
     write_boundary: "read-only; Record mutations remain exclusively under canonical Record CRUD"
-    deterministic_cases: [reject-unauthorized-expansion, preserve-independent-dimensions, prose-default, structured-only-on-request, require-bounded-request-context, block-unauthorized-vault-scope, preserve-authorized-expansion, limit-stale-source, block-restricted-content]
+    deterministic_cases: [reject-unauthorized-expansion, preserve-independent-dimensions, prose-default, structured-only-on-request, require-bounded-request-context, block-unauthorized-vault-scope, preserve-authorized-expansion, preserve-authorized-conflict-at-L4, limit-stale-source, block-restricted-content, preserve-record-prose-with-inaccessible-artifact, block-inaccessible-record-content, keep-scope-collision-candidates-separate]
     semantic_cases:
       - id: SPD-S-001
         fixture_ref: "v3-semantic-fixtures.yaml#search-ranking-vs-epistemic-state"
@@ -235,8 +235,8 @@ engines:
         expected_disposition: blocked
         review_boundary: explicit-human-decision
       - id: SPD-S-003
-        fixture_ref: "v3-semantic-fixtures.yaml#inaccessible-search-evidence"
-        expected_disposition: blocked
+        fixture_ref: "v3-semantic-fixtures.yaml#record-content-with-inaccessible-artifact"
+        expected_disposition: partial
         review_boundary: host-or-human-review
       - id: SPD-S-004
         fixture_ref: "v3-semantic-fixtures.yaml#search-scope-collision"

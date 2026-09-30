@@ -11,6 +11,7 @@ ACCESSIBILITY = {"available", "unavailable", "restricted"}
 REPRESENTATION_KINDS = {
     "summary", "excerpt", "transcription", "preview", "structured_description", "manifest"
 }
+REPRESENTATION_FORMATS = {"prose"}
 
 
 class ArtifactContractError(ValueError):
@@ -19,6 +20,14 @@ class ArtifactContractError(ValueError):
 
 def source_hash(content: str) -> str:
     return sha256(content.encode("utf-8")).hexdigest()
+
+
+def read_record_prose(record: dict) -> str:
+    """Return persisted Record content without reading or reconstructing an Artifact."""
+    content = record.get("content")
+    if not isinstance(content, str) or not content.strip():
+        raise ArtifactContractError("Record requires persisted prose content")
+    return content
 
 
 def _rank(value: str) -> int:
@@ -56,26 +65,28 @@ def validate_artifact_link(record: dict, artifact: dict, link: dict) -> dict:
     if _rank(record["visibility"]) < _rank(artifact["visibility"]):
         raise ArtifactContractError("Record visibility is weaker than Artifact visibility")
     representation = link.get("representation")
-    if link.get("semantic_required") and not representation:
-        raise ArtifactContractError("semantic Artifact requires material representation")
-    if representation:
-        if not representation.get("content"):
-            raise ArtifactContractError("material representation requires content")
-        if representation.get("kind") not in REPRESENTATION_KINDS:
-            raise ArtifactContractError("unknown material representation kind")
-        if representation.get("artifact_version") != artifact["version"]:
-            raise ArtifactContractError("representation version does not match Artifact")
-        if artifact.get("source_hash") and representation.get("artifact_hash") != artifact["source_hash"]:
-            raise ArtifactContractError("representation hash does not match Artifact")
-        if _rank(representation.get("visibility", "public")) < _rank(record["visibility"]):
-            raise ArtifactContractError("representation visibility weakens Record visibility")
-        if _rank(representation.get("visibility", "public")) < _rank(artifact["visibility"]):
-            raise ArtifactContractError("representation visibility weakens Artifact visibility")
+    if not representation:
+        raise ArtifactContractError("Artifact link requires a material prose representation")
+    if not isinstance(representation.get("content"), str) or not representation["content"].strip():
+        raise ArtifactContractError("material representation requires prose content")
+    if representation.get("format") not in REPRESENTATION_FORMATS:
+        raise ArtifactContractError("material representation must use prose format")
+    if representation.get("kind") not in REPRESENTATION_KINDS:
+        raise ArtifactContractError("unknown material representation kind")
+    if representation.get("artifact_version") != artifact["version"]:
+        raise ArtifactContractError("representation version does not match Artifact")
+    if artifact.get("source_hash") and representation.get("artifact_hash") != artifact["source_hash"]:
+        raise ArtifactContractError("representation hash does not match Artifact")
+    if _rank(representation.get("visibility", "public")) < _rank(record["visibility"]):
+        raise ArtifactContractError("representation visibility weakens Record visibility")
+    if _rank(representation.get("visibility", "public")) < _rank(artifact["visibility"]):
+        raise ArtifactContractError("representation visibility weakens Artifact visibility")
     return deepcopy(link)
 
 
 def validate_record_artifacts(record: dict, artifacts: dict[str, dict]) -> dict:
     updated = deepcopy(record)
+    read_record_prose(updated)
     for link in updated.get("artifacts", []):
         artifact = artifacts.get(link.get("artifact_id"))
         if artifact is None:
@@ -110,6 +121,7 @@ def mark_divergence(record: dict, artifact: dict) -> dict:
 
 
 def reconstruct_used_version(record: dict, artifact_versions: dict[tuple[str, int], dict], artifact_id: str) -> dict:
+    """Verify/recover a linked Artifact version for audit, never for Record reading."""
     link = next((item for item in record.get("artifacts", []) if item.get("artifact_id") == artifact_id), None)
     if link is None:
         raise ArtifactContractError("Artifact is not linked by Record")

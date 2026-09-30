@@ -7,11 +7,13 @@ cases:
   - {id: update-versioned, engine: crud, command_index: 0, assertion_id: crud.update_versioned, assertion: "versioned update increments the Record version atomically"}
   - {id: reject-stale-write, engine: crud, command_index: 0, assertion_id: crud.reject_stale_write, assertion: "stale expected version is rejected without mutation"}
   - {id: reject-mcp-bypass, engine: crud, command_index: 1, assertion_id: crud.reject_mcp_bypass, assertion: "unsupported MCP write and direct normalizer write are blocked"}
+  - {id: read-requires-authorization-context, engine: crud, command_index: 1, assertion_id: crud.read_requires_authorization_context, assertion: "Record reads fail closed when the authorized vault scope is missing or empty"}
 
   - {id: validate-hash, engine: artifact-provenance, command_index: 0, assertion_id: artifact.validate_hash, assertion: "artifact hash is reproducible and correctly typed"}
   - {id: monotonic-version, engine: artifact-provenance, command_index: 0, assertion_id: artifact.monotonic_version, assertion: "artifact versions do not move backwards"}
   - {id: preserve-used-version, engine: artifact-provenance, command_index: 0, assertion_id: artifact.preserve_used_version, assertion: "used artifact version is preserved when a newer version appears"}
   - {id: representation-hash-match, engine: artifact-provenance, command_index: 0, assertion_id: artifact.representation_hash_match, assertion: "representation hash matches the recorded source"}
+  - {id: record-content-independent-of-artifact, engine: artifact-provenance, command_index: 0, assertion_id: artifact.record_content_independent, assertion: "persisted prose remains readable when a linked Artifact is unavailable"}
 
   - {id: require-minimization, engine: ingress, command_index: 0, assertion_id: ingress.require_minimization, assertion: "processed ingress requires minimization evidence"}
   - {id: require-anonymization, engine: ingress, command_index: 0, assertion_id: ingress.require_anonymization, assertion: "sensitive ingress requires anonymization or an explicit block"}
@@ -69,5 +71,9 @@ cases:
   - {id: require-bounded-request-context, engine: search-progressive-disclosure, command_index: 0, assertion_id: search.require_bounded_request_context, assertion: "missing query, entity, vault or knowledge scope is rejected"}
   - {id: block-unauthorized-vault-scope, engine: search-progressive-disclosure, command_index: 0, assertion_id: search.block_unauthorized_vault_scope, assertion: "vault scope outside actor authorization is rejected"}
   - {id: preserve-authorized-expansion, engine: search-progressive-disclosure, command_index: 0, assertion_id: search.preserve_authorized_expansion, assertion: "explicit authorization permits L4 without upgrading authority or epistemic status"}
-  - {id: limit-stale-source, engine: search-progressive-disclosure, command_index: 0, assertion_id: search.limit_stale_source, assertion: "stale evidence is capped at L2 and requires revalidation"}
+  - {id: preserve-authorized-conflict-at-L4, engine: search-progressive-disclosure, command_index: 0, assertion_id: search.preserve_authorized_conflict_at_l4, assertion: "explicit L4 disclosure preserves each conflicting source separately and keeps interpretation needs_review"}
+  - {id: limit-stale-source, engine: search-progressive-disclosure, command_index: 0, assertion_id: search.limit_stale_source, assertion: "stale Record content is capped at L2 and requires revalidation"}
   - {id: block-restricted-content, engine: search-progressive-disclosure, command_index: 0, assertion_id: search.block_restricted_content, assertion: "restricted content is blocked at L1 and privacy is not reported as allowed"}
+  - {id: preserve-record-prose-with-inaccessible-artifact, engine: search-progressive-disclosure, command_index: 0, assertion_id: search.preserve_record_prose_with_inaccessible_artifact, assertion: "an unavailable Artifact preserves readable Record prose as partial, renders the observation-date boundary without an availability label, and keeps the internal limit"}
+  - {id: block-inaccessible-record-content, engine: search-progressive-disclosure, command_index: 0, assertion_id: search.block_inaccessible_record_content, assertion: "unavailable Record content is blocked at L0"}
+  - {id: keep-scope-collision-candidates-separate, engine: search-progressive-disclosure, command_index: 0, assertion_id: search.keep_scope_collision_candidates_separate, assertion: "same-term candidates remain separate within the authorized scope and candidates outside entity or knowledge scope are excluded"}

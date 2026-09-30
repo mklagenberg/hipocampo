@@ -38,6 +38,13 @@ provenance:
   source_hash: "optional sha256"
 ```
 
+The Record body is the durable content-bearing representation and must be
+stored as non-empty prose. When a Record refers to an Artifact, the Artifact
+metadata and representation preserve provenance and support later verification;
+they do not replace, reconstruct or become a prerequisite for reading the
+persisted Record prose. Artifact availability is therefore independent from
+Record readability.
+
 The unreleased V3 governance envelope may additionally carry:
 
 ```yaml

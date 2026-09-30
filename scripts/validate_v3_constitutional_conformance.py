@@ -62,8 +62,8 @@ def main() -> int:
 
     cases = basis.get("cases", []) if isinstance(basis, dict) else []
     active_cases = [case for case in cases if isinstance(case, dict) and case.get("review_status") != "pending"]
-    if len(active_cases) != 28:
-        errors.append(f"constitutional basis must contain 28 active cases, found {len(active_cases)}")
+    if len(active_cases) != 33:
+        errors.append(f"constitutional basis must contain 33 confirmed active cases, found {len(active_cases)}")
     case_ids: set[str] = set()
     review_ids: set[str] = set()
     decision_ids = accepted_decision_ids(workspace / "management" / "SDD" / "decisions")
@@ -103,7 +103,7 @@ def main() -> int:
         for error in errors:
             print(f"  [FAIL] {error}")
         return 1
-    print("validate_v3_constitutional_conformance: OK — Constitution, 28 active case bases and pending candidates are linked")
+    print("validate_v3_constitutional_conformance: OK — Constitution, 33 confirmed active case bases and their Decision Records are linked")
     return 0
 
 

@@ -29,7 +29,7 @@ RECORD_STATUSES = {"active", "archived", "superseded", "draft", "provisional"}
 SEMANTIC_DECISIONS = {"accepted", "provisional", "needs_review", "blocked", "rework_required"}
 FULL_RECORD_FIELDS = {
     "record_id", "record_version", "entity", "scope", "source", "vault", "governance",
-    "physical_path", "status", "visibility", "staleness", "collection_ids", "chunks", "artifacts",
+    "content", "physical_path", "status", "visibility", "staleness", "collection_ids", "chunks", "artifacts",
 }
 
 
@@ -211,6 +211,8 @@ def validate_record_structure(record: dict, active_collections: dict[str, dict])
         raise ContractError("Record entity is required")
     if not isinstance(record["scope"], str) or not record["scope"]:
         raise ContractError("Record scope is required")
+    if not isinstance(record["content"], str) or not record["content"].strip():
+        raise ContractError("Record content must be non-empty prose")
     validate_source(record["source"])
     validate_vault_contract(record["vault"])
     governance = record["governance"]
@@ -343,10 +345,24 @@ class RecordCrud:
         self.events.append(event)
         return self._remember(idempotency_key, {"status": "accepted", "record": structural, "event": event})
 
-    def read(self, record_id: str) -> dict:
+    def _read_record(self, record_id: str) -> dict:
         if record_id not in self._records:
             raise ContractError("Record not found")
         return deepcopy(self._records[record_id])
+
+    def read(self, record_id: str, *, authorized_vault_ids: list[str] | None = None) -> dict:
+        """Read a Record only with an explicit, bounded authorization context."""
+        if (
+            not isinstance(authorized_vault_ids, list)
+            or not authorized_vault_ids
+            or any(not isinstance(item, str) or not item.strip() for item in authorized_vault_ids)
+        ):
+            raise ContractError("Record read requires a non-empty authorized_vault_ids context")
+        record = self._read_record(record_id)
+        vault_id = record.get("vault", {}).get("vault_id")
+        if vault_id not in authorized_vault_ids:
+            raise ContractError("actor is not authorized for Record vault")
+        return record
 
     def update(self, record_id: str, patch: dict, *, expected_version: int, semantic_review: dict,
                actor: str, reason: str, operation: str = "update", idempotency_key: str | None = None) -> dict:
@@ -355,7 +371,7 @@ class RecordCrud:
             return cached
         if not actor or not reason:
             raise ContractError("Record update requires actor and reason")
-        current = self.read(record_id)
+        current = self._read_record(record_id)
         if expected_version != current["record_version"]:
             raise ContractError("stale Record version; reread before update")
         if patch.get("record_id", record_id) != record_id:
@@ -387,12 +403,15 @@ class RecordCrud:
         operation = request.get("operation")
         if operation == "read":
             actor = request.get("actor") or {}
-            allowed_vaults = actor.get("authorized_vault_ids")
-            if allowed_vaults is not None:
-                record = self.read(request.get("record_id", ""))
-                if record.get("vault", {}).get("vault_id") not in allowed_vaults:
-                    raise ContractError("actor is not authorized for Record vault")
-            return {"status": "accepted", "record": self.read(request.get("record_id", ""))}
+            if not isinstance(actor, dict):
+                raise ContractError("Record read requires an authorization context")
+            return {
+                "status": "accepted",
+                "record": self.read(
+                    request.get("record_id", ""),
+                    authorized_vault_ids=actor.get("authorized_vault_ids"),
+                ),
+            }
         common = {
             "semantic_review": request.get("semantic_review"),
             "actor": request.get("actor", ""),

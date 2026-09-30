@@ -1,0 +1,42 @@
+change_set:
+  id: "0118-v3-search-authorized-disclosure-with-unresolved-conflict"
+  class: "normative"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0112-v3-search-authorized-disclosure-with-unresolved-conflict.md"
+
+impact:
+  - artifact: "docs/v3-search-progressive-disclosure-contract.md"
+    status: "updated"
+    note: "Distinguishes authorized content disclosure and operation acceptance from epistemic resolution, preserving each conflicted source separately."
+  - artifact: "scripts/v3_search_engine.py, scripts/validate_v3_search_progressive_disclosure.py, docs/v3-search-progressive-disclosure-fixtures.yaml, docs/engines/test-matrix.yaml, docs/engines/deterministic-case-bindings.yaml"
+    status: "updated"
+    note: "Adds conflict-aware interpretation status and deterministic L4 test over two independently sourced conflicting Records."
+  - artifact: "docs/v3-semantic-fixtures.yaml, docs/v3-search-progressive-disclosure-semantic-review.yaml, docs/v3-constitutional-test-basis.yaml, docs/taxonomy.md, scripts/validate_v3_search_progressive_disclosure_review.py, CHANGELOG.md"
+    status: "updated"
+    note: "Records explicit human confirmation of SPD-S-005 and the controlled interpretation-status values; keeps constitutional basis pending until canonical two-pass revalidation."
+  - artifact: "docs/v3-vocabulary-and-aliases.md"
+    status: "reviewed"
+    note: "No alias or canonical noun is introduced; the new controlled result field belongs in the taxonomy map, so the conversational alias surface is unchanged."
+  - artifact: "SPEC.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, conformance/moda.yaml, moda.yaml"
+    status: "reviewed"
+    note: "No released behavior, host adapter, migration or MODA conformance claim changes."
+  - artifact: "knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "Only sanitized in-memory fixtures are used; no real vault is queried."
+
+validation:
+  commands:
+    - "python -B scripts/validate_v3_search_progressive_disclosure.py --root ."
+    - "python -B scripts/validate_v3_search_progressive_disclosure_review.py --root ."
+    - "python -B scripts/validate_v3_constitutional_conformance.py --root ."
+    - "python -B scripts/validate_v3_engine_suite.py --root ."
+    - "python -B scripts/validate_change.py --root ."
+    - "python -B scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "scripts/validate_v3_search_progressive_disclosure.py"
+    - "docs/v3-search-progressive-disclosure-fixtures.yaml"
+    - "docs/v3-search-progressive-disclosure-semantic-review.yaml"
+  notes: "Local sanitized candidate validation only; no real-vault access, cross-entity search, migration, publication or activation."

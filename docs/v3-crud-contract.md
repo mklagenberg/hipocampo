@@ -21,6 +21,7 @@ record:
   governance:
     owner: "owner-id"
     authority: "authority-id-or-chain"
+  content: "Human-readable prose representation of the governed knowledge."
   physical_path: "records/example.md"
   status: "active"
   visibility: "internal"
@@ -41,6 +42,9 @@ record:
 ```
 
 `Collection`, `Artifact`, and `Package` are separate objects. A Record must
+carry its governed content in prose; Artifact references preserve provenance
+and do not replace that content. Artifact availability is independent from
+Record readability. A Record must
 reference at least one active Collection. A Chunk must reference its parent
 Record and cannot be presented without parent context. The physical path may
 change without changing identity.
@@ -73,9 +77,11 @@ tools are outside the V3 contract and must be blocked.
 
 - **Create:** validate the full Record, active Collection membership, unique
   Chunk IDs, Artifact references, and monotonic restrictions before persistence.
-- **Read:** read frontmatter first; a Chunk read includes `record_id`, parent
+- **Read:** require an explicit, non-empty authorization context covering the
+  Record's vault; missing or empty authorization fails closed. Read frontmatter
+  first; a Chunk read includes `record_id`, parent
   title/context, effective restrictions, and provenance. READ itself does not
-  write.
+  fetch or reconstruct an Artifact and does not write.
 - **Update:** preserve `record_id`, increment `record_version` for governed
   changes, validate all relationships, and preserve the original Record when a
   split is needed. A Chunk is not independently versioned by default.

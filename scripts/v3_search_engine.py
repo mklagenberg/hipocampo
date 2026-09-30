@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from datetime import datetime
 import re
 
 from v3_crud_engine import ContractError, RecordCrud
@@ -81,12 +82,26 @@ def _matching_chunks(record: dict, terms: list[str]) -> list[dict]:
     ]
 
 
-def _limits(record: dict, *, source_accessible: bool) -> list[str]:
+def _artifact_accessible(record: dict) -> bool:
+    """Return whether linked Artifacts are available for direct verification.
+
+    Record content remains readable when this is false.  The flag only limits
+    provenance/currentness checks and Artifact-dependent operations.
+    """
+    artifacts = record.get("artifacts", [])
+    if not artifacts:
+        return True
+    return all(artifact.get("accessibility", "available") == "available" for artifact in artifacts)
+
+
+def _limits(record: dict, *, artifact_accessible: bool, record_readable: bool) -> list[str]:
     limits: list[str] = []
-    if not source_accessible:
-        limits.append("source_access_unavailable")
+    if not artifact_accessible:
+        limits.append("artifact_access_unavailable")
+    if not record_readable:
+        limits.append("record_content_unavailable")
     if record.get("staleness") in {"stale", "revalidation_required"}:
-        limits.append("source_requires_revalidation")
+        limits.append("record_requires_revalidation")
     if record.get("privacy") == "blocked" or record.get("visibility") == "restricted":
         limits.append("privacy_boundary_blocks_content")
     if record.get("authority_state", "unknown") in {"unknown", "conflicting"}:
@@ -94,13 +109,61 @@ def _limits(record: dict, *, source_accessible: bool) -> list[str]:
     return limits
 
 
-def _result_envelope(record: dict, request: dict, *, relevance: float, chunks: list[dict], source_accessible: bool) -> dict:
+def _artifact_freshness_note(record: dict, *, artifact_accessible: bool) -> str | None:
+    """Describe the represented source-version boundary without exposing access state."""
+    if artifact_accessible:
+        return None
+    artifacts = [
+        artifact for artifact in record.get("artifacts", [])
+        if artifact.get("accessibility", "available") != "available"
+    ]
+    observed_at_values: set[str] = set()
+    for artifact in artifacts:
+        value = artifact.get("observed_at")
+        if not isinstance(value, str) or not value.strip():
+            continue
+        normalized = value.strip()
+        try:
+            parsed = datetime.fromisoformat(normalized.replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        if parsed.tzinfo is not None and parsed.utcoffset() is not None:
+            observed_at_values.add(normalized)
+    observed_at = sorted(observed_at_values)
+    if not observed_at:
+        return (
+            "A data da última leitura da versão considerada não está registrada; "
+            "atualizações posteriores não foram verificadas nem consideradas nesta resposta."
+        )
+    if len(observed_at) == 1:
+        when = observed_at[0]
+    else:
+        when = ", ".join(observed_at)
+    return (
+        f"A última leitura da versão considerada foi em {when}; atualizações posteriores "
+        "não foram verificadas nem estão refletidas nesta resposta."
+    )
+
+
+def _result_envelope(
+    record: dict,
+    request: dict,
+    *,
+    relevance: float,
+    chunks: list[dict],
+    artifact_accessible: bool,
+    record_readable: bool,
+) -> dict:
     requested = request["requested_disclosure"]
     explicit = request.get("explicit_expansion_authorization", False)
-    limits = _limits(record, source_accessible=source_accessible)
+    limits = _limits(
+        record,
+        artifact_accessible=artifact_accessible,
+        record_readable=record_readable,
+    )
     disposition = "accepted"
     returned = requested
-    if not source_accessible:
+    if not record_readable:
         returned = "L0"
         disposition = "blocked"
     elif record.get("privacy") == "blocked" or record.get("visibility") == "restricted":
@@ -117,6 +180,8 @@ def _result_envelope(record: dict, request: dict, *, relevance: float, chunks: l
     elif record.get("staleness") in {"stale", "revalidation_required"}:
         returned = _lower_level(requested, "L2")
         disposition = "partial"
+    elif not artifact_accessible:
+        disposition = "partial"
 
     source = record.get("source", {})
     envelope = {
@@ -129,6 +194,11 @@ def _result_envelope(record: dict, request: dict, *, relevance: float, chunks: l
             else "redacted" if record.get("privacy") == "redacted" else "allowed"
         ),
         "epistemic_status": record.get("epistemic_status", "unknown"),
+        "interpretation_status": (
+            "needs_review"
+            if record.get("epistemic_status") in {"unresolved-conflict", "conflicting"}
+            else "not_assessed"
+        ),
         "disclosure_level": returned,
         "evidence": [source.get("source_id", "source-unavailable")],
         "limits": sorted(set(limits)),
@@ -136,6 +206,9 @@ def _result_envelope(record: dict, request: dict, *, relevance: float, chunks: l
         "mutation": "none",
         "disposition": disposition,
     }
+    freshness_note = _artifact_freshness_note(record, artifact_accessible=artifact_accessible)
+    if freshness_note:
+        envelope["freshness_note"] = freshness_note
     if LEVEL_RANK[returned] >= LEVEL_RANK["L1"]:
         envelope["metadata"] = {
             "record_id": record["record_id"],
@@ -169,11 +242,22 @@ def _prose(envelopes: list[dict], request: dict) -> str:
         return f"Não encontrei material dentro do escopo autorizado para '{request['query']}'. Limite: nenhum resultado recuperável."
     parts: list[str] = []
     for item in envelopes:
-        limit_text = "; ".join(item["limits"]) if item["limits"] else "sem limitações adicionais identificadas"
+        presentation_limits = [
+            item.get("freshness_note", "A atualidade da versão representada não foi verificada.")
+            if limit == "artifact_access_unavailable" else limit
+            for limit in item["limits"]
+        ]
+        limit_text = "; ".join(presentation_limits) if presentation_limits else "sem limitações adicionais identificadas"
+        evidence_text = ", ".join(item.get("evidence", [])) or "origem não registrada"
+        interpretation_note = (
+            " A interpretação permanece pendente de revisão; nenhuma conclusão foi consolidada."
+            if item.get("interpretation_status") == "needs_review" else ""
+        )
         parts.append(
             f"Encontrei {item['record_ref']} com relevância {item['relevance']:.3f}; "
+            f"origem: {evidence_text}; "
             f"a autoridade está {item['authority']}, a divulgação ficou em {item['disclosure_level']} "
-            f"e o limite observado é {limit_text}."
+            f"e o limite observado é {limit_text}.{interpretation_note}"
         )
     return " ".join(parts)
 
@@ -187,7 +271,6 @@ def search(crud: RecordCrud, request: dict) -> dict:
     before_events = len(crud.events)
     terms = _terms(validated["query"])
     envelopes: list[dict] = []
-    inaccessible = False
     for record_id, snapshot in before.items():
         if snapshot.get("entity") != validated["entity"]:
             continue
@@ -198,9 +281,8 @@ def search(crud: RecordCrud, request: dict) -> dict:
         relevance = _relevance(snapshot, terms)
         if relevance <= 0:
             continue
-        source_accessible = snapshot.get("source_accessible", True)
-        if not source_accessible:
-            inaccessible = True
+        artifact_accessible = _artifact_accessible(snapshot)
+        record_readable = True
         try:
             read = crud.apply({
                 "operation": "read",
@@ -209,25 +291,30 @@ def search(crud: RecordCrud, request: dict) -> dict:
             })
             record = read["record"]
         except ContractError as exc:
-            inaccessible = True
+            record_readable = False
             record = deepcopy(snapshot)
-            record["source_accessible"] = False
             record["read_error"] = str(exc)
         envelopes.append(_result_envelope(
             record,
             validated,
             relevance=relevance,
             chunks=_matching_chunks(record, terms),
-            source_accessible=source_accessible and "read_error" not in record,
+            artifact_accessible=artifact_accessible,
+            record_readable=record_readable,
         ))
     envelopes.sort(key=lambda item: (-item["relevance"], item["record_ref"]))
     if any(item["disposition"] == "blocked" for item in envelopes):
         disposition = "blocked"
-    elif any(item["disposition"] == "partial" for item in envelopes) or inaccessible:
+    elif any(item["disposition"] == "partial" for item in envelopes):
         disposition = "partial"
     else:
         disposition = "accepted" if envelopes else "partial"
     returned_level = min((LEVEL_RANK[item["disclosure_level"]] for item in envelopes), default=0)
+    interpretation_status = (
+        "needs_review"
+        if any(item["interpretation_status"] == "needs_review" for item in envelopes)
+        else "not_assessed"
+    )
     limits = sorted({limit for item in envelopes for limit in item["limits"]})
     trail = {
         "request_id": validated["request_id"],
@@ -247,6 +334,7 @@ def search(crud: RecordCrud, request: dict) -> dict:
         raise SearchContractError("search mutated the CRUD state")
     return {
         "status": disposition,
+        "interpretation_status": interpretation_status,
         "presentation": presentation,
         "results": deepcopy(envelopes),
         "trail": trail,

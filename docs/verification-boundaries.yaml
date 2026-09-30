@@ -176,11 +176,11 @@ entries:
     mechanism: scripts/validate_v3_artifacts.py
     inputs: docs/v3-artifact-fixtures.yaml and in-memory Artifact/Record representations
     outputs: Artifact contract allow/block result
-    coverage: material representation, version/hash integrity, accessibility, privacy monotonicity, external references, and reconstruction
+    coverage: material prose representation, version/hash integrity, accessibility, privacy monotonicity, external references, and audit/revalidation reconstruction
     rule_revision: "v3.0.0-2"
     legacy_treatment: v2 instances remain readable and are not migrated
     limits: cannot fetch external objects, prove authorization or truth, perform transcription, migrate vaults, or enforce runtime access
-    human_or_environmental_boundary: source access, semantic adequacy, migration review, connector policy, and human publication gate
+    human_or_environmental_boundary: Artifact access, semantic adequacy, migration review, connector policy, and human publication gate
   - id: v3-l4r-ledger-audit
     mechanism: scripts/v3_audit_engine.py
     inputs: local vault snapshots, Records, Packages, and packages-sent/packages-received ledger entries

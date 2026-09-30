@@ -138,17 +138,24 @@ cases:
     required_guard: "state the access limitation and do not reconstruct missing content"
     negative_behavior: "do not fill an inaccessible evidence frontier by plausibility"
     review_boundary: host-or-human-review
+  - id: record-content-with-inaccessible-artifact
+    input_kind: record-with-prose-and-unavailable-artifact
+    expected_epistemic: provenance-limited
+    expected_maturity: partial
+    required_guard: "present persisted Record prose and state the Artifact limitation"
+    negative_behavior: "do not block Record reading or reconstruct the Artifact for display"
+    review_boundary: host-or-human-review
   - id: search-scope-collision
     input_kind: same-term-results-across-entities-or-vaults
     expected_epistemic: unresolved-conflict
     expected_maturity: review-required
-    required_guard: "keep entity, vault and knowledge scope explicit; do not merge candidates"
-    negative_behavior: "do not treat a matching term as shared governance or permission"
+    required_guard: "filter outside-entity, vault and knowledge-scope candidates; keep eligible multi-vault candidates separate and do not merge"
+    negative_behavior: "do not treat a matching term as shared governance, authority or permission"
     review_boundary: human-semantic-review
   - id: authorized-expansion-with-unresolved-conflict
     input_kind: explicitly-authorized-expanded-result-with-conflicting-provenance
     expected_epistemic: unresolved-conflict
     expected_maturity: review-required
-    required_guard: "authorization permits disclosure only; preserve conflict and provenance"
-    negative_behavior: "do not convert authorization into epistemic settlement"
+    required_guard: "authorization permits requested disclosure only; preserve each source and provenance separately, and keep any combined interpretation needs_review"
+    negative_behavior: "do not convert operation acceptance or authorization into epistemic settlement or a consolidated conclusion"
     review_boundary: explicit-human-decision

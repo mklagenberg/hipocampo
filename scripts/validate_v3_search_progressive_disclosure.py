@@ -11,7 +11,7 @@ from pathlib import Path
 
 import yaml
 
-from v3_crud_engine import RecordCrud
+from v3_crud_engine import ContractError, RecordCrud
 from v3_search_engine import SearchContractError, search
 
 
@@ -24,12 +24,30 @@ EXPECTED = {
     "require-bounded-request-context": ("blocked", "L0"),
     "block-unauthorized-vault-scope": ("blocked", "L0"),
     "preserve-authorized-expansion": ("accepted", "L4"),
+    "preserve-authorized-conflict-at-L4": ("accepted", "L4"),
     "limit-stale-source": ("partial", "L2"),
     "block-restricted-content": ("blocked", "L1"),
+    "preserve-record-prose-with-inaccessible-artifact": ("partial", "L3"),
+    "block-inaccessible-record-content": ("blocked", "L0"),
+    "keep-scope-collision-candidates-separate": ("needs_review", "L2"),
 }
 
 
-def runtime_record(record_id: str, *, text: str, staleness: str = "current", visibility: str = "internal") -> dict:
+def runtime_record(
+    record_id: str,
+    *,
+    text: str,
+    staleness: str = "current",
+    visibility: str = "internal",
+    artifact_accessibility: str = "available",
+    artifact_observed_at: str | None = None,
+    entity: str = "entity-a",
+    vault_id: str = "vault-a",
+    scope: str = "scope-a",
+) -> dict:
+    artifact = {"artifact_id": f"artifact-{record_id}", "role": "supporting", "version": 1, "reference": "sanitized/ref", "visibility": visibility, "accessibility": artifact_accessibility}
+    if artifact_observed_at is not None:
+        artifact["observed_at"] = artifact_observed_at
     return {
         "record_id": record_id,
         "record_version": 1,
@@ -37,10 +55,10 @@ def runtime_record(record_id: str, *, text: str, staleness: str = "current", vis
         "status": "active",
         "visibility": visibility,
         "staleness": staleness,
-        "entity": "entity-a",
-        "scope": "scope-a",
-        "source": {"source_id": f"source-{record_id}", "source_kind": "conversation", "entity": "entity-a"},
-        "vault": {"vault_id": "vault-a", "entity": "entity-a", "profile": "entity", "role": "anchor"},
+        "entity": entity,
+        "scope": scope,
+        "source": {"source_id": f"source-{record_id}", "source_kind": "conversation", "entity": entity},
+        "vault": {"vault_id": vault_id, "entity": entity, "profile": "entity", "role": "anchor"},
         "governance": {"owner": "owner-a", "authority": "authority-a"},
         "maturity": "curated",
         "collection_ids": ["collection-a"],
@@ -52,8 +70,9 @@ def runtime_record(record_id: str, *, text: str, staleness: str = "current", vis
             "visibility": visibility,
             "staleness": staleness,
         }],
-        "artifacts": [{"artifact_id": f"artifact-{record_id}", "role": "supporting", "version": 1, "reference": "sanitized/ref", "visibility": visibility}],
+        "artifacts": [artifact],
         "title": "Alpha result",
+        "content": f"Prose content for {record_id}: {text}",
         "authority_state": "unknown",
         "epistemic_status": "unresolved-conflict",
     }
@@ -143,6 +162,40 @@ def run_runtime_cases(errors: list[str]) -> None:
     except SearchContractError as exc:
         errors.append(f"runtime authorized-expansion case failed: {exc}")
 
+    conflict_records = {
+        "rec-conflict-a": runtime_record("rec-conflict-a", text="alpha due September", vault_id="vault-a"),
+        "rec-conflict-b": runtime_record("rec-conflict-b", text="alpha due October", vault_id="vault-b"),
+    }
+    conflict_records["rec-conflict-a"]["source"]["source_id"] = "source-conflict-a"
+    conflict_records["rec-conflict-b"]["source"]["source_id"] = "source-conflict-b"
+    conflict_crud = RecordCrud(
+        {"collection-a": {"collection_id": "collection-a", "active": True}},
+        conflict_records,
+    )
+    conflict_result = search(conflict_crud, {
+        **base,
+        "request_id": "search-test-authorized-conflict",
+        "query": "alpha",
+        "vault_scope": ["vault-a", "vault-b"],
+        "authorized_vault_ids": ["vault-a", "vault-b"],
+        "requested_disclosure": "L4",
+        "explicit_expansion_authorization": True,
+    })
+    conflict_items = conflict_result["results"]
+    conflict_prose = conflict_result["presentation"].get("text", "")
+    if (
+        conflict_result["status"] != "accepted"
+        or conflict_result["interpretation_status"] != "needs_review"
+        or len(conflict_items) != 2
+        or [item["record_ref"] for item in conflict_items] != ["rec-conflict-a", "rec-conflict-b"]
+        or any(item["disclosure_level"] != "L4" or "expanded_content" not in item for item in conflict_items)
+        or any(item["epistemic_status"] != "unresolved-conflict" or item["interpretation_status"] != "needs_review" for item in conflict_items)
+        or [item["evidence"] for item in conflict_items] != [["source-conflict-a"], ["source-conflict-b"]]
+        or "source-conflict-a" not in conflict_prose or "source-conflict-b" not in conflict_prose
+        or conflict_prose.count("nenhuma conclusão foi consolidada") != 2
+    ):
+        errors.append("authorized L4 disclosure converted an unresolved source conflict into one accepted conclusion or lost provenance")
+
     try:
         search(crud, {**base, "request_id": "search-test-unauthorized-vault", "vault_scope": ["vault-b"], "authorized_vault_ids": ["vault-a"]})
         errors.append("unauthorized vault scope was not rejected")
@@ -157,18 +210,111 @@ def run_runtime_cases(errors: list[str]) -> None:
         {"rec-stale": runtime_record("rec-stale", text="alpha stale", staleness="stale")},
     )
     stale = search(stale_crud, {**base, "request_id": "search-test-stale", "requested_disclosure": "L3"})
-    if stale["results"][0]["disclosure_level"] != "L2" or "source_requires_revalidation" not in stale["results"][0]["limits"]:
+    if stale["results"][0]["disclosure_level"] != "L2" or "record_requires_revalidation" not in stale["results"][0]["limits"]:
         errors.append("stale source was not limited and surfaced")
 
-    inaccessible_record = runtime_record("rec-inaccessible", text="alpha unavailable")
-    inaccessible_record["source_accessible"] = False
+    inaccessible_record = runtime_record(
+        "rec-inaccessible",
+        text="alpha unavailable",
+        artifact_accessibility="unavailable",
+        artifact_observed_at="2026-09-20T12:00:00Z",
+    )
     inaccessible_crud = RecordCrud(
         {"collection-a": {"collection_id": "collection-a", "active": True}},
         {"rec-inaccessible": inaccessible_record},
     )
-    inaccessible = search(inaccessible_crud, {**base, "request_id": "search-test-inaccessible", "requested_disclosure": "L3"})
-    if inaccessible["status"] != "blocked" or inaccessible["results"][0]["disclosure_level"] != "L0" or "source_access_unavailable" not in inaccessible["results"][0]["limits"]:
-        errors.append("inaccessible evidence was not blocked at L0 with a surfaced limit")
+    inaccessible = search(inaccessible_crud, {**base, "request_id": "search-test-inaccessible", "requested_disclosure": "L3", "explicit_expansion_authorization": True})
+    if (
+        inaccessible["status"] != "partial"
+        or inaccessible["results"][0]["disclosure_level"] != "L3"
+        or "artifact_access_unavailable" not in inaccessible["results"][0]["limits"]
+        or "selected_chunks" not in inaccessible["results"][0]
+        or "2026-09-20T12:00:00Z" not in inaccessible["presentation"]["text"]
+        or "atualizações posteriores" not in inaccessible["presentation"]["text"]
+        or "artifact_access_unavailable" in inaccessible["presentation"]["text"]
+        or "indisponível" in inaccessible["presentation"]["text"]
+    ):
+        errors.append("inaccessible Artifact did not preserve Record prose with the bounded observation-date message")
+
+    undated_record = runtime_record(
+        "rec-undated-artifact",
+        text="alpha undated",
+        artifact_accessibility="unavailable",
+    )
+    undated_crud = RecordCrud(
+        {"collection-a": {"collection_id": "collection-a", "active": True}},
+        {"rec-undated-artifact": undated_record},
+    )
+    undated = search(undated_crud, {**base, "request_id": "search-test-undated-artifact", "requested_disclosure": "L3", "explicit_expansion_authorization": True})
+    if (
+        undated["status"] != "partial"
+        or "data da última leitura" not in undated["presentation"]["text"]
+        or "indisponível" in undated["presentation"]["text"]
+    ):
+        errors.append("missing observation date was fabricated or exposed as an availability message")
+
+    malformed_date_record = runtime_record(
+        "rec-malformed-date-artifact",
+        text="alpha malformed date",
+        artifact_accessibility="unavailable",
+        artifact_observed_at="not-a-timestamp",
+    )
+    malformed_date_crud = RecordCrud(
+        {"collection-a": {"collection_id": "collection-a", "active": True}},
+        {"rec-malformed-date-artifact": malformed_date_record},
+    )
+    malformed_date = search(malformed_date_crud, {**base, "request_id": "search-test-malformed-date-artifact", "requested_disclosure": "L3", "explicit_expansion_authorization": True})
+    if (
+        "not-a-timestamp" in malformed_date["presentation"]["text"]
+        or "data da última leitura" not in malformed_date["presentation"]["text"]
+    ):
+        errors.append("malformed observation timestamp was presented as a valid freshness boundary")
+
+    collision_records = {
+        "rec-scope-a": runtime_record("rec-scope-a", text="delta shared term alpha", vault_id="vault-a"),
+        "rec-scope-b": runtime_record("rec-scope-b", text="delta shared term beta", vault_id="vault-b"),
+        "rec-other-entity": runtime_record("rec-other-entity", text="delta shared term outside", entity="entity-b", vault_id="vault-c"),
+        "rec-other-scope": runtime_record("rec-other-scope", text="delta shared term outside", vault_id="vault-b", scope="scope-b"),
+    }
+    collision_crud = RecordCrud(
+        {"collection-a": {"collection_id": "collection-a", "active": True}},
+        collision_records,
+    )
+    collision = search(collision_crud, {
+        **base,
+        "request_id": "search-test-scope-collision",
+        "query": "delta",
+        "vault_scope": ["vault-a", "vault-b"],
+        "authorized_vault_ids": ["vault-a", "vault-b"],
+    })
+    collision_refs = [item["record_ref"] for item in collision["results"]]
+    if (
+        collision["status"] != "accepted"
+        or collision_refs != ["rec-scope-a", "rec-scope-b"]
+        or len(set(collision_refs)) != 2
+        or collision["presentation"]["text"].count("Encontrei ") != 2
+        or any(item["metadata"]["entity"] != "entity-a" for item in collision["results"])
+        or any(item["metadata"]["vault_id"] not in {"vault-a", "vault-b"} for item in collision["results"])
+    ):
+        errors.append("same-term candidates were merged or crossed declared entity, vault or knowledge scope")
+
+    class DeniedReadCrud(RecordCrud):
+        def apply(self, request: dict) -> dict:
+            if request.get("operation") == "read":
+                raise ContractError("Record content is unavailable to this read")
+            return super().apply(request)
+
+    denied_crud = DeniedReadCrud(
+        {"collection-a": {"collection_id": "collection-a", "active": True}},
+        {"rec-denied": runtime_record("rec-denied", text="alpha denied")},
+    )
+    denied = search(denied_crud, {**base, "request_id": "search-test-record-denied", "requested_disclosure": "L3"})
+    if (
+        denied["status"] != "blocked"
+        or denied["results"][0]["disclosure_level"] != "L0"
+        or "record_content_unavailable" not in denied["results"][0]["limits"]
+    ):
+        errors.append("unavailable Record content was not blocked at L0")
 
     restricted_record = runtime_record("rec-restricted", text="alpha restricted", visibility="restricted")
     restricted_crud = RecordCrud(
@@ -270,7 +416,7 @@ def main() -> int:
         for error in errors:
             print(f"  [FAIL] {error}")
         return 1
-    print("validate_v3_search_progressive_disclosure: OK — contract envelope and 9 sanitized fixtures")
+    print("validate_v3_search_progressive_disclosure: OK — contract envelope and 13 sanitized fixtures")
     return 0
 
 

@@ -33,6 +33,7 @@ def expect_block(callback, label: str, errors: list[str]) -> None:
 def base_record() -> dict:
     return {
         "record_id": "rec-001", "record_version": 1, "physical_path": "records/example.md",
+        "content": "This sanitized Record preserves governed knowledge in prose.",
         "status": "active", "visibility": "internal", "staleness": "current",
         "entity": "entity-a", "scope": "project-alpha",
         "source": {"source_id": "source-session-001", "source_kind": "conversation", "entity": "entity-a"},

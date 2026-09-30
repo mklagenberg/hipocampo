@@ -27,25 +27,28 @@ cases:
     mutation: none
   - review_id: SEM-SPD-003
     case_id: SPD-S-003
-    fixture_ref: "v3-semantic-fixtures.yaml#inaccessible-search-evidence"
-    agent_disposition: blocked
-    human_confirmation: pending
-    rationale: "An inaccessible evidence frontier cannot support reconstructed content or current-use guidance."
-    negative_behavior_checked: "Missing evidence was surfaced as a limit rather than filled by plausibility."
+    fixture_ref: "v3-semantic-fixtures.yaml#record-content-with-inaccessible-artifact"
+    agent_disposition: partial
+    human_confirmation: confirmed
+    confirmation_basis: "FF-DEC-0070; operator accepted alternative A with an observation-date message on 2026-09-30"
+    rationale: "Persisted Record prose remains available as a partial result; user-facing prose states the observed version date and that later updates were not verified or reflected, while the structured result retains the internal Artifact access limit."
+    negative_behavior_checked: "Record prose was not blocked or reconstructed; no availability label or fabricated observation date was shown to the user."
     mutation: none
   - review_id: SEM-SPD-004
     case_id: SPD-S-004
     fixture_ref: "v3-semantic-fixtures.yaml#search-scope-collision"
     agent_disposition: needs_review
-    human_confirmation: pending
-    rationale: "A matching term across entities or vaults does not establish shared scope, authority or permission to merge candidates."
-    negative_behavior_checked: "Candidates remained bounded by entity, vault and knowledge scope."
+    human_confirmation: confirmed
+    confirmation_basis: "FF-DEC-0071; operator accepted alternative A on 2026-09-30"
+    rationale: "Out-of-scope candidates are excluded; eligible candidates from authorized vaults remain distinct and require semantic review rather than being merged based on a shared term."
+    negative_behavior_checked: "The local runtime returned each in-scope candidate separately and excluded candidates from another entity or knowledge scope."
     mutation: none
   - review_id: SEM-SPD-005
     case_id: SPD-S-005
     fixture_ref: "v3-semantic-fixtures.yaml#authorized-expansion-with-unresolved-conflict"
     agent_disposition: needs_review
-    human_confirmation: pending
-    rationale: "Authorization controls disclosure but cannot settle conflicting provenance or epistemic status."
-    negative_behavior_checked: "Expanded content did not become settled knowledge merely because disclosure was authorized."
+    human_confirmation: confirmed
+    confirmation_basis: "FF-DEC-0072; operator accepted alternative A on 2026-09-30"
+    rationale: "Explicit authorization permits the requested disclosure level; each Record keeps its own provenance and unresolved epistemic state, while any combined interpretation remains needs_review. Operation acceptance is not knowledge acceptance."
+    negative_behavior_checked: "Two conflicting Records were returned separately at L4 with distinct evidence references; the operation status was accepted while interpretation_status remained needs_review and prose stated that no conclusion was consolidated."
     mutation: none
