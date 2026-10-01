@@ -8,6 +8,9 @@ change_set:
     - "decisions/0110-v3-search-artifact-freshness-presentation.md"
 
 impact:
+  - artifact: "decisions/0110-v3-search-artifact-freshness-presentation.md"
+    status: "updated"
+    note: "Introduces the accepted Search freshness presentation decision for the unreleased V3 candidate."
   - artifact: "docs/v3-artifact-contract.md, docs/v3-search-progressive-disclosure-contract.md"
     status: "updated"
     note: "Defines observed_at as source-version observation and separates it from checked_at; documents freshness wording and its missing-date fallback."

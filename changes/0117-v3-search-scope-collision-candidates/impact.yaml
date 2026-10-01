@@ -8,6 +8,9 @@ change_set:
     - "decisions/0111-v3-search-scope-collision-candidates.md"
 
 impact:
+  - artifact: "decisions/0111-v3-search-scope-collision-candidates.md"
+    status: "updated"
+    note: "Introduces the accepted Search scope-collision decision for the unreleased V3 candidate."
   - artifact: "docs/v3-search-progressive-disclosure-contract.md"
     status: "updated"
     note: "Defines hard entity/vault/scope filtering and keeps same-term eligible candidates separate and review-required."

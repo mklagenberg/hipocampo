@@ -8,6 +8,9 @@ change_set:
     - "decisions/0109-v3-record-content-independent-of-artifact-accessibility.md"
 
 impact:
+  - artifact: "decisions/0109-v3-record-content-independent-of-artifact-accessibility.md"
+    status: "updated"
+    note: "Introduces the accepted Record–Artifact boundary decision for the unreleased V3 candidate."
   - artifact: "scripts/v3_crud_engine.py, scripts/validate_v3_crud.py, scripts/validate_v3_crud_use_cases.py"
     status: "updated"
     note: "Requires non-empty Record prose in the canonical CRUD shape and updates sanitized CRUD fixtures."

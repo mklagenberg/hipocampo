@@ -8,6 +8,9 @@ change_set:
     - "decisions/0107-v3-constitutional-test-conformance.md"
 
 impact:
+  - artifact: "decisions/0107-v3-constitutional-test-conformance.md"
+    status: "updated"
+    note: "Introduces the accepted constitutional test conformance decision as part of the unreleased V3 candidate."
   - artifact: "docs/engines/deterministic-case-bindings.yaml"
     status: "updated"
     note: "Binds all matrix deterministic cases to command indexes and observable assertions."
