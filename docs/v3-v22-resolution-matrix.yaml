@@ -64,7 +64,7 @@ dispositions:
     v3_resolution: "Route drift through surface authority, compatibility, evidence and migration gates."
     disposition: "superseded"
     v3_authority: "docs/v3-surface-authority-contract.md, docs/v3-external-reference-policy.md, docs/v3-f0-contract.md"
-    residual_limit: "An explicit V3 drift registry and fixture cross-reference remains a preparation task."
+    residual_limit: "The V3 drift registry and fixture cross-reference are covered by docs/v3-contract-drift-registry.yaml; real-vault drift remains unobserved until an authorized preflight."
   - id: "0067-bounded-skill-recovery"
     v2_problem: "Skill recovery could overwrite a known-good installation or accept an unverified package."
     v3_resolution: "Retain verified package, lock, rollback and human-confirmed installation as a skill procedure."
