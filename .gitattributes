@@ -1,0 +1,28 @@
+# Store recognized text as LF in Git and in every working tree.
+* text=auto eol=lf
+
+# Windows command scripts use CRLF in working trees; Git stores normalized LF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Keep common binary formats out of text conversion and text diffs.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.zip binary
+*.xls binary
+*.xlsx binary
+*.xlsm binary
+*.xlsb binary
+*.xltx binary
+*.xltm binary
+*.xlam binary
+*.doc binary
+*.docx binary
+*.docm binary
+*.ppt binary
+*.pptx binary
+*.pptm binary

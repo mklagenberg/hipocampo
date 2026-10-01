@@ -1,0 +1,39 @@
+change_set:
+  id: "0120-cross-platform-repository-hygiene"
+  class: "operational"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0113-cross-platform-repository-hygiene.md"
+
+impact:
+  - artifact: ".gitignore"
+    status: "updated"
+    note: "Ignores generated Python and JavaScript artifacts, Excel lock/recovery files, and Windows/macOS filesystem metadata without excluding source, lockfiles, or workbooks."
+  - artifact: ".gitattributes"
+    status: "updated"
+    note: "Normalizes recognized text to LF, preserves CRLF checkout for Windows command scripts, and declares binary formats explicitly."
+  - artifact: "decisions/0113-cross-platform-repository-hygiene.md"
+    status: "updated"
+    note: "Records the durable repository-level EOL and generated-artifact policy, including preservation of management source paths."
+  - artifact: "SPEC.md, CHANGELOG.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, COMPATIBILITY.yaml"
+    status: "reviewed"
+    note: "No methodology contract, user behavior, released version, compatibility or adoption requirement changes."
+  - artifact: "knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "No vault, private capture or content record is in scope."
+
+validation:
+  commands:
+    - "git check-ignore -v <generated-artifact-fixtures>"
+    - "git check-attr text eol -- <text-and-binary-fixtures>"
+    - "git add --renormalize ."
+    - "git ls-files --eol"
+    - "python -B scripts/validate_change.py --root ."
+    - "python -B scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "git check-ignore and git check-attr output for positive/negative fixtures"
+    - "git ls-files --eol output and reviewed renormalization diff"
+    - "management SDD/link validation and preservation check"
+  notes: "The management source directories already opted out of normalization and remain untouched; this operational Change Set does not alter product behavior or release state."
