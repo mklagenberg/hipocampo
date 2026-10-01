@@ -1,0 +1,84 @@
+schema_version: "1.0"
+run_id: RUN-20260930-spd-constitutional-revalidation
+historical_revalidation: "v3-semantic-constitutional-revalidation.yaml"
+prior_search_review: "v3-search-progressive-disclosure-semantic-review.yaml"
+basis_file: "v3-constitutional-test-basis.yaml"
+review_policy:
+  passes: 2
+  privacy: sanitized-no-real-content
+  record_mutations: none
+  scope: "five human-confirmed Search semantic cases, compared with the preserved 28-case historical round"
+  semantic_limit: "constitutional compatibility and disposition traceability; not proof of factual truth or release approval"
+  pass_1: primary-constitutional-judgment
+  pass_2: adversarial-inference-and-boundary-challenge
+cases:
+  - case_id: SPD-S-001
+    review_id: SEM-SPD-001
+    prior_disposition: needs_review
+    primary_constitutional_judgment: compatible
+    primary_disposition: needs_review
+    primary_rationale: "Relevance remains independent from authority and epistemic status under Constitution 2.1, 2.7 and 2.8; the existing decision preserves the conflict."
+    adversarial_constitutional_judgment: compatible
+    adversarial_disposition: needs_review
+    adversarial_rationale: "A high rank or apparent usefulness cannot be used to bypass unknown authority or convert unresolved evidence into settled knowledge."
+    final_constitutional_judgment: compatible
+    final_disposition: needs_review
+    delta: unchanged
+    diagnosis: "Both passes preserve the human-confirmed disposition; no constitutional conflict or unsupported authority inference was found."
+    mutation: none
+  - case_id: SPD-S-002
+    review_id: SEM-SPD-002
+    prior_disposition: blocked
+    primary_constitutional_judgment: compatible
+    primary_disposition: blocked
+    primary_rationale: "Without explicit expansion authorization, the request cannot exceed its authorized disclosure boundary; Constitution 2.9 and section 3 apply."
+    adversarial_constitutional_judgment: compatible
+    adversarial_disposition: blocked
+    adversarial_rationale: "Relevance, recency or matching terms cannot imply consent or disclosure permission; blocking expansion does not require blocking safe bounded metadata."
+    final_constitutional_judgment: compatible
+    final_disposition: blocked
+    delta: unchanged
+    diagnosis: "Both passes preserve the human-confirmed fail-closed disposition without broadening the block beyond the unauthorized expansion."
+    mutation: none
+  - case_id: SPD-S-003
+    review_id: SEM-SPD-003
+    prior_disposition: partial
+    primary_constitutional_judgment: compatible
+    primary_disposition: partial
+    primary_rationale: "Readable persisted Record prose can remain available with a partial freshness boundary; provenance and uncertainty remain visible under Constitution 2.1, 2.2 and 2.8."
+    adversarial_constitutional_judgment: compatible
+    adversarial_disposition: partial
+    adversarial_rationale: "An Artifact access check cannot be represented as a content-read time; no Artifact reconstruction, fabricated timestamp or claim of currentness is allowed."
+    final_constitutional_judgment: compatible
+    final_disposition: partial
+    delta: unchanged
+    diagnosis: "Both passes preserve the human-confirmed partial result and its observed-version boundary; Record readability is not confused with Artifact verification."
+    mutation: none
+  - case_id: SPD-S-004
+    review_id: SEM-SPD-004
+    prior_disposition: needs_review
+    primary_constitutional_judgment: compatible
+    primary_disposition: needs_review
+    primary_rationale: "Entity, authorized vault and knowledge-scope boundaries govern eligibility; same-term candidates inside scope retain separate provenance under Constitution 2.4, 2.5 and 2.9."
+    adversarial_constitutional_judgment: compatible
+    adversarial_disposition: needs_review
+    adversarial_rationale: "Lexical similarity, ranking, recency or shared storage cannot create common governance or justify disclosing excluded candidates or merging eligible Records."
+    final_constitutional_judgment: compatible
+    final_disposition: needs_review
+    delta: unchanged
+    diagnosis: "Both passes preserve separate eligible candidates and review-bound combined interpretation; no cross-entity or out-of-scope permission is inferred."
+    mutation: none
+  - case_id: SPD-S-005
+    review_id: SEM-SPD-005
+    prior_disposition: needs_review
+    primary_constitutional_judgment: compatible
+    primary_disposition: needs_review
+    primary_rationale: "Explicit authorization can permit L4 disclosure while preserving source provenance and epistemic conflict under Constitution 2.2, 2.5, 2.7, 2.8 and 2.9."
+    adversarial_constitutional_judgment: compatible
+    adversarial_disposition: needs_review
+    adversarial_rationale: "Operation status accepted must not become knowledge acceptance; no source is selected, merged or presented as a settled conclusion, and privacy/scope/read gates remain independent."
+    final_constitutional_judgment: compatible
+    final_disposition: needs_review
+    delta: unchanged
+    diagnosis: "Both passes preserve the human-confirmed disposition; disclosure permission and unresolved interpretation remain separate."
+    mutation: none

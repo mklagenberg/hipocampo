@@ -10,6 +10,12 @@ REM-pending local receipt, privacy-bounded transparency, and deterministic
 backward/forward Package auditing. These additions remain an unreleased V3
 candidate and do not activate V3 for existing instances.
 
+The Search & Progressive Disclosure candidate adds a bounded read-side engine
+with explicit `L0`–`L4` disclosure levels, independent relevance/authority/
+privacy/epistemic dimensions and prose-first presentation. Its contract is in
+`docs/v3-search-progressive-disclosure-contract.md`; it remains local and
+read-only until a later host and authorization gate.
+
 ## Record and Chunk metadata
 
 The V3 Record or Chunk envelope may carry these independent fields:
@@ -31,6 +37,13 @@ provenance:
   observed_at: "YYYY-MM-DDThh:mm:ssZ"
   source_hash: "optional sha256"
 ```
+
+The Record body is the durable content-bearing representation and must be
+stored as non-empty prose. When a Record refers to an Artifact, the Artifact
+metadata and representation preserve provenance and support later verification;
+they do not replace, reconstruct or become a prerequisite for reading the
+persisted Record prose. Artifact availability is therefore independent from
+Record readability.
 
 The unreleased V3 governance envelope may additionally carry:
 

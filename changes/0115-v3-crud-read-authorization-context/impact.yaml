@@ -1,0 +1,44 @@
+change_set:
+  id: "0115-v3-crud-read-authorization-context"
+  class: "normative"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0108-v3-search-progressive-disclosure.md"
+
+impact:
+  - artifact: "scripts/v3_crud_engine.py"
+    status: "updated"
+    note: "Requires explicit authorized vault scope on the public Read boundary and denies omitted or empty context."
+  - artifact: "scripts/validate_v3_crud_use_cases.py, docs/v3-crud-use-case-fixtures.yaml"
+    status: "updated"
+    note: "Adds executable negative cases for Read without authorization context and with an empty scope."
+  - artifact: "docs/v3-crud-contract.md, docs/engines/test-matrix.yaml, docs/engines/deterministic-case-bindings.yaml"
+    status: "updated"
+    note: "States and binds the fail-closed Read requirement."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Records the unreleased V3 candidate correction and its host-enforcement limit."
+  - artifact: "SPEC.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, conformance/moda.yaml, moda.yaml"
+    status: "reviewed"
+    note: "No released contract, instance migration, host integration, or MODA claim is changed."
+  - artifact: "knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "Only sanitized in-memory fixtures are used."
+
+validation:
+  commands:
+    - "python -B scripts/validate_v3_crud_use_cases.py --root ."
+    - "python -B scripts/validate_v3_crud.py --root ."
+    - "python -B scripts/validate_v3_search_progressive_disclosure.py --root ."
+    - "python -B scripts/validate_v3_engine_suite.py --root ."
+    - "python -B scripts/validate_change.py --root ."
+    - "python -B scripts/validate_hipocampo.py --root ."
+    - "python -B scripts/validate_contracts.py --root ."
+  evidence:
+    - "scripts/v3_crud_engine.py"
+    - "scripts/validate_v3_crud_use_cases.py"
+    - "docs/v3-crud-use-case-fixtures.yaml"
+    - "docs/engines/deterministic-case-bindings.yaml"
+  notes: "Local V3 candidate validation only; no actor authentication, host enforcement, vault access, migration, publication or release is performed."

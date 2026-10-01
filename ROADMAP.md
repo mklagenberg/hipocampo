@@ -1,6 +1,6 @@
 # Roadmap
 
-Last revised: **2026-09-08**
+Last revised: **2026-09-30**
 
 This roadmap communicates direction, not a date commitment. Only an approved release plan or formal milestone creates a delivery commitment. Detailed work lives in Decision Records and PRs; completed work lives in `CHANGELOG.md`.
 
@@ -18,16 +18,20 @@ remains fail-closed when authority, conciliation, privacy or staleness is not
 resolved. General derived projections remain deferred by the accepted V3
 decision on derived layers. MRL-0005 now adds a single canonical vocabulary,
 local vault extensions, English structural language, explicit offline
-authority, and labelled external references.
+authority, and labelled external references. Change Set 0108 adds the logical
+Search & Progressive Disclosure boundary: relevance does not grant authority
+or disclosure, and the default presentation remains didactic prose.
 
 **Status:** X3 and X4 are complete in the checkout. D5.1–D5.6 are accepted,
 MRL-0005/X5, MRL-0006/X6 and F0 are implemented as unreleased V3 candidates.
 No v2 instance migration, remote transport, tag, release or V3 activation has
 occurred.
 
-**Next direction:** validate the F0 closure, then prepare migration v2 → v3,
-the LTE gate and the human publication gate. These remain subsequent
-management stages.
+**Next direction:** F0 is closed in the local candidate. Prepare and validate
+the v2 → v3 migration, then pass the integrated LTE readiness gate and the
+human publication gate. The semantic Search cases and current local changes
+must also complete their human review and normal integration path. No real
+vault migration, V3 activation or publication has been authorized or performed.
 
 MRL-0006 decisions D6.1–D6.5 and F0 decisions D0.1–D0.4 are accepted in
 management. X6 and F0 candidate contracts are implemented and validated in the

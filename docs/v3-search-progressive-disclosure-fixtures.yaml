@@ -1,0 +1,109 @@
+schema_version: "1.0"
+fixture_policy:
+  kind: search-progressive-disclosure-contract
+  privacy: sanitized-no-real-content
+  status: unreleased-v3-preparation
+  mutation: none
+  validator_limit: "contract envelope only; relevance, authority and semantic adequacy remain reviewed"
+levels: [L0, L1, L2, L3, L4]
+cases:
+  - id: reject-unauthorized-expansion
+    requested_disclosure: L4
+    explicit_expansion_authorization: false
+    expected_disposition: blocked
+    expected_disclosure_level: L0
+    mutation: none
+  - id: preserve-independent-dimensions
+    requested_disclosure: L3
+    explicit_expansion_authorization: false
+    relevance: high
+    authority: unknown
+    privacy: allowed
+    epistemic_status: unresolved-conflict
+    expected_disposition: needs_review
+    expected_disclosure_level: L2
+    mutation: none
+  - id: prose-default
+    requested_disclosure: L2
+    explicit_expansion_authorization: false
+    presentation: prose-default
+    expected_disposition: partial
+    expected_disclosure_level: L2
+    mutation: none
+  - id: structured-only-on-request
+    requested_disclosure: L2
+    explicit_expansion_authorization: false
+    presentation: structured-on-request
+    explicit_structured_request: true
+    expected_disposition: accepted
+    expected_disclosure_level: L2
+    mutation: none
+  - id: require-bounded-request-context
+    missing_fields: [knowledge_scope]
+    expected_disposition: blocked
+    expected_disclosure_level: L0
+    mutation: none
+  - id: block-unauthorized-vault-scope
+    vault_scope: [vault-b]
+    authorized_vault_ids: [vault-a]
+    expected_disposition: blocked
+    expected_disclosure_level: L0
+    mutation: none
+  - id: preserve-authorized-expansion
+    requested_disclosure: L4
+    explicit_expansion_authorization: true
+    expected_disposition: accepted
+    expected_disclosure_level: L4
+    mutation: none
+  - id: preserve-authorized-conflict-at-L4
+    requested_disclosure: L4
+    explicit_expansion_authorization: true
+    epistemic_status: unresolved-conflict
+    expected_disposition: accepted
+    expected_interpretation_status: needs_review
+    expected_disclosure_level: L4
+    expected_candidate_count: 2
+    expected_provenance: separate-per-record
+    merged_conclusion: none
+    mutation: none
+  - id: limit-stale-source
+    requested_disclosure: L3
+    staleness: stale
+    expected_disposition: partial
+    expected_disclosure_level: L2
+    mutation: none
+  - id: block-restricted-content
+    requested_disclosure: L3
+    explicit_expansion_authorization: true
+    visibility: restricted
+    privacy: blocked
+    expected_disposition: blocked
+    expected_disclosure_level: L1
+    mutation: none
+  - id: preserve-record-prose-with-inaccessible-artifact
+    requested_disclosure: L3
+    explicit_expansion_authorization: true
+    artifact_accessibility: unavailable
+    observed_at: "2026-09-20T12:00:00Z"
+    expected_disposition: partial
+    expected_disclosure_level: L3
+    expected_presentation: "state the observed version date and that later updates were not verified or reflected; do not say the Artifact is unavailable"
+    mutation: none
+  - id: block-inaccessible-record-content
+    requested_disclosure: L3
+    record_accessibility: unavailable
+    expected_disposition: blocked
+    expected_disclosure_level: L0
+    mutation: none
+  - id: keep-scope-collision-candidates-separate
+    query_term: "delta"
+    requested_entity: entity-a
+    vault_scope: [vault-a, vault-b]
+    authorized_vault_ids: [vault-a, vault-b]
+    knowledge_scope: scope-a
+    out_of_scope_matches: [entity-b, scope-b]
+    expected_disposition: needs_review
+    expected_disclosure_level: L2
+    expected_candidate_count: 2
+    merge: none
+    mutation: none

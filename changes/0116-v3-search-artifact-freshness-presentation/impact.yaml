@@ -1,0 +1,47 @@
+change_set:
+  id: "0116-v3-search-artifact-freshness-presentation"
+  class: "normative"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0110-v3-search-artifact-freshness-presentation.md"
+
+impact:
+  - artifact: "decisions/0110-v3-search-artifact-freshness-presentation.md"
+    status: "updated"
+    note: "Introduces the accepted Search freshness presentation decision for the unreleased V3 candidate."
+  - artifact: "docs/v3-artifact-contract.md, docs/v3-search-progressive-disclosure-contract.md"
+    status: "updated"
+    note: "Defines observed_at as source-version observation and separates it from checked_at; documents freshness wording and its missing-date fallback."
+  - artifact: "scripts/v3_search_engine.py, scripts/validate_v3_search_progressive_disclosure.py"
+    status: "updated"
+    note: "Renders observation-date boundary in default prose while preserving the structured internal access limit; adds dated and undated cases."
+  - artifact: "docs/v3-search-progressive-disclosure-fixtures.yaml, docs/v3-search-progressive-disclosure-semantic-review.yaml, docs/v3-constitutional-test-basis.yaml, docs/engines/deterministic-case-bindings.yaml"
+    status: "updated"
+    note: "Binds the accepted SPD-S-003 wording, disposition, constitutional basis and deterministic expectation."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Records the unreleased candidate presentation clarification."
+  - artifact: "SPEC.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, conformance/moda.yaml, moda.yaml"
+    status: "reviewed"
+    note: "No released behavior, host adapter or MODA conformance claim changes."
+  - artifact: "knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "Only sanitized in-memory fixtures are used; no real vault or Artifact is read."
+
+validation:
+  commands:
+    - "python -B scripts/validate_v3_search_progressive_disclosure.py --root ."
+    - "python -B scripts/validate_v3_search_progressive_disclosure_review.py --root ."
+    - "python -B scripts/validate_v3_constitutional_conformance.py --root ."
+    - "python -B scripts/validate_v3_engine_suite.py --root ."
+    - "python -B scripts/validate_change.py --root ."
+    - "python -B scripts/validate_hipocampo.py --root ."
+    - "python -B scripts/validate_contracts.py --root ."
+  evidence:
+    - "scripts/v3_search_engine.py"
+    - "scripts/validate_v3_search_progressive_disclosure.py"
+    - "docs/v3-search-progressive-disclosure-fixtures.yaml"
+    - "docs/v3-search-progressive-disclosure-semantic-review.yaml"
+  notes: "Local sanitized V3 candidate validation only; no Artifact fetching, host integration, real-vault access, migration or publication."

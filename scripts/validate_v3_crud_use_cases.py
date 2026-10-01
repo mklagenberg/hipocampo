@@ -43,6 +43,7 @@ def base_record(record_id: str = "rec-001", *, staleness: str = "current", curre
         "source": {"source_id": "source-001", "source_kind": "conversation", "entity": "entity-a"},
         "vault": {"vault_id": "vault-a", "entity": "entity-a", "profile": "entity", "role": "anchor"},
         "governance": {"owner": "owner-001", "authority": "authority-001"},
+        "content": "This sanitized Record preserves governed knowledge in prose.",
         "physical_path": f"records/{record_id}.md",
         "status": "active",
         "visibility": "internal",
@@ -86,8 +87,8 @@ def main() -> int:
     fixture = yaml.safe_load((root / "docs/v3-crud-use-case-fixtures.yaml").read_text(encoding="utf-8"))
     errors: list[str] = []
     cases = fixture.get("cases", [])
-    if len(cases) != 18:
-        errors.append("expected eighteen CRUD use-case fixtures")
+    if len(cases) != 21:
+        errors.append("expected twenty-one CRUD use-case fixtures")
 
     crud = RecordCrud(ACTIVE_COLLECTIONS)
     mcp = McpCrudAdapter(crud)
@@ -97,13 +98,25 @@ def main() -> int:
     if created["status"] != "accepted" or created["transport"] != "mcp" or len(crud.events) != 1:
         errors.append("UC-CRUD-03: valid create did not cross MCP and CRUD exactly once")
 
-    before_read = deepcopy(crud.read("rec-001"))
+    before_read = deepcopy(crud.read("rec-001", authorized_vault_ids=["vault-a"]))
     read = mcp.call({"operation": "read", "record_id": "rec-001", "actor": {"authorized_vault_ids": ["vault-a"]}})
     if read["record"] != before_read or len(crud.events) != 1:
         errors.append("UC-CRUD-01: authorized read mutated the Record or event stream")
     expect_error(
         lambda: mcp.call({"operation": "read", "record_id": "rec-001", "actor": {"authorized_vault_ids": ["vault-other"]}}),
         "UC-CRUD-02 unauthorized read", errors, McpCrudError,
+    )
+    expect_error(
+        lambda: mcp.call({"operation": "read", "record_id": "rec-001"}),
+        "UC-CRUD-19 read without authorization context", errors, McpCrudError,
+    )
+    expect_error(
+        lambda: mcp.call({"operation": "read", "record_id": "rec-001", "actor": {"authorized_vault_ids": []}}),
+        "UC-CRUD-20 read with empty authorization scope", errors, McpCrudError,
+    )
+    expect_error(
+        lambda: crud.read("rec-001"),
+        "UC-CRUD-21 direct CRUD read without authorization context", errors, ContractError,
     )
 
     invalid = base_record("rec-invalid")
@@ -131,7 +144,7 @@ def main() -> int:
         "actor": "curator-001", "reason": "identity change", "idempotency_key": "update-identity",
     }), "UC-CRUD-08 immutable identity", errors, McpCrudError)
 
-    proposed = artifact_update(crud.read("rec-001"), "art-001", 2)
+    proposed = artifact_update(crud.read("rec-001", authorized_vault_ids=["vault-a"]), "art-001", 2)
     artifact_update_result = mcp.call({
         "operation": "update", "record_id": "rec-001", "expected_version": 2,
         "patch": {"artifacts": proposed["artifacts"]}, "semantic_review": review("rec-001"),
@@ -202,7 +215,7 @@ def main() -> int:
         for error in errors:
             print(f"  [FAIL] {error}")
         return 1
-    print("validate_v3_crud_use_cases: OK — 18 MCP CRUD use cases, semantic gates, version control, audit and bypass blocking")
+    print(f"validate_v3_crud_use_cases: OK — {len(cases)} MCP CRUD use cases, semantic gates, version control, audit and bypass blocking")
     return 0
 
 

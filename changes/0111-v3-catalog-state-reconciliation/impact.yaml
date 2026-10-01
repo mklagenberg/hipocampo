@@ -1,0 +1,36 @@
+change_set:
+  id: "0111-v3-catalog-state-reconciliation"
+  class: "operational"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0108-v3-search-progressive-disclosure.md"
+
+impact:
+  - artifact: "docs/engines/catalog.md"
+    status: "updated"
+    note: "Names the implemented local Search runtime and preserves the separate MCP/host integration boundary."
+  - artifact: "scripts/v3_search_engine.py, changes/0109-v3-search-progressive-disclosure-runtime, changes/0110-v3-search-progressive-disclosure-test-reinforcement"
+    status: "reviewed"
+    note: "Existing implementation and test reinforcement were reconciled; behavior was not changed."
+  - artifact: "SPEC.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, conformance/moda.yaml, moda.yaml"
+    status: "reviewed"
+    note: "No released contract, migration, skill, scaffold or MODA-claim change is authorized."
+  - artifact: "knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "No vault, cache or private artifact was read or changed."
+
+validation:
+  commands:
+    - "python -B scripts/validate_v3_engine_catalog.py --root ."
+    - "python -B scripts/validate_v3_engine_suite.py --root ."
+    - "python -B scripts/validate_change.py --root ."
+    - "python -B scripts/validate_hipocampo.py --root ."
+    - "python -B scripts/validate_contracts.py --root ."
+  evidence:
+    - "scripts/v3_search_engine.py"
+    - "docs/engines/catalog.md"
+    - "changes/0109-v3-search-progressive-disclosure-runtime"
+    - "changes/0110-v3-search-progressive-disclosure-test-reinforcement"
+  notes: "Local unreleased V3 candidate only; no deploy, release, remote write, vault read or MCP integration."

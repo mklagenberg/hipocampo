@@ -6,11 +6,13 @@ review_policy:
   corpus_mode: "authorized-local-cache-read-only"
   passes: 2
   semantic_limit: "the package records reviewed dispositions; it does not make semantic truth deterministic"
+  constitutional_basis_file: "v3-constitutional-test-basis.yaml"
 
 scope_reconciliation:
-  matrix_cases_before: 22
+  matrix_cases_before: 24
   engine_specific_learning_cases: 4
-  canonical_case_count: 24
+  constitutional_edge_cases: 4
+  canonical_case_count: 28
   corrected_conflicts:
     - "LEARN-S-001 changed from accepted to needs_review because recurrence is a review signal, not proof of a new valid rule"
     - "LEARN-S-003 added to the canonical matrix"
@@ -70,3 +72,8 @@ cases:
   - {review_id: SEM-LEARN-002, lot: 4, engine: learning-evolution, fixture: decision-candidate, source_refs: [personal-anchor-research-error-log, fixture:decision-candidate], primary_disposition: needs_review, adversarial_disposition: needs_review, final_disposition: needs_review, decision_basis: "a lesson can indicate a bug, documentation gap or new capability; ownership requires semantic review", negative_behavior_checked: "turning a lesson directly into a contract change", mutation: none}
   - {review_id: SEM-LEARN-003, lot: 4, engine: learning-evolution, fixture: reported-not-confirmed, source_refs: [personal-anchor-research-error-log, fixture:reported-not-confirmed], primary_disposition: rework_required, adversarial_disposition: rework_required, final_disposition: rework_required, decision_basis: "a false positive that implicates the contract requires rework before a new case can be accepted", negative_behavior_checked: "patching the test expectation without reviewing the contract", mutation: none}
   - {review_id: SEM-LEARN-004, lot: 4, engine: learning-evolution, fixture: inaccessible-artifact, source_refs: [personal-anchor-ingress-handover, fixture:inaccessible-artifact], primary_disposition: blocked, adversarial_disposition: blocked, final_disposition: blocked, decision_basis: "an incident touching privacy or governance cannot become a learning candidate until its access frontier is reviewed", negative_behavior_checked: "retaining sensitive incident content in the learning signal", mutation: none}
+
+  - {review_id: SEM-CRUD-003, lot: 5, engine: crud, fixture: constitutional-rule-without-exception, source_refs: [fixture:constitutional-rule-without-exception], primary_disposition: blocked, adversarial_disposition: blocked, final_disposition: blocked, decision_basis: "a specific rule cannot bypass CRUD or contradict the Constitution without an accepted scoped exception Decision Record", negative_behavior_checked: "inferring an exception from operational convenience", mutation: none}
+  - {review_id: SEM-GOV-003, lot: 5, engine: governance, fixture: bounded-constitutional-exception, source_refs: [fixture:bounded-constitutional-exception], primary_disposition: needs_review, adversarial_disposition: needs_review, final_disposition: needs_review, decision_basis: "the exception envelope is reviewable but semantic legitimacy, risk acceptance and scope cannot be automated", negative_behavior_checked: "generalizing a bounded exception by analogy", mutation: none}
+  - {review_id: SEM-GOV-004, lot: 5, engine: governance, fixture: constitutional-amendment-rejudgment, source_refs: [fixture:constitutional-amendment-rejudgment], primary_disposition: needs_review, adversarial_disposition: needs_review, final_disposition: needs_review, decision_basis: "a constitutional amendment creates a rejudgment obligation and blocks new use until affected rules are adjudicated", negative_behavior_checked: "silently retaining or deleting an affected rule", mutation: none}
+  - {review_id: SEM-LEARN-005, lot: 5, engine: learning-evolution, fixture: exception-by-analogy, source_refs: [fixture:exception-by-analogy], primary_disposition: blocked, adversarial_disposition: blocked, final_disposition: blocked, decision_basis: "learning cannot broaden an exception beyond its Decision Record scope", negative_behavior_checked: "expanding an exception through analogy", mutation: none}

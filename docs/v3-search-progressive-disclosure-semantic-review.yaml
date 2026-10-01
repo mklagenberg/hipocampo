@@ -1,0 +1,54 @@
+schema_version: "1.0"
+review_policy:
+  kind: candidate-semantic-review
+  privacy: sanitized-no-real-content
+  mutation: none
+  reviewer: agent-adversarial-pass
+  human_confirmation: required
+  semantic_limit: "agent reasoning preserves uncertainty; only human review can close the pending V3 cases"
+cases:
+  - review_id: SEM-SPD-001
+    case_id: SPD-S-001
+    fixture_ref: "v3-semantic-fixtures.yaml#search-ranking-vs-epistemic-state"
+    agent_disposition: needs_review
+    human_confirmation: confirmed
+    confirmation_basis: "FF-DEC-0067; operator selected alternative A on 2026-09-15"
+    rationale: "High lexical or semantic relevance is insufficient to establish contextual authority or resolve an epistemic conflict."
+    negative_behavior_checked: "A ranked result was not presented as settled knowledge."
+    mutation: none
+  - review_id: SEM-SPD-002
+    case_id: SPD-S-002
+    fixture_ref: "v3-semantic-fixtures.yaml#disclosure-without-authorization"
+    agent_disposition: blocked
+    human_confirmation: confirmed
+    confirmation_basis: "FF-DEC-0068; operator selected alternative A on 2026-09-15"
+    rationale: "Disclosure escalation is not authorized by relevance, recency or a matching term."
+    negative_behavior_checked: "The request was blocked without inferring permission."
+    mutation: none
+  - review_id: SEM-SPD-003
+    case_id: SPD-S-003
+    fixture_ref: "v3-semantic-fixtures.yaml#record-content-with-inaccessible-artifact"
+    agent_disposition: partial
+    human_confirmation: confirmed
+    confirmation_basis: "FF-DEC-0070; operator accepted alternative A with an observation-date message on 2026-09-30"
+    rationale: "Persisted Record prose remains available as a partial result; user-facing prose states the observed version date and that later updates were not verified or reflected, while the structured result retains the internal Artifact access limit."
+    negative_behavior_checked: "Record prose was not blocked or reconstructed; no availability label or fabricated observation date was shown to the user."
+    mutation: none
+  - review_id: SEM-SPD-004
+    case_id: SPD-S-004
+    fixture_ref: "v3-semantic-fixtures.yaml#search-scope-collision"
+    agent_disposition: needs_review
+    human_confirmation: confirmed
+    confirmation_basis: "FF-DEC-0071; operator accepted alternative A on 2026-09-30"
+    rationale: "Out-of-scope candidates are excluded; eligible candidates from authorized vaults remain distinct and require semantic review rather than being merged based on a shared term."
+    negative_behavior_checked: "The local runtime returned each in-scope candidate separately and excluded candidates from another entity or knowledge scope."
+    mutation: none
+  - review_id: SEM-SPD-005
+    case_id: SPD-S-005
+    fixture_ref: "v3-semantic-fixtures.yaml#authorized-expansion-with-unresolved-conflict"
+    agent_disposition: needs_review
+    human_confirmation: confirmed
+    confirmation_basis: "FF-DEC-0072; operator accepted alternative A on 2026-09-30"
+    rationale: "Explicit authorization permits the requested disclosure level; each Record keeps its own provenance and unresolved epistemic state, while any combined interpretation remains needs_review. Operation acceptance is not knowledge acceptance."
+    negative_behavior_checked: "Two conflicting Records were returned separately at L4 with distinct evidence references; the operation status was accepted while interpretation_status remained needs_review and prose stated that no conclusion was consolidated."
+    mutation: none

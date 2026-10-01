@@ -22,6 +22,11 @@ Maintenance and Verification
         ^
         |
 Learning & Evolution <--- events, audits, validator results and lessons
+
+Search & Progressive Disclosure <--- bounded read request
+        |              |
+        v              v
+   Record CRUD     Governance / semantic review
 ```
 
 Rules:
@@ -38,6 +43,8 @@ Rules:
   by itself.
 - Learning & Evolution reads bounded signals and reviewed lessons to propose
   cases; it does not activate behavior or write Records.
+- Search & Progressive Disclosure is read-only: it may request a governed CRUD
+  read, but never mutates a Record or treats relevance as authority or access.
 
 The graph deliberately leaves semantic review as a gate rather than making it a
 hidden dependency inside deterministic code.

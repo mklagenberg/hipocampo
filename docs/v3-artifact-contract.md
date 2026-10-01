@@ -14,6 +14,7 @@ artifact:
   source_kind: "url | conversation | internal | external-storage"
   source_hash: "sha256-of-referenced-version"
   accessibility: "available | unavailable | restricted"
+  observed_at: "2026-09-05T12:00:00Z"
   checked_at: "2026-09-05T12:00:00Z"
   visibility: "internal"
   external_destination:
@@ -23,6 +24,11 @@ artifact:
 
 `external_destination` is a reference only. It is not a connector, a
 credential, an authorization grant, or proof that the object can be fetched.
+`observed_at` records the latest successful read/observation of the exact
+content version represented in the Record. `checked_at` records only when
+accessibility was checked; it must not be presented as the content's last-read
+time.
+`observed_at` must be a valid ISO-8601 timestamp with timezone information.
 
 ## Provenance index
 
@@ -55,6 +61,9 @@ kind, hash when available, authorship when known, relevant dates, accessibility,
 visibility and limitations. A Record or Chunk should reference the compact
 `artifact_id`, version and relevant role; it need not repeat the complete
 provenance entry.
+For Search presentation, `observed_at` identifies the latest successful
+observation of the source version represented by the Record. If it is absent,
+the date is unknown and must not be inferred from `checked_at`.
 
 The index may refine the envelope's broad `external-storage` source kind into
 the provider-specific values shown above (`google-drive`, `onedrive`, `s3`,
@@ -67,7 +76,9 @@ gateway is a separate capability and does not follow from this index contract.
 
 ## Material representation
 
-When `semantic_required: true`, the Record link must carry a representation:
+Every Record linked to an Artifact must carry a material prose representation
+of the represented content. The Artifact link is never a substitute for the
+Record body:
 
 ```yaml
 artifact_link:
@@ -75,9 +86,9 @@ artifact_link:
   role: "evidence"
   version: 1
   source_hash: "sha256-of-referenced-version"
-  semantic_required: true
   representation:
     kind: "summary"
+    format: "prose"
     content: "Sanitized minimal representation of the relevant contribution."
     artifact_version: 1
     artifact_hash: "sha256-of-referenced-version"
@@ -87,11 +98,12 @@ artifact_link:
 ```
 
 Allowed representation kinds are `summary`, `excerpt`, `transcription`,
-`preview`, `structured_description`, and `manifest`. The content must be
-present when the Artifact is semantically necessary, but need not reproduce
-the full Artifact. The representation must identify the exact Artifact
-version/hash it describes and keep a limitation visible when the original is
-unavailable, restricted, partial, or externally hosted.
+`preview`, `structured_description`, and `manifest`. Every kind carries
+`format: prose`; structured metadata or a manifest may accompany the prose but
+cannot replace it. The prose need not reproduce the full Artifact. It must
+identify the exact Artifact version/hash it describes and keep a limitation
+visible when the original is unavailable, restricted, partial, or externally
+hosted.
 
 ## Provenance and privacy rules
 
@@ -105,9 +117,10 @@ unavailable, restricted, partial, or externally hosted.
   `available` from a URI or hash;
 - an Artifact version change marks divergence/review-required and never
   silently updates the Record or its representation;
-- reconstructing the version used by a Record resolves the linked version and
-  verifies its hash when a hash is recorded; mismatch or unavailability blocks
-  reconstruction;
+- reconstructing the version used by a Record is an optional audit or
+  revalidation operation; it resolves the linked version and verifies its hash
+  when a hash is recorded, while mismatch or unavailability blocks only that
+  reconstruction operation and never Record reading;
 - provenance retains source reference, capture/generation time, version/hash,
   availability, and known limitations without copying restricted source
   material.

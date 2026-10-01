@@ -12,6 +12,7 @@ from v3_artifact_engine import (
     ArtifactContractError,
     mark_divergence,
     reconstruct_used_version,
+    read_record_prose,
     source_hash,
     update_artifact,
     validate_record_artifacts,
@@ -33,8 +34,8 @@ def main() -> int:
     root = Path(args.root).resolve()
     fixture = yaml.safe_load((root / "docs/v3-artifact-fixtures.yaml").read_text(encoding="utf-8"))
     errors: list[str] = []
-    if len(fixture.get("cases", [])) != 10:
-        errors.append("expected ten Artifact fixtures")
+    if len(fixture.get("cases", [])) != 11:
+        errors.append("expected eleven Artifact fixtures")
 
     digest = source_hash("sanitized artifact version one")
     artifact = {
@@ -45,11 +46,12 @@ def main() -> int:
     }
     record = {
         "record_id": "rec-001", "visibility": "internal",
+        "content": "The sanitized Record preserves the Artifact contribution in prose.",
         "artifacts": [{
             "artifact_id": "art-001", "role": "evidence", "version": 1,
-            "source_hash": digest, "semantic_required": True,
+            "source_hash": digest,
             "representation": {
-                "kind": "summary", "content": "Sanitized representation only.",
+                "kind": "summary", "format": "prose", "content": "Sanitized representation only.",
                 "artifact_version": 1, "artifact_hash": digest,
                 "generated_at": "2026-09-05T12:00:00Z", "visibility": "internal",
             },
@@ -67,6 +69,11 @@ def main() -> int:
 
     missing = deepcopy(record)
     expect_block(lambda: validate_record_artifacts(missing, {}), "missing Artifact", errors)
+    try:
+        if read_record_prose(missing) != record["content"]:
+            errors.append("Record prose changed while Artifact resolution was unavailable")
+    except ArtifactContractError as exc:
+        errors.append(f"Record prose was incorrectly coupled to Artifact resolution: {exc}")
 
     artifact_v2 = update_artifact(artifact, version=2, content_hash=source_hash("sanitized artifact version two"))
     diverged = mark_divergence(record, artifact_v2)
@@ -106,12 +113,16 @@ def main() -> int:
     mismatched["artifacts"][0]["source_hash"] = source_hash("different")
     expect_block(lambda: validate_record_artifacts(mismatched, {"art-001": artifact}), "divergent hash", errors)
 
+    no_format = deepcopy(record)
+    no_format["artifacts"][0]["representation"].pop("format")
+    expect_block(lambda: validate_record_artifacts(no_format, {"art-001": artifact}), "non-prose representation", errors)
+
     if errors:
         print(f"validate_v3_artifacts: FAILED — {len(errors)} error(s)")
         for error in errors:
             print(f"  [FAIL] {error}")
         return 1
-    print("validate_v3_artifacts: OK — representation, hashes, version drift, access limits, and reconstruction")
+    print("validate_v3_artifacts: OK — prose Record content, Artifact limits, hashes, version drift, and audit reconstruction")
     return 0
 
 
