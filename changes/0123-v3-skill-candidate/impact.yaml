@@ -8,9 +8,12 @@ change_set:
     - "decisions/0115-isolated-v3-skill-candidate.md"
 
 impact:
-  - artifact: "candidates/skill-v3/SKILL.md, candidates/skill-v3/manifest.yaml, candidates/skill-v3/package-lock.yaml, candidates/skill-v3/references/"
+  - artifact: "candidates/skill-v3/SKILL.md, candidates/skill-v3/manifest.yaml, candidates/skill-v3/package-lock.yaml, candidates/skill-v3/agents/openai.yaml, candidates/skill-v3/references/codex.md, candidates/skill-v3/references/crud-frontmatter.md, candidates/skill-v3/references/instanciacao.md, candidates/skill-v3/references/instantiation.md, candidates/skill-v3/references/invariantes.md, candidates/skill-v3/references/invariants.md, candidates/skill-v3/references/personalizacao.md, candidates/skill-v3/references/personalization.md, candidates/skill-v3/references/rotinas.md, candidates/skill-v3/references/routines.md, candidates/skill-v3/references/v3-operation.md"
     status: "updated"
     note: "Adds a complete unreleased skill candidate for the V3.0.0 baseline while leaving the V2 release package untouched."
+  - artifact: "decisions/0115-isolated-v3-skill-candidate.md"
+    status: "updated"
+    note: "Records the proposed isolation boundary for an unreleased V3 candidate pending human review."
   - artifact: "docs/v3-skill-conformance-ai-review.yaml, docs/v3-skill-conformance-gate.md, scripts/validate_v3_skill_conformance.py"
     status: "updated"
     note: "Records the primary AI semantic review and binds coverage, per-case evidence, timestamps and package integrity to the exact candidate; separate AI challenge and human decision remain blocked."
