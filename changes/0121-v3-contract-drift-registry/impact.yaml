@@ -1,0 +1,40 @@
+change_set:
+  id: "0121-v3-contract-drift-registry"
+  class: "operational"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0058-canonical-compatibility-contract.md"
+    - "decisions/0088-v3-surface-authority-and-external-references.md"
+    - "decisions/0097-v3-f0-typed-outcomes-and-contextual-blocking.md"
+    - "decisions/0098-v3-supersession-and-v22-resolution.md"
+    - "decisions/0100-v3-synthetic-vault-inventory-gate.md"
+
+impact:
+  - artifact: "docs/v3-contract-drift-registry.yaml"
+    status: "updated"
+    note: "Cross-references five existing classifications to migration-relevant V3 surfaces, accepted authorities, fixture outcomes and validators."
+  - artifact: "docs/contract-drift-procedure.md, docs/v3-v22-resolution-matrix.yaml"
+    status: "updated"
+    note: "Documents the registry boundary and closes only the explicit registry-preparation residual; real-vault drift remains unobserved."
+  - artifact: "scripts/validate_contract_drift.py, docs/verification-boundaries.yaml"
+    status: "updated"
+    note: "Validates references, class/action/fixture consistency and negative cases; expands declared deterministic crosswalk coverage."
+  - artifact: "SPEC.md, CHANGELOG.md, UPGRADE.md, MIGRATIONS.md, skill/, scaffold/, COMPATIBILITY.yaml"
+    status: "reviewed"
+    note: "No normative contract, user behavior, release, compatibility, installation or migration procedure changes."
+  - artifact: "knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "No vault, private capture or content record is in scope."
+
+validation:
+  commands:
+    - "python -B scripts/validate_contract_drift.py"
+    - "python -B scripts/validate_change.py --root ."
+    - "python -B scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "five drift classes and all declared registry references resolve"
+    - "five invalid crosswalk cases are rejected deterministically"
+    - "contract-drift, Change Set, repository and link validators pass"
+  notes: "Deterministic cross-reference validation does not prove semantic sufficiency, remote authorization or real-vault migration readiness."

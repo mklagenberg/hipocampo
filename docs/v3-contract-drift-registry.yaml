@@ -1,0 +1,77 @@
+schema_version: "1.0"
+status: "unreleased-v3-candidate"
+purpose: "Trace migration-relevant V3 surfaces to existing authority, drift routing, fixtures and validators."
+classes:
+  - id: "content-change"
+    action: "continue"
+    surfaces:
+      - "docs/v3-crud-contract.md"
+      - "docs/v3-artifact-contract.md"
+    authorities:
+      - "decisions/0072-v3-record-chunk-crud-contract.md"
+      - "decisions/0073-v3-artifact-representation-and-provenance-contract.md"
+    fixtures:
+      - path: "docs/contract-drift-fixtures.yaml"
+        id: "content-change"
+        expected: "continue"
+        validator: "scripts/validate_contract_drift.py"
+  - id: "instruction-change"
+    action: "reread"
+    surfaces:
+      - "SPEC.md"
+      - "skill/SKILL.md"
+    authorities:
+      - "docs/v3-surface-authority-contract.md"
+      - "decisions/0088-v3-surface-authority-and-external-references.md"
+    fixtures:
+      - path: "docs/contract-drift-fixtures.yaml"
+        id: "instruction-change"
+        expected: "reread"
+        validator: "scripts/validate_contract_drift.py"
+  - id: "contract-change"
+    action: "blocked"
+    surfaces:
+      - "SPEC.md"
+      - "docs/v3-contract.md"
+      - "docs/v3-f0-contract.md"
+    authorities:
+      - "decisions/0097-v3-f0-typed-outcomes-and-contextual-blocking.md"
+      - "decisions/0098-v3-supersession-and-v22-resolution.md"
+    fixtures:
+      - path: "docs/contract-drift-fixtures.yaml"
+        id: "contract-change"
+        expected: "blocked"
+        validator: "scripts/validate_contract_drift.py"
+  - id: "methodology-version-change"
+    action: "compatibility-route"
+    surfaces:
+      - "COMPATIBILITY.yaml"
+      - "skill/manifest.yaml"
+      - "skill/package-lock.yaml"
+    authorities:
+      - "decisions/0058-canonical-compatibility-contract.md"
+      - "decisions/0098-v3-supersession-and-v22-resolution.md"
+    fixtures:
+      - path: "docs/contract-drift-fixtures.yaml"
+        id: "methodology-version-change"
+        expected: "compatibility-route"
+        validator: "scripts/validate_contract_drift.py"
+  - id: "unavailable"
+    action: "blocked"
+    surfaces:
+      - "docs/v3-multivault-resolution-contract.md"
+      - "docs/v3-session-cache-contract.md"
+      - "docs/v3-synthetic-vault-inventories.yaml"
+    authorities:
+      - "decisions/0088-v3-surface-authority-and-external-references.md"
+      - "decisions/0097-v3-f0-typed-outcomes-and-contextual-blocking.md"
+      - "decisions/0100-v3-synthetic-vault-inventory-gate.md"
+    fixtures:
+      - path: "docs/contract-drift-fixtures.yaml"
+        id: "unavailable"
+        expected: "blocked"
+        validator: "scripts/validate_contract_drift.py"
+      - path: "docs/v3-synthetic-vault-inventories.yaml"
+        id: "synthetic-invited-vault-inaccessible"
+        expected: "blocked"
+        validator: "scripts/validate_v3_inventory.py"

@@ -120,12 +120,12 @@ entries:
     human_or_environmental_boundary: host/session adapter and target authority
   - id: contract-drift-routing
     mechanism: scripts/validate_contract_drift.py
-    inputs: drift classifications and declared actions
-    outputs: deterministic routing assessment
-    coverage: five contract-drift classes
+    inputs: drift classifications, V3 surface authorities, permitted actions and linked fixtures
+    outputs: deterministic routing and cross-reference assessment
+    coverage: five contract-drift classes plus V3 migration-surface traceability
     rule_revision: "1.0"
     legacy_treatment: historical contracts are not migrated automatically
-    limits: cannot determine semantic sufficiency of a new contract
+    limits: cannot observe real-vault drift or determine semantic sufficiency of a new contract
     human_or_environmental_boundary: human review and authoritative contract
   - id: skill-recovery
     mechanism: scripts/validate_skill_recovery.py
