@@ -1,0 +1,66 @@
+schema_version: "1.0"
+suite_id: "v3-skill-conformance"
+assessment_status: "blocked"
+assessment_scope: "current canonical package readiness; no V3-compatible skill candidate exists yet"
+
+review_target:
+  methodology_baseline: "3.0.0"
+  skill_manifest: "skill/manifest.yaml"
+  skill_version: "1.3.0"
+  methodology_compatibility: "^2.1.0"
+  package_lock: "skill/package-lock.yaml"
+  package_lock_sha256: "56a350cbf396b0215c4281e6ceb20e2153270ba202e1a552c79c29e44e0c03c1"
+
+deterministic_observation:
+  expected_compatibility_state: "unsupported_or_unknown"
+  observed_reason: "The declared skill range ^2.1.0 does not include methodology 3.0.0."
+  action: "block_durable_v3_operation"
+
+ai_readiness_review:
+  status: "completed_with_blocker"
+  reviewer_type: "AI"
+  findings:
+    - id: "AI-SKILL-001"
+      severity: "blocking"
+      finding: "The canonical skill package declares compatibility with ^2.1.0, not V3.0.0. It must not be represented as operating according to V3."
+      evidence:
+        - "skill/manifest.yaml:methodology.compatibility"
+        - "skill/SKILL.md:Skill package version and methodology compatibility"
+    - id: "AI-SKILL-002"
+      severity: "blocking"
+      finding: "No V3-compatible skill candidate is available to execute the semantic scenarios; assessing V3 behavior now would overstate the evidence."
+      evidence:
+        - "docs/v3-skill-conformance-cases.yaml"
+        - "docs/v3-skill-conformance-gate.md"
+
+ai_semantic_review:
+  status: "not_run_no_v3_compatible_skill_candidate"
+  reviewer_type: "AI"
+  review_id: null
+  reviewer_session_id: null
+  reviewed_at: null
+  package_lock_sha256: null
+  reviewed_semantic_case_ids: []
+  case_dispositions: []
+
+ai_challenge:
+  status: "not_run_no_ai_semantic_review"
+  reviewer_type: "AI"
+  challenge_id: null
+  reviewer_session_id: null
+  reviewed_ai_review_id: null
+  reviewed_at: null
+  package_lock_sha256: null
+  conclusion: "Not run because there is no V3-compatible skill semantic review to challenge."
+
+human_review:
+  status: "pending"
+  decision: null
+  reviewer: null
+  reviewed_ai_review_id: null
+  reviewed_ai_challenge_id: null
+  reviewed_at: null
+
+limits:
+  - "This is a readiness assessment of the current package, not a semantic test of a V3 skill candidate."
+  - "No real vault content, host runtime, remote authorization or client-local installation was exercised."

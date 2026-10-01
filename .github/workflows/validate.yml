@@ -28,6 +28,8 @@ jobs:
         run: python scripts/validate_skill_package.py --root .
       - name: Validate cross-surface methodology contracts
         run: python scripts/validate_contracts.py --root .
+      - name: Validate V3 skill conformance gate
+        run: python scripts/validate_v3_skill_conformance.py --root . --mode workflow
       - name: Validate Change Set structure
         run: python scripts/validate_change.py --root .
       - name: Resolve change validation base

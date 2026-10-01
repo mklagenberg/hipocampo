@@ -4,6 +4,11 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **V3 skill conformance gate (Change Set 0122):** adds synthetic deterministic
+  compatibility cases and an AI-first semantic review plus AI challenge before
+  human approval. The current skill package remains correctly blocked for V3;
+  no V3 behavior or release readiness is inferred from the gate itself.
+
 - **V3 Search semantic revalidation coverage (Change Set 0119):** preserves the
   historical 28-case constitutional round and adds a separate two-pass review
   of the five human-confirmed Search cases; all five dispositions remain

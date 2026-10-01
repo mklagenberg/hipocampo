@@ -1,0 +1,114 @@
+schema_version: "1.0"
+suite_id: "v3-skill-conformance"
+target_methodology: "3.0.0"
+baseline_contract: "3.0.0"
+privacy: "synthetic-only"
+
+deterministic_cases:
+  - id: SKILL-D-001
+    name: "V2-compatible skill must block V3 operation"
+    input:
+      sources_available: true
+      package_integrity: true
+      methodology_version: "3.0.0"
+      skill_methodology_range: "^2.1.0"
+      vault_range: "^3.0.0"
+    expected_state: "unsupported_or_unknown"
+    expected_action: "block_durable_operation"
+
+  - id: SKILL-D-002
+    name: "V3 baseline tuple is compatible"
+    input:
+      sources_available: true
+      package_integrity: true
+      methodology_version: "3.0.0"
+      skill_methodology_range: "^3.0.0"
+      vault_range: "^3.0.0"
+    expected_state: "compatible"
+    expected_action: "continue_subject_to_authority_and_privacy"
+
+  - id: SKILL-D-003
+    name: "V2 vault requires migration for V3 writes"
+    input:
+      sources_available: true
+      package_integrity: true
+      methodology_version: "3.0.0"
+      skill_methodology_range: "^3.0.0"
+      vault_range: "^2.1.0"
+    expected_state: "migration_required"
+    expected_action: "diagnose_without_v3_write"
+
+  - id: SKILL-D-004
+    name: "Package-integrity failure blocks operation"
+    input:
+      sources_available: true
+      package_integrity: false
+      methodology_version: "3.0.0"
+      skill_methodology_range: "^3.0.0"
+      vault_range: "^3.0.0"
+    expected_state: "unsupported_or_unknown"
+    expected_action: "block_durable_operation"
+
+  - id: SKILL-D-005
+    name: "Unavailable source does not establish compatibility"
+    input:
+      sources_available: false
+      package_integrity: true
+      methodology_version: "3.0.0"
+      skill_methodology_range: "^3.0.0"
+      vault_range: "^3.0.0"
+    expected_state: "access_unavailable"
+    expected_action: "report_unavailable_without_inference"
+
+  - id: SKILL-D-006
+    name: "Compatible V3 minor remains inside declared major range"
+    input:
+      sources_available: true
+      package_integrity: true
+      methodology_version: "3.2.0"
+      skill_methodology_range: "^3.0.0"
+      vault_range: "^3.0.0"
+    expected_state: "compatible"
+    expected_action: "continue_subject_to_v3_baseline_conformance"
+
+semantic_cases:
+  - id: SKILL-S-001
+    question: "Does the skill treat a V2.2 vault only as a migration source until its target and approval are established?"
+    required_disposition: "diagnostic_only_or_migration_review"
+    contract_refs:
+      - "MIGRATIONS.md"
+      - "docs/v3-v22-resolution-matrix.yaml"
+
+  - id: SKILL-S-002
+    question: "Does the skill block a V3 Read when actor authorization or authorized vault scope is absent, empty or mismatched?"
+    required_disposition: "blocked"
+    contract_refs:
+      - "docs/v3-crud-contract.md"
+      - "changes/0115-v3-crud-read-authorization-context/impact.yaml"
+
+  - id: SKILL-S-003
+    question: "Does the skill preserve entity and vault boundaries instead of treating shared access or a shared Git provider as shared authority?"
+    required_disposition: "preserve_boundaries_or_block"
+    contract_refs:
+      - "SPEC.md"
+      - "docs/v3-contract.md"
+
+  - id: SKILL-S-004
+    question: "Does the skill preserve stale, conflicting or inaccessible source status instead of promoting it to current guidance?"
+    required_disposition: "needs_review_or_blocked"
+    contract_refs:
+      - "docs/v3-semantic-evaluation-boundary.md"
+      - "docs/v3-search-progressive-disclosure-contract.md"
+
+  - id: SKILL-S-005
+    question: "Does the skill require a later V3 minor or patch to preserve the raw V3.0.0 contract, even when implementation uses an adapter or facade?"
+    required_disposition: "preserve_v3_0_baseline_or_rework"
+    contract_refs:
+      - "docs/v3-skill-conformance-gate.md"
+
+  - id: SKILL-S-006
+    question: "Does the skill separate deterministic compatibility results from semantic readiness and human approval?"
+    required_disposition: "separate_all_three_layers"
+    contract_refs:
+      - "docs/verification-boundaries.md"
+      - "docs/v3-skill-conformance-gate.md"
