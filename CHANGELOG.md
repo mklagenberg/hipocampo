@@ -4,6 +4,12 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **Isolated V3 skill candidate (Change Set 0123):** adds a complete,
+  integrity-locked `2.0.0-rc.1` package with `^3.0.0` compatibility while
+  preserving the released V2 skill. The primary AI semantic review passed the
+  six synthetic cases; a separate AI challenge and human decision remain
+  pending. The candidate is not installable or activated.
+
 - **V3 skill conformance gate (Change Set 0122):** adds synthetic deterministic
   compatibility cases and an AI-first semantic review plus AI challenge before
   human approval. The current skill package remains correctly blocked for V3;

@@ -86,7 +86,7 @@ IMPACT_STATUSES = {"updated", "reviewed", "not-applicable"}
 
 PROTECTED_PREFIXES = (
     "SPEC.md", "CHANGELOG.md", "UPGRADE.md", "MIGRATIONS.md", "moda.yaml",
-    "decisions/", "skill/", "scaffold/", "docs/", "conformance/",
+    "decisions/", "skill/", "scaffold/", "docs/", "conformance/", "candidates/",
 )
 
 PATH_TOKEN_RE = re.compile(r"[\w.\-]+(?:/[\w.\-]+)+|[\w.\-]+\.(?:md|yaml|yml|py)")

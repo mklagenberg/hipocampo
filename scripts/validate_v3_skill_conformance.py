@@ -40,15 +40,32 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
     blockers: list[str] = []
     cases_path = root / "docs" / "v3-skill-conformance-cases.yaml"
     review_path = root / "docs" / "v3-skill-conformance-ai-review.yaml"
-    manifest_path = root / "skill" / "manifest.yaml"
-    lock_path = root / "skill" / "package-lock.yaml"
-
     try:
         cases = load_yaml(cases_path)
         review = load_yaml(review_path)
-        manifest = load_yaml(manifest_path)
+        active_contract = load_yaml(root / "COMPATIBILITY.yaml")
     except (OSError, yaml.YAMLError, ValueError) as exc:
         return [f"cannot load conformance inputs: {exc}"], []
+
+    review_target = review.get("review_target", {})
+    package_root_value = review_target.get("package_root")
+    if not isinstance(package_root_value, str) or not package_root_value:
+        return ["review_target.package_root must identify the exact candidate package"], []
+    package_root = (root / package_root_value).resolve()
+    if root not in package_root.parents:
+        return ["review_target.package_root must stay inside the repository"], []
+    manifest_rel = review_target.get("skill_manifest", "manifest.yaml")
+    lock_rel = review_target.get("package_lock", "package-lock.yaml")
+    manifest_path = (package_root / manifest_rel).resolve()
+    lock_path = (package_root / lock_rel).resolve()
+    if package_root not in manifest_path.parents or package_root not in lock_path.parents:
+        return ["candidate manifest and package lock must stay inside the candidate package"], []
+
+    try:
+        manifest = load_yaml(manifest_path)
+        package_lock = load_yaml(lock_path)
+    except (OSError, yaml.YAMLError, ValueError) as exc:
+        return [f"cannot load candidate skill package: {exc}"], []
 
     if cases.get("schema_version") != "1.0" or cases.get("suite_id") != "v3-skill-conformance":
         errors.append("case suite has an unsupported schema or suite_id")
@@ -90,23 +107,87 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
             if not (root / ref).is_file():
                 errors.append(f"{case.get('id')}: missing contract reference {ref}")
 
-    if not lock_path.is_file():
-        errors.append("skill package lock is missing")
-        package_lock_sha256 = ""
-    else:
-        package_lock_sha256 = hashlib.sha256(lock_path.read_bytes()).hexdigest()
+    package_lock_sha256 = hashlib.sha256(lock_path.read_bytes()).hexdigest()
 
     skill = manifest.get("skill", {})
     skill_range = manifest.get("methodology", {}).get("compatibility", "")
     target = cases.get("target_methodology", "3.0.0")
+    active_methodology_version = active_contract.get("methodology", {}).get("version")
+    methodology_is_released = active_methodology_version == target
+    candidate_is_released = skill.get("release_status") == "released" and bool(
+        manifest.get("updates", {}).get("release_ref")
+    )
     package_version = skill.get("version")
-    expected_lock = review.get("review_target", {}).get("package_lock_sha256")
+    expected_lock = review_target.get("package_lock_sha256")
     if expected_lock != package_lock_sha256:
         errors.append("AI review package-lock fingerprint is stale")
-    if review.get("review_target", {}).get("skill_version") != package_version:
-        errors.append("AI review skill version does not match skill/manifest.yaml")
-    if review.get("review_target", {}).get("methodology_compatibility") != skill_range:
-        errors.append("AI review compatibility range does not match skill/manifest.yaml")
+    if review_target.get("skill_version") != package_version:
+        errors.append("AI review skill version does not match the candidate manifest")
+    if review_target.get("methodology_compatibility") != skill_range:
+        errors.append("AI review compatibility range does not match the candidate manifest")
+    if str(skill.get("core_path", "")).rstrip("/\\") != package_root_value.rstrip("/\\"):
+        errors.append("candidate manifest core_path does not match review_target.package_root")
+    if manifest.get("skill", {}).get("source_repository") != "https://github.com/mklagenberg/hipocampo":
+        errors.append("candidate must identify the canonical official Hipocampo repository")
+    executable_suffixes = {".py", ".js", ".ps1", ".sh", ".bat", ".cmd", ".exe"}
+    bundled_executables = sorted(
+        path.relative_to(package_root).as_posix()
+        for path in package_root.rglob("*")
+        if path.is_file() and path.suffix.casefold() in executable_suffixes
+    )
+    if bundled_executables:
+        errors.append(
+            "candidate is instructions-only; executable helper(s) require a separate scope review: "
+            + ", ".join(bundled_executables)
+        )
+
+    entrypoint_path = package_root / "SKILL.md"
+    operation_path = package_root / "references" / "v3-operation.md"
+    try:
+        entrypoint = entrypoint_path.read_text(encoding="utf-8")
+        operation = operation_path.read_text(encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"candidate progressive-disclosure guidance is unavailable: {exc}")
+        entrypoint = operation = ""
+    guidance_checks = (
+        ("progressive-disclosure route", entrypoint, "progressive-disclosure-read", "SKILL.md"),
+        ("authorized-vault guard", operation, "authorized_vault_ids", "references/v3-operation.md"),
+        ("frontmatter-first filtering", operation, "frontmatter", "references/v3-operation.md"),
+        ("L0-L4 disclosure levels", operation, "L4", "references/v3-operation.md"),
+        ("official repository adjacency rule", operation, "source_repository", "references/v3-operation.md"),
+        ("no direct filesystem scan", operation, "scanning vault files directly", "references/v3-operation.md"),
+        ("version-pinned source references", operation, "immutable release", "references/v3-operation.md"),
+        ("separate vault relationship resolution", operation, "registry procedure for that vault scope", "references/v3-operation.md"),
+    )
+    for label, content, marker, filename in guidance_checks:
+        if marker.casefold() not in content.casefold():
+            errors.append(f"{filename} is missing required {label} guidance")
+    if not any(item.get("id") == "SKILL-S-007" for item in semantic if isinstance(item, dict)):
+        errors.append("semantic suite must cover progressive disclosure and official-repository adjacencies")
+
+    locked_package = package_lock.get("package", {})
+    if locked_package.get("version") != package_version:
+        errors.append("candidate package-lock version does not match the candidate manifest")
+    locked_files = locked_package.get("files", [])
+    expected_files: dict[str, str] = {}
+    for item in locked_files:
+        if not isinstance(item, dict) or not isinstance(item.get("path"), str) or not isinstance(item.get("sha256"), str):
+            errors.append("candidate package-lock entries need path and sha256")
+            continue
+        if Path(item["path"]).is_absolute() or ".." in Path(item["path"]).parts:
+            errors.append(f"candidate package-lock path escapes candidate root: {item['path']}")
+            continue
+        expected_files[item["path"]] = item["sha256"]
+    actual_files = {
+        path.relative_to(package_root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in package_root.rglob("*")
+        if path.is_file() and path != lock_path
+    }
+    if set(expected_files) != set(actual_files):
+        errors.append("candidate package-lock file set differs from the candidate package")
+    for relative, digest in actual_files.items():
+        if expected_files.get(relative) != digest:
+            errors.append(f"candidate package-lock hash mismatch for {relative}")
 
     covers_target = compatibility_state(
         {
@@ -137,6 +218,8 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
         errors.append("recorded deterministic observation does not match the declared skill compatibility")
     if observed_state != "compatible" and deterministic_observation.get("action") != "block_durable_v3_operation":
         errors.append("incompatible skill must record the fail-closed V3 operation action")
+    if observed_state == "compatible" and deterministic_observation.get("action") != "continue_subject_to_authority_and_privacy":
+        errors.append("compatible tuple must preserve the separate authority and privacy gates")
 
     ai_reviewed_at = challenge_reviewed_at = human_reviewed_at = None
     if ai.get("status") in {"passed", "completed_with_findings"}:
@@ -164,6 +247,19 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
                 errors.append(f"{item.get('case_id')}: AI evidence references are required")
             if not isinstance(item.get("uncertainty"), str) or not item["uncertainty"].strip():
                 errors.append(f"{item.get('case_id')}: AI uncertainty statement is required")
+            evidence_refs = item.get("evidence")
+            if isinstance(evidence_refs, list):
+                for evidence_ref in evidence_refs:
+                    if not isinstance(evidence_ref, str) or not evidence_ref.strip():
+                        errors.append(f"{item.get('case_id')}: AI evidence references must be non-empty paths")
+                        continue
+                    evidence_path = evidence_ref.split("#", 1)[0]
+                    if Path(evidence_path).is_absolute() or ".." in Path(evidence_path).parts:
+                        errors.append(f"{item.get('case_id')}: AI evidence path escapes the repository")
+                    elif not (root / evidence_path).is_file():
+                        errors.append(f"{item.get('case_id')}: missing AI evidence reference {evidence_path}")
+        if ai.get("status") == "passed" and ai.get("findings"):
+            errors.append("AI semantic review cannot be passed while unresolved findings are recorded")
         if not ai.get("reviewer_type") == "AI":
             errors.append("semantic review must identify an AI reviewer")
 
@@ -183,6 +279,36 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
             errors.append("AI challenge must use a separate reviewer session")
         if not isinstance(challenge.get("conclusion"), str) or not challenge["conclusion"].strip():
             errors.append("AI challenge conclusion is required")
+        challenged_ids = set(challenge.get("challenged_semantic_case_ids", []))
+        if challenged_ids != semantic_ids:
+            errors.append("AI challenge must cover every semantic case")
+        case_challenges = challenge.get("case_challenges", [])
+        challenge_ids = [item.get("case_id") for item in case_challenges if isinstance(item, dict)]
+        if len(challenge_ids) != len(case_challenges) or set(challenge_ids) != semantic_ids or len(challenge_ids) != len(set(challenge_ids)):
+            errors.append("AI challenge must record exactly one challenge disposition for every semantic case")
+        for item in case_challenges:
+            if not isinstance(item, dict):
+                continue
+            if item.get("disposition") not in {"stands", "revise", "needs_human"}:
+                errors.append(f"{item.get('case_id')}: invalid AI challenge disposition")
+            if not isinstance(item.get("rationale"), str) or not item["rationale"].strip():
+                errors.append(f"{item.get('case_id')}: AI challenge rationale is required")
+            if not isinstance(item.get("evidence"), list) or not item["evidence"]:
+                errors.append(f"{item.get('case_id')}: AI challenge evidence references are required")
+            elif isinstance(item.get("evidence"), list):
+                for evidence_ref in item["evidence"]:
+                    if not isinstance(evidence_ref, str) or not evidence_ref.strip():
+                        errors.append(f"{item.get('case_id')}: AI challenge evidence must be a non-empty path")
+                        continue
+                    evidence_path = evidence_ref.split("#", 1)[0]
+                    if Path(evidence_path).is_absolute() or ".." in Path(evidence_path).parts:
+                        errors.append(f"{item.get('case_id')}: AI challenge evidence path escapes the repository")
+                    elif not (root / evidence_path).is_file():
+                        errors.append(f"{item.get('case_id')}: missing AI challenge evidence reference {evidence_path}")
+        if challenge.get("status") == "passed" and any(
+            item.get("disposition") != "stands" for item in case_challenges if isinstance(item, dict)
+        ):
+            errors.append("AI challenge cannot pass while any case is marked revise or needs_human")
         if ai_reviewed_at and challenge_reviewed_at and challenge_reviewed_at <= ai_reviewed_at:
             errors.append("AI challenge timestamp must follow the primary AI semantic review")
 
@@ -200,6 +326,10 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
             errors.append("human review timestamp must follow the AI challenge")
 
     if mode == "release":
+        if not methodology_is_released:
+            blockers.append(f"methodology target {target} is not the active released version ({active_methodology_version})")
+        if not candidate_is_released:
+            blockers.append("candidate manifest does not identify an immutable released skill package")
         if not covers_target:
             blockers.append(f"skill compatibility {skill_range!r} does not cover V3.0.0")
         if ai.get("status") != "passed" or reviewed_ids != semantic_ids:
@@ -216,18 +346,23 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
             errors.append("assessment_status must be blocked or ready")
         if readiness_review.get("status") not in {"completed", "completed_with_blocker"}:
             errors.append("AI readiness review status must be recorded")
-        if assessment == "blocked" and covers_target:
-            errors.append("review says blocked although the declared skill range covers V3.0.0")
         if assessment == "ready" and not covers_target:
             errors.append("review says ready although the skill compatibility range excludes V3.0.0")
-        if assessment == "ready" and reviewed_ids != semantic_ids:
-            errors.append("ready assessment must cover every semantic case")
+        if assessment == "ready" and (not methodology_is_released or not candidate_is_released or reviewed_ids != semantic_ids or ai.get("status") != "passed" or challenge.get("status") != "passed" or human.get("status") != "approved"):
+            errors.append("ready assessment requires complete AI, challenge and human approval")
+        if not methodology_is_released:
+            blockers.append(f"methodology target {target} is not the active released version ({active_methodology_version})")
+        if not candidate_is_released:
+            blockers.append("candidate remains unreleased and cannot be installed")
         if not covers_target:
             blockers.append(f"skill compatibility {skill_range!r} does not cover V3.0.0")
         if ai.get("status") != "passed":
             blockers.append("AI semantic review is not passed for every semantic case")
         if challenge.get("status") != "passed":
-            blockers.append("AI challenge is not passed")
+            if challenge.get("status") == "not_run_pending_independent_ai_session":
+                blockers.append("independent AI challenge session is pending")
+            else:
+                blockers.append("AI challenge is not passed")
         if human.get("status") != "approved":
             blockers.append("human review remains pending")
         if ai.get("status") == "not_run_no_v3_compatible_skill_candidate":
@@ -238,7 +373,7 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
             blockers.append("no V3-compatible skill candidate is available for semantic cases")
         elif ai.get("status") not in {"passed", "completed_with_findings"}:
             errors.append("AI semantic review must be completed or explicitly not run")
-        elif challenge.get("status") not in {"passed", "completed_with_findings"}:
+        elif challenge.get("status") not in {"passed", "completed_with_findings", "not_run_pending_independent_ai_session"}:
             errors.append("AI challenge must complete after the AI semantic review")
         if human.get("status") not in {"pending", "approved"}:
             errors.append("human review status must be pending or approved")
