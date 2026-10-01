@@ -10,7 +10,7 @@ review_target:
   skill_version: "2.0.0-rc.1"
   methodology_compatibility: "^3.0.0"
   package_lock: "package-lock.yaml"
-  package_lock_sha256: "be1f85317ab177016777debb31df13bb8b6aef00226d34b95a355a6adf2b63a7"
+  package_lock_sha256: "4b0b57442c9ab57f200aeccb4177ae25a91e7038ad2af01cfd77ff17592ecf40"
 
 deterministic_observation:
   expected_compatibility_state: "compatible"
@@ -26,10 +26,10 @@ ai_readiness_review:
 ai_semantic_review:
   status: "passed"
   reviewer_type: "AI"
-  review_id: "V3SKILL-AI-REVIEW-001"
-  reviewer_session_id: "primary-review-session-2026-10-01"
-  reviewed_at: "2026-10-01T16:55:17Z"
-  package_lock_sha256: "be1f85317ab177016777debb31df13bb8b6aef00226d34b95a355a6adf2b63a7"
+  review_id: "V3SKILL-AI-REVIEW-002"
+  reviewer_session_id: "primary-review-session-codex-2026-10-01-1739z"
+  reviewed_at: "2026-10-01T17:39:47Z"
+  package_lock_sha256: "4b0b57442c9ab57f200aeccb4177ae25a91e7038ad2af01cfd77ff17592ecf40"
   reviewed_semantic_case_ids:
     - "SKILL-S-001"
     - "SKILL-S-002"
@@ -37,6 +37,7 @@ ai_semantic_review:
     - "SKILL-S-004"
     - "SKILL-S-005"
     - "SKILL-S-006"
+    - "SKILL-S-007"
   case_dispositions:
     - case_id: "SKILL-S-001"
       disposition: "diagnostic_only_or_migration_review"
@@ -44,7 +45,7 @@ ai_semantic_review:
       evidence:
         - "candidates/skill-v3/SKILL.md#Session-entry-and-compatibility"
         - "candidates/skill-v3/references/v3-operation.md#1-verify-the-tuple-before-operation"
-        - "candidates/skill-v3/references/v3-operation.md#5-prepare-a-v2-to-v3-migration"
+        - "candidates/skill-v3/references/v3-operation.md#6-prepare-a-v2-to-v3-migration"
         - "MIGRATIONS.md#2x--30-v3-candidate-not-active"
       uncertainty: "No real V2 vault content or migration was examined; the result assesses written operating guidance."
     - case_id: "SKILL-S-002"
@@ -69,8 +70,8 @@ ai_semantic_review:
       disposition: "needs_review_or_blocked"
       rationale: "The candidate preserves stale, conflicting, inaccessible, provisional and unknown states; it forbids treating retrieval, recency, relevance, hash or disclosure authorization as resolution."
       evidence:
-        - "candidates/skill-v3/references/v3-operation.md#3-read-and-preserve-source-state"
-        - "candidates/skill-v3/references/v3-operation.md#7-report-result-and-limits"
+        - "candidates/skill-v3/references/v3-operation.md#4-read-and-preserve-source-state"
+        - "candidates/skill-v3/references/v3-operation.md#8-report-result-and-limits"
         - "docs/v3-semantic-evaluation-boundary.md#Deterministic-boundary"
         - "docs/v3-search-progressive-disclosure-contract.md#Result-envelope"
       uncertainty: "This is a text review; no inaccessible or conflicting source was exercised at runtime."
@@ -79,7 +80,7 @@ ai_semantic_review:
       rationale: "The candidate states that all later V3 minors and patches preserve raw V3.0.0 behavior, including through adapters or facades, and excludes host identity from the version tuple."
       evidence:
         - "candidates/skill-v3/SKILL.md#Hipocampo-V3-Skill-candidate"
-        - "candidates/skill-v3/references/v3-operation.md#6-preserve-the-v3.0.0-baseline"
+        - "candidates/skill-v3/references/v3-operation.md#7-preserve-the-v3.0.0-baseline"
         - "docs/v3-skill-conformance-gate.md#Purpose"
       uncertainty: "The claim is assessed as guidance; no later V3 minor or adapter implementation exists here to execute."
     - case_id: "SKILL-S-006"
@@ -87,10 +88,20 @@ ai_semantic_review:
       rationale: "The candidate separates tuple compatibility, authority/privacy and tool capability, and distinguishes deterministic checks, semantic interpretation and human decisions."
       evidence:
         - "candidates/skill-v3/SKILL.md#Session-entry-and-compatibility"
-        - "candidates/skill-v3/references/v3-operation.md#7-report-result-and-limits"
+        - "candidates/skill-v3/references/v3-operation.md#8-report-result-and-limits"
         - "candidates/skill-v3/references/crud-frontmatter.md#Governed-changes"
         - "docs/verification-boundaries.md#Classification-rule"
       uncertainty: "Passing text conformance does not prove semantic truth, host enforcement or human acceptance."
+    - case_id: "SKILL-S-007"
+      disposition: "bounded_progressive_read_with_pinned_official_references"
+      rationale: "The skill requires an authorized bounded request, minimum disclosure, frontmatter filtering before selected Record/Chunk bodies, and explicit authorization for L4. Methodology adjacencies are resolved from the official repository at the version-matched immutable release and pinned commit/path; vault aliases use their own authorized registry and are not resolved through the methodology repository."
+      evidence:
+        - "candidates/skill-v3/SKILL.md#Discover-vaults-and-entities"
+        - "candidates/skill-v3/references/v3-operation.md#3-progressive-disclosure-read"
+        - "docs/v3-search-progressive-disclosure-contract.md#Disclosure-levels"
+        - "docs/v3-crud-contract.md#Read"
+        - "docs/v3-external-reference-policy.md"
+      uncertainty: "The skill guidance and local synthetic engine were validated; no real vault, host adapter, remote CRUD authorization or network retrieval path was exercised."
   findings: []
   limits:
     - "This review evaluates candidate instructions and cited contracts, not runtime behavior."

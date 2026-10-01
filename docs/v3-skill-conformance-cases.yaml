@@ -112,3 +112,11 @@ semantic_cases:
     contract_refs:
       - "docs/verification-boundaries.md"
       - "docs/v3-skill-conformance-gate.md"
+
+  - id: SKILL-S-007
+    question: "Does the skill read only authorized, relevant vault content progressively, and resolve methodology adjacencies from the official version-matched repository without confusing them with vault relationships?"
+    required_disposition: "bounded_progressive_read_with_pinned_official_references"
+    contract_refs:
+      - "docs/v3-search-progressive-disclosure-contract.md"
+      - "docs/v3-crud-contract.md"
+      - "docs/v3-external-reference-policy.md"

@@ -12,12 +12,14 @@ continue to describe V2.2 truthfully.
 Add a complete, integrity-locked V3 skill candidate at
 `candidates/skill-v3/`. Keep the released package under `skill/` and the active
 `COMPATIBILITY.yaml` tuple unchanged. The candidate declares skill package
-`2.0.0-rc.1`, methodology range `^3.0.0`, and unreleased status. Extend the
-conformance validator to bind AI evidence to this candidate's full package
-lock, evaluate six semantic scenarios, and enforce the AI review → separate AI
-challenge → human decision sequence. Record the primary AI semantic review;
-leave the independent challenge and human decision pending for their proper
-gates.
+`2.0.0-rc.1`, methodology range `^3.0.0`, and unreleased status. The candidate
+routes authorized reads through the progressive-disclosure contract and
+resolves methodology adjacencies from the version-matched official repository,
+separate from vault relationship resolution. Extend the conformance validator
+to bind AI evidence to this candidate's full package lock, evaluate seven
+semantic scenarios, and enforce the AI review → separate AI challenge → human
+decision sequence. Record the primary AI semantic review; leave the independent
+challenge and human decision pending for their proper gates.
 
 This Change Set implements candidate guidance from existing V3 contracts. It
 does not change V3 methodology contracts, install or publish the candidate,
@@ -46,7 +48,10 @@ the review lock and requires a new semantic assessment.
 - the V2 released skill and active compatibility tuple remain unchanged;
 - the V3 candidate package is complete, explicitly unreleased, and locked by
   SHA-256;
-- the candidate covers all six semantic cases and refers to the governing V3
+- the skill gives an actionable, least-disclosure read flow, distinguishes
+  official methodology references from vault relationships, and pins normative
+  references to the matching official release;
+- the candidate covers all seven semantic cases and refers to the governing V3
   contracts;
 - primary AI review dispositions include rationale, evidence and uncertainty
   for all cases and bind to the exact package-lock fingerprint;

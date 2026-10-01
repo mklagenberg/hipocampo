@@ -61,6 +61,10 @@ Shared access, account, Git provider, entity name or similar content does not
 join their governance. If actor authorization or a non-empty authorized-vault
 set is missing, empty or mismatched, block the V3 read.
 
+For content retrieval, follow the bounded **progressive-disclosure read** in
+**[V3 operation and compatibility](references/v3-operation.md#3-progressive-disclosure-read)**.
+Do not replace it with a repository-wide body scan or direct filesystem read.
+
 ## Run a CRUD operation
 
 Use **[V3 CRUD and read validation](references/crud-frontmatter.md)**. Semantic

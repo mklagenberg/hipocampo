@@ -46,9 +46,10 @@ sources, and package-integrity failure.
 
 The suite asks whether the skill correctly handles V2.2 source diagnosis,
 V3.0 operations, authorization scope, multi-vault/entity boundaries, stale or
-conflicting source material, and later V3 releases that must preserve the raw
-V3.0 contract through an adapter or facade. These cases use synthetic inputs
-only. The skill candidate is not exercised against real vault content.
+conflicting source material, later V3 releases that must preserve the raw V3.0
+contract through an adapter or facade, and least-disclosure reads with
+version-matched official methodology references. These cases use synthetic
+inputs only. The skill candidate is not exercised against real vault content.
 
 ## Commands and gates
 

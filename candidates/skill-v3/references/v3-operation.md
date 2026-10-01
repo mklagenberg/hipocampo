@@ -47,7 +47,63 @@ canonical CRUD boundary, mark that operation unavailable and stop. Do not
 fall back to direct repository/file writes or claim that a connector test
 proves remote authorization.
 
-## 3. Read and preserve source state
+## 3. Progressive-disclosure read
+
+Use the canonical V3 Search and CRUD Read capabilities; a host adapter is only
+transport. If the environment cannot enforce the requested vault authorization
+and disclosure level through those boundaries, stop and report that capability
+gap. Do not simulate a governed read by scanning vault files directly.
+
+1. **Bound the request.** Establish the exact actor, entity, target vaults,
+   knowledge scope, intent and non-empty `authorized_vault_ids`. Verify the
+   compatibility tuple and privacy/visibility constraints before content is
+   disclosed. Exclude candidates outside the authorized entity, vault and
+   scope before relevance ranking.
+2. **Search at the minimum level.** Submit a bounded Search request. Treat the
+   requested disclosure as an upper bound; relevance, recency or a matching
+   term never increases it. Start with safe metadata (`L1`) when it can answer
+   the intent; otherwise request only the Record envelope (`L2`) needed to
+   select a candidate.
+3. **Filter from frontmatter.** Validate Record identity and version, entity,
+   vault, scope, visibility, maturity, status, staleness and provenance at read
+   time. Keep each Record distinct. Mark conflicts or unresolved authority as
+   `needs_review`; do not rank them into a winner.
+4. **Open selected content only.** Read the body of a selected Record only when
+   its envelope cannot answer the stated intent. Read only the selected
+   matching Chunk at `L3`, with its parent Record context and effective
+   restrictions. Do not load neighboring bodies merely because a link or
+   similarity score exists.
+5. **Expand only on explicit authorization.** `L4` requires specific
+   authorization for the additional content and all earlier gates. It is not
+   implied by the user asking a broad question, by repository access, or by a
+   high score. If authorization is absent or ambiguous, remain at the lower
+   permitted level or block.
+6. **Resolve only relevant adjacencies.** When a retrieved item raises a
+   methodology question, consult the official repository declared by this
+   package's `manifest.yaml` (`source_repository`). Use the immutable release
+   tag matching the verified methodology version for normative behavior; pin
+   the tag/commit and the exact file paths examined. Follow only direct links
+   and dependency references needed to resolve the question, then stop. Use
+   `main` only to check release/update availability, not to silently replace
+   the contract of an already verified release. If the matching release or
+   source commit cannot be established, report the methodology interpretation
+   as unknown and do not infer a rule.
+
+   This official-repository lookup is separate from vault relationships. To
+   resolve a vault's `$alias:path.md` or `related` reference, use the authorized
+   registry procedure for that vault scope; the public methodology repository
+   is not a vault registry and does not authorize cross-vault reads.
+7. **Return the smallest useful result.** Preserve source, entity, vault,
+   scope, epistemic status, freshness and limits. Do not fetch or reconstruct a
+   linked Artifact as part of Read. State `needs_review`, partial or blocked
+   limits as applicable; retrieval and disclosure do not establish truth.
+
+The contract's disclosure levels are `L0` none, `L1` metadata, `L2` Record
+envelope/frontmatter, `L3` selected Chunk and `L4` explicitly authorized
+expansion. See [Search & Progressive Disclosure](../../../docs/v3-search-progressive-disclosure-contract.md)
+for the normative candidate contract.
+
+## 4. Read and preserve source state
 
 Use the V3 CRUD `read` operation. Read frontmatter first and validate the
 request, version, entity, vault, scope, visibility, maturity, staleness and
@@ -62,7 +118,7 @@ retrieved, recent, relevant, hashed or authorized for disclosure. Keep
 conflicting Records and evidence separate. Use `needs_review` when the contract
 requires interpretation and state when no conclusion was consolidated.
 
-## 4. Propose and commit governed changes
+## 5. Propose and commit governed changes
 
 For a governed change, first prepare a proposal with actor, reason, expected
 Record version, source/provenance, entity, scope, vault and required semantic
@@ -88,7 +144,7 @@ host file API never writes directly.
 - **Artifact change:** version the Artifact and flag linked Records for review;
   never silently replace the version historically used.
 
-## 5. Prepare a V2-to-V3 migration
+## 6. Prepare a V2-to-V3 migration
 
 A V2 vault is a migration source, not a V3 write target. First establish the
 released target tuple, source version and exact vault/scope authorization.
@@ -105,7 +161,7 @@ and REM before any V3 item becomes `current` or `curated`, and reconcile the
 source/destination ledgers. Migration approval does not approve publication or
 LTE.
 
-## 6. Preserve the V3.0.0 baseline
+## 7. Preserve the V3.0.0 baseline
 
 Treat raw V3.0.0 contract behavior as the compatibility baseline for every
 later V3 minor and patch. A facade or adapter may translate host-specific
@@ -114,7 +170,7 @@ The host is not the version authority. If a later version cannot preserve the
 baseline, report incompatibility and require a separately approved transition;
 do not relabel it as a compatible minor or patch.
 
-## 7. Report result and limits
+## 8. Report result and limits
 
 Report compatibility, authority/privacy, tool capability, semantic
 interpretation and human decision as separate outcomes. State the exact source

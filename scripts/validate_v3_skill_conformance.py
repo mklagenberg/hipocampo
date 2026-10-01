@@ -127,6 +127,32 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
         errors.append("AI review compatibility range does not match the candidate manifest")
     if str(skill.get("core_path", "")).rstrip("/\\") != package_root_value.rstrip("/\\"):
         errors.append("candidate manifest core_path does not match review_target.package_root")
+    if manifest.get("skill", {}).get("source_repository") != "https://github.com/mklagenberg/hipocampo":
+        errors.append("candidate must identify the canonical official Hipocampo repository")
+
+    entrypoint_path = package_root / "SKILL.md"
+    operation_path = package_root / "references" / "v3-operation.md"
+    try:
+        entrypoint = entrypoint_path.read_text(encoding="utf-8")
+        operation = operation_path.read_text(encoding="utf-8")
+    except OSError as exc:
+        errors.append(f"candidate progressive-disclosure guidance is unavailable: {exc}")
+        entrypoint = operation = ""
+    guidance_checks = (
+        ("progressive-disclosure route", entrypoint, "progressive-disclosure-read", "SKILL.md"),
+        ("authorized-vault guard", operation, "authorized_vault_ids", "references/v3-operation.md"),
+        ("frontmatter-first filtering", operation, "frontmatter", "references/v3-operation.md"),
+        ("L0-L4 disclosure levels", operation, "L4", "references/v3-operation.md"),
+        ("official repository adjacency rule", operation, "source_repository", "references/v3-operation.md"),
+        ("no direct filesystem scan", operation, "scanning vault files directly", "references/v3-operation.md"),
+        ("version-pinned source references", operation, "immutable release", "references/v3-operation.md"),
+        ("separate vault relationship resolution", operation, "registry procedure for that vault scope", "references/v3-operation.md"),
+    )
+    for label, content, marker, filename in guidance_checks:
+        if marker.casefold() not in content.casefold():
+            errors.append(f"{filename} is missing required {label} guidance")
+    if not any(item.get("id") == "SKILL-S-007" for item in semantic if isinstance(item, dict)):
+        errors.append("semantic suite must cover progressive disclosure and official-repository adjacencies")
 
     locked_package = package_lock.get("package", {})
     if locked_package.get("version") != package_version:
