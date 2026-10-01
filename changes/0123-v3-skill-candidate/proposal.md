@@ -48,6 +48,8 @@ the review lock and requires a new semantic assessment.
 - the V2 released skill and active compatibility tuple remain unchanged;
 - the V3 candidate package is complete, explicitly unreleased, and locked by
   SHA-256;
+- the package contains only routed instructions and required metadata, without
+  unreferenced legacy redirect stubs or executable vault-access shortcuts;
 - the skill gives an actionable, least-disclosure read flow, distinguishes
   official methodology references from vault relationships, and pins normative
   references to the matching official release;

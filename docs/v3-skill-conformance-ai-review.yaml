@@ -10,7 +10,7 @@ review_target:
   skill_version: "2.0.0-rc.1"
   methodology_compatibility: "^3.0.0"
   package_lock: "package-lock.yaml"
-  package_lock_sha256: "4b0b57442c9ab57f200aeccb4177ae25a91e7038ad2af01cfd77ff17592ecf40"
+  package_lock_sha256: "91685f8106ef3e24d6a9c4e518e6b099f4ec2e760b90e93c29ad33bad90db3fa"
 
 deterministic_observation:
   expected_compatibility_state: "compatible"
@@ -26,10 +26,10 @@ ai_readiness_review:
 ai_semantic_review:
   status: "passed"
   reviewer_type: "AI"
-  review_id: "V3SKILL-AI-REVIEW-002"
-  reviewer_session_id: "primary-review-session-codex-2026-10-01-1739z"
-  reviewed_at: "2026-10-01T17:39:47Z"
-  package_lock_sha256: "4b0b57442c9ab57f200aeccb4177ae25a91e7038ad2af01cfd77ff17592ecf40"
+  review_id: "V3SKILL-AI-REVIEW-003"
+  reviewer_session_id: "primary-review-session-codex-2026-10-01-1825z"
+  reviewed_at: "2026-10-01T18:25:42Z"
+  package_lock_sha256: "91685f8106ef3e24d6a9c4e518e6b099f4ec2e760b90e93c29ad33bad90db3fa"
   reviewed_semantic_case_ids:
     - "SKILL-S-001"
     - "SKILL-S-002"
@@ -94,7 +94,7 @@ ai_semantic_review:
       uncertainty: "Passing text conformance does not prove semantic truth, host enforcement or human acceptance."
     - case_id: "SKILL-S-007"
       disposition: "bounded_progressive_read_with_pinned_official_references"
-      rationale: "The skill requires an authorized bounded request, minimum disclosure, frontmatter filtering before selected Record/Chunk bodies, and explicit authorization for L4. Methodology adjacencies are resolved from the official repository at the version-matched immutable release and pinned commit/path; vault aliases use their own authorized registry and are not resolved through the methodology repository."
+      rationale: "The skill requires an authorized bounded request, minimum disclosure, frontmatter filtering before selected Record/Chunk bodies, and explicit authorization for L4. Methodology adjacencies are resolved from the official repository at the version-matched immutable release and pinned commit/path; vault aliases use their own authorized registry and are not resolved through the methodology repository. Package-scope review found no bundled executable helpers and removed four unreferenced legacy redirects."
       evidence:
         - "candidates/skill-v3/SKILL.md#Discover-vaults-and-entities"
         - "candidates/skill-v3/references/v3-operation.md#3-progressive-disclosure-read"

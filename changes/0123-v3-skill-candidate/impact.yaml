@@ -8,7 +8,7 @@ change_set:
     - "decisions/0115-isolated-v3-skill-candidate.md"
 
 impact:
-  - artifact: "candidates/skill-v3/SKILL.md, candidates/skill-v3/manifest.yaml, candidates/skill-v3/package-lock.yaml, candidates/skill-v3/agents/openai.yaml, candidates/skill-v3/references/codex.md, candidates/skill-v3/references/crud-frontmatter.md, candidates/skill-v3/references/instanciacao.md, candidates/skill-v3/references/instantiation.md, candidates/skill-v3/references/invariantes.md, candidates/skill-v3/references/invariants.md, candidates/skill-v3/references/personalizacao.md, candidates/skill-v3/references/personalization.md, candidates/skill-v3/references/rotinas.md, candidates/skill-v3/references/routines.md, candidates/skill-v3/references/v3-operation.md"
+  - artifact: "candidates/skill-v3/SKILL.md, candidates/skill-v3/manifest.yaml, candidates/skill-v3/package-lock.yaml, candidates/skill-v3/agents/openai.yaml, candidates/skill-v3/references/codex.md, candidates/skill-v3/references/crud-frontmatter.md, candidates/skill-v3/references/instantiation.md, candidates/skill-v3/references/invariants.md, candidates/skill-v3/references/personalization.md, candidates/skill-v3/references/routines.md, candidates/skill-v3/references/v3-operation.md"
     status: "updated"
     note: "Adds the candidate's bounded progressive-disclosure read and version-pinned official methodology adjacency lookup while leaving the V2 release package untouched."
   - artifact: "decisions/0115-isolated-v3-skill-candidate.md"

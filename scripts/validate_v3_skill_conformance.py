@@ -129,6 +129,17 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
         errors.append("candidate manifest core_path does not match review_target.package_root")
     if manifest.get("skill", {}).get("source_repository") != "https://github.com/mklagenberg/hipocampo":
         errors.append("candidate must identify the canonical official Hipocampo repository")
+    executable_suffixes = {".py", ".js", ".ps1", ".sh", ".bat", ".cmd", ".exe"}
+    bundled_executables = sorted(
+        path.relative_to(package_root).as_posix()
+        for path in package_root.rglob("*")
+        if path.is_file() and path.suffix.casefold() in executable_suffixes
+    )
+    if bundled_executables:
+        errors.append(
+            "candidate is instructions-only; executable helper(s) require a separate scope review: "
+            + ", ".join(bundled_executables)
+        )
 
     entrypoint_path = package_root / "SKILL.md"
     operation_path = package_root / "references" / "v3-operation.md"
