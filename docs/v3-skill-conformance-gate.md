@@ -53,14 +53,17 @@ only. The skill candidate is not exercised against real vault content.
 ## Commands and gates
 
 - CI runs `python scripts/validate_v3_skill_conformance.py --mode workflow`.
-  This validates the suite, deterministic outcomes, review-envelope
-  consistency and package binding without claiming V3 release readiness.
+  This validates the suite, deterministic outcomes, the isolated package at
+  `candidates/skill-v3/`, its file lock, review-envelope consistency and
+  package binding without claiming V3 release readiness.
 - The release checklist runs
   `python scripts/validate_v3_skill_conformance.py --mode release` after the
   V3 skill candidate and AI review exist. Release readiness requires a V3
   compatible package, complete AI and AI-challenge coverage for the exact
   package, and recorded human approval.
 
-The current package is expected to remain release-blocked until its
-methodology compatibility range and V3 operation guidance are updated and
-reviewed.
+The V2 skill at `skill/` remains the released package and is unchanged. The
+isolated `2.0.0-rc.1` V3 candidate has a primary AI semantic review recorded;
+its independent AI challenge and human decision remain pending. It is not
+installable and real-vault operation remains blocked until V3.0.0 is released,
+the AI challenge passes, and human approval is recorded.

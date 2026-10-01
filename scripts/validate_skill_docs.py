@@ -59,14 +59,14 @@ def collect_declared_outputs(root: Path, errors: list[str]) -> set[str]:
 
 
 def iter_skill_files(root: Path):
-    skill_dir = root / "skill"
-    if not skill_dir.is_dir():
-        return
-    for path in sorted(skill_dir.rglob("*.md")):
-        yield path
-    yaml_path = skill_dir / "manifest.yaml"
-    if yaml_path.exists():
-        yield yaml_path
+    for skill_dir in (root / "skill", root / "candidates" / "skill-v3"):
+        if not skill_dir.is_dir():
+            continue
+        for path in sorted(skill_dir.rglob("*.md")):
+            yield path
+        yaml_path = skill_dir / "manifest.yaml"
+        if yaml_path.exists():
+            yield yaml_path
 
 
 def check_example_paths(root: Path, declared_outputs: set[str], errors: list[str]) -> None:

@@ -1,57 +1,113 @@
 schema_version: "1.0"
 suite_id: "v3-skill-conformance"
 assessment_status: "blocked"
-assessment_scope: "current canonical package readiness; no V3-compatible skill candidate exists yet"
+assessment_scope: "primary AI semantic review completed for the isolated V3 skill candidate; independent AI challenge and human decision remain pending"
 
 review_target:
   methodology_baseline: "3.0.0"
-  skill_manifest: "skill/manifest.yaml"
-  skill_version: "1.3.0"
-  methodology_compatibility: "^2.1.0"
-  package_lock: "skill/package-lock.yaml"
-  package_lock_sha256: "56a350cbf396b0215c4281e6ceb20e2153270ba202e1a552c79c29e44e0c03c1"
+  package_root: "candidates/skill-v3"
+  skill_manifest: "manifest.yaml"
+  skill_version: "2.0.0-rc.1"
+  methodology_compatibility: "^3.0.0"
+  package_lock: "package-lock.yaml"
+  package_lock_sha256: "be1f85317ab177016777debb31df13bb8b6aef00226d34b95a355a6adf2b63a7"
 
 deterministic_observation:
-  expected_compatibility_state: "unsupported_or_unknown"
-  observed_reason: "The declared skill range ^2.1.0 does not include methodology 3.0.0."
-  action: "block_durable_v3_operation"
+  expected_compatibility_state: "compatible"
+  observed_reason: "The candidate skill declares ^3.0.0, which covers the V3.0.0 baseline; this does not establish authority, privacy permission or host capability."
+  action: "continue_subject_to_authority_and_privacy"
 
 ai_readiness_review:
-  status: "completed_with_blocker"
+  status: "completed"
   reviewer_type: "AI"
-  findings:
-    - id: "AI-SKILL-001"
-      severity: "blocking"
-      finding: "The canonical skill package declares compatibility with ^2.1.0, not V3.0.0. It must not be represented as operating according to V3."
-      evidence:
-        - "skill/manifest.yaml:methodology.compatibility"
-        - "skill/SKILL.md:Skill package version and methodology compatibility"
-    - id: "AI-SKILL-002"
-      severity: "blocking"
-      finding: "No V3-compatible skill candidate is available to execute the semantic scenarios; assessing V3 behavior now would overstate the evidence."
-      evidence:
-        - "docs/v3-skill-conformance-cases.yaml"
-        - "docs/v3-skill-conformance-gate.md"
+  findings: []
+  summary: "The isolated candidate package is complete, integrity-locked and declares the target V3.0.0 baseline. It remains unreleased and is not an activation instruction."
 
 ai_semantic_review:
-  status: "not_run_no_v3_compatible_skill_candidate"
+  status: "passed"
   reviewer_type: "AI"
-  review_id: null
-  reviewer_session_id: null
-  reviewed_at: null
-  package_lock_sha256: null
-  reviewed_semantic_case_ids: []
-  case_dispositions: []
+  review_id: "V3SKILL-AI-REVIEW-001"
+  reviewer_session_id: "primary-review-session-2026-10-01"
+  reviewed_at: "2026-10-01T16:55:17Z"
+  package_lock_sha256: "be1f85317ab177016777debb31df13bb8b6aef00226d34b95a355a6adf2b63a7"
+  reviewed_semantic_case_ids:
+    - "SKILL-S-001"
+    - "SKILL-S-002"
+    - "SKILL-S-003"
+    - "SKILL-S-004"
+    - "SKILL-S-005"
+    - "SKILL-S-006"
+  case_dispositions:
+    - case_id: "SKILL-S-001"
+      disposition: "diagnostic_only_or_migration_review"
+      rationale: "The candidate treats a V2 tuple as migration_required for V3 writes, permits only bounded diagnosis, and requires target tuple, vault-specific mapping, rollback and explicit approval before migration."
+      evidence:
+        - "candidates/skill-v3/SKILL.md#Session-entry-and-compatibility"
+        - "candidates/skill-v3/references/v3-operation.md#1-verify-the-tuple-before-operation"
+        - "candidates/skill-v3/references/v3-operation.md#5-prepare-a-v2-to-v3-migration"
+        - "MIGRATIONS.md#2x--30-v3-candidate-not-active"
+      uncertainty: "No real V2 vault content or migration was examined; the result assesses written operating guidance."
+    - case_id: "SKILL-S-002"
+      disposition: "blocked"
+      rationale: "The skill explicitly requires an actor and a non-empty authorized_vault_ids set covering the requested vault; missing, empty, ambiguous or mismatched authorization blocks Read."
+      evidence:
+        - "candidates/skill-v3/SKILL.md#Discover-vaults-and-entities"
+        - "candidates/skill-v3/references/v3-operation.md#2-confirm-authority-scope-and-operation-capability"
+        - "candidates/skill-v3/references/crud-frontmatter.md#Read"
+        - "docs/v3-crud-contract.md#CRUD-behavior"
+      uncertainty: "No host runtime was exercised to verify that a connector enforces this context."
+    - case_id: "SKILL-S-003"
+      disposition: "preserve_boundaries_or_block"
+      rationale: "The candidate resolves entity, scope and vault independently and rejects shared access, account, Git provider or matching content as shared governance."
+      evidence:
+        - "candidates/skill-v3/SKILL.md#Discover-vaults-and-entities"
+        - "candidates/skill-v3/references/v3-operation.md#2-confirm-authority-scope-and-operation-capability"
+        - "candidates/skill-v3/references/crud-frontmatter.md#Scope-and-privacy"
+        - "docs/v3-contract.md#Entity-aware-routing-and-governed-split"
+      uncertainty: "No cross-vault connector or real identity graph was exercised."
+    - case_id: "SKILL-S-004"
+      disposition: "needs_review_or_blocked"
+      rationale: "The candidate preserves stale, conflicting, inaccessible, provisional and unknown states; it forbids treating retrieval, recency, relevance, hash or disclosure authorization as resolution."
+      evidence:
+        - "candidates/skill-v3/references/v3-operation.md#3-read-and-preserve-source-state"
+        - "candidates/skill-v3/references/v3-operation.md#7-report-result-and-limits"
+        - "docs/v3-semantic-evaluation-boundary.md#Deterministic-boundary"
+        - "docs/v3-search-progressive-disclosure-contract.md#Result-envelope"
+      uncertainty: "This is a text review; no inaccessible or conflicting source was exercised at runtime."
+    - case_id: "SKILL-S-005"
+      disposition: "preserve_v3_0_baseline_or_rework"
+      rationale: "The candidate states that all later V3 minors and patches preserve raw V3.0.0 behavior, including through adapters or facades, and excludes host identity from the version tuple."
+      evidence:
+        - "candidates/skill-v3/SKILL.md#Hipocampo-V3-Skill-candidate"
+        - "candidates/skill-v3/references/v3-operation.md#6-preserve-the-v3.0.0-baseline"
+        - "docs/v3-skill-conformance-gate.md#Purpose"
+      uncertainty: "The claim is assessed as guidance; no later V3 minor or adapter implementation exists here to execute."
+    - case_id: "SKILL-S-006"
+      disposition: "separate_all_three_layers"
+      rationale: "The candidate separates tuple compatibility, authority/privacy and tool capability, and distinguishes deterministic checks, semantic interpretation and human decisions."
+      evidence:
+        - "candidates/skill-v3/SKILL.md#Session-entry-and-compatibility"
+        - "candidates/skill-v3/references/v3-operation.md#7-report-result-and-limits"
+        - "candidates/skill-v3/references/crud-frontmatter.md#Governed-changes"
+        - "docs/verification-boundaries.md#Classification-rule"
+      uncertainty: "Passing text conformance does not prove semantic truth, host enforcement or human acceptance."
+  findings: []
+  limits:
+    - "This review evaluates candidate instructions and cited contracts, not runtime behavior."
+    - "No real vault content, remote authorization, client installation or migration was exercised."
+    - "The candidate package is unreleased and must not be installed or used for real-vault operations yet."
 
 ai_challenge:
-  status: "not_run_no_ai_semantic_review"
+  status: "not_run_pending_independent_ai_session"
   reviewer_type: "AI"
   challenge_id: null
   reviewer_session_id: null
   reviewed_ai_review_id: null
   reviewed_at: null
   package_lock_sha256: null
-  conclusion: "Not run because there is no V3-compatible skill semantic review to challenge."
+  challenged_semantic_case_ids: []
+  case_challenges: []
+  conclusion: "Pending an independent AI session to challenge the primary semantic assessment against the same package fingerprint."
 
 human_review:
   status: "pending"
@@ -62,5 +118,6 @@ human_review:
   reviewed_at: null
 
 limits:
-  - "This is a readiness assessment of the current package, not a semantic test of a V3 skill candidate."
-  - "No real vault content, host runtime, remote authorization or client-local installation was exercised."
+  - "No real vault was accessed or changed."
+  - "Candidate behavior has not been exercised through a host runtime or canonical CRUD implementation."
+  - "The V3 methodology and candidate skill remain unreleased; this record is not a release approval."

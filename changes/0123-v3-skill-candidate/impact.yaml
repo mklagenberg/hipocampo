@@ -1,0 +1,42 @@
+change_set:
+  id: "0123-v3-skill-candidate"
+  class: "operational"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0115-isolated-v3-skill-candidate.md"
+
+impact:
+  - artifact: "candidates/skill-v3/SKILL.md, candidates/skill-v3/manifest.yaml, candidates/skill-v3/package-lock.yaml, candidates/skill-v3/references/"
+    status: "updated"
+    note: "Adds a complete unreleased skill candidate for the V3.0.0 baseline while leaving the V2 release package untouched."
+  - artifact: "docs/v3-skill-conformance-ai-review.yaml, docs/v3-skill-conformance-gate.md, scripts/validate_v3_skill_conformance.py"
+    status: "updated"
+    note: "Records the primary AI semantic review and binds coverage, per-case evidence, timestamps and package integrity to the exact candidate; separate AI challenge and human decision remain blocked."
+  - artifact: "scripts/validate_skill_docs.py, scripts/validate_change.py, CHANGELOG.md"
+    status: "updated"
+    note: "Includes the isolated candidate in skill documentation and protected-diff validation and records the unreleased candidate work."
+  - artifact: "skill/, COMPATIBILITY.yaml, SPEC.md, MIGRATIONS.md, UPGRADE.md"
+    status: "reviewed"
+    note: "The released V2 package and active V2.2 tuple remain unchanged; V3 contracts remain candidate contracts."
+  - artifact: "knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "Only synthetic scenarios and versioned methodology contracts were used; no real vault was accessed."
+
+validation:
+  commands:
+    - "python -B scripts/validate_v3_skill_conformance.py --root . --mode workflow"
+    - "python -B scripts/validate_v3_skill_conformance.py --root . --mode release"
+    - "python -B scripts/validate_skill_docs.py --root ."
+    - "python -B scripts/validate_skill_package.py --root ."
+    - "python -B scripts/validate_compatibility.py --root ."
+    - "python -B scripts/validate_change.py --root ."
+    - "python -B scripts/validate_hipocampo.py --root ."
+    - "python -B scripts/validate_contracts.py --root ."
+  evidence:
+    - "docs/v3-skill-conformance-cases.yaml"
+    - "docs/v3-skill-conformance-ai-review.yaml"
+    - "candidates/skill-v3/package-lock.yaml"
+    - "scripts/validate_v3_skill_conformance.py"
+  notes: "Workflow validation must pass. Release mode is expected to block until the methodology release, independent AI challenge and human approval are complete."
