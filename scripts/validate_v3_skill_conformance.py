@@ -388,6 +388,12 @@ def main() -> int:
     args = parser.parse_args()
     root = Path(args.root).resolve()
     errors, blockers = validate(root, args.mode)
+    human_approved = False
+    try:
+        review = load_yaml(root / "docs" / "v3-skill-conformance-ai-review.yaml")
+        human_approved = review.get("human_review", {}).get("status") == "approved"
+    except (OSError, yaml.YAMLError, ValueError):
+        pass
 
     if errors:
         print(f"validate_v3_skill_conformance: FAILED — {len(errors)} error(s)")
@@ -403,7 +409,10 @@ def main() -> int:
         print(f"validate_v3_skill_conformance: OK — suite and evidence envelope valid; {len(blockers)} release blocker(s) remain")
     else:
         print("validate_v3_skill_conformance: OK — suite and review evidence are complete")
-    print("  Semantic conclusions remain subject to human review.")
+    if human_approved:
+        print("  Human review is recorded; semantic conclusions remain assessments, not deterministic proofs.")
+    else:
+        print("  Semantic conclusions remain subject to human review.")
     return 0
 
 
