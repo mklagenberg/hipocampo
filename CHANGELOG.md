@@ -4,12 +4,17 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **Human confirmation for V3 coverage-gap assessments (Change Set 0126):**
+  records the operator's confirmation of all three semantic dispositions from
+  Change Set 0125. This closes their review gate without turning semantic
+  assessment into deterministic proof or runtime enforcement.
+
 - **V3 cross-engine coverage-gap scenarios (Change Set 0125):** adds six
   executable synthetic cases for case-to-assertion binding, authorization
   revocation, restricted Chunks, transfer retries, interrupted migration
-  preflight, and missing skill capability; adds three semantic assessments
-  pending human confirmation. The 63 existing bindings now carry and validate
-  exact assertion IDs and command targets. Search excludes restricted Chunk
+  preflight, and missing skill capability; adds three semantic assessments,
+  confirmed by the operator in Change Set 0126. The 63 existing bindings now
+  carry and validate exact assertion IDs and command targets. Search excludes restricted Chunk
   content from ranking and expansion, and migration preflight blocks
   already-started execution state. Runtime migration recovery and host
   authorization remain outside the evidence produced here.

@@ -2,8 +2,9 @@
 """Execute new synthetic V3 coverage-gap scenarios and validate review envelopes.
 
 Six deterministic scenarios exercise local V3 components or explicit test
-adapters. Three semantic scenarios are checked for a complete, human-pending
-assessment envelope; this script does not decide semantic truth.
+adapters. Three semantic scenarios are checked for a complete review envelope
+and an explicit pending or confirmed human disposition; this script does not
+decide semantic truth.
 """
 from __future__ import annotations
 
@@ -297,10 +298,24 @@ def validate_semantic_envelope(root: Path, cases: list[dict], errors: list[str])
         errors.append(f"cannot read semantic review envelope: {exc}")
         return
     policy = review.get("review_policy", {}) if isinstance(review, dict) else {}
-    if policy.get("status") != "ai-assessed-human-confirmation-pending":
-        errors.append("semantic review must remain AI-assessed and human-pending")
-    if policy.get("human_confirmation") != "pending" or policy.get("record_mutations") != "none":
-        errors.append("semantic review must preserve the human gate and zero-mutation boundary")
+    human_confirmation = policy.get("human_confirmation")
+    human_review = review.get("human_review", {}) if isinstance(review, dict) else {}
+    if policy.get("record_mutations") != "none":
+        errors.append("semantic review must preserve the zero-mutation boundary")
+    if human_confirmation == "pending":
+        if policy.get("status") != "ai-assessed-human-confirmation-pending":
+            errors.append("pending semantic review must disclose its AI-assessed, human-pending status")
+        if human_review.get("status") != "pending" or human_review.get("decision") is not None:
+            errors.append("pending semantic review must not contain a human decision")
+    elif human_confirmation == "confirmed":
+        if policy.get("status") != "ai-assessed-human-confirmed":
+            errors.append("confirmed semantic review must preserve its AI-assessment and human-confirmation status")
+        if human_review.get("status") != "confirmed" or not isinstance(human_review.get("decision"), str) or not human_review["decision"].strip():
+            errors.append("human confirmation must record a non-empty decision")
+        if not human_review.get("confirmed_at") or not human_review.get("reviewer"):
+            errors.append("human confirmation must record reviewer and confirmation date")
+    else:
+        errors.append("human_confirmation must be pending or confirmed")
     if policy.get("second_pass") != "same-reviewer-adversarial-self-challenge; not an independent reviewer":
         errors.append("semantic review must disclose that the second pass is not independent")
     expected_ids = {case.get("id") for case in cases}
@@ -314,6 +329,10 @@ def validate_semantic_envelope(root: Path, cases: list[dict], errors: list[str])
         for field in ("primary_disposition", "adversarial_disposition", "rationale", "countercheck"):
             if not isinstance(case.get(field), str) or not case[field].strip():
                 errors.append(f"{case.get('id')}: semantic review missing {field}")
+        if human_confirmation == "confirmed" and case.get("human_disposition") != case.get("primary_disposition"):
+            errors.append(f"{case.get('id')}: human disposition must explicitly confirm the reviewed primary disposition")
+        if human_confirmation == "pending" and "human_disposition" in case:
+            errors.append(f"{case.get('id')}: pending review must not contain a human disposition")
         refs = case.get("evidence_refs", [])
         if not isinstance(refs, list) or not refs:
             errors.append(f"{case.get('id')}: semantic review requires evidence references")
@@ -331,14 +350,14 @@ def validate_semantic_envelope(root: Path, cases: list[dict], errors: list[str])
                 errors.append(f"{case.get('id')}: semantic review requires {field}")
 
 
-def run(root: Path) -> tuple[list[str], int, int]:
+def run(root: Path) -> tuple[list[str], int, int, str]:
     errors: list[str] = []
     try:
         data = yaml.safe_load((root / SCENARIO_FILE).read_text(encoding="utf-8"))
     except (OSError, yaml.YAMLError) as exc:
-        return [f"cannot read scenario file: {exc}"], 0, 0
+        return [f"cannot read scenario file: {exc}"], 0, 0, "unknown"
     if not isinstance(data, dict) or data.get("schema_version") != "1.0":
-        return ["scenario file must be a schema_version 1.0 mapping"], 0, 0
+        return ["scenario file must be a schema_version 1.0 mapping"], 0, 0, "unknown"
     if data.get("privacy") != "synthetic-only" or data.get("mutation") != "none":
         errors.append("coverage-gap scenarios must be synthetic-only and non-mutating")
     deterministic = data.get("deterministic_cases", [])
@@ -369,7 +388,13 @@ def run(root: Path) -> tuple[list[str], int, int]:
         errors.extend(handler(case, root))
         executed += 1
     validate_semantic_envelope(root, semantic, errors)
-    return errors, executed, len(semantic)
+    try:
+        review = yaml.safe_load((root / REVIEW_FILE).read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError):
+        human_confirmation = "unknown"
+    else:
+        human_confirmation = review.get("review_policy", {}).get("human_confirmation", "unknown") if isinstance(review, dict) else "unknown"
+    return errors, executed, len(semantic), human_confirmation
 
 
 def main() -> int:
@@ -377,7 +402,7 @@ def main() -> int:
     parser.add_argument("--root", default=".")
     args = parser.parse_args()
     root = Path(args.root).resolve()
-    errors, executed, semantic_count = run(root)
+    errors, executed, semantic_count, human_confirmation = run(root)
     if errors:
         print(f"validate_v3_coverage_gap_scenarios: FAILED — {len(errors)} error(s), {executed} deterministic scenario(s) executed")
         for error in errors:
@@ -385,7 +410,7 @@ def main() -> int:
         return 1
     print(
         "validate_v3_coverage_gap_scenarios: OK — "
-        f"{executed} deterministic scenarios executed; {semantic_count} semantic assessments are complete and human-pending"
+        f"{executed} deterministic scenarios executed; {semantic_count} semantic assessments are complete; human confirmation: {human_confirmation}"
     )
     return 0
 

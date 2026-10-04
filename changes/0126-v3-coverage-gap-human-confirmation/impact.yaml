@@ -1,0 +1,35 @@
+change_set:
+  id: "0126-v3-coverage-gap-human-confirmation"
+  class: "operational"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0093-v3-capability-and-revocation-boundary.md"
+    - "decisions/0099-v3-migration-fixture-gate.md"
+    - "decisions/0104-v3-logical-engine-organization.md"
+    - "decisions/0115-isolated-v3-skill-candidate.md"
+
+impact:
+  - artifact: "docs/v3-coverage-gap-semantic-review.yaml, scripts/validate_v3_coverage_gap_scenarios.py, scripts/validate_v3_engine_suite.py"
+    status: "updated"
+    note: "Records the operator confirmation of all three semantic cases and validates pending or confirmed review states without implying deterministic semantic proof."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Records that Change Set 0125 semantic assessments were confirmed through this follow-on Change Set."
+  - artifact: "SPEC.md, docs/v3-contract.md, candidates/skill-v3/, skill/, COMPATIBILITY.yaml, knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "No contract, skill package, compatibility tuple, vault or private capture was changed or accessed."
+
+validation:
+  commands:
+    - "python -B scripts/validate_v3_coverage_gap_scenarios.py --root ."
+    - "python -B scripts/validate_v3_engine_suite.py --root ."
+    - "python -B scripts/validate_v3_engine_catalog.py --root ."
+    - "python -B scripts/validate_v3_skill_conformance.py --mode workflow --root ."
+    - "python -B scripts/validate_change.py --root . --base origin/main --head HEAD"
+    - "python -B scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "docs/v3-coverage-gap-semantic-review.yaml"
+    - "scripts/validate_v3_coverage_gap_scenarios.py"
+  notes: "The human review gate for these three assessments is closed. Release readiness, runtime capability enforcement and semantic truth are not established by this confirmation."

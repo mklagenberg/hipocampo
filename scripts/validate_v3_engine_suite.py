@@ -132,7 +132,7 @@ def main() -> int:
         f"{semantic_revalidation_count} semantic revalidation command executed, "
         f"{deterministic_case_count} existing deterministic cases assigned, "
         f"{semantic_case_count} existing semantic cases review-bound, "
-        "plus the six executable coverage-gap scenarios and three human-pending semantic assessments"
+        "plus the six executable coverage-gap scenarios and three semantic assessments (see their recorded human-review status)"
     )
     return 0
 
