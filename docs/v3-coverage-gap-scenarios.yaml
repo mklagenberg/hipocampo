@@ -46,7 +46,7 @@ deterministic_cases:
       records: 1
       crud_events: 1
   - id: DET-MIGRATION-INTERRUPT-001
-    assertion_id: migration.interrupted_preflight_cannot_be_ready
+    assertion_id: migration.interrupted_branch_isolated_until_validation
     runner: v3-coverage-gap-scenarios
     handler: migration_interruption
     input:
@@ -59,8 +59,11 @@ deterministic_cases:
       source_changed: false
       target_promoted: false
       runtime_resume_tested: false
+      partial_change_on_task_branch: true
+      main_sha_unchanged: true
+      premature_merge: false
   - id: DET-SKILL-CAPABILITY-001
-    assertion_id: skill.missing_runtime_capability_stops_without_io
+    assertion_id: skill.capability_authorization_gate_fails_closed_before_io
     runner: v3-coverage-gap-scenarios
     handler: missing_skill_capability
     input:
@@ -71,6 +74,33 @@ deterministic_cases:
       disposition: unavailable
       read_performed: false
       write_performed: false
+      capability_matrix:
+        - capability: proven
+          authorization_context: missing
+          disposition: authorization_required
+          read_performed: false
+        - capability: observational
+          authorization_context: valid
+          disposition: unavailable
+          read_performed: false
+        - capability: unavailable
+          authorization_context: valid
+          disposition: unavailable
+          read_performed: false
+        - capability: authorization_required
+          authorization_context: valid
+          disposition: authorization_required
+          read_performed: false
+        - capability: proven
+          authorization_context: valid
+          disposition: accepted
+          read_performed: true
+          canonical_reads: 1
+      revocation_after_snapshot:
+        status: blocked
+        disclosure_level: L0
+        body_returned: false
+        mutation: none
 
 semantic_cases:
   - id: SEM-MIGRATION-SCOPE-001

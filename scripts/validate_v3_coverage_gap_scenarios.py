@@ -10,8 +10,13 @@ from __future__ import annotations
 
 import argparse
 from copy import deepcopy
+import os
 from pathlib import Path
+import shutil
+import stat
+import subprocess
 from typing import Callable
+import uuid
 
 import yaml
 
@@ -78,8 +83,8 @@ def check_binding(binding: dict) -> list[str]:
         "DET-SEARCH-REVOCATION-001": ("search.revocation_between_snapshot_and_read_fails_closed", "v3-coverage-gap-scenarios", "authorization_revocation"),
         "DET-SEARCH-CHUNK-001": ("search.restricted_chunk_excluded_from_rank_and_disclosure", "v3-coverage-gap-scenarios", "chunk_effective_restriction"),
         "DET-TRANSFER-RETRY-001": ("transfer.replayed_acceptance_creates_one_record_and_event", "v3-coverage-gap-scenarios", "transfer_retry"),
-        "DET-MIGRATION-INTERRUPT-001": ("migration.interrupted_preflight_cannot_be_ready", "v3-coverage-gap-scenarios", "migration_interruption"),
-        "DET-SKILL-CAPABILITY-001": ("skill.missing_runtime_capability_stops_without_io", "v3-coverage-gap-scenarios", "missing_skill_capability"),
+        "DET-MIGRATION-INTERRUPT-001": ("migration.interrupted_branch_isolated_until_validation", "v3-coverage-gap-scenarios", "migration_interruption"),
+        "DET-SKILL-CAPABILITY-001": ("skill.capability_authorization_gate_fails_closed_before_io", "v3-coverage-gap-scenarios", "missing_skill_capability"),
     }
     case_id = binding.get("id")
     expected = registry.get(case_id)
@@ -241,7 +246,6 @@ def test_transfer_retry(case: dict, root: Path) -> list[str]:
 
 
 def test_migration_interruption(case: dict, root: Path) -> list[str]:
-    del root
     errors: list[str] = []
     source = {"source_version": "2.2.0", "record_ids": ["r1", "r2", "r3", "r4", "r5"]}
     before = deepcopy(source)
@@ -261,23 +265,179 @@ def test_migration_interruption(case: dict, root: Path) -> list[str]:
         errors.append(f"interrupted migration expected {case['expected']['status']}, got {status}")
     if (source != before) != case["expected"]["source_changed"]:
         errors.append("migration preflight modified its source fixture")
-    if case["expected"]["target_promoted"] is not False or case["expected"]["runtime_resume_tested"] is not False:
+    if (
+        case["expected"]["target_promoted"] is not False
+        or case["expected"]["runtime_resume_tested"] is not False
+        or case["expected"].get("partial_change_on_task_branch") is not True
+        or case["expected"].get("main_sha_unchanged") is not True
+        or case["expected"].get("premature_merge") is not False
+    ):
         errors.append("scenario must state that runtime resume remains untested")
+
+    # Exercise the declared Git recovery boundary without touching this checkout
+    # or any vault: a partial migration commit stays on its dedicated branch.
+    git_env = os.environ.copy()
+    for key in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR", "GIT_OBJECT_DIRECTORY", "GIT_ALTERNATE_OBJECT_DIRECTORIES"):
+        git_env.pop(key, None)
+    git_env.update({
+        "GIT_CONFIG_NOSYSTEM": "1",
+        "GIT_AUTHOR_DATE": "2026-10-04T12:00:00+00:00",
+        "GIT_COMMITTER_DATE": "2026-10-04T12:00:00+00:00",
+    })
+
+    def git(repo: Path, *args: str) -> str:
+        result = subprocess.run(
+            ["git", "-C", str(repo), *args],
+            capture_output=True,
+            text=True,
+            check=False,
+            env=git_env,
+        )
+        if result.returncode:
+            raise RuntimeError(result.stderr.strip() or f"git {' '.join(args)} failed")
+        return result.stdout.strip()
+
+    try:
+        temp_root = root / ".tmp"
+        temp_root.mkdir(exist_ok=True)
+        repo = temp_root / f"synthetic-migration-{uuid.uuid4().hex}"
+        repo.mkdir()
+        try:
+            git(repo, "init", "--quiet", "--initial-branch=main")
+            git(repo, "config", "user.name", "Hipocampo Synthetic Test")
+            git(repo, "config", "user.email", "synthetic@example.invalid")
+            git(repo, "config", "core.autocrlf", "false")
+            source_path = repo / "source.md"
+            source_path.write_text("version: 2.2.0\nrecords: [r1, r2, r3, r4, r5]\n", encoding="utf-8")
+            git(repo, "add", "source.md")
+            git(repo, "commit", "--quiet", "-m", "synthetic baseline")
+            main_sha = git(repo, "rev-parse", "HEAD")
+            git(repo, "switch", "--quiet", "-c", "migration/test")
+            partial_path = repo / "partial-migration.yaml"
+            partial_path.write_text("mapped_records: [r1, r2]\nstate: interrupted\n", encoding="utf-8")
+            git(repo, "add", "partial-migration.yaml")
+            git(repo, "commit", "--quiet", "-m", "synthetic partial migration")
+            partial_sha = git(repo, "rev-parse", "HEAD")
+            if git(repo, "branch", "--show-current") != "migration/test":
+                errors.append("partial migration did not remain on its dedicated branch")
+            git(repo, "switch", "--quiet", "main")
+            if git(repo, "rev-parse", "HEAD") != main_sha:
+                errors.append("main advanced before migration validation")
+            if _git_object_exists(repo, "main:partial-migration.yaml", git_env):
+                errors.append("partial migration file is present on main before validation")
+            git(repo, "switch", "--quiet", "migration/test")
+            if git(repo, "rev-parse", "HEAD") != partial_sha or not partial_path.is_file():
+                errors.append("partial migration was not preserved on the task branch")
+            if "main" in git(repo, "branch", "--contains", partial_sha).splitlines():
+                errors.append("partial migration commit is reachable from main before validation")
+            if git(repo, "rev-parse", "main") != main_sha:
+                errors.append("main changed while preserving the interrupted migration branch")
+            if not errors:
+                print(f"    synthetic Git baseline={main_sha}; partial={partial_sha}; main unchanged; no merge")
+        finally:
+            if repo.exists():
+                shutil.rmtree(repo, onerror=_remove_readonly)
+    except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
+        errors.append(f"synthetic Git branch isolation check failed: {exc}")
     return errors
+
+
+def _remove_readonly(function, path, exc_info) -> None:
+    """Git object files can be read-only on Windows; clean only our temp repo."""
+    del exc_info
+    os.chmod(path, stat.S_IWRITE)
+    function(path)
+
+
+def _git_object_exists(repo: Path, object_name: str, env: dict[str, str]) -> bool:
+    result = subprocess.run(
+        ["git", "-C", str(repo), "cat-file", "-e", object_name],
+        capture_output=True,
+        check=False,
+        env=env,
+    )
+    return result.returncode == 0
 
 
 def test_missing_skill_capability(case: dict, root: Path) -> list[str]:
     errors: list[str] = []
     operation = (root / "candidates/skill-v3/references/v3-operation.md").read_text(encoding="utf-8")
     scenario = case["input"]
-    if scenario["capability_available"] or scenario["authorization_context"] != "missing":
-        errors.append("fixture must represent unavailable capability and missing authorization")
-    if case["expected"] != {"disposition": "unavailable", "read_performed": False, "write_performed": False}:
-        errors.append("scenario must fail closed without Read or Write")
     if "mark that operation unavailable and stop" not in operation:
         errors.append("candidate skill does not direct the unavailable-capability stop")
     if "Do not simulate a governed read by scanning vault files directly" not in operation:
         errors.append("candidate skill does not prohibit direct filesystem fallback")
+
+    class SyntheticHostAdapter:
+        """Test double for host capability and authorization; never a real host."""
+        def __init__(self, capability: str, auth: str, crud: RecordCrud):
+            self.capability = capability
+            self.auth = auth
+            self.crud = crud
+            self.snapshot_reads = 0
+            self.canonical_reads = 0
+            self.writes = 0
+
+        def dispatch(self) -> dict:
+            if self.capability != "proven":
+                disposition = "authorization_required" if self.capability == "authorization_required" else "unavailable"
+                return {"disposition": disposition, "results": [], "read_performed": False, "write_performed": False}
+            if self.auth != "valid":
+                return {"disposition": "authorization_required", "results": [], "read_performed": False, "write_performed": False}
+            adapter = self
+
+            class CountingCrud(RecordCrud):
+                @property
+                def records(self):
+                    adapter.snapshot_reads += 1
+                    return super().records
+
+                def apply(self, request: dict) -> dict:
+                    if request.get("operation") == "read":
+                        adapter.canonical_reads += 1
+                    else:
+                        adapter.writes += 1
+                    return super().apply(request)
+
+            wrapped = CountingCrud(self.crud.active_collections, self.crud.records)
+            result = search(wrapped, search_request(query="alpha"))
+            return {
+                "disposition": result["status"],
+                "results": result["results"],
+                "read_performed": self.canonical_reads > 0,
+                "write_performed": self.writes > 0,
+            }
+
+    record = runtime_record("rec-capability", text="alpha synthetic-capability-body")
+    base_crud = RecordCrud({"collection-a": {"collection_id": "collection-a", "active": True}}, {record["record_id"]: record})
+    expected_matrix = case["expected"].get("capability_matrix", [])
+    if not expected_matrix:
+        errors.append("scenario does not declare its synthetic capability/auth matrix")
+    for expected_case in expected_matrix:
+        capability = expected_case["capability"]
+        auth = expected_case["authorization_context"]
+        expected_disposition = expected_case["disposition"]
+        expect_read = expected_case["read_performed"]
+        adapter = SyntheticHostAdapter(capability, auth, base_crud)
+        result = adapter.dispatch()
+        if result["disposition"] != expected_disposition:
+            errors.append(f"{capability}/{auth}: expected {expected_disposition}, got {result['disposition']}")
+        if result["read_performed"] != expect_read or result["write_performed"]:
+            errors.append(f"{capability}/{auth}: incorrect canonical Read/Write activity")
+        if not expect_read and (result["results"] or adapter.snapshot_reads or adapter.canonical_reads):
+            errors.append(f"{capability}/{auth}: denied request accessed or returned Record content")
+        if adapter.canonical_reads != expected_case.get("canonical_reads", 0):
+            errors.append("authorized request must perform exactly one canonical CRUD Read")
+        if not errors and expect_read:
+            print(f"    capability={capability}, authorization={auth}, canonical_reads={adapter.canonical_reads}, writes={adapter.writes}")
+    revoked_case = {"expected": case["expected"].get("revocation_after_snapshot", {})}
+    errors.extend(test_authorization_revocation(revoked_case, root))
+    if scenario.get("capability_available") is not False or scenario.get("authorization_context") != "missing":
+        errors.append("fixture must retain the original unavailable-capability, missing-authorization case")
+    if any(case["expected"].get(key) != value for key, value in {
+        "disposition": "unavailable", "read_performed": False, "write_performed": False,
+    }.items()):
+        errors.append("scenario contract must retain fail-closed behavior without Read or Write")
     return errors
 
 
@@ -350,14 +510,14 @@ def validate_semantic_envelope(root: Path, cases: list[dict], errors: list[str])
                 errors.append(f"{case.get('id')}: semantic review requires {field}")
 
 
-def run(root: Path) -> tuple[list[str], int, int, str]:
+def run(root: Path) -> tuple[list[str], int, int, str, list[tuple[str, bool]]]:
     errors: list[str] = []
     try:
         data = yaml.safe_load((root / SCENARIO_FILE).read_text(encoding="utf-8"))
     except (OSError, yaml.YAMLError) as exc:
-        return [f"cannot read scenario file: {exc}"], 0, 0, "unknown"
+        return [f"cannot read scenario file: {exc}"], 0, 0, "unknown", []
     if not isinstance(data, dict) or data.get("schema_version") != "1.0":
-        return ["scenario file must be a schema_version 1.0 mapping"], 0, 0, "unknown"
+        return ["scenario file must be a schema_version 1.0 mapping"], 0, 0, "unknown", []
     if data.get("privacy") != "synthetic-only" or data.get("mutation") != "none":
         errors.append("coverage-gap scenarios must be synthetic-only and non-mutating")
     deterministic = data.get("deterministic_cases", [])
@@ -374,6 +534,7 @@ def run(root: Path) -> tuple[list[str], int, int, str]:
     if {case.get("id") for case in semantic if isinstance(case, dict)} != SEMANTIC_IDS:
         errors.append("semantic scenario coverage does not match the three reviewed scenarios")
     executed = 0
+    scenario_results: list[tuple[str, bool]] = []
     for case in deterministic:
         if not isinstance(case, dict):
             continue
@@ -385,7 +546,9 @@ def run(root: Path) -> tuple[list[str], int, int, str]:
         if handler is None:
             errors.append(f"{case.get('id')}: executable scenario handler is unavailable")
             continue
-        errors.extend(handler(case, root))
+        case_errors = handler(case, root)
+        errors.extend(case_errors)
+        scenario_results.append((case["id"], not case_errors))
         executed += 1
     validate_semantic_envelope(root, semantic, errors)
     try:
@@ -394,7 +557,7 @@ def run(root: Path) -> tuple[list[str], int, int, str]:
         human_confirmation = "unknown"
     else:
         human_confirmation = review.get("review_policy", {}).get("human_confirmation", "unknown") if isinstance(review, dict) else "unknown"
-    return errors, executed, len(semantic), human_confirmation
+    return errors, executed, len(semantic), human_confirmation, scenario_results
 
 
 def main() -> int:
@@ -402,7 +565,9 @@ def main() -> int:
     parser.add_argument("--root", default=".")
     args = parser.parse_args()
     root = Path(args.root).resolve()
-    errors, executed, semantic_count, human_confirmation = run(root)
+    errors, executed, semantic_count, human_confirmation, scenario_results = run(root)
+    for case_id, passed in scenario_results:
+        print(f"  [{'PASS' if passed else 'FAIL'}] {case_id}")
     if errors:
         print(f"validate_v3_coverage_gap_scenarios: FAILED — {len(errors)} error(s), {executed} deterministic scenario(s) executed")
         for error in errors:

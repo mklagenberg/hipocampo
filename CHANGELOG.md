@@ -4,6 +4,14 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **Synthetic migration-branch and runtime request gates (Change Set 0127):**
+  exercises an interrupted partial migration in a temporary Git repository and
+  verifies that `main` remains at its baseline until validation. Expands the
+  synthetic capability/authentication matrix around Search and canonical CRUD
+  Read, including missing, observational, unavailable, valid, and revoked
+  contexts. These test doubles do not prove enforcement by a real host or cover
+  side effects outside Git.
+
 - **Human confirmation for V3 coverage-gap assessments (Change Set 0126):**
   records the operator's confirmation of all three semantic dispositions from
   Change Set 0125. This closes their review gate without turning semantic

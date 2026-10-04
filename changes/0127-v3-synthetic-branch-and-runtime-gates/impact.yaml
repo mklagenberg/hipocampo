@@ -1,0 +1,42 @@
+change_set:
+  id: "0127-v3-synthetic-branch-and-runtime-gates"
+  class: "operational"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0093-v3-capability-and-revocation-boundary.md"
+    - "decisions/0099-v3-migration-fixture-gate.md"
+    - "decisions/0104-v3-logical-engine-organization.md"
+    - "decisions/0115-isolated-v3-skill-candidate.md"
+
+impact:
+  - artifact: "scripts/validate_v3_coverage_gap_scenarios.py"
+    status: "updated"
+    note: "Executes temporary Git branch isolation and synthetic capability/authorization request gates, including canonical Read and revocation assertions."
+  - artifact: "docs/v3-coverage-gap-scenarios.yaml"
+    status: "updated"
+    note: "Declares main SHA preservation, no premature merge, the capability/authentication matrix, and expected revocation outcome."
+  - artifact: "CHANGELOG.md"
+    status: "updated"
+    note: "Records the additive synthetic coverage and its host-enforcement and external-side-effect limits."
+  - artifact: "SPEC.md, skill/, candidates/skill-v3/, COMPATIBILITY.yaml, knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "No methodology obligation, published skill, candidate skill package, compatibility tuple, vault, or private capture was changed or accessed."
+
+validation:
+  commands:
+    - "python -B scripts/validate_v3_coverage_gap_scenarios.py --root ."
+    - "python -B scripts/validate_v3_engine_suite.py --root ."
+    - "python -B scripts/validate_v3_search_progressive_disclosure.py --root ."
+    - "python -B scripts/validate_v3_migration.py"
+    - "python -B scripts/validate_v3_skill_conformance.py --mode workflow --root ."
+    - "python -B scripts/validate_skill_package.py --root ."
+    - "python -B scripts/validate_skill_docs.py --root ."
+    - "python -B scripts/validate_contracts.py --root ."
+    - "python -B scripts/validate_hipocampo.py --root ."
+    - "python -B scripts/validate_change.py --root . --base origin/main --head HEAD"
+  evidence:
+    - "docs/v3-coverage-gap-scenarios.yaml"
+    - "scripts/validate_v3_coverage_gap_scenarios.py"
+  notes: "Synthetic tests prove only declared local adapter and Git properties. Skill release mode is expected to remain blocked until its existing publication and readiness gates are met."
