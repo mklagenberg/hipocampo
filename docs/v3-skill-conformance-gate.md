@@ -64,7 +64,10 @@ inputs only. The skill candidate is not exercised against real vault content.
   package, and recorded human approval.
 
 The V2 skill at `skill/` remains the released package and is unchanged. The
-isolated `2.0.0-rc.1` V3 candidate has a primary AI semantic review recorded;
-its independent AI challenge and human decision remain pending. It is not
-installable and real-vault operation remains blocked until V3.0.0 is released,
-the AI challenge passes, and human approval is recorded.
+isolated `2.0.0-rc.1` V3 candidate has a primary AI semantic review, independent
+AI challenge, and human approval recorded against the same package fingerprint.
+This approves the semantic assessments and the candidate-isolation decision;
+it does not release or activate the candidate. The methodology and skill
+candidate remain unreleased, and runtime enforcement has not been demonstrated.
+Real-vault operation remains blocked until the methodology and skill releases,
+compatible tuple, and adapter capability/authorization gates are satisfied.

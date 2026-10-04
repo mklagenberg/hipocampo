@@ -1,0 +1,39 @@
+change_set:
+  id: "0124-v3-skill-human-review"
+  class: "operational"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0115-isolated-v3-skill-candidate.md"
+
+impact:
+  - artifact: "docs/v3-skill-conformance-ai-review.yaml"
+    status: "updated"
+    note: "Records the independent challenge and the operator's human approval against the unchanged candidate fingerprint, including review limits."
+  - artifact: "docs/v3-skill-conformance-gate.md"
+    status: "updated"
+    note: "Reflects completed semantic review while preserving the unreleased methodology, unreleased candidate, runtime, and real-vault blockers."
+  - artifact: "scripts/validate_v3_skill_conformance.py"
+    status: "updated"
+    note: "Reports the recorded human-review state accurately while retaining the distinction between semantic assessment and deterministic proof."
+  - artifact: "candidates/skill-v3/, skill/, COMPATIBILITY.yaml, SPEC.md, MIGRATIONS.md, UPGRADE.md"
+    status: "reviewed"
+    note: "Candidate contents, active V2 package and tuple, and V3 normative contracts remain unchanged."
+  - artifact: "knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "No real vault content was accessed or changed."
+
+validation:
+  commands:
+    - "python -B scripts/validate_v3_skill_conformance.py --root . --mode workflow"
+    - "python -B scripts/validate_v3_skill_conformance.py --root . --mode release"
+    - "python -B scripts/validate_change.py --root ."
+    - "python -B scripts/validate_hipocampo.py --root ."
+    - "python -B scripts/validate_contracts.py --root ."
+  evidence:
+    - "docs/v3-skill-conformance-cases.yaml"
+    - "docs/v3-skill-conformance-ai-review.yaml"
+    - "candidates/skill-v3/package-lock.yaml"
+    - "scripts/validate_v3_skill_conformance.py"
+  notes: "Workflow mode must pass. Release mode is expected to remain blocked because V3 and the skill candidate are unreleased and the assessment is not release-ready."

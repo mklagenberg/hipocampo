@@ -1,7 +1,7 @@
 schema_version: "1.0"
 suite_id: "v3-skill-conformance"
 assessment_status: "blocked"
-assessment_scope: "primary AI semantic review completed for the isolated V3 skill candidate; independent AI challenge and human decision remain pending"
+assessment_scope: "primary AI semantic review, independent AI challenge, and human review completed for the isolated V3 skill candidate; release and runtime gates remain pending"
 
 review_target:
   methodology_baseline: "3.0.0"
@@ -109,26 +109,86 @@ ai_semantic_review:
     - "The candidate package is unreleased and must not be installed or used for real-vault operations yet."
 
 ai_challenge:
-  status: "not_run_pending_independent_ai_session"
+  status: "passed"
   reviewer_type: "AI"
-  challenge_id: null
-  reviewer_session_id: null
-  reviewed_ai_review_id: null
-  reviewed_at: null
-  package_lock_sha256: null
-  challenged_semantic_case_ids: []
-  case_challenges: []
-  conclusion: "Pending an independent AI session to challenge the primary semantic assessment against the same package fingerprint."
+  challenge_id: "V3SKILL-AI-CHALLENGE-001"
+  reviewer_session_id: "codex-subagent:/root/v3_skill_challenge"
+  reviewed_ai_review_id: "V3SKILL-AI-REVIEW-003"
+  reviewed_at: "2026-10-04T18:05:37Z"
+  package_lock_sha256: "91685f8106ef3e24d6a9c4e518e6b099f4ec2e760b90e93c29ad33bad90db3fa"
+  challenged_semantic_case_ids:
+    - "SKILL-S-001"
+    - "SKILL-S-002"
+    - "SKILL-S-003"
+    - "SKILL-S-004"
+    - "SKILL-S-005"
+    - "SKILL-S-006"
+    - "SKILL-S-007"
+  case_challenges:
+    - case_id: "SKILL-S-001"
+      disposition: "stands"
+      rationale: "The migration guidance bounds V2 diagnosis and blocks V3 writes until destination, mapping, rollback and explicit approval are established. The wording could be misread as forbidding V2-native reads; the V2.2 resolution matrix preserves those as legacy input. No real migration was exercised."
+      evidence:
+        - "candidates/skill-v3/references/v3-operation.md"
+        - "MIGRATIONS.md"
+        - "docs/v3-v22-resolution-matrix.yaml"
+    - case_id: "SKILL-S-002"
+      disposition: "stands"
+      rationale: "The skill requires an actor and a non-empty authorized_vault_ids set covering the requested vault, and blocks missing or mismatched context. Text instructions do not prove that a host connector enforces this boundary."
+      evidence:
+        - "candidates/skill-v3/SKILL.md"
+        - "candidates/skill-v3/references/crud-frontmatter.md"
+        - "docs/v3-crud-contract.md"
+        - "changes/0115-v3-crud-read-authorization-context/impact.yaml"
+    - case_id: "SKILL-S-003"
+      disposition: "stands"
+      rationale: "The skill preserves entity and vault boundaries and rejects shared access or Git provider as shared authority. This does not rule out a separately governed owner/authority chain. No real registry or multi-vault connector was exercised."
+      evidence:
+        - "candidates/skill-v3/references/invariants.md"
+        - "docs/v3-contract.md"
+        - "docs/v3-crud-contract.md"
+    - case_id: "SKILL-S-004"
+      disposition: "stands"
+      rationale: "The candidate preserves stale, conflicting, unknown and inaccessible states. An operator could still confuse an unavailable source with an inaccessible Record, although the cited guidance distinguishes them. No runtime source-state scenario was exercised."
+      evidence:
+        - "candidates/skill-v3/references/v3-operation.md"
+        - "docs/v3-semantic-evaluation-boundary.md"
+        - "docs/v3-search-progressive-disclosure-contract.md"
+    - case_id: "SKILL-S-005"
+      disposition: "stands"
+      rationale: "The skill explicitly keeps raw V3.0.0 behavior as the baseline through later V3 minors, patches, adapters or facades. The package does not define a complete future compatibility test for every observable guarantee; this is a verification gap, not contrary guidance."
+      evidence:
+        - "candidates/skill-v3/references/v3-operation.md"
+        - "candidates/skill-v3/references/invariants.md"
+        - "docs/v3-skill-conformance-gate.md"
+    - case_id: "SKILL-S-006"
+      disposition: "stands"
+      rationale: "The guidance separates compatibility, authority/privacy, capability, deterministic validation, semantic interpretation and human decisions. A response template could help preserve those distinctions in concise reports, but its absence does not contradict the instructions."
+      evidence:
+        - "candidates/skill-v3/SKILL.md"
+        - "candidates/skill-v3/references/v3-operation.md"
+        - "candidates/skill-v3/references/crud-frontmatter.md"
+        - "docs/verification-boundaries.md"
+    - case_id: "SKILL-S-007"
+      disposition: "stands"
+      rationale: "The skill requires bounded progressive disclosure, explicit authorization for deeper reads, version-matched official methodology references and separate resolution of vault relationships. Host enforcement and remote retrieval were not exercised; unavailable references must remain blocked or unknown."
+      evidence:
+        - "candidates/skill-v3/references/v3-operation.md"
+        - "candidates/skill-v3/references/personalization.md"
+        - "docs/v3-search-progressive-disclosure-contract.md"
+        - "docs/v3-external-reference-policy.md"
+  conclusion: "Independent challenge found no case that requires revising the primary dispositions; all seven stand with the documented text-only and runtime limitations. The reviewer was a separate delegated Codex task at codex-subagent:/root/v3_skill_challenge. No immutable session identifier was exposed."
 
 human_review:
-  status: "pending"
-  decision: null
-  reviewer: null
-  reviewed_ai_review_id: null
-  reviewed_ai_challenge_id: null
-  reviewed_at: null
+  status: "approved"
+  decision: "accepted_with_documented_limits; candidate isolation decision accepted; release remains blocked"
+  reviewer: "operator via explicit approval in this Codex conversation"
+  reviewed_ai_review_id: "V3SKILL-AI-REVIEW-003"
+  reviewed_ai_challenge_id: "V3SKILL-AI-CHALLENGE-001"
+  reviewed_at: "2026-10-04T18:09:03Z"
 
 limits:
   - "No real vault was accessed or changed."
   - "Candidate behavior has not been exercised through a host runtime or canonical CRUD implementation."
   - "The V3 methodology and candidate skill remain unreleased; this record is not a release approval."
+  - "Runtime enforcement, remote authorization and real-vault operation remain unproven."
