@@ -50,6 +50,17 @@ The complete case and test assignment is maintained in
 is `scripts/validate_v3_engine_suite.py`; semantic cases remain review-bound
 and are checked for valid fixture references and complete review boundaries.
 
+Cross-engine safety scenarios are supplemental verification, not a thirteenth
+domain engine. `docs/v3-coverage-gap-scenarios.yaml` adds six executable
+deterministic scenarios and three additive semantic assessments. The runner
+checks the existing 63 case IDs, assertion IDs and exact command bindings,
+then executes the declared 22 engine commands and the six new scenario
+handlers. Passing an engine command proves that command passed; it does not
+produce an independent transcript for every one of the 63 assertion IDs.
+The three new semantic assessments remain pending human confirmation. The
+interrupted-migration case exercises preflight blocking only; rollback and
+resume have no runtime executor in this candidate.
+
 Search & Progressive Disclosure is a logical read-side boundary in the
 unreleased candidate. Its first gate is now implemented as a fixture-backed,
 local read-only runtime through the canonical CRUD read boundary. This does not

@@ -4,10 +4,20 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **V3 cross-engine coverage-gap scenarios (Change Set 0125):** adds six
+  executable synthetic cases for case-to-assertion binding, authorization
+  revocation, restricted Chunks, transfer retries, interrupted migration
+  preflight, and missing skill capability; adds three semantic assessments
+  pending human confirmation. The 63 existing bindings now carry and validate
+  exact assertion IDs and command targets. Search excludes restricted Chunk
+  content from ranking and expansion, and migration preflight blocks
+  already-started execution state. Runtime migration recovery and host
+  authorization remain outside the evidence produced here.
+
 - **Isolated V3 skill candidate (Change Set 0123):** adds a complete,
   integrity-locked `2.0.0-rc.1` package with `^3.0.0` compatibility while
   preserving the released V2 skill. The primary AI semantic review passed the
-  six synthetic cases; a separate AI challenge and human decision remain
+  seven synthetic cases; a separate AI challenge and human decision remain
   pending. The candidate is not installable or activated.
 
 - **V3 skill conformance gate (Change Set 0122):** adds synthetic deterministic

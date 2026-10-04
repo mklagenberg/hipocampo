@@ -16,6 +16,11 @@ VERSION_RE = re.compile(r"^\d+\.\d+(?:\.\d+)?$")
 
 
 def evaluate(case: dict[str, Any]) -> str:
+    # This module is a migration preflight, not an execution or recovery
+    # engine. Any already-started/incomplete state requires a dedicated,
+    # reviewed recovery path and cannot be declared ready by preflight.
+    if case.get("execution_state", "not_started") != "not_started":
+        return "blocked"
     if case.get("unsafe_raw_fallback"):
         return "blocked"
     source_version = case.get("source_version")

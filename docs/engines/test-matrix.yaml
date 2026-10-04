@@ -6,6 +6,7 @@ policy:
   normative_basis: "v3-constitutional-test-basis.yaml"
   deterministic_bindings: "engines/deterministic-case-bindings.yaml"
   semantic_revalidation_command: "python scripts/validate_v3_semantic_constitutional_revalidation.py --root ."
+  coverage_gap_scenario_command: "python scripts/validate_v3_coverage_gap_scenarios.py --root ."
 engines:
   - id: crud
     name: "Record CRUD"

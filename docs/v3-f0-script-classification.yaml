@@ -63,6 +63,9 @@ scripts:
   - path: scripts/v3_search_engine.py
     class: hybrid
     proof: "bounded CRUD reads, disclosure guardrails and no-mutation checks; relevance, authority and epistemic interpretation remain semantic"
+  - path: scripts/v3_case_bindings.py
+    class: deterministic
+    proof: "canonical assertion identifiers and exact case-to-command binding validation"
   - path: scripts/validate_v3_migration.py
     class: deterministic
     proof: "migration fixture coverage and expected typed outcomes"

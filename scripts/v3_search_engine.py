@@ -6,7 +6,7 @@ from copy import deepcopy
 from datetime import datetime
 import re
 
-from v3_crud_engine import ContractError, RecordCrud
+from v3_crud_engine import ContractError, RecordCrud, effective_visibility
 
 
 LEVELS = ("L0", "L1", "L2", "L3", "L4")
@@ -60,9 +60,19 @@ def _terms(query: str) -> list[str]:
     return re.findall(r"[\w-]+", query.casefold())
 
 
+def _chunk_content_allowed(record: dict, chunk: dict) -> bool:
+    """Keep a more-restricted Chunk out of ranking and all disclosure levels."""
+    return (
+        effective_visibility([record, chunk]) != "restricted"
+        and chunk.get("privacy") not in {"blocked", "restricted"}
+    )
+
+
 def _record_text(record: dict) -> str:
     parts = [str(record.get("title", "")), str(record.get("text", ""))]
     for chunk in record.get("chunks", []):
+        if not _chunk_content_allowed(record, chunk):
+            continue
         parts.extend([str(chunk.get("text_ref", "")), str(chunk.get("text", ""))])
     return " ".join(parts).casefold()
 
@@ -78,7 +88,8 @@ def _matching_chunks(record: dict, terms: list[str]) -> list[dict]:
     return [
         deepcopy(chunk)
         for chunk in record.get("chunks", [])
-        if any(term in str(chunk.get("text", "")).casefold() for term in terms)
+        if _chunk_content_allowed(record, chunk)
+        and any(term in str(chunk.get("text", "")).casefold() for term in terms)
     ]
 
 
@@ -233,6 +244,7 @@ def _result_envelope(
         envelope["expanded_content"] = [
             {"chunk_id": chunk.get("chunk_id"), "text": chunk.get("text", "")}
             for chunk in record.get("chunks", [])
+            if _chunk_content_allowed(record, chunk)
         ]
     return envelope
 
