@@ -51,7 +51,7 @@ The unreleased V3 governance envelope may additionally carry:
 entity: "entity-id"
 scope: "knowledge-scope"
 vault:
-  id: "vault-id"
+  vault_id: "vault-id"
   profile: "entity | team | personal"
   role: "anchor | additional"
 governance:
@@ -68,6 +68,8 @@ source:
 maturity, write access, or automatic access to an entity anchor. The existing
 `entity`/`role` manifest model remains separate from the candidate vault
 profile.
+`vault_id` is the canonical stable vault identifier in the V3 envelope and
+matches the CRUD and migration executor contracts.
 
 `confidence`, `attributed_to`, and `evidence` remain optional. A source hash
 identifies a version; it does not prove truth, quality, or authorization.

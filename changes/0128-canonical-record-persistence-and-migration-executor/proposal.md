@@ -17,6 +17,8 @@ that accepts a complete, reviewed vault-local manifest. The executor runs
 dry-run by default, requires complete mapping/privacy/destination/rollback and
 exact-vault approval declarations, verifies source fingerprints, and refuses
 to run on `main`, a branch that does not include local `main`, or a dirty tree.
+Align the general V3 envelope example with the CRUD contract by using
+`vault.vault_id` as the canonical stable vault identifier.
 
 The migration operation is internal to the canonical gateway and is not added
 to the MCP operation surface. An interrupted multi-Record batch stays on its
