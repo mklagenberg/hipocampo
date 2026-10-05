@@ -1,0 +1,43 @@
+change_set:
+  id: "0128-canonical-record-persistence-and-migration-executor"
+  class: "operational"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0099-v3-migration-fixture-gate.md"
+    - "decisions/0103-v3-canonical-crud-mutation-boundary.md"
+    - "decisions/0116-canonical-record-persistence-and-v3-migration.md"
+
+impact:
+  - artifact: "scripts/v3_crud_engine.py, scripts/v3_record_store.py, scripts/v3_migration_executor.py, scripts/normalize_frontmatter_queue.py, scripts/validate_v3_migration_executor.py"
+    status: "updated"
+    note: "Adds canonical Markdown-backed Create/Update/Read state and an internal migration operation/executor with strict source, semantic, privacy, authorization, branch, and recovery gates."
+  - artifact: "docs/v3-crud-contract.md, docs/v3-migration-execution.md, changes/0128-canonical-record-persistence-and-migration-executor/proposal.md, decisions/0116-canonical-record-persistence-and-v3-migration.md"
+    status: "updated"
+    note: "Documents the gateway-owned persistence boundary, manifest, dry-run/apply sequence, and interrupted-batch limits."
+  - artifact: "docs/engines/test-matrix.yaml, docs/engines/deterministic-case-bindings.yaml, docs/v3-f0-script-classification.yaml, CHANGELOG.md"
+    status: "updated"
+    note: "Integrates deterministic persistence and migration executor cases into the CRUD engine suite and records the unreleased implementation."
+  - artifact: "MIGRATIONS.md"
+    status: "updated"
+    note: "Points the unreleased V3 execution sequence to the deterministic executor procedure while retaining all existing preconditions."
+  - artifact: "SPEC.md, COMPATIBILITY.yaml, UPGRADE.md, skill/, candidates/skill-v3/, knowledge_vaults/, private/"
+    status: "not-applicable"
+    note: "Implements the already-declared V3 CRUD boundary without changing active V2.2 obligations, compatibility or release state; no skill package, real vault, or private capture is changed."
+
+validation:
+  commands:
+    - "python -B scripts/validate_v3_migration_executor.py"
+    - "python -B scripts/validate_v3_crud.py --root ."
+    - "python -B scripts/validate_v3_crud_use_cases.py --root ."
+    - "python -B scripts/validate_v3_migration.py"
+    - "python -B scripts/validate_v3_engine_catalog.py --root ."
+    - "python -B scripts/validate_v3_engine_suite.py --root ."
+    - "python -B scripts/validate_change.py --root . --base origin/main --head HEAD"
+    - "python -B scripts/validate_contracts.py --root ."
+    - "python -B scripts/validate_hipocampo.py --root ."
+  evidence:
+    - "scripts/validate_v3_migration_executor.py"
+    - "docs/v3-migration-execution.md"
+  notes: "All migration executor evidence is synthetic. Successful validation does not establish semantic readiness of any real vault or approve a V3 release."

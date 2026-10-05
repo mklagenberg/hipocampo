@@ -6,8 +6,11 @@ from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
+from typing import Protocol
 
 import yaml
+from v3_migration_engine import validate_execution_context
+from v3_queue_engine import DEPRECATED_VALUES
 
 
 VISIBILITY_RANK = {"public": 0, "internal": 1, "confidential": 2, "restricted": 3}
@@ -35,6 +38,22 @@ FULL_RECORD_FIELDS = {
 
 class ContractError(ValueError):
     pass
+
+
+class RecordPersistence(Protocol):
+    def load_all(self, active_collections: dict[str, dict]) -> dict[str, dict]: ...
+
+    def create(self, record: dict) -> None: ...
+
+    def update(self, previous: dict, record: dict) -> None: ...
+
+    def migrate(self, record: dict, source_path: str, expected_source_sha256: str) -> str: ...
+
+    def read_legacy_document(self, relative_path: str) -> tuple[dict, str, str]: ...
+
+    def normalize_legacy_document(
+        self, relative_path: str, frontmatter: dict, body: str, expected_source_sha256: str
+    ) -> None: ...
 
 
 def _rank(mapping: dict[str, int], value: str) -> int:
@@ -308,11 +327,22 @@ class RecordCrud:
     enforces the mutation and versioning rules.
     """
 
-    def __init__(self, active_collections: dict[str, dict], records: dict[str, dict] | None = None):
+    def __init__(
+        self,
+        active_collections: dict[str, dict],
+        records: dict[str, dict] | None = None,
+        *,
+        persistence: RecordPersistence | None = None,
+    ):
         self.active_collections = deepcopy(active_collections)
-        self._records = deepcopy(records or {})
+        self._persistence = persistence
+        if records is None and persistence is not None:
+            self._records = persistence.load_all(self.active_collections)
+        else:
+            self._records = deepcopy(records or {})
         self.events: list[dict] = []
         self._idempotency: dict[str, dict] = {}
+        self._migration_fingerprints: dict[str, str] = {}
         for record in self._records.values():
             validate_record_structure(record, self.active_collections)
 
@@ -340,10 +370,88 @@ class RecordCrud:
         validate_record_semantics(structural, semantic_review, operation=semantic_operation)
         if structural["record_id"] in self._records:
             raise ContractError("Record already exists")
+        if self._persistence is not None:
+            self._persistence.create(structural)
         self._records[structural["record_id"]] = structural
         event = _event("created", structural, actor=actor, result="accepted", reason=reason)
         self.events.append(event)
         return self._remember(idempotency_key, {"status": "accepted", "record": structural, "event": event})
+
+    def migrate(
+        self,
+        record: dict,
+        *,
+        source_path: str,
+        expected_source_sha256: str,
+        semantic_review: dict,
+        migration_context: dict,
+        actor: str,
+        reason: str,
+        idempotency_key: str,
+    ) -> dict:
+        """Commit one explicitly mapped V2 document as a V3 Record.
+
+        The migration executor may propose a complete target Record, but only
+        this gateway validates it and invokes the configured persistence
+        adapter. The adapter must compare the source fingerprint and replace
+        the document atomically. This operation is internal and is not exposed
+        by the logical MCP CRUD adapter.
+        """
+        if not actor or not reason or not idempotency_key:
+            raise ContractError("Record migration requires actor, reason and idempotency key")
+        request_fingerprint = hashlib.sha256(yaml.safe_dump({
+            "record": record,
+            "source_path": source_path,
+            "expected_source_sha256": expected_source_sha256,
+            "semantic_review": semantic_review,
+            "migration_context": migration_context,
+            "actor": actor,
+            "reason": reason,
+        }, sort_keys=True, allow_unicode=True).encode("utf-8")).hexdigest()
+        previous_fingerprint = self._migration_fingerprints.get(idempotency_key)
+        if previous_fingerprint and previous_fingerprint != request_fingerprint:
+            raise ContractError("migration idempotency key was reused for a different request")
+        cached = self._cached(idempotency_key)
+        if cached:
+            return cached
+        if self._persistence is None:
+            raise ContractError("Record migration requires canonical persistence")
+        if not isinstance(source_path, str) or not source_path or source_path != record.get("physical_path"):
+            raise ContractError("migration source path must match the target Record path")
+        if not isinstance(expected_source_sha256, str) or len(expected_source_sha256) != 64:
+            raise ContractError("migration requires the expected source SHA-256")
+        if record.get("record_id") in self._records:
+            raise ContractError("Record already exists in the V3 CRUD state")
+        context_status = validate_execution_context(
+            migration_context,
+            target_vault_id=record.get("vault", {}).get("vault_id", ""),
+            source_path=source_path,
+            source_sha256=expected_source_sha256,
+            record=record,
+            semantic_review=semantic_review,
+        )
+        if context_status != "ready":
+            raise ContractError(f"Record migration context blocked: {context_status}")
+        structural = validate_record_structure(record, self.active_collections)
+        semantic_operation = "current-use" if structural.get("current_use") else "migration"
+        validate_record_semantics(structural, semantic_review, operation=semantic_operation)
+        if semantic_review.get("decision") != "accepted":
+            raise ContractError("Record migration requires an accepted semantic review")
+
+        persistence_status = self._persistence.migrate(
+            structural, source_path, expected_source_sha256
+        )
+        if persistence_status != "written":
+            raise ContractError("canonical migration persistence returned an invalid status")
+        self._records[structural["record_id"]] = structural
+        self._migration_fingerprints[idempotency_key] = request_fingerprint
+        event = _event("migrated", structural, actor=actor, result=persistence_status, reason=reason)
+        self.events.append(event)
+        return self._remember(idempotency_key, {
+            "status": "accepted",
+            "record": structural,
+            "event": event,
+        })
 
     def _read_record(self, record_id: str) -> dict:
         if record_id not in self._records:
@@ -384,11 +492,57 @@ class RecordCrud:
         merged["record_version"] = current["record_version"] + 1
         structural = validate_record_structure(merged, self.active_collections)
         validate_record_semantics(structural, semantic_review, operation=operation)
+        if self._persistence is not None:
+            self._persistence.update(current, structural)
         self._records[record_id] = structural
         event = _event("updated", structural, actor=actor, result="accepted", reason=reason)
         event["previous_record_version"] = current["record_version"]
         self.events.append(event)
         return self._remember(idempotency_key, {"status": "accepted", "record": structural, "event": event})
+
+    def normalize_legacy_frontmatter(
+        self,
+        relative_path: str,
+        proposed_frontmatter: dict,
+        body: str,
+        *,
+        expected_revision: int,
+        actor: str,
+        reason: str,
+    ) -> None:
+        """Apply the narrow deterministic legacy vocabulary correction through CRUD."""
+        if self._persistence is None or not actor or not reason:
+            raise ContractError("legacy normalization requires canonical persistence, actor and reason")
+        if not isinstance(proposed_frontmatter, dict) or not isinstance(body, str):
+            raise ContractError("legacy normalization proposal is invalid")
+        current, current_body, source_sha256 = self._persistence.read_legacy_document(relative_path)
+        if current.get("revision") != expected_revision:
+            raise ContractError("stale document revision; reread before normalization")
+        if current_body != body:
+            raise ContractError("legacy normalization cannot change Record prose")
+        if {"record_id", "record_version"}.issubset(current):
+            raise ContractError("V3 Records must use canonical RecordCrud.update")
+        old_source = current.get("source")
+        if not old_source or DEPRECATED_VALUES.get(old_source) != proposed_frontmatter.get("source"):
+            raise ContractError("legacy normalization is not a supported deterministic value mapping")
+        old_without_allowed = {key: value for key, value in current.items() if key not in {"source", "revision", "revision_note"}}
+        new_without_allowed = {key: value for key, value in proposed_frontmatter.items() if key not in {"source", "revision", "revision_note"}}
+        if old_without_allowed != new_without_allowed:
+            raise ContractError("legacy normalization changed fields outside its deterministic mapping")
+        if proposed_frontmatter.get("revision") != expected_revision + 1 or not proposed_frontmatter.get("revision_note"):
+            raise ContractError("legacy normalization must increment revision and explain the change")
+        self._persistence.normalize_legacy_document(
+            relative_path, proposed_frontmatter, body, source_sha256
+        )
+        self.events.append({
+            "event_type": "record_legacy_normalized",
+            "physical_path": relative_path,
+            "actor": actor,
+            "result": "accepted",
+            "reason": reason,
+            "previous_revision": expected_revision,
+            "record_revision": expected_revision + 1,
+        })
 
     def archive(self, record_id: str, *, expected_version: int, semantic_review: dict, actor: str,
                 reason: str, idempotency_key: str | None = None) -> dict:
@@ -427,28 +581,26 @@ class RecordCrud:
         raise ContractError("MCP request must use the canonical CRUD operations")
 
 
-def persist_record_document(path: Path, frontmatter: dict, body: str, *, expected_revision: int, actor: str, reason: str) -> None:
-    """Persist a document correction through the CRUD module.
-
-    This narrow adapter exists for legacy frontmatter normalization. Queue
-    files remain metadata and are not Records; Record-document writes still
-    have one implementation boundary here.
-    """
-    current = path.read_text(encoding="utf-8")
-    current_frontmatter, _ = _parse_document_for_crud(current)
-    if current_frontmatter.get("revision") != expected_revision:
-        raise ContractError("stale document revision; reread before update")
-    serialized = "---\n" + yaml.safe_dump(frontmatter, sort_keys=False, allow_unicode=True).rstrip() + "\n---" + body
-    path.write_text(serialized, encoding="utf-8")
-
-
 def _parse_document_for_crud(text: str) -> tuple[dict, str]:
-    if not text.startswith("---\n"):
+    if text.startswith("---\r\n"):
+        frontmatter_start = 5
+    elif text.startswith("---\n"):
+        frontmatter_start = 4
+    else:
         return {}, text
-    end = text.find("\n---", 4)
-    if end < 0:
+    delimiter_start = -1
+    delimiter_length = 0
+    for delimiter in ("\r\n---\r\n", "\n---\n", "\r\n---", "\n---"):
+        candidate = text.find(delimiter, frontmatter_start)
+        if candidate >= 0 and (delimiter_start < 0 or candidate < delimiter_start):
+            delimiter_start = candidate
+            delimiter_length = len(delimiter)
+    if delimiter_start < 0:
         return {}, text
-    return yaml.safe_load(text[4:end]) or {}, text[end + 4:]
+    delimiter = text[delimiter_start:delimiter_start + delimiter_length]
+    body_start = delimiter_start + len(delimiter.rstrip("\r\n"))
+    frontmatter = yaml.safe_load(text[frontmatter_start:delimiter_start]) or {}
+    return frontmatter, text[body_start:]
 
 
 def read_chunk(record: dict, chunk_id: str) -> dict:

@@ -11,10 +11,10 @@ engines:
   - id: crud
     name: "Record CRUD"
     contract: "docs/v3-crud-contract.md"
-    modules: ["scripts/v3_crud_engine.py", "scripts/v3_mcp_crud_adapter.py"]
-    deterministic_commands: ["python scripts/validate_v3_crud.py --root .", "python scripts/validate_v3_crud_use_cases.py --root ."]
+    modules: ["scripts/v3_crud_engine.py", "scripts/v3_mcp_crud_adapter.py", "scripts/v3_record_store.py", "scripts/v3_migration_executor.py"]
+    deterministic_commands: ["python scripts/validate_v3_crud.py --root .", "python scripts/validate_v3_crud_use_cases.py --root .", "python scripts/validate_v3_migration_executor.py"]
     write_boundary: "canonical RecordCrud only"
-    deterministic_cases: [create-valid, update-versioned, reject-stale-write, reject-mcp-bypass, read-requires-authorization-context]
+    deterministic_cases: [create-valid, update-versioned, reject-stale-write, reject-mcp-bypass, read-requires-authorization-context, migrate-through-canonical-gateway, load-persisted-records, block-interrupted-migration, reject-stale-migration-source, reject-unreviewed-migration, legacy-normalization-through-crud]
     semantic_cases:
       - id: CRUD-S-001
         fixture_ref: "v3-semantic-fixtures.yaml#new-versus-curated"

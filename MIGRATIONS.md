@@ -70,6 +70,12 @@ classify real repositories.
 8. Reconcile the source and destination ledgers, then close the migration only
    when the LTE gate accepts the evidence.
 
+The unreleased V3 candidate's deterministic executor, manifest contract,
+dry-run/apply commands, and interrupted-batch behavior are documented in
+[`docs/v3-migration-execution.md`](docs/v3-migration-execution.md). The executor
+does not replace any precondition above and does not prove that a vault's
+semantic mapping, privacy assessment, or inventory is complete.
+
 No step above authorizes remote transport, publication, deletion or V3
 activation by itself.
 

@@ -4,6 +4,13 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **Canonical Markdown-backed V3 CRUD and migration executor (Change Set
+  0128):** adds persistent Create/Update/Read loading through the Record CRUD
+  gateway and an internal, manifest-bound V2-to-V3 migration operation. The
+  executor defaults to dry-run, checks source fingerprints and migration
+  branch gates, and fails closed on interrupted batches. Synthetic fixtures do
+  not prove semantic readiness or authorize real-vault writes.
+
 - **Synthetic migration-branch and runtime request gates (Change Set 0127):**
   exercises an interrupted partial migration in a temporary Git repository and
   verifies that `main` remains at its baseline until validation. Expands the

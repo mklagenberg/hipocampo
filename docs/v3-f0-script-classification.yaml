@@ -57,6 +57,12 @@ scripts:
   - path: scripts/v3_migration_engine.py
     class: deterministic
     proof: "synthetic migration preflight outcome from declared blocking conditions"
+  - path: scripts/v3_migration_executor.py
+    class: deterministic
+    proof: "manifest, source hash, branch, privacy, authorization and recovery gates; semantic mapping quality remains reviewed"
+  - path: scripts/v3_record_store.py
+    class: deterministic
+    proof: "canonical CRUD persistence, document parsing, atomic replacement and integrity checks; record meaning remains semantic"
   - path: scripts/v3_learning_engine.py
     class: hybrid
     proof: "sanitized signal identity, deduplication and candidate boundary; semantic gap assessment remains reviewed"
