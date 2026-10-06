@@ -4,6 +4,12 @@ Version: 2.2.0 · Follows [SemVer](https://semver.org/lang/pt-BR/)
 
 This document is the normative specification of the Hipocampo methodology: the frontmatter schema, the retrieval rules, and the conventions that any instance (content repository) must follow to be considered compatible with a version of Hipocampo. The active released contract is v2.2.0. The unreleased V3 candidate contracts are documented separately in [docs/v3-contract.md](docs/v3-contract.md), [docs/v3-crud-contract.md](docs/v3-crud-contract.md), and [docs/v3-artifact-contract.md](docs/v3-artifact-contract.md); they do not activate V3 behavior for existing instances. It is not a usage manual — for that, see [GETTING-STARTED.md](GETTING-STARTED.md). It is not a document of limitations — for that, see [DISCLAIMER.md](DISCLAIMER.md). It is not a best-practices guide — for that, see [BEST-PRACTICES.md](BEST-PRACTICES.md). It is not an upgrade guide for an existing instance — for that, see [UPGRADE.md](UPGRADE.md).
 
+The explicitly authorized local WRK-0074 experiment is governed by
+[Decision 0117](decisions/0117-scoped-local-v3-experiment.md). It permits only
+scoped candidate operations on dedicated local branches after entry and
+capability checks. It does not activate V3 for other instances, approve
+individual mappings or change the released compatibility contract.
+
 ## 1. Scope
 
 Hipocampo is an agentic second brain methodology: git + markdown + AI rituals. This repository (`hipocampo`) carries the specification, scaffold, skill, and tooling, never actual instance content. Every knowledge base that implements Hipocampo lives in private repositories, without exception (see invariants, section 8).

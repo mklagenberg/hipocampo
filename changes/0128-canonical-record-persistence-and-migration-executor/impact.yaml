@@ -2,7 +2,7 @@ change_set:
   id: "0128-canonical-record-persistence-and-migration-executor"
   class: "operational"
   semver: "none"
-  status: "implemented"
+  status: "accepted"
   backfill: false
   decisions:
     - "decisions/0099-v3-migration-fixture-gate.md"

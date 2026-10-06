@@ -60,6 +60,13 @@ classify real repositories.
 
 ### Execution sequence
 
+For the explicitly authorized local WRK-0074 experiment, apply the scoped
+entry envelope in [Decision 0117](decisions/0117-scoped-local-v3-experiment.md).
+Refresh clean main once per task, then check fingerprints on its dedicated
+branch. An isolated worktree stays inside its own vault boundary and does not
+authorize removing an original lock. Individual mapping, privacy and recovery
+gates in the sequence below remain mandatory.
+
 1. Freeze the selected source inventory and capture its version and hashes.
 2. Resolve compatibility and target access without writing.
 3. Apply the approved mapping to synthetic fixtures first.

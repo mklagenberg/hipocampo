@@ -177,6 +177,34 @@ def main() -> int:
         code, traversal = run(traversal_repo, traversal_map, mode="dry-run")
         check(code == 2 and traversal.get("status") == "blocked", "path traversal was not blocked", errors)
 
+        reload_repo, reload_source = make_repo(parent, "collection-reload-vault")
+        branches[reload_repo.resolve()] = "migration/v3-fixture"
+        existing = record("rec-existing-v3-fixture")
+        existing["physical_path"] = "records/rec-existing-v3-fixture.md"
+        existing["collection_ids"] = ["collection-prior"]
+        existing_path = reload_repo / existing["physical_path"]
+        existing_path.write_bytes(serialize_record(existing))
+        reload_manifest = manifest(reload_source)
+        before_source = (reload_repo / "records/rec-migration-001.md").read_bytes()
+        before_existing = existing_path.read_bytes()
+        code, reload_blocked = run(reload_repo, reload_manifest, mode="apply")
+        check(code == 2 and reload_blocked.get("status") == "blocked"
+              and reload_blocked.get("reason") == "existing_v3_reload_failed"
+              and reload_blocked.get("written") == 0,
+              "incomplete cumulative Collection registry did not return a contained block", errors)
+        check((reload_repo / "records/rec-migration-001.md").read_bytes() == before_source
+              and existing_path.read_bytes() == before_existing,
+              "failed existing V3 reload changed a source or persisted Record", errors)
+
+        reload_manifest["active_collections"]["collection-prior"] = {
+            "collection_id": "collection-prior", "active": True,
+        }
+        code, reload_applied = run(reload_repo, reload_manifest, mode="apply")
+        check(code == 0 and reload_applied.get("written") == 1,
+              "complete cumulative Collection registry did not permit canonical apply", errors)
+        check(parse_record((reload_repo / "records/rec-migration-001.md").read_bytes()) == record(),
+              "cumulative-registry migration did not round-trip through CRUD", errors)
+
         update_repo = parent / "update-vault"
         (update_repo / "records").mkdir(parents=True)
         old_record = record("rec-update-fixture")

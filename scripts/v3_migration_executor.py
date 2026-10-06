@@ -132,8 +132,18 @@ def run(root: Path, manifest: dict, *, mode: str) -> tuple[int, dict]:
             "blocked": 0, "already_applied": 0, "written": 0,
         }
 
-    store = MarkdownRecordStore(root)
-    crud = RecordCrud(manifest["active_collections"], persistence=store)
+    try:
+        store = MarkdownRecordStore(root)
+        crud = RecordCrud(manifest["active_collections"], persistence=store)
+    except (ContractError, OSError):
+        # Loading existing V3 state is part of the apply gate. Do not let a
+        # stale/incomplete Collection registry escape as an unstructured
+        # exception or reach the first migration write.
+        return 2, {
+            "status": "blocked", "reason": "existing_v3_reload_failed",
+            "records": len(statuses), "ready": 0, "blocked": len(statuses),
+            "already_applied": 0, "written": 0,
+        }
     written = 0
     try:
         for item in manifest["records"]:

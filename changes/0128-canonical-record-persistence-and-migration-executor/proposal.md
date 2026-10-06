@@ -37,6 +37,9 @@ separately. The script summary contains counts and status only.
 - Dry-run makes no writes; apply blocks on missing mapping, rejected review,
   stale source, path escape, wrong branch, dirty tree, or incomplete inventory
   fingerprint.
+- Apply returns a structured block with zero writes when existing V3 Records
+  fail to reload under the supplied active Collection registry; it does not
+  infer missing Collection state.
 - A single Record replacement is atomic and round-trips through the V3 store.
 - A second apply after an interrupted or completed write does not silently
   resume the migration.
@@ -62,11 +65,16 @@ is not auto-resumed.
   whole-vault transaction.
 - A process interruption after one or more writes requires separate recovery
   review.
+- A missing or stale active Collection registry can make existing V3 state
+  unloadable; the executor preserves that as a pre-write block and requires
+  an explicitly complete cumulative registry.
 - V3 remains an unreleased candidate; the implementation does not authorize
   skill installation, publication, push, merge, or real-vault execution.
 
 ## Status
 
-Implemented on the local candidate branch for synthetic validation. Real-vault
+Architecture accepted by the operator on 2026-10-06 for the scoped local
+experiment recorded in Decision 0117. Implemented on the local candidate
+branch and validated with synthetic fixtures. Real-vault
 migration remains blocked until per-vault inventories, mappings, privacy
 reviews, destination checks, and rollback evidence are complete.

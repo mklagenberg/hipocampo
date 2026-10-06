@@ -1,6 +1,6 @@
 # 0116 — Canonical Record persistence and V3 migration execution
 
-**Status:** Proposed with implementation for human review
+**Status:** Accepted for the scoped local experiment
 
 **Date:** 2026-10-05
 
@@ -14,7 +14,7 @@ mapping through the canonical gateway and persisted the validated result.
 
 ## Decision
 
-Proposed; pending human review.
+Accepted by the operator on 2026-10-06 for the local WRK-0074 experiment.
 
 Give the canonical `RecordCrud` gateway an optional persistence adapter for
 Markdown-backed Records. The adapter loads V3 Records, creates and updates
@@ -72,5 +72,9 @@ execution. Keep real vaults outside the test fixtures.
 
 ## Approval
 
-Proposed with implementation in Change Set 0128 for human review. Until
-accepted, this Decision Record remains a candidate architecture choice.
+The operator explicitly accepted the canonical persistence design and Change
+Set 0128 on 2026-10-06, after being presented with the three entry decisions.
+This acceptance covers the architecture for the local experiment only. It
+does not accept individual Collections, mappings, semantic reviews, privacy
+claims or recovery declarations. Decision 0117 records the experiment scope;
+V3 release and real-vault readiness remain separate gates.
