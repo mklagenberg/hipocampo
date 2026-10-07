@@ -33,3 +33,7 @@ resolve the conflict by choosing the newest README or skill copy.
 Both the methodology repository and each vault have a README. The README is
 written for humans: it explains and presents what the repository contains. It
 does not become normative merely because it is easy to read.
+
+## Release-preparation projection
+
+This adjacency is included by the prepared V3 SPEC. Unreleased/candidate wording above records development state, not proof of publication. Its normative scope is subordinate to SPEC and accepted decisions; existing vault adoption remains separately governed.

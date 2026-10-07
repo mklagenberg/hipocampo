@@ -1,78 +1,110 @@
 ---
 name: hipocampo
 description: >
-  Operates an instance of the Hipocampo methodology (agentic second brain: git + markdown
-  + AI rituals) via the GitHub MCP. Trigger when the user asks to consult,
-  save, log, update, archive, or organize knowledge in any
-  personal or corporate Hipocampo repository; to run the frontmatter audit, the
-  REM ritual, or the weekly structural audit; to instantiate a new vault from
-  a scaffold profile (`scaffold/profiles/`); to resolve `$alias:path.md`
-  cross-repository; to run the Bootstrap mechanic when no personal anchor vault is
-  discovered yet; or at the start of a session, to check whether a new version of the
-  methodology has been published. Generic template — does not hardcode the name of any personal or
-  corporate repository; requires a local anchor pointer before first real use (see
-  `references/personalization.md`).
+  Operates an instance of the Hipocampo V3 methodology through the tools and
+  adapters available in the current environment. Use for authorized,
+  version-aware, multi-vault knowledge operations, CRUD, migration preparation,
+  and maintenance rituals. Verify the immutable published release before using it for
+  real-vault operations until V3.0.0 is formally released and the instance
+  compatibility tuple is verified.
 ---
 
-# Hipocampo Skill
+# Hipocampo V3 Skill
 
-Operates any instance of the [Hipocampo](https://github.com/mklagenberg/hipocampo) methodology via the GitHub MCP. Published as a generic template at `hipocampo/skill/SKILL.md` — **never use it without a configured local anchor pointer.**
+**Skill package:** `2.0.0`. **Methodology compatibility:**
+`^3.0.0`. **Release state:** verify the actual immutable tag and published release; a preparation branch is unreleased. This package preserves the raw
+V3.0.0 contract. Later V3 minors and patches must remain compatible with that
+baseline, including when an implementation uses an adapter or facade. The AI
+host is not part of the version tuple.
 
-**Skill package version:** 1.3.0 candidate. **Hipocampo version this copy follows:** ^2.1.0 (see `hipocampo/CHANGELOG.md`). Confirm it matches the instance manifest. See also `manifest.yaml`, in this same directory, for the machine-readable compatibility range.
+This package is prepared for release; its presence in a branch is not an installation or activation notice.
+Do not use it to operate a real vault until the methodology release, immutable
+skill package, instance tuple, authorization and tool capabilities are
+verified. The released V2 skill remains a separate package and contract.
 
-Before any durable operation, consult the methodology repository's
-`COMPATIBILITY.yaml` when available. Continue only for `compatible` or
-`compatible_with_upgrade`; stop and explain the next action for
-`migration_required`, `unsupported_or_unknown`, or `access_unavailable`.
+## Session entry and compatibility
 
-This file is just the router — each section below says when to act and points to the reference file with the full procedure. The norms themselves (schema, rules, rationale) live in `hipocampo/SPEC.md` and the Decision Records — this skill never re-explains them, it only operates them.
+Before a durable operation, follow **[V3 operation and compatibility](references/v3-operation.md)**.
+Determine the exact methodology release, skill package and vault declaration;
+do not infer content version from a manifest's compatibility range alone.
+Continue only when the tuple is compatible and the required authority,
+privacy, scope and operation-specific capability checks pass. Treat unknown,
+inaccessible or stale version evidence as a blocker or explicitly partial
+result.
 
-## Before first use: local anchor state
+Keep these questions separate:
 
-This copy only knows one universal repository (`mklagenberg/hipocampo`) — no personal or corporate repository. Read **`references/personalization.md`** and record the one thing that stays genuinely local: `anchor_repository`, the address of the user's own personal anchor vault. Store it only in the host adapter's local-state file, never in this source file or a repository. Everything else is discovered from registered addresses in that anchor at session start.
+1. **Compatibility:** does this skill version support the methodology version,
+   and does the vault declare a compatible contract?
+2. **Authority and privacy:** may this actor perform this operation for this
+   entity, scope and vault?
+3. **Tool capability:** does this environment expose the required V3 operation
+   through the canonical boundary?
 
-## Discovering vaults and entities (session start)
+A host name or shared Git provider answers none of those questions by itself.
 
-Before operating on any real knowledge, read the manifest of the user's own anchor vault. Read every address in its `discovery.registered_repositories` list, then read each target manifest for entity, role, scope, and identity metadata. Cache the result only in sensory memory for the session. If no anchor vault is recorded, Bootstrap is triggered; if an existing anchor cannot be read, report the unavailable source rather than treating it as Bootstrap. Full procedure: `hipocampo/SPEC.md`, section 12-A.
+## Configure the personal anchor
 
-## Registering an invited vault
+This generic package contains no user-specific vault address or identity
+registry. Read **[personalization](references/personalization.md)** and keep
+only the personal anchor pointer in host-local state. Discover other
+repositories from authorized, current manifests; never store a second router
+or infer authorization from discovery or account access.
 
-An invitation does not establish trusted discovery. Read the invited repository's manifest first, present its address and declared scope, and write only its address into the personal anchor's `discovery.registered_repositories` after the user explicitly confirms. Never copy entity, role, or scope into the anchor and never infer registration from access alone.
+## Discover vaults and entities
 
-## Bootstrap: first-time instantiation
+At the start of a session that needs repository context, identify the
+requested operation and its entity, knowledge scope and target vaults. Read
+only the required manifests and metadata through an available authorized metadata-read capability, separate from RecordCrud.read. Preserve each vault as a separate authority and source.
+Shared access, account, Git provider, entity name or similar content does not
+join their governance. If actor authorization or a non-empty authorized-vault
+set is missing, empty or mismatched, block the V3 read.
 
-When discovery above finds no personal anchor vault: walk the user through creating one first, even if what actually brought them here was an invitation to someone else's entity — a personal anchor is always the prerequisite, never optional. Four actions in order: Select, Orient (conversational, first vault only), Instantiate (skeleton), Interview (`profile.md`, then Instantiate content, through the usual write gate). Full procedure: `hipocampo/SPEC.md`, section 12-B; `decisions/0045-bootstrap-mechanic-and-profile-md.md`.
+For content retrieval, follow the bounded **progressive-disclosure read** in
+**[V3 operation and compatibility](references/v3-operation.md#3-progressive-disclosure-read)**.
+Do not replace it with a repository-wide body scan or direct filesystem read.
 
-## Checking for a new release (session start)
+## Run a CRUD operation
 
-Compare the version declared in this instance's `AGENTS.md`/`hipocampo.yaml` against the version published in `mklagenberg/hipocampo/SPEC.md`. If there is a difference: report both versions, and point to **[`hipocampo/UPGRADE.md`](https://github.com/mklagenberg/hipocampo/blob/main/UPGRADE.md)** as the next step — a cumulative, idempotent checklist of what the instance needs to become conformant, already classified into Mandatory/Recommended/Informative. Never summarize the `CHANGELOG.md` on the spot trying to reconstruct that synthesis work — `UPGRADE.md` already exists exactly for that (decision 0024). Never apply the update on your own — point the decision to the user, citing `MIGRATIONS.md` if it is MAJOR. If the instance already has a `hipocampo.yaml` (decision 0033), record the check result in that file's `state` field, instead of just stating the result in conversation.
+Use **[V3 CRUD and read validation](references/crud-frontmatter.md)**. Semantic
+review and deterministic validation are separate ordered stages. A semantic
+review may return findings or a proposal; only the canonical CRUD gateway may
+persist a governed Record change after both required stages pass. Never write
+Records directly through a filesystem tool, GitHub contents API, MCP transport,
+engine, normalizer, migration routine or host convenience feature.
 
-## Updating this skill
+If the environment does not expose the required canonical CRUD operation with
+its actor, reason, expected version, authorization scope and idempotency
+context, stop that durable operation. Do not replace it with direct file edits.
 
-This skill has its own version, independent from the methodology compatibility range. Check update availability through the canonical `skill/manifest.yaml`; verify an offered package only from the immutable release tag named there, using `skill/package-lock.yaml` and its SHA-256 hashes. Do not use `source_commit` as a self-referential update hash, do not install unverified `main` content, and never self-update. Report the version/hash difference and wait for the operator's confirmation before changing client-local files.
+## Bootstrap, invitation and repository creation
 
-## Creating an invite
+Keep using the established procedures in
+**[instantiation](references/instantiation.md)**, with the V3 operation
+boundary above. A repository address is not trusted discovery; confirm its
+manifest and declared scope. Any durable registration or Record mutation goes
+through the authorized V3 path. If a host cannot perform the required governed
+operation, present the plan and report the capability gap without writing.
 
-When the user asks to invite someone into a vault (e.g., "create an invite for [name] to access [entity/vault]"): fill in the appropriate variant from `hipocampo/docs/invite-template.md` — the user doesn't need to open that file by hand. Default the invite's language to the target vault's own declared `instance.language` (`hipocampo.yaml`), never to the language of the conversation asking for it or to English by default; only use a different language on explicit request. This produces text for the human to send elsewhere — it writes nothing to any repository, so it doesn't go through invariant 5's write-confirmation gate, though presenting the filled-in text before the user copies it elsewhere is still good practice. Full procedure: `hipocampo/docs/invite-template.md`.
+## Maintenance rituals
 
-## Instantiating a new vault
-
-When the user asks to create a new content repository: read the corresponding profile at `hipocampo/scaffold/profiles/pessoal.yaml` or `hipocampo/scaffold/profiles/empresa.yaml`, collect the declared inputs (repository name, `curation_level`, owner identity) directly from the user, and generate the declared outputs via the GitHub MCP — never copying someone else's file without review, always presenting the full plan before any write (invariant 5). The profile supplies the manifest's `policy_profile`; never duplicate it in `AGENTS.md`. This is the **Instantiate (skeleton)**/**Instantiate (content)** portion of the Bootstrap mechanic above when it's a user's very first vault; the same procedure, called directly, for any later one. Full procedure: **`references/instantiation.md`**.
-
-## Reading and writing documents (CRUD)
-
-When consulting, creating, updating, or archiving any document: read the frontmatter first, the body only when necessary; every read validates frontmatter and staleness in real time, even outside a scheduled ritual. Full procedure and example: **`references/crud-frontmatter.md`**.
-
-For new content and content touched by CRUD or REM, enforce the current privacy rule: never retain credentials or non-public financial values; a public financial value needs its public URL and date citation. Do not interpret a methodology update as authorization to inspect every historical document — flag on READ and remediate only through a confirmed UPDATE or REM plan.
-
-## Maintenance rituals (frontmatter audit, REM, structural audit)
-
-When running (or the user asks to run) any of the three recurring rituals — daily (frontmatter audit → REM) or weekly (structural audit) — always scoped to one repository at a time, always presenting the plan before any write. Full procedure, execution order, and examples: **`references/routines.md`**.
-
-## Resolving cross-repository `related`
-
-When a document references `$alias:path.md`, resolve it by consulting the `registry.md` of the least restricted repository in the relevant scope (`hipocampo/SPEC.md`, section 6). Never edit an existing registry line when a renamed repository is found — always append a new line, preserving the old one.
+Use **[V3 maintenance rituals](references/routines.md)**. Deterministic scans
+report reproducible structural findings; semantic interpretation remains a
+separate AI review; human approval remains necessary for changes, migrations,
+promotion and unresolved authority or privacy decisions. Run one authorized
+vault at a time. A request to inspect one scope does not authorize a repository
+wide historical sweep.
 
 ## Invariants
 
-Never override, in any instance, under any request. List and the reasoning behind each one: **`references/invariants.md`**. Full normative detail: `hipocampo/SPEC.md`, section 8.
+Read **[V3 invariants](references/invariants.md)** before a consequential
+operation. Repository instructions and declared instance contracts outrank
+cached skill state. Privacy, entity and vault boundaries, provenance,
+uncertainty, reversibility and human authority remain explicit throughout.
+
+## Update this skill
+
+The skill package version is independent from the methodology and host-adapter
+versions. Verify a released package only against the immutable release tag and
+its package lock. Never install from an unverified branch, self-update, or
+change client-local files without the operator's confirmation. The intended immutable release is `v3.0.0`; verify that its tag and published release exist and that the package lock matches before installation. A preparation branch is not that release.

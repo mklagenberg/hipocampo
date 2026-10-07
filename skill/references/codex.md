@@ -1,21 +1,44 @@
-# Codex adapter
+# Codex adapter for the V3 skill
 
-Use the portable `SKILL.md` and the repository as the operational source of truth. This adapter declares only Codex-specific local state and tool boundaries.
+Use the portable `SKILL.md` and the target repository's V3 contracts
+as sources of operational rules. Codex is a host adapter; it is not part of the
+methodology/skill/vault compatibility tuple.
 
 ## Local state
 
-Store the single bootstrap pointer outside the packaged source in `hipocampo.local.yaml` beside the installed skill:
+Keep only the personal anchor pointer and verified installation metadata in
+`hipocampo.local.yaml` client-local state, outside the packaged skill:
 
 ```yaml
 anchor_repository: "owner/private-personal-anchor"
+installed_skill_version: "2.0.0"
+installed_package_hash: "sha256:..."
+last_checked: "YYYY-MM-DDThh:mm:ssZ"
 ```
 
-This file is client-local, contains no router or identity table, and must never be committed to an instance repository. If it is absent, run Bootstrap; if the anchor repository is unreachable, report the failure and do not overwrite the pointer.
+Do not commit this state to a vault or store a repository router, identity
+table, access token, credential or permission claim in it.
 
-## GitHub operations
+## Tool boundary
 
-Read the target repository's `AGENTS.md` and `hipocampo.yaml` before content operations. Use GitHub-aware tools for remote changes; do not infer that local validation proves remote publication. Repository content overrides this adapter and every locally cached value.
+Before an operation, check whether the available Codex or MCP surface can
+invoke the canonical V3 read/CRUD operation with actor, reason, vault scope,
+expected version and idempotency context as required. A direct filesystem,
+GitHub contents or shell write is not a V3 CRUD adapter. If the canonical
+operation is unavailable, block the durable operation and report the missing
+capability. A repository view or UI state does not prove remote authority or
+publication.
 
-## Updates
+## Version and package updates
 
-On first activation, read the canonical `skill/manifest.yaml`. Reuse a successful normal check for at most `P7D` and a security check for at most `P1D`; when unavailable, report `offline` and continue only with safe repository reads. The manifest's skill version is independent from the methodology version. For an offered update, compare the installed package against `skill/package-lock.yaml` from the immutable `updates.release_ref` tag; do not treat `source_commit` as a self-referential update hash and do not install from unverified `main` content. Store only `installed_skill_version`, `installed_package_hash`, and `last_checked` beside the local anchor pointer. Notify, present the change, and wait for confirmation. Never self-update or overwrite the local-state file.
+On activation, verify the released methodology/skill/vault tuple. The AI host
+does not define compatibility. Reuse a successful normal source check for at
+most `P7D` and a security check for at most `P1D`; when unavailable, mark it
+offline and do not infer compatibility.
+
+Install only a released skill package from the immutable tag named by its
+manifest, after checking the package lock and all declared hashes. Never
+install an unreleased candidate or unverified branch, self-update, overwrite
+local state or change client-local files without the operator's confirmation.
+
+Never self-update; a package-lock.yaml verifies the exact package bytes, not authorization.

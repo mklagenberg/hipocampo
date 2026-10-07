@@ -11,7 +11,7 @@ artifact:
   full_name: "Hipocampo — agentic second brain methodology"
   kind: "methodology"
   domain: "personal-and-corporate-knowledge-management"
-  version: "2.2.0"
+  version: "3.0.0"
   status: "active"
   language: "en"
   repository: "https://github.com/mklagenberg/hipocampo"
@@ -149,12 +149,12 @@ components:
 packages:
   specification:
     role: "normative-specification"
-    version: "2.2.0"
+    version: "3.0.0"
     source: "SPEC.md"
     source_kind: "local"
   decisions:
     role: "durable-decision-records"
-    version: "2.2.0"
+    version: "3.0.0"
     source: "decisions/"
     source_kind: "local"
   skill:
@@ -178,5 +178,5 @@ conformance:
 
 synchronization:
   policy: "UPGRADE.md"
-  state: "current"
-  reason: "SPEC.md, CHANGELOG.md, and decisions/ are kept manually synchronized on every merged PR (a Decision Record accompanied by the corresponding entries in SPEC.md/CHANGELOG.md for every structural change); starting from Phase C, operational/normative changes are also accompanied by a Change Set in changes/. Starting from Phase D, skill/ and scaffold/ live inside the repository itself (no cross-repository synchronization with hipocampo-toolkit, which was consolidated and archived). No automated drift check exists yet — see conformance/moda.yaml, controls packaging_and_synchronization and quality_and_evaluation."
+  state: "review-required"
+  reason: "Prepared V3 source, skill and scaffold are locally synchronized and validated; final human acceptance, main integration and immutable publication remain pending. No installed host or whole-vault adoption claim."

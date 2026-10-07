@@ -1,27 +1,73 @@
-# CRUD mechanics and frontmatter-first reading
+# V3 CRUD and read validation
 
-Full reference: `hipocampo/SPEC.md`, section 2-B (decision 0012, decision 0018).
+Full contract: `docs/v3-crud-contract.md`. V3 has one governed Record
+read/write boundary: the canonical CRUD gateway. Host, filesystem and GitHub
+APIs are transports or adapters; they do not become alternate persistence
+paths.
 
-## Reading rule
+## Read
 
-When operating on multiple documents (search, triage, staleness), always read the **frontmatter first** — YAML, low token cost, enough to filter by `type`, `tags`, `status`, `temporality`, `related`. Only read the **full body** after deciding, from the frontmatter, that that specific document needs it. Do not read the entire body of every candidate by default — it is avoidable token waste, especially in an instance with many documents.
+Before a governed Read, require an explicit actor and authorization context
+covering the requested vault. The context must include a non-empty
+`authorized_vault_ids` set containing that vault. Missing, empty, ambiguous or
+mismatched authority fails closed. Do not infer access from repository
+visibility, current login, invitation, shared Git provider or remembered
+identity.
 
-## Validation at read time (independent of the batch frontmatter audit)
+Read frontmatter first and validate the record/version, entity, scope, vault,
+visibility, maturity, staleness and provenance at the time of the Read. Fetch
+the body only when needed for the stated intent. A Chunk is never presented
+without its parent Record context and effective restrictions. Read the stored
+Record prose directly; an unavailable Artifact does not make the Record
+unreadable. Read does not fetch or reconstruct Artifacts and never writes.
 
-Every READ operation — even a one-off query, outside any scheduled ritual — validates the document's frontmatter against the norm (section 2 schema) and the staleness check (section 5) **at the moment of reading**, regardless of whether the batch frontmatter audit (reference `routines.md`) has already gone through that document.
+Report stale, partial, conflicting or inaccessible source state. A Read does
+not settle truth, authority or conflict. Never update metadata or repair a
+Record while reading.
 
-The same touchpoint performs a proportional privacy check of the body actually needed for the request: obvious credentials, non-public financial values, and a public financial value without its URL/date citation are findings. READ reports without rewriting; CREATE, UPDATE, and REM must make new or touched content conformant through an explicitly confirmed plan. Do not turn a methodology upgrade into a full-repository inspection.
+## Governed changes
 
-If the validation finds a problem, explicitly flag what it is and what to do. Never change `status` or any field on your own as part of this validation — only flag it. Concrete cases:
+Every Create, Update or governed Delete proposal carries the actor, reason,
+expected Record version, required semantic-review reference and idempotency
+key, along with provenance and the relevant entity/scope/vault context.
 
-- **Expired `ttl`:** warn that the information may be outdated. If `source: url`, suggest revalidation via research (the same trigger that activates the `deep-research` skill) before treating the content as current.
-- **Missing required field:** point out which field is missing, without inventing a value.
-- **`temporality: contextual` with `context_anchor` pointing to a document that is already `archived`/`superseded`:** flag that the document may be outdated even though its `ttl` has not yet expired — the anchor changed state before the deadline.
+1. **Semantic review:** assess provenance, authority, privacy, applicability,
+   conflict, maturity and staleness. Record a finding, uncertainty or human
+   gate when any item cannot be resolved. The review proposes; it does not
+   persist.
+2. **Deterministic validation:** the canonical CRUD gateway independently
+   enforces schema, references, versions, immutable identity, allowed state
+   transitions, idempotency and atomicity before persistence.
+3. **Commit:** only that gateway may persist after both required validations
+   pass. Direct file writes and convenience APIs are prohibited.
 
-## Example
+Metadata-only normalization may use the deterministic CRUD path only when it
+does not make a semantic claim or change governed meaning.
 
-> User: "what do we know about vendor X?"
->
-> The agent reads the candidates' frontmatter by `tags`/`type: company`. It finds a document with `ttl: 2026-03-01` (already expired) and `source: url`. Response: "I found a document about vendor X, but the `ttl` expired in March and the original source is a URL — the information may be outdated. Do you want me to revalidate it via research before answering, or would you rather see the content as-is, with that caveat?"
+## Operation rules
 
-CRUD itself (Create/Read/Update/Delete) maps to the lifecycle of the `status` field (SPEC section 2) — Delete is always mitigated by invariant 3 (never physically delete), except for the narrow exception in decision 0010.
+- **Create:** validate the full Record, active Collection membership, unique
+  Chunk IDs, Artifact references and monotonic restrictions.
+- **Update:** preserve `record_id`; advance `record_version` for governed
+  changes; preserve the original Record when splitting; keep entities separate.
+- **Delete:** use `archived` or `superseded`, never physical deletion except
+  through the narrow legal-remediation process and an explicit human decision.
+- **Move:** change physical path only; preserve identity and logical Collection
+  membership.
+- **Artifact update:** version the Artifact and submit a CRUD mutation that
+  flags the Record for review. Do not replace the historically used Artifact
+  version silently.
+
+## Scope and privacy
+
+Resolve actor/role, Source, entity, knowledge scope, source vault, visibility,
+maturity, staleness, authority, destination contract and transfer mode before
+any mutation or package assembly. A shared Source can support separate
+entity-bound Records with common lineage; it does not authorize synchronization
+or merging. Cross-entity transfer requires destination acceptance, Owner
+approval and minimization. Privacy and authority are independent gates.
+
+Never retain credentials or non-public financial values. Do not treat a
+methodology upgrade as permission for a repository-wide historical sweep.
+Raise findings first; remediate only within a confirmed scope and through the
+governed CRUD/REM flow.

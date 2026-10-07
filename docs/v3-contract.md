@@ -1,8 +1,6 @@
 # Hipocampo V3 contract — unreleased candidate
 
-This is the implementation contract for the unreleased `v3.0.0`/LTE work. The
-active released specification remains v2.2.0 until a future release gate
-promotes this candidate. Existing v2 instances remain readable and are not
+This is the implementation contract for the unreleased `v3.0.0`/LTE work. The prepared V3 specification is SPEC.md; the active externally published release remains v2.2.0 until the human publication gate passes. Existing v2 instances remain readable and are not
 migrated by merely reading this document.
 
 The L4R closure adds logical authority resolution, bilateral local ledgers,
@@ -203,9 +201,7 @@ The following documents record the unreleased MRL-0005 candidate boundary:
 - `docs/v3-external-reference-policy.md` — comparison/inspiration boundary for
   external references.
 
-These documents are candidate contracts only. They do not activate V3 for
-existing instances, override the released v2.2.0 `SPEC.md`, or constitute a
-migration plan.
+These adjacencies form the V3 contract prepared in SPEC.md. Preparation does not activate V3 for existing instances or constitute a vault migration plan.
 
 ## MRL-0006 candidate contracts
 

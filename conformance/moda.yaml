@@ -7,12 +7,13 @@ framework:
 subject:
   id: "hipocampo"
   kind: "methodology"
-  version: "2.2.0"
+  version: "3.0.0"
   adoption_mode: "retrospective"
 
 assessment:
   claim_stage: "mapped"
   result: "partial"
+  scope: "Historical V2 control evidence retained with current V3 source and packaging preparation; no full MODA reaudit or whole-vault adoption claim. Dated prior notes remain historical."
 
 controls:
   problem_and_purpose:

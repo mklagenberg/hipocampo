@@ -42,7 +42,7 @@ LINK_RE = re.compile(r"(?<!!)\[[^\]]*\]\(([^)\s]+)(?:\s+\"[^\"]*\")?\)")
 FENCE_RE = re.compile(r"^```", re.MULTILINE)
 
 # Root-relative directories never worth scanning for markdown files.
-SKIP_DIRS = {".git", "node_modules"}
+SKIP_DIRS = {".git", "node_modules", ".tmp"}
 
 
 def slugify(heading: str) -> str:
@@ -71,7 +71,7 @@ def strip_code_fences(text: str) -> str:
 
 def iter_markdown_files(root: Path):
     for path in sorted(root.rglob("*.md")):
-        if any(part in SKIP_DIRS for part in path.parts):
+        if any(part in SKIP_DIRS for part in path.relative_to(root).parts):
             continue
         yield path
 

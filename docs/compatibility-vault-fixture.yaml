@@ -1,7 +1,8 @@
+# Synthetic current-tuple fixture; never a real vault or remote proof.
 hipocampo:
   manifest_version: "1.0"
-  compatibility: "^2.1.1"
-  verified_against: "2.1.1"
+  compatibility: "^3.0.0"
+  verified_against: "3.0.0"
   verified_commit: "fixture-commit"
 instance:
   policy_profile: "personal"

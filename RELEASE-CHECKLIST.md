@@ -22,3 +22,7 @@ Work accumulates on `main` via normal PRs between releases (`decisions/0021`) â€
 ## After release
 
 Nothing further is required beyond what's already in `decisions/0014`/`0021` â€” no separate announcement step, no changelog-of-the-changelog. The tag and the GitHub Release are the record.
+
+## Preparation versus publication
+
+A prepared version heading is an intended target, not evidence of a tag. Preserve the exact package fingerprint for AI review, independent challenge and final human decision. Verify the content commit and subsequent evidence-only diff. Before issuing an executable publication handoff, verify the reviewed PR/main commit, required CI, tag absence and exact final target. The agent never creates a tag or GitHub Release.

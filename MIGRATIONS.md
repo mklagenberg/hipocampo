@@ -1,5 +1,23 @@
 # Hipocampo — Migrations
 
+## V3.0.0 release preparation — explicit adoption required
+
+The prepared target is methodology 3.0.0 / skill 2.0.0 / vault ^3.0.0.
+Verify the actual immutable publication before installation or activation.
+V2 instances do not become compatible by changing a range. Keep the
+appropriate immutable V2 package for legacy operation until governed migration
+passes. Use per-vault inventory, complete review, accepted Collections and
+exact mappings, privacy/source/context gates, canonical CRUD conversion and
+fresh reload. Preserve original prose, Unicode/newlines, all legacy fields,
+attachments, relations, provenance and unknown source state. Recovery requires
+the exact immutable ticket and human acceptance; no direct edits or Git reset.
+The scaffold creates proposal/operational structure, never a Record directly.
+See [release scope](docs/v3-release-preparation.md) and
+[execution procedure](docs/v3-migration-execution.md). The historical candidate
+sections below retain their original boundary; this section defines the
+prepared adoption target and does not certify publication or full migration.
+
+
 Migration guide for each MAJOR version jump (SemVer — see SPEC.md, section 9, and DISCLAIMER.md).
 
 MINOR and PATCH migration requires no action — see DISCLAIMER.md, section "Versioning and what it means for you". This file only documents MAJOR jumps, which require active migration by definition.

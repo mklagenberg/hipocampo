@@ -4,6 +4,33 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+## [3.0.0] — 2026-10-07 (prepared; not published)
+
+### Changed
+
+- Prepare the first V3/LTE major: governed Record/Chunk/Collection identities,
+  independent knowledge states, entity/vault authority, Artifact provenance,
+  progressive disclosure, canonical CRUD and bounded operational metadata.
+- Prepare canonical portable skill 2.0.0 with ^3.0.0 compatibility and an exact
+  package lock. Preserve reviewed rc.1 and the previous specification/package.
+- Align new-vault scaffold proposals and tuple validation with V3; existing
+  vaults still need separately approved mappings and canonical migration.
+- Replace obsolete fixed skill-version validation with tuple/hash integrity
+  checks. Distinguish preparation, human acceptance and actual publication.
+
+### Limits and adoption
+
+- Demonstrated runtime is bounded local Python/Git; other adapters require
+  operation-specific verification. No global installation or universal host
+  enforcement is claimed. Actual restoration was not executed.
+- Three accepted local pilot migrations passed fresh reload; 335 reviewed
+  knowledge items remain retained. Publication does not accept their proposals.
+- MAJOR adoption and recovery: MIGRATIONS.md and docs/v3-migration-execution.md.
+- Final content/package review, integration and manual publication are pending.
+
+### Accumulated V3 development
+
+
 - **Reviewed local pilot results (Change Set 0131):** records three explicitly
   accepted one-item pilots migrated through canonical CRUD, reloaded in fresh
   processes and compared with their approved proposals. One presented personal

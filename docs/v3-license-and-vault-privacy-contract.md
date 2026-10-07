@@ -21,7 +21,10 @@ permission and does not override the vault contract.
 
 ## Compatibility boundary
 
-The active v2.2.0 `SPEC.md` and existing instances remain unchanged until a
-future V3 release and explicit migration gate. This candidate records the
+SPEC.md prepares the V3.0.0 authority; existing V2 instances remain unchanged until their explicit migration gate. The published baseline remains v2.2.0 until actual publication. This candidate records the
 future separation so that implementation, migration and publication cannot
 silently conflate license and privacy.
+
+## Release-preparation projection
+
+This adjacency is included by the prepared V3 SPEC. Unreleased/candidate wording above records development state, not proof of publication. Its normative scope is subordinate to SPEC and accepted decisions; existing vault adoption remains separately governed.

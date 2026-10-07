@@ -41,3 +41,7 @@ The resolver only normalizes vocabulary. It does not infer authority,
 privacy, maturity, epistemic truth, or destination ownership. Those decisions
 remain governed by the relevant V3 contracts and human clarification when
 needed.
+
+## Release-preparation projection
+
+This adjacency is included by the prepared V3 SPEC. Unreleased/candidate wording above records development state, not proof of publication. Its normative scope is subordinate to SPEC and accepted decisions; existing vault adoption remains separately governed.
