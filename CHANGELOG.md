@@ -4,11 +4,18 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **Reviewed local pilot results (Change Set 0131):** records three explicitly
+  accepted one-item pilots migrated through canonical CRUD, reloaded in fresh
+  processes and compared with their approved proposals. One presented personal
+  pilot remains held for a visibility correction. Other proposals remain
+  unaccepted; real restoration, whole-vault adoption and release are unproven.
+
 - **Fingerprinted legacy and canonical recovery (Change Set 0130):** adds an
   explicit observed-legacy conversion contract that preserves unknown version,
   body and legacy fields, plus ticket-bound recovery through canonical CRUD.
-  Scoped implementation direction is authorized; real pilot items remain
-  unapproved, and synthetic recovery does not prove real-vault readiness.
+  The implemented contract and presented local pilots were subsequently
+  reviewed and accepted. Per-item privacy/policy gates still apply; synthetic
+  recovery alone does not prove real-vault readiness or real restoration.
 
 - **Scoped local V3 experiment (Change Set 0129):** records operator acceptance
   of task refresh, local candidate use and canonical persistence architecture.

@@ -42,6 +42,14 @@ additionally requires approval of that exact ticket. Selection of
 options 1B/2A/3A authorizes implementation and four pilot decision sheets,
 not acceptance of their unpresented content or privacy claims.
 
+After the concrete sheets and implemented procedure were presented, the
+operator separately accepted them. Three conforming one-item pilots completed
+canonical migration and fresh-process verification locally on 2026-10-07;
+the personal pilot is held for acceptance of a prepared visibility correction.
+This result does not authorize other proposals or promote whole-instance
+compatibility. Exact restoration preimages were verified, but no real ticket
+restoration was executed. See [the scoped execution evidence boundary](docs/v3-migration-execution.md#real-pilot-evidence-boundary).
+
 The synthetic preflight cases in
 `docs/v3-migration-fixtures.yaml` and their deterministic evaluator in
 `scripts/validate_v3_migration.py` are the first executable check of this

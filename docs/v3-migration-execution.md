@@ -143,8 +143,28 @@ Their results do not establish real-vault privacy, authority, item approval,
 or a completed real pilot. The existing V2 execution mode remains available
 with its original gates.
 
-The executor and Markdown store have been run only against sanitized synthetic
-Git fixtures. No real-vault migration manifest with complete mappings,
-privacy reviews, and rollback evidence exists in this candidate. Running
-against the four real vault branches without such a manifest must return
-`mapping_manifest_required` and write nothing.
+## Real pilot evidence boundary
+
+On 2026-10-07, after explicit human review of the implemented contract and four
+concrete sheets, three conforming one-item manifests passed real preflight,
+canonical write and fresh-process reload on dedicated branches in their
+originating vaults. The approved Records matched their complete proposals;
+original body/Unicode/newlines and all parsed legacy fields were preserved.
+The remaining 385 original files across the four vaults stayed byte-exact,
+and the three changed source files have verified byte-exact recovery preimages.
+The personal sheet's `internal` label conflicts with its vault policy; its
+prepared `confidential` correction remains held for exact human acceptance.
+Review coverage remains 338/338; three migrated and 335 retained is a partial
+result, not four fully migrated vaults.
+
+Bounded candidate-contract runtime used canonical READ on actual V3 Records
+and read-only Search. Search retained provisional/uncertain disposition and
+withheld restricted Chunk references. No global skill installation or package
+change occurred. Synthetic actual-Git recovery tests remain distinct from
+these real write/reload results: no real ticket restoration was executed.
+
+Private manifests, accepted review/privacy receipts, cumulative active
+Collection registries, cursors, source fingerprints and tickets remain in
+the original vault boundary. Management receives aggregate results only.
+Without a complete accepted manifest the executor still blocks and writes
+nothing; the MCP surface is not expanded by this internal experiment.
