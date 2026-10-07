@@ -1,6 +1,6 @@
 # 0118 — Fingerprinted legacy migration and canonical recovery
 
-**Status:** Accepted direction for scoped implementation; real items unapproved
+**Status:** Accepted for scoped implementation and presented local pilots
 
 **Date:** 2026-10-06
 
@@ -63,12 +63,20 @@ Exercise real Git with synthetic CRLF/Unicode sources, custom legacy fields,
 attachments and relationships; migration/reload/recovery in fresh processes;
 interruption before/after persistence; wrong ticket/branch/entity, source drift,
 edited tickets, later V3 update, locks, rejected reviews and missing gates.
-Keep real vaults read-only except administrative pilot proposals/checkpoints.
+Before real writes, require exact item acceptance and current source/context,
+Collection, privacy and semantic gates. Keep unaccepted items unchanged.
 
 ## Approval
 
 The operator explicitly stated: "Eu autorizo seguir com 1b + 2a + 3A".
-The accepted scope is direct-route and recovery implementation plus four pilot
-decision sheets. Exact pilot content and all remaining gate evidence are not
-accepted by that statement. Review the implemented contract and pilot sheets
-before real Record writes; test results do not substitute human authority.
+That first statement accepted implementation and preparation only. After the
+four concrete sheets and common contract/procedure were shown in chat, the
+operator replied "Aprivado." on 2026-10-07. This subsequent acceptance covers
+the presented local pilots, their one-item mappings/Collections, governance
+and bounded same-vault handling. Each private receipt binds its exact source,
+proposal and context. It does not accept any other reviewed item or establish
+source claims as facts. The personal sheet proposed `internal`, conflicting
+with that vault's current policy; it is held for exact acceptance of the
+prepared `confidential` correction. The three compliant pilots may proceed
+independently through canonical CRUD. Exact-ticket approval remains required
+before any real restoration. No publication, installation or release follows.

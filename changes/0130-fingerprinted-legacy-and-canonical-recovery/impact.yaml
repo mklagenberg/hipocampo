@@ -2,7 +2,7 @@ change_set:
   id: "0130-fingerprinted-legacy-and-canonical-recovery"
   class: "normative"
   semver: "none"
-  status: "proposed"
+  status: "accepted"
   backfill: false
   decisions:
     - "decisions/0118-fingerprinted-legacy-and-canonical-recovery.md"
@@ -29,4 +29,4 @@ validation:
   evidence:
     - "scripts/validate_v3_legacy_recovery.py"
     - "docs/v3-migration-execution.md"
-  notes: "Separate synthetic Git recovery, source read-only checks and unaccepted real pilot proposals; no real migration is authorized by passing tests."
+  notes: "Accepted implemented contract after presentation and human review on 2026-10-07. Separate synthetic Git recovery from explicitly accepted local pilots. Personal visibility correction remains held; passing tests alone never authorizes a real item. Freeze this Change Set at the acceptance checkpoint."

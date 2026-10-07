@@ -51,5 +51,11 @@ engine suite passed 25 deterministic commands and its semantic revalidation
 command. Package validation passed without changing the released or candidate
 skill package; two recorded release gates remain. Scope and Change Set
 validators are required again against the checkpointed diff.
-The implemented contract and four concrete pilot sheets remain reviewable
-before any real migration. Accepted Change Sets 0128 and 0129 stay frozen.
+The implemented contract and four concrete pilot sheets were presented and
+accepted by the human operator on 2026-10-07. Item-specific receipts must bind
+that approval before apply. The personal sheet has a visibility conflict with
+its vault policy and remains held for acceptance of the prepared correction;
+the three conforming pilots may proceed independently. Other item proposals
+remain unaccepted. This Change Set becomes frozen at this acceptance checkpoint;
+further result/documentation changes require a new Change Set. Accepted Change
+Sets 0128 and 0129 stayed frozen.
