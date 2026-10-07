@@ -31,6 +31,17 @@ Before a real migration, the operator must have:
 Missing mapping, unknown privacy, unavailable destination, missing rollback or
 missing approval blocks migration.
 
+The scoped experiment may also prepare the explicit observed-legacy route in
+[Decision 0118](decisions/0118-fingerprinted-legacy-and-canonical-recovery.md).
+Unknown effective version is retained, with exact body and legacy-field
+bindings. The source conversion contract must be accepted separately; generic
+unknown compatibility never permits writes. A reviewed recovery procedure
+and its test evidence are required before real migration; canonical CRUD
+creates the immutable ticket before persistence. Restoring a real result
+additionally requires approval of that exact ticket. Selection of
+options 1B/2A/3A authorizes implementation and four pilot decision sheets,
+not acceptance of their unpresented content or privacy claims.
+
 The synthetic preflight cases in
 `docs/v3-migration-fixtures.yaml` and their deterministic evaluator in
 `scripts/validate_v3_migration.py` are the first executable check of this

@@ -17,6 +17,13 @@ BLOCKING = {
 VERSION_RE = re.compile(r"^\d+\.\d+(?:\.\d+)?$")
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 APPROVAL_SCOPE = "v2.2-to-v3-branch-local"
+LEGACY_CONTRACT = "fingerprinted-legacy-v1"
+LEGACY_APPROVAL_SCOPE = "fingerprinted-legacy-to-v3-branch-local"
+
+
+def context_fingerprint(files: dict[str, str]) -> str:
+    return hashlib.sha256(json.dumps(files, sort_keys=True, ensure_ascii=False,
+        separators=(",", ":")).encode("utf-8")).hexdigest()
 
 
 def evaluate(case: dict[str, Any]) -> str:
@@ -71,17 +78,36 @@ def validate_execution_manifest(manifest: dict[str, Any]) -> str:
         return "semantic_review_incomplete"
     if manifest.get("unsafe_raw_fallback") is not False:
         return "unsafe_raw_fallback_enabled"
-    gate = evaluate(manifest)
+    direct_legacy = manifest.get("source_contract") == LEGACY_CONTRACT
+    if manifest.get("source_contract") not in (None, LEGACY_CONTRACT):
+        return "source_contract_unknown"
+    if direct_legacy:
+        if (manifest.get("source_version") != "unknown"
+            or manifest.get("source_version_status") != "not_established"
+            or manifest.get("source_contract_status") != "accepted"
+            or not manifest.get("source_contract_approval_ref")
+            or not manifest.get("source_evidence_ref")):
+            return "legacy_source_contract_incomplete"
+        files = manifest.get("context_files")
+        if not isinstance(files, dict) or not files or any(
+            not isinstance(path, str) or not path or not (
+                SHA256_RE.fullmatch(str(value)) or (path == "profile.md" and value == "absent"))
+            for path, value in files.items()):
+            return "legacy_context_binding_missing"
+        gate = "ready" if manifest.get("human_approval") == "present" else "authorization_required"
+    else:
+        gate = evaluate(manifest)
     if gate != "ready":
         return gate
-    if not VERSION_RE.fullmatch(str(manifest.get("source_version", ""))) or not str(manifest["source_version"]).startswith("2."):
+    if not direct_legacy and (not VERSION_RE.fullmatch(str(manifest.get("source_version", ""))) or not str(manifest["source_version"]).startswith("2.")):
         return "source_version_not_v2"
     if not VERSION_RE.fullmatch(str(manifest.get("target_version", ""))) or not str(manifest["target_version"]).startswith("3."):
         return "target_version_not_v3"
     vault_id = manifest.get("vault_id")
     if not vault_id or manifest.get("approved_vault_id") != vault_id:
         return "authorization_scope_mismatch"
-    if manifest.get("approval_scope") != APPROVAL_SCOPE or not manifest.get("approval_ref"):
+    expected_scope = LEGACY_APPROVAL_SCOPE if direct_legacy else APPROVAL_SCOPE
+    if manifest.get("approval_scope") != expected_scope or not manifest.get("approval_ref"):
         return "authorization_scope_incomplete"
     if not SHA256_RE.fullmatch(str(manifest.get("source_inventory_sha256", ""))):
         return "source_inventory_fingerprint_missing"
@@ -115,6 +141,15 @@ def validate_execution_manifest(manifest: dict[str, Any]) -> str:
         return "duplicate_idempotency_key"
     if inventory_fingerprint(records) != manifest["source_inventory_sha256"]:
         return "source_inventory_fingerprint_mismatch"
+    if direct_legacy and any(
+        item.get("source_context_sha256") != context_fingerprint(manifest["context_files"])
+        or not item.get("legacy_source_evidence_ref")
+        or not isinstance(item["record"].get("legacy_frontmatter"), dict)
+        or not item["record"]["legacy_frontmatter"]
+        or item["record"].get("legacy_source_sha256") != item["source_sha256"]
+        or item["record"].get("record_version") != 1
+        for item in records):
+        return "legacy_record_binding_incomplete"
     return "ready"
 
 

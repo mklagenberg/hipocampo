@@ -11,7 +11,7 @@ import subprocess
 import yaml
 
 from v3_crud_engine import ContractError, RecordCrud, validate_record_semantics, validate_record_structure
-from v3_migration_engine import SHA256_RE, validate_execution_manifest
+from v3_migration_engine import LEGACY_CONTRACT, SHA256_RE, validate_execution_manifest
 from v3_record_store import MarkdownRecordStore, serialize_record
 
 
@@ -56,6 +56,9 @@ def _inspect_record(root: Path, manifest: dict, item: dict) -> str:
             return "physical_path_changed"
         semantic_operation = "current-use" if record.get("current_use") else "migration"
         validate_record_semantics(record, item["semantic_review"], operation=semantic_operation)
+        if manifest.get("source_contract") == LEGACY_CONTRACT:
+            store = MarkdownRecordStore(root)
+            store.validate_legacy_binding(record, item["source_path"], item["source_sha256"], manifest["context_files"])
         if item["semantic_review"].get("decision") != "accepted":
             return "semantic_review_not_accepted"
         if not item.get("reason") or not item.get("idempotency_key"):
@@ -76,21 +79,21 @@ def _git_apply_gate(root: Path) -> str | None:
     try:
         branch = subprocess.run(
             ["git", "-C", str(root), "branch", "--show-current"],
-            capture_output=True, text=True, check=True,
+            capture_output=True, text=True, check=True, timeout=30,
         ).stdout.strip()
         top_level = subprocess.run(
             ["git", "-C", str(root), "rev-parse", "--show-toplevel"],
-            capture_output=True, text=True, check=True,
+            capture_output=True, text=True, check=True, timeout=30,
         ).stdout.strip()
         main_ancestor = subprocess.run(
             ["git", "-C", str(root), "merge-base", "--is-ancestor", "main", "HEAD"],
-            capture_output=True, text=True, check=False,
+            capture_output=True, text=True, check=False, timeout=30,
         ).returncode
         status = subprocess.run(
             ["git", "-C", str(root), "status", "--porcelain", "-z"],
-            capture_output=True, text=True, check=True,
+            capture_output=True, text=True, check=True, timeout=30,
         ).stdout
-    except (OSError, subprocess.CalledProcessError):
+    except (OSError, subprocess.SubprocessError):
         return "git_repository_unavailable"
     if not branch.startswith("migration/"):
         return "dedicated_migration_branch_required"
@@ -105,6 +108,8 @@ def _git_apply_gate(root: Path) -> str | None:
 
 def run(root: Path, manifest: dict, *, mode: str) -> tuple[int, dict]:
     root = root.resolve(strict=True)
+    if mode not in {"dry-run", "apply"}:
+        return 2, {"status": "blocked", "reason": "execution_mode_invalid", "written": 0}
     global_status = _preflight(manifest)
     if global_status != "ready":
         return 2, {"status": "blocked", "reason": global_status, "records": 0, "written": 0, "already_applied": 0}
@@ -115,10 +120,12 @@ def run(root: Path, manifest: dict, *, mode: str) -> tuple[int, dict]:
                 "status": "blocked", "reason": gate, "records": len(manifest["records"]),
                 "written": 0, "already_applied": 0,
             }
-    statuses = [
-        _inspect_record(root, manifest, item)
-        for item in manifest["records"]
-    ]
+    statuses = []
+    for item in manifest["records"]:
+        try:
+            statuses.append(_inspect_record(root, manifest, item))
+        except (OSError, ValueError, TypeError, KeyError, yaml.YAMLError):
+            statuses.append("record_inspection_failed")
     blocked = sum(status != "ready" for status in statuses)
     already = 0
     if blocked:
@@ -135,7 +142,7 @@ def run(root: Path, manifest: dict, *, mode: str) -> tuple[int, dict]:
     try:
         store = MarkdownRecordStore(root)
         crud = RecordCrud(manifest["active_collections"], persistence=store)
-    except (ContractError, OSError):
+    except (ContractError, OSError, ValueError, TypeError, yaml.YAMLError):
         # Loading existing V3 state is part of the apply gate. Do not let a
         # stale/incomplete Collection registry escape as an unstructured
         # exception or reach the first migration write.
@@ -159,7 +166,7 @@ def run(root: Path, manifest: dict, *, mode: str) -> tuple[int, dict]:
             )
             if result["status"] == "accepted":
                 written += 1
-    except (ContractError, OSError):
+    except (ContractError, OSError, ValueError, TypeError, yaml.YAMLError):
         return 3, {
             "status": "partial", "records": len(statuses), "written": written,
             "already_applied": already, "blocked": len(statuses) - written - already,

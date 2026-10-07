@@ -4,6 +4,12 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+- **Fingerprinted legacy and canonical recovery (Change Set 0130):** adds an
+  explicit observed-legacy conversion contract that preserves unknown version,
+  body and legacy fields, plus ticket-bound recovery through canonical CRUD.
+  Scoped implementation direction is authorized; real pilot items remain
+  unapproved, and synthetic recovery does not prove real-vault readiness.
+
 - **Scoped local V3 experiment (Change Set 0129):** records operator acceptance
   of task refresh, local candidate use and canonical persistence architecture.
   Keeps per-item approvals, runtime evidence and V3 release gates separate;

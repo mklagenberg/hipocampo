@@ -63,6 +63,9 @@ scripts:
   - path: scripts/v3_record_store.py
     class: deterministic
     proof: "canonical CRUD persistence, document parsing, atomic replacement and integrity checks; record meaning remains semantic"
+  - path: scripts/validate_v3_legacy_recovery.py
+    class: deterministic
+    proof: "synthetic observed-legacy conversion and canonical recovery with actual Git; no real-vault authorization, semantic or privacy proof"
   - path: scripts/v3_learning_engine.py
     class: hybrid
     proof: "sanitized signal identity, deduplication and candidate boundary; semantic gap assessment remains reviewed"

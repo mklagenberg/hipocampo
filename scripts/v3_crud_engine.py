@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Protocol
 
 import yaml
-from v3_migration_engine import validate_execution_context
+from v3_migration_engine import LEGACY_CONTRACT, validate_execution_context
 from v3_queue_engine import DEPRECATED_VALUES
 
 
@@ -48,6 +48,14 @@ class RecordPersistence(Protocol):
     def update(self, previous: dict, record: dict) -> None: ...
 
     def migrate(self, record: dict, source_path: str, expected_source_sha256: str) -> str: ...
+
+    def validate_legacy_binding(self, record: dict, source_path: str, expected_sha256: str, context_files: dict) -> None: ...
+
+    def prepare_migration_recovery(self, record: dict, source_path: str, expected_sha256: str) -> dict: ...
+
+    def load_recovery_ticket(self, ticket_id: str, expected_ticket_sha256: str) -> dict: ...
+
+    def recover_migration(self, ticket: dict) -> str: ...
 
     def read_legacy_document(self, relative_path: str) -> tuple[dict, str, str]: ...
 
@@ -438,6 +446,12 @@ class RecordCrud:
         if semantic_review.get("decision") != "accepted":
             raise ContractError("Record migration requires an accepted semantic review")
 
+        ticket = None
+        if migration_context.get("source_contract") == LEGACY_CONTRACT:
+            self._persistence.validate_legacy_binding(structural, source_path,
+                expected_source_sha256, migration_context["context_files"])
+            ticket = self._persistence.prepare_migration_recovery(structural,
+                source_path, expected_source_sha256)
         persistence_status = self._persistence.migrate(
             structural, source_path, expected_source_sha256
         )
@@ -451,7 +465,45 @@ class RecordCrud:
             "status": "accepted",
             "record": structural,
             "event": event,
+            "recovery_ticket": ticket,
         })
+
+    def recover_migration(self, ticket_id: str, *, expected_ticket_sha256: str,
+                          recovery_context: dict, semantic_review: dict,
+                          actor: str, reason: str) -> dict:
+        """Internal, exact-ticket legacy restoration; never an MCP file writer."""
+        if self._persistence is None or not actor or not reason:
+            raise ContractError("canonical recovery requires persistence, actor and reason")
+        ticket = self._persistence.load_recovery_ticket(ticket_id, expected_ticket_sha256)
+        if not isinstance(recovery_context, dict) or (
+            recovery_context.get("human_approval") != "present"
+            or recovery_context.get("approved_vault_id") != ticket["vault_id"]
+            or recovery_context.get("approved_entity") != ticket["entity"]
+            or recovery_context.get("approval_scope") != "canonical-migration-recovery-branch-local"
+            or not recovery_context.get("approval_ref") or not recovery_context.get("procedure_ref")
+            or recovery_context.get("ticket_id") != ticket_id
+            or recovery_context.get("ticket_sha256") != expected_ticket_sha256):
+            raise ContractError("exact-ticket recovery approval is incomplete or mismatched")
+        review = validate_semantic_review(semantic_review, target_id=ticket["record_id"],
+            operation="migration-recovery")
+        if review["decision"] != "accepted":
+            raise ContractError("canonical recovery requires accepted semantic review")
+        current = self._records.get(ticket["record_id"])
+        if current is not None and (current["record_version"] != 1
+            or current["entity"] != ticket["entity"]
+            or current["vault"]["vault_id"] != ticket["vault_id"]
+            or current["physical_path"] != ticket["source_path"]):
+            raise ContractError("recovery cannot overwrite later Record state")
+        status = self._persistence.recover_migration(ticket)
+        if status not in {"restored", "source_present_no_write"}:
+            raise ContractError("canonical recovery persistence returned an invalid status")
+        self._records.pop(ticket["record_id"], None)
+        self._idempotency.clear()
+        self._migration_fingerprints.clear()
+        event = {"event_type": "record_migration_recovery", "actor": actor,
+            "reason": reason, "result": status, "record_id": ticket["record_id"]}
+        self.events.append(event)
+        return {"status": status, "written": int(status == "restored"), "event": event}
 
     def _read_record(self, record_id: str) -> dict:
         if record_id not in self._records:

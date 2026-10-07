@@ -10,6 +10,16 @@ scoped candidate operations on dedicated local branches after entry and
 capability checks. It does not activate V3 for other instances, approve
 individual mappings or change the released compatibility contract.
 
+Within that experiment, [Decision 0118](decisions/0118-fingerprinted-legacy-and-canonical-recovery.md)
+records authorization to implement a direct, fingerprint-bound legacy route
+and canonical recovery. An unknown effective source version stays unknown;
+it is not promoted to V2.2 or general compatibility. The route requires an
+explicit accepted source contract, exact source/body/legacy-field bindings,
+all existing per-item approvals and tested recovery. Recovery of the exact
+pre-migration bytes is an internal CRUD operation bound to an immutable ticket,
+the originating vault/entity/branch and the unchanged migrated fingerprint.
+It does not authorize arbitrary restoration or bypass semantic/privacy gates.
+
 ## 1. Scope
 
 Hipocampo is an agentic second brain methodology: git + markdown + AI rituals. This repository (`hipocampo`) carries the specification, scaffold, skill, and tooling, never actual instance content. Every knowledge base that implements Hipocampo lives in private repositories, without exception (see invariants, section 8).

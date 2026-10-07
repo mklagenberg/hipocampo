@@ -102,6 +102,47 @@ separate gates under `MIGRATIONS.md`.
 
 ## Current execution boundary
 
+### Explicit observed-legacy route and canonical recovery
+
+Decision 0118 defines an additional scoped source contract. Its manifest uses
+`source_contract: fingerprinted-legacy-v1`, `source_version: unknown`,
+`source_version_status: not_established`, `source_contract_status: accepted`,
+`source_contract_approval_ref`, `source_evidence_ref`, and
+`approval_scope: fingerprinted-legacy-to-v3-branch-local`. It also carries
+non-empty repository-relative `context_files` mapped to exact SHA-256 hashes.
+An absent `profile.md` may be explicitly represented by `absent`; its absence
+is evidence, not a fulfilled profile or governance requirement. Appearance of
+that file invalidates the context binding until reconciliation.
+Each entry binds `source_context_sha256` to the canonical context map hash and
+provides `legacy_source_evidence_ref`. The complete initial Record preserves
+the exact body in `content`, every parsed original field in
+`legacy_frontmatter` and the original hash in `legacy_source_sha256`.
+Malformed, absent or V3 headers are held; this is not a raw-content fallback.
+All mapping, privacy, governance, Collection, semantic review, destination,
+branch and tested-recovery gates remain mandatory.
+
+Before its atomic replacement, canonical CRUD creates an immutable ticket
+under the originating repository's Git administration directory. Ticket
+identity and hash are an operational receipt, never an approval by themselves.
+After interruption, inspect the ticket and actual bytes before another action.
+`RecordCrud.recover_migration` requires exact ticket ID/hash, vault/entity,
+`human_approval: present`, `approval_scope:
+canonical-migration-recovery-branch-local`, `approval_ref`, `procedure_ref`,
+and an accepted semantic review. Only an unchanged initial migration result
+can be restored. Later version, target drift, ticket drift, branch/lineage
+change or a surviving lock blocks it. Unrelated dirty files remain untouched.
+
+Recovery returns `restored` after a verified atomic byte-exact replacement, or
+`source_present_no_write` when the source bytes are already present. The latter
+does not prove any migration or recovery happened. Retained tickets block
+same-source reexecution, even after restoration; a new attempt needs its own
+governed procedure. These internal operations remain outside the MCP surface.
+
+The route and recovery are tested with synthetic content and actual Git.
+Their results do not establish real-vault privacy, authority, item approval,
+or a completed real pilot. The existing V2 execution mode remains available
+with its original gates.
+
 The executor and Markdown store have been run only against sanitized synthetic
 Git fixtures. No real-vault migration manifest with complete mappings,
 privacy reviews, and rollback evidence exists in this candidate. Running

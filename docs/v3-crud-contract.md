@@ -90,6 +90,18 @@ operation. The migration executor only prepares and submits proposals; it
 never writes Record files directly. The executable procedure and recovery
 limits are documented in `v3-migration-execution.md`.
 
+Decision 0118 adds the scoped `fingerprinted-legacy-v1` conversion contract:
+effective version remains `unknown`, the exact body and parsed legacy fields
+are preserved, and a recovery ticket is written in own Git administration
+before Record persistence. Internal `RecordCrud.recover_migration` requires
+an accepted review and exact-ticket/vault/entity approval. It restores only
+the unchanged initial migration result to its ticket-bound original bytes,
+rejects later Record updates, and leaves unrelated working changes untouched.
+Neither operation is exposed by the MCP adapter. Source-present after an
+interruption is a no-write observation, not proof of completed rollback.
+Reusing the original manifest after recovery is blocked by the retained ticket;
+a new attempt requires separately governed reexecution.
+
 The MCP surface is a transport adapter, not a second persistence layer. It may
 expose only the canonical `create`, `read`, `update` and governed `delete`
 operations. A request must carry its actor, reason, expected Record version,
