@@ -18,9 +18,9 @@
 
 hipocampo:
   manifest_version: "1.0"
-  compatibility: "^2.1.1"
+  compatibility: "^3.0.0"
   verified_against: "<fill in: version of hipocampo/SPEC.md at instantiation time>"
-  verified_commit: "<fill in: commit of hipocampo/main used as the scaffold source>"
+  verified_commit: "<fill in: commit resolved from the verified immutable methodology release used as the scaffold source>"
 
 instance:
   repository: "<fill in: URL of this repository>"
@@ -39,8 +39,8 @@ discovery:
 
 scaffold:
   profile: "<fill in: pessoal | empresa>"    # scaffold profile id — literal filename token, not translated (PR #27)
-  profile_version: "1.0.0"
-  engine_version: "1.0.0"
+  profile_version: "2.0.0"
+  engine_version: "2.0.0"
   source_repository: "https://github.com/mklagenberg/hipocampo"
   source_commit: "<fill in: same commit as hipocampo.verified_commit>"
 

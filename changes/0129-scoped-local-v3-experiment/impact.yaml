@@ -1,0 +1,32 @@
+change_set:
+  id: "0129-scoped-local-v3-experiment"
+  class: "normative"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0116-canonical-record-persistence-and-v3-migration.md"
+    - "decisions/0117-scoped-local-v3-experiment.md"
+impact:
+  - artifact: "SPEC.md, decisions/0116-canonical-record-persistence-and-v3-migration.md, decisions/0117-scoped-local-v3-experiment.md, CHANGELOG.md, MIGRATIONS.md"
+    status: "updated"
+    note: "Projects explicit acceptance of three entry decisions for one local experiment, without release activation or individual semantic approvals."
+  - artifact: "changes/0128-canonical-record-persistence-and-migration-executor/proposal.md, changes/0128-canonical-record-persistence-and-migration-executor/impact.yaml"
+    status: "updated"
+    note: "Records the first human architecture acceptance; the accepted Change Set remains frozen after this transition."
+  - artifact: "candidates/skill-v3/, docs/v3-skill-conformance-ai-review.yaml, skill/, COMPATIBILITY.yaml"
+    status: "reviewed"
+    note: "Previously reviewed candidate package stays byte-exact; scoped operator authorization is an external experiment envelope, not installation or a release."
+  - artifact: "moda.yaml, conformance/moda.yaml, UPGRADE.md, ROADMAP.md"
+    status: "reviewed"
+    note: "No released version, adoption action, methodology structure or conformance claim changes. Existing V3 direction remains."
+validation:
+  commands:
+    - "python -B scripts/validate_hipocampo.py --root ."
+    - "python -B scripts/validate_change.py --root ."
+    - "python -B scripts/validate_contracts.py --root ."
+    - "python -B scripts/validate_skill_package.py --root ."
+    - "python -B scripts/validate_v3_skill_conformance.py --root ."
+  evidence:
+    - "decisions/0117-scoped-local-v3-experiment.md"
+  notes: "Linked-worktree and real-entry evidence belongs to the authorized management/vault boundaries. It never proves a V3 release."

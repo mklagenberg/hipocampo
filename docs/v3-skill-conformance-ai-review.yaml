@@ -1,194 +1,872 @@
-schema_version: "1.0"
-suite_id: "v3-skill-conformance"
-assessment_status: "blocked"
-assessment_scope: "primary AI semantic review, independent AI challenge, and human review completed for the isolated V3 skill candidate; release and runtime gates remain pending"
-
+schema_version: '1.0'
+suite_id: v3-skill-conformance
+assessment_status: ready
+assessment_scope: final canonical prepared skill; fresh exact-package AI review, independent
+  challenge and human approval required
 review_target:
-  methodology_baseline: "3.0.0"
-  package_root: "candidates/skill-v3"
-  skill_manifest: "manifest.yaml"
-  skill_version: "2.0.0-rc.1"
-  methodology_compatibility: "^3.0.0"
-  package_lock: "package-lock.yaml"
-  package_lock_sha256: "91685f8106ef3e24d6a9c4e518e6b099f4ec2e760b90e93c29ad33bad90db3fa"
-
+  methodology_baseline: 3.0.0
+  package_root: skill
+  skill_manifest: manifest.yaml
+  skill_version: 2.0.0
+  methodology_compatibility: ^3.0.0
+  package_lock: package-lock.yaml
+  package_lock_sha256: 2462816441e5e829579014207403dbf8342c6c500bdb4691792a5d8a4aa84f9b
 deterministic_observation:
-  expected_compatibility_state: "compatible"
-  observed_reason: "The candidate skill declares ^3.0.0, which covers the V3.0.0 baseline; this does not establish authority, privacy permission or host capability."
-  action: "continue_subject_to_authority_and_privacy"
-
+  expected_compatibility_state: compatible
+  observed_reason: The candidate skill declares ^3.0.0, which covers the V3.0.0 baseline;
+    this does not establish authority, privacy permission or host capability.
+  action: continue_subject_to_authority_and_privacy
 ai_readiness_review:
-  status: "completed"
-  reviewer_type: "AI"
+  status: completed
+  reviewer_type: AI
   findings: []
-  summary: "The isolated candidate package is complete, integrity-locked and declares the target V3.0.0 baseline. It remains unreleased and is not an activation instruction."
-
+  summary: Exact-package primary AI review and independent challenge passed; explicit
+    human acceptance now recorded. Local package handoff gate is complete; remote
+    integration, CI and actual publication remain separate.
 ai_semantic_review:
-  status: "passed"
-  reviewer_type: "AI"
-  review_id: "V3SKILL-AI-REVIEW-003"
-  reviewer_session_id: "primary-review-session-codex-2026-10-01-1825z"
-  reviewed_at: "2026-10-01T18:25:42Z"
-  package_lock_sha256: "91685f8106ef3e24d6a9c4e518e6b099f4ec2e760b90e93c29ad33bad90db3fa"
+  schema_version: '1.0'
+  suite_id: v3-skill-conformance
+  review_id: V3SKILL-AI-REVIEW-FINAL-003
+  reviewer_type: AI
+  reviewer_session_id: /root/v3_release_primary_review
+  reviewed_at: '2026-10-07T21:55:53Z'
+  status: passed
+  assessment_scope: Fresh primary semantic reassessment of all seven cases for the
+    final canonical immutable-release-target skill 2.0.0, including pre-publication
+    blocking and post-publication verification without package-byte changes.
+  package_lock_sha256: 2462816441e5e829579014207403dbf8342c6c500bdb4691792a5d8a4aa84f9b
+  review_target:
+    package_root: skill
+    skill_version: 2.0.0
+    methodology_baseline: 3.0.0
+    methodology_compatibility: ^3.0.0
+    package_lock: skill/package-lock.yaml
   reviewed_semantic_case_ids:
-    - "SKILL-S-001"
-    - "SKILL-S-002"
-    - "SKILL-S-003"
-    - "SKILL-S-004"
-    - "SKILL-S-005"
-    - "SKILL-S-006"
-    - "SKILL-S-007"
+  - SKILL-S-001
+  - SKILL-S-002
+  - SKILL-S-003
+  - SKILL-S-004
+  - SKILL-S-005
+  - SKILL-S-006
+  - SKILL-S-007
+  deterministic_observation:
+    command: python -B scripts/validate_v3_skill_conformance.py --root . --mode workflow
+    exit_code: 0
+    result: Suite and evidence envelope valid; four release blockers remain at the
+      time of this review.
+    integrity: All ten declared package file hashes match. The package-lock fingerprint
+      was checked before and after the semantic read and remained unchanged.
+    corrected_link: The ../../docs/v3-search-progressive-disclosure-contract.md reference
+      resolves to the existing contract inside this repository.
+    limits: This result checks reproducible properties and does not prove semantic
+      truth, authorization, installation, human acceptance or publication.
   case_dispositions:
-    - case_id: "SKILL-S-001"
-      disposition: "diagnostic_only_or_migration_review"
-      rationale: "The candidate treats a V2 tuple as migration_required for V3 writes, permits only bounded diagnosis, and requires target tuple, vault-specific mapping, rollback and explicit approval before migration."
-      evidence:
-        - "candidates/skill-v3/SKILL.md#Session-entry-and-compatibility"
-        - "candidates/skill-v3/references/v3-operation.md#1-verify-the-tuple-before-operation"
-        - "candidates/skill-v3/references/v3-operation.md#6-prepare-a-v2-to-v3-migration"
-        - "MIGRATIONS.md#2x--30-v3-candidate-not-active"
-      uncertainty: "No real V2 vault content or migration was examined; the result assesses written operating guidance."
-    - case_id: "SKILL-S-002"
-      disposition: "blocked"
-      rationale: "The skill explicitly requires an actor and a non-empty authorized_vault_ids set covering the requested vault; missing, empty, ambiguous or mismatched authorization blocks Read."
-      evidence:
-        - "candidates/skill-v3/SKILL.md#Discover-vaults-and-entities"
-        - "candidates/skill-v3/references/v3-operation.md#2-confirm-authority-scope-and-operation-capability"
-        - "candidates/skill-v3/references/crud-frontmatter.md#Read"
-        - "docs/v3-crud-contract.md#CRUD-behavior"
-      uncertainty: "No host runtime was exercised to verify that a connector enforces this context."
-    - case_id: "SKILL-S-003"
-      disposition: "preserve_boundaries_or_block"
-      rationale: "The candidate resolves entity, scope and vault independently and rejects shared access, account, Git provider or matching content as shared governance."
-      evidence:
-        - "candidates/skill-v3/SKILL.md#Discover-vaults-and-entities"
-        - "candidates/skill-v3/references/v3-operation.md#2-confirm-authority-scope-and-operation-capability"
-        - "candidates/skill-v3/references/crud-frontmatter.md#Scope-and-privacy"
-        - "docs/v3-contract.md#Entity-aware-routing-and-governed-split"
-      uncertainty: "No cross-vault connector or real identity graph was exercised."
-    - case_id: "SKILL-S-004"
-      disposition: "needs_review_or_blocked"
-      rationale: "The candidate preserves stale, conflicting, inaccessible, provisional and unknown states; it forbids treating retrieval, recency, relevance, hash or disclosure authorization as resolution."
-      evidence:
-        - "candidates/skill-v3/references/v3-operation.md#4-read-and-preserve-source-state"
-        - "candidates/skill-v3/references/v3-operation.md#8-report-result-and-limits"
-        - "docs/v3-semantic-evaluation-boundary.md#Deterministic-boundary"
-        - "docs/v3-search-progressive-disclosure-contract.md#Result-envelope"
-      uncertainty: "This is a text review; no inaccessible or conflicting source was exercised at runtime."
-    - case_id: "SKILL-S-005"
-      disposition: "preserve_v3_0_baseline_or_rework"
-      rationale: "The candidate states that all later V3 minors and patches preserve raw V3.0.0 behavior, including through adapters or facades, and excludes host identity from the version tuple."
-      evidence:
-        - "candidates/skill-v3/SKILL.md#Hipocampo-V3-Skill-candidate"
-        - "candidates/skill-v3/references/v3-operation.md#7-preserve-the-v3.0.0-baseline"
-        - "docs/v3-skill-conformance-gate.md#Purpose"
-      uncertainty: "The claim is assessed as guidance; no later V3 minor or adapter implementation exists here to execute."
-    - case_id: "SKILL-S-006"
-      disposition: "separate_all_three_layers"
-      rationale: "The candidate separates tuple compatibility, authority/privacy and tool capability, and distinguishes deterministic checks, semantic interpretation and human decisions."
-      evidence:
-        - "candidates/skill-v3/SKILL.md#Session-entry-and-compatibility"
-        - "candidates/skill-v3/references/v3-operation.md#8-report-result-and-limits"
-        - "candidates/skill-v3/references/crud-frontmatter.md#Governed-changes"
-        - "docs/verification-boundaries.md#Classification-rule"
-      uncertainty: "Passing text conformance does not prove semantic truth, host enforcement or human acceptance."
-    - case_id: "SKILL-S-007"
-      disposition: "bounded_progressive_read_with_pinned_official_references"
-      rationale: "The skill requires an authorized bounded request, minimum disclosure, frontmatter filtering before selected Record/Chunk bodies, and explicit authorization for L4. Methodology adjacencies are resolved from the official repository at the version-matched immutable release and pinned commit/path; vault aliases use their own authorized registry and are not resolved through the methodology repository. Package-scope review found no bundled executable helpers and removed four unreferenced legacy redirects."
-      evidence:
-        - "candidates/skill-v3/SKILL.md#Discover-vaults-and-entities"
-        - "candidates/skill-v3/references/v3-operation.md#3-progressive-disclosure-read"
-        - "docs/v3-search-progressive-disclosure-contract.md#Disclosure-levels"
-        - "docs/v3-crud-contract.md#Read"
-        - "docs/v3-external-reference-policy.md"
-      uncertainty: "The skill guidance and local synthetic engine were validated; no real vault, host adapter, remote CRUD authorization or network retrieval path was exercised."
+  - case_id: SKILL-S-001
+    disposition: diagnostic_only_or_migration_review
+    rationale: A hypothetical V2.2 vault remains diagnostic/migration input for this
+      V3 package. It cannot become a V3 write target merely by changing a compatibility
+      range. The skill requires exact source/target evidence, vault-specific authorization,
+      accepted mapping, privacy and destination checks, tested rollback and explicit
+      human approval; existing V2 operation remains attached to the appropriate immutable
+      V2 package.
+    evidence:
+    - skill/references/v3-operation.md
+    - MIGRATIONS.md
+    - docs/v3-v22-resolution-matrix.yaml
+    - SPEC.md
+    uncertainty: No legacy vault, source content or migration was exercised; the disposition
+      assesses written operating guidance.
+  - case_id: SKILL-S-002
+    disposition: blocked
+    rationale: A hypothetical Read with no actor, no authorized_vault_ids, an empty
+      set or a set excluding the requested vault must stop before disclosure. Shared
+      account access, invitation, repository visibility and remembered identity cannot
+      supply the missing authorization. Lack of an operation-specific authorized adapter
+      remains a capability blocker. Metadata discovery now uses a separately authorized
+      metadata-read capability with exact actor/target/scope/privacy/current provenance
+      checks; it neither fictionalizes RecordCrud.read nor authorizes Record-body
+      access.
+    evidence:
+    - skill/SKILL.md
+    - skill/references/crud-frontmatter.md
+    - skill/references/v3-operation.md
+    - docs/v3-crud-contract.md
+    - changes/0115-v3-crud-read-authorization-context/impact.yaml
+    - skill/references/personalization.md
+    uncertainty: No connector or actor-authentication implementation was exercised;
+      instructions do not establish real authorization enforcement.
+  - case_id: SKILL-S-003
+    disposition: preserve_boundaries_or_block
+    rationale: When two vaults share a provider, account or Source, their entity,
+      scope and authority remain separate. The skill forbids automatic merging/synchronization
+      and requires destination acceptance, Owner approval and minimization for a cross-entity
+      representation. A vault profile is policy, not inherited authority.
+    evidence:
+    - skill/SKILL.md
+    - skill/references/invariants.md
+    - skill/references/crud-frontmatter.md
+    - SPEC.md
+    - docs/v3-contract.md
+    uncertainty: No real registry, multi-vault identity graph, governed split or transfer
+      was exercised.
+  - case_id: SKILL-S-004
+    disposition: needs_review_or_blocked
+    rationale: A hypothetical stale or conflicting Record cannot become current guidance
+      through rank, recency, hashing or disclosure approval. Inaccessible Record content
+      blocks the dependent read. Readable persisted prose remains readable when its
+      referenced Artifact is unavailable, with freshness and verification limits preserved;
+      Read does not fetch or reconstruct the Artifact.
+    evidence:
+    - skill/references/v3-operation.md
+    - skill/references/crud-frontmatter.md
+    - docs/v3-semantic-evaluation-boundary.md
+    - docs/v3-search-progressive-disclosure-contract.md
+    uncertainty: No live conflicting or inaccessible source was exercised. Exact observed_at
+      versus checked_at presentation rules remain in the normative Search adjacency.
+  - case_id: SKILL-S-005
+    disposition: preserve_v3_0_baseline_or_rework
+    rationale: A hypothetical later V3 minor/patch or facade must preserve the raw
+      V3.0.0 contract and observable guarantees. Host identity cannot redefine compatibility.
+      Failure to preserve the baseline requires incompatibility disclosure and a separately
+      approved transition rather than relabeling the change compatible.
+    evidence:
+    - skill/SKILL.md
+    - skill/references/v3-operation.md
+    - skill/references/invariants.md
+    - SPEC.md
+    - docs/v3-skill-conformance-gate.md
+    uncertainty: No later release or adapter/facade implementation was executed; future
+      conformance requires version-specific evidence.
+  - case_id: SKILL-S-006
+    disposition: separate_all_three_layers
+    rationale: An intact tuple is compatibility only, not authority/privacy or tool
+      capability. Semantic review proposes and deterministic CRUD validation independently
+      checks before persistence. Neither an AI semantic pass nor a green script grants
+      human acceptance, migration permission, installation or publication. The historical
+      rc.1 approval is now explicitly separate from this new package review. The immutable-release-target
+      declaration states intended release only; null source_commit is not verified
+      provenance. Actual published tag, exact commit and hashes remain required before
+      installation or operation. Current publication language describes an unverified
+      preparation branch rather than declaring the immutable package permanently unreleased.
+      A subsequently verified official release can satisfy the publication gate without
+      changing the package or borrowing approval from an older fingerprint.
+    evidence:
+    - skill/SKILL.md
+    - skill/references/v3-operation.md
+    - skill/references/crud-frontmatter.md
+    - docs/verification-boundaries.md
+    - docs/v3-skill-conformance-gate.md
+    - docs/v3-skill-conformance-ai-review.yaml
+    - docs/evidence/v3-skill-rc1-review-2026-10-04.yaml
+    - skill/manifest.yaml
+    - skill/references/codex.md
+    uncertainty: No human approval is inferred. The primary review still requires
+      an independent challenge and subsequent exact human decision.
+  - case_id: SKILL-S-007
+    disposition: bounded_progressive_read_with_pinned_official_references
+    rationale: A hypothetical retrieval starts with bounded actor/entity/vault/scope
+      authorization, minimum disclosure and frontmatter filters before selected Chunk
+      bodies with parent context. L4 requires specific expansion authorization. Methodology
+      dependencies use the official source_repository at the verified version-matched
+      immutable tag/commit and exact paths; vault relations use their own authorized
+      registry. Operational manifests and registries now use a separate bounded authorized
+      metadata-read capability, with current version/fingerprint checks and fail-closed
+      behavior when capability or provenance is absent. RecordCrud.read accepts Record
+      IDs; metadata access is explicitly prohibited from becoming a body-read or CRUD
+      bypass. The canonical contract link and immutable scaffold provenance remain
+      corrected.
+    evidence:
+    - skill/references/v3-operation.md
+    - skill/references/personalization.md
+    - skill/references/instantiation.md
+    - skill/manifest.yaml
+    - docs/v3-search-progressive-disclosure-contract.md
+    - docs/v3-crud-contract.md
+    - docs/v3-external-reference-policy.md
+    - scaffold/profiles/pessoal.yaml
+    - scaffold/profiles/empresa.yaml
+    - scaffold/skeleton/hipocampo.yaml
+    uncertainty: No remote reference lookup or content read was performed. Instructions
+      remain subject to separately verified operation-specific capability and authorization.
+  additional_scenario_assessments:
+  - scenario: Bootstrap with no anchor, or with an unavailable configured anchor
+    disposition: plan_and_explicit_approval_or_block
+    rationale: Absence permits orientation and profile planning; unavailability is
+      not absence. Required inputs, exact repository visibility/entity/scope, owner/privacy
+      checks, recovery and capability must be presented and approved. Approved operational
+      manifests/registries use a separately authorized structure capability; knowledge
+      Records still require canonical CRUD and accepted Collections. Missing capability
+      produces a blocked plan, and conflicting existing files are not overwritten.
+    evidence:
+    - skill/references/instantiation.md
+    - skill/references/personalization.md
+    - SPEC.md
+    - scaffold/profiles/pessoal.yaml
+    - scaffold/profiles/empresa.yaml
+    uncertainty: No repository creation, metadata write or bootstrap runtime was exercised.
+  - scenario: Invitation registration
+    disposition: confirm_address_and_metadata_capability_or_block
+    rationale: The target manifest and scope must be read under authorization and
+      confirmed. Registration is an exact operational manifest/registry change with
+      current fingerprint, privacy checks, validation and review. No identity, role
+      or permission claims are copied into the anchor. Missing supported metadata
+      capability blocks registration without bypassing Record CRUD. Target and anchor
+      metadata are read through the distinct authorized metadata route, not RecordCrud.read.
+      Capability absence or unverifiable current provenance blocks discovery/registration.
+    evidence:
+    - skill/references/personalization.md
+    - skill/references/instantiation.md
+    - SPEC.md
+    uncertainty: The skill defines safe blocking and the required authorization envelope;
+      it does not prove a supported metadata adapter exists.
+  - scenario: Skill update, prepared branch or unavailable immutable release
+    disposition: verify_and_notify_then_require_confirmation
+    rationale: The immutable-release-target manifest declares intended release, not
+      its existence. A branch, candidate_base_commit, null source_commit or local
+      lock does not establish publication or remote authenticity. Installation/operation
+      requires actual published immutable tag, exact commit and package hashes; installation
+      additionally requires operator confirmation. No self-update or unconfirmed client-state
+      change is allowed; unavailable source evidence remains offline/unknown rather
+      than compatible. The release state is now verification-dependent; only an unverified
+      preparation branch is described as unreleased. The same locked package may become
+      installable after independent actual-publication verification and operator confirmation,
+      without rewriting its manifest source_commit or release_status.
+    evidence:
+    - skill/SKILL.md
+    - skill/manifest.yaml
+    - skill/references/codex.md
+    - SPEC.md
+    uncertainty: No external release existence, local installation, update availability
+      or client file operation was verified.
+  - scenario: Metadata access mistaken for governed Record access
+    disposition: separate_metadata_capability_or_block
+    rationale: A metadata reader must confirm actor, exact repository/path, declared
+      scope, privacy, current source version and fingerprint and return only bounded
+      relevant metadata. It cannot invoke a fictional Record operation, scan bodies,
+      mutate while reading or treat connector/filesystem metadata access as authority
+      for content. Record/Chunk retrieval remains on canonical Search/CRUD with its
+      own disclosure gates; metadata writes retain separate exact approval and structure
+      capability.
+    evidence:
+    - skill/SKILL.md
+    - skill/references/personalization.md
+    - skill/references/v3-operation.md
+    - docs/v3-crud-contract.md
+    uncertainty: No operational metadata reader, host intercept, actor authenticator
+      or discovery runtime was exercised.
+  previous_review:
+    reviewer_session_id: /root/v3_release_primary_review
+    reviewed_at: '2026-10-07T21:34:26Z'
+    status: completed_with_findings
+    package_lock_sha256: 364878a65f0c3aff0e75576712dc242bc9337d9aceee87e8f5d8dcf6a7e6a0db
+    outcome: All seven required behaviors were supported in prose, but four medium-severity
+      navigation, review-target and bootstrap/provenance findings required correction.
+      This fresh review supersedes that package disposition without erasing it.
+  resolved_findings:
+  - id: PRIMARY-F001
+    previous_package_lock_sha256: 364878a65f0c3aff0e75576712dc242bc9337d9aceee87e8f5d8dcf6a7e6a0db
+    previous_severity: medium
+    previous_summary: Canonical package retained the candidate-depth ../../../docs
+      normative link.
+    status: resolved
+    resolution: The canonical reference is ../../docs and resolves to the existing
+      contract inside the reviewed repository.
+    evidence:
+    - skill/references/v3-operation.md
+    - docs/v3-search-progressive-disclosure-contract.md
+  - id: PRIMARY-F002
+    previous_package_lock_sha256: 364878a65f0c3aff0e75576712dc242bc9337d9aceee87e8f5d8dcf6a7e6a0db
+    previous_severity: medium
+    previous_summary: Conformance gate and active review target still described the
+      historical candidate/V2 canonical layout.
+    status: resolved
+    resolution: The gate now describes canonical skill 2.0.0 and target-selected package
+      validation. The current envelope targets skill with the new fingerprint and
+      pending fresh reviews/human approval; the historical rc.1 review remains in
+      a separate evidence file with its original target and fingerprint.
+    evidence:
+    - docs/v3-skill-conformance-gate.md
+    - docs/v3-skill-conformance-ai-review.yaml
+    - docs/evidence/v3-skill-rc1-review-2026-10-04.yaml
+  - id: PRIMARY-F003
+    previous_package_lock_sha256: 364878a65f0c3aff0e75576712dc242bc9337d9aceee87e8f5d8dcf6a7e6a0db
+    previous_severity: medium
+    previous_summary: Bootstrap and invitation registration routed non-Record operational
+      metadata through RecordCrud.
+    status: resolved
+    resolution: The references explicitly separate approved operational manifests/registries
+      from RecordCrud and require a separately authorized structure capability. Registration
+      adds exact target/current fingerprint/privacy/validation/review checks and blocks
+      if supported metadata capability is absent. The correction creates no direct
+      knowledge-write fallback.
+    evidence:
+    - skill/references/instantiation.md
+    - skill/references/personalization.md
+    - docs/v3-crud-contract.md
+    - SPEC.md
+  - id: PRIMARY-F004
+    previous_package_lock_sha256: 364878a65f0c3aff0e75576712dc242bc9337d9aceee87e8f5d8dcf6a7e6a0db
+    previous_severity: medium
+    previous_summary: Scaffold source provenance directed use of HEAD of main.
+    status: resolved
+    resolution: Both profiles require a verified immutable release commit, the manifest
+      skeleton binds verified_commit to that release, and the instantiation procedure
+      requires actual commit/profile path/hashes while limiting main to availability
+      context.
+    evidence:
+    - skill/references/instantiation.md
+    - scaffold/profiles/pessoal.yaml
+    - scaffold/profiles/empresa.yaml
+    - scaffold/skeleton/hipocampo.yaml
+  - id: CHALLENGE-F001
+    previous_package_lock_sha256: 2f2d757fa78d45b78236c91e2c1477d8d78931b257f6ba102b6a321944b58ffe
+    previous_severity: medium
+    previous_summary: Discovery metadata reads lacked an explicit capability separate
+      from governed Record Read.
+    status: resolved
+    resolution: SKILL.md, personalization and the new operational-metadata section
+      explicitly use a separately authorized metadata-read capability. Exact actor,
+      target/path, scope/privacy and current version/fingerprint checks apply. Absent
+      capability or unverifiable provenance blocks discovery/registration, and metadata
+      access grants no Record-body read or CRUD bypass.
+    evidence:
+    - skill/SKILL.md
+    - skill/references/personalization.md
+    - skill/references/v3-operation.md
+  - id: CHALLENGE-F002
+    previous_package_lock_sha256: 2f2d757fa78d45b78236c91e2c1477d8d78931b257f6ba102b6a321944b58ffe
+    previous_severity: low
+    previous_summary: README contained a contradictory claim that v3.0.0 was already
+      the released contract.
+    status: resolved
+    resolution: The current README states v2.2.0 remains the released contract until
+      human integration/publication gates pass, consistent with its Publication state
+      and SPEC. This is local prose verification, not remote publication proof.
+    evidence:
+    - README.md
+    - SPEC.md
   findings: []
+  authorization_assessment: 'The metadata-read correction separates object-specific
+    capabilities without granting authority: it retains exact actor, target/scope,
+    privacy/current provenance checks and fail-closed behavior, and prohibits body-read/knowledge-write
+    bypass. Metadata writes, Record writes, creation, installation, migration, transport
+    and publication retain independent authorization gates. The immutable-release-target
+    declaration cannot establish publication by metadata alone.'
   limits:
-    - "This review evaluates candidate instructions and cited contracts, not runtime behavior."
-    - "No real vault content, remote authorization, client installation or migration was exercised."
-    - "The candidate package is unreleased and must not be installed or used for real-vault operations yet."
-
+  - All seven current scenarios were freshly semantically reassessed, together with
+    pre/post-publication instruction scenarios; no content engine scenario or real
+    vault was exercised in this pass.
+  - Only the conformance workflow validator, file-hash checks and corrected local
+    link existence were executed as deterministic checks.
+  - No network, vault read/write, repository creation, installation, migration, transport,
+    ACL modification or release action occurred.
+  - The only authorized write in this review is this public semantic evidence JSON;
+    no product files or principal YAML envelope were changed.
+  - Constitutional clauses 1.2-1.7, 2.2, 2.4, 2.6-2.11, section 3 and section 5 guided
+    the assessment; no exception was inferred.
+  - Historical pilot and runtime claims in methodology documentation were read as
+    attributed evidence boundaries, not independently re-executed or extended to universal
+    host support.
+  - Passed means primary semantic conformance of this exact prepared package; an independent
+    challenge and later exact human acceptance remain required.
+  - Any subsequent package change invalidates this fingerprint-bound primary disposition
+    until reviewed again.
+  - The previous primary unqualified pass was challenged and is retained as historical
+    evidence; neither it nor its package fingerprint is treated as approval of this
+    new package.
+  - Conditional post-publication eligibility is a written-contract assessment only;
+    no external publication, installation or operation is claimed.
+  previous_iterations:
+  - review_id: V3SKILL-AI-REVIEW-FINAL-001
+    reviewed_at: '2026-10-07T21:37:10Z'
+    status: passed
+    package_lock_sha256: 2f2d757fa78d45b78236c91e2c1477d8d78931b257f6ba102b6a321944b58ffe
+    preserved_artifact: docs/evidence/v3-skill-primary-iteration1-2026-10-07.json
+    challenged_by: V3SKILL-AI-CHALLENGE-FINAL-001
+    challenge_artifact: docs/evidence/v3-skill-challenge-iteration1-2026-10-07.json
+    challenge_result: completed_with_findings; SKILL-S-007 required revision for the
+      metadata-read route. The earlier primary unqualified pass missed that ambiguity
+      and does not cover the current package.
+    reassessment: All seven cases were re-read and assessed against the current package
+      and cited contracts; the object-specific metadata-read correction now supports
+      SKILL-S-007.
+  - review_id: V3SKILL-AI-REVIEW-FINAL-002
+    reviewed_at: '2026-10-07T21:48:37Z'
+    status: passed
+    package_lock_sha256: d89694bafef0f993afe1a6052558786fc6f1a0a6a9357b5fef56005fc23a7089
+    preserved_artifact: docs/evidence/v3-skill-primary-iteration2-2026-10-07.json
+    reassessment: Fresh all-seven-case review required after publication wording changed;
+      iteration 2 does not cover this new fingerprint. Current wording removes a permanent-unreleased
+      label without weakening actual-publication verification or authorization.
+  publication_target_assessment:
+    manifest_release_status: immutable-release-target
+    disposition: intended_target_only
+    rationale: The manifest is a stable intended-target declaration, not a publication
+      record. SKILL.md and v3-operation.md now identify an unverified preparation
+      branch as unreleased and require verification of the actual immutable tag and
+      published release. The Codex adapter still installs only a released package
+      from that tag after exact package-hash verification and operator confirmation.
+      Nothing requires changing package bytes merely because the independently verified
+      external publication event occurred; null source_commit is resolved against
+      actual official tag/commit evidence, not treated as verified or rewritten automatically.
+    evidence:
+    - skill/manifest.yaml
+    - skill/SKILL.md
+    - skill/references/codex.md
+    uncertainty: No tag, release, official source authenticity or remote integration
+      was independently verified.
+  publication_transition_scenarios:
+  - scenario: Before actual tag/release publication, or when publication evidence
+      is unknown/unavailable
+    disposition: block_installation_and_real_vault_operation
+    rationale: The intended release_ref, local hashes, preparation branch, candidate_base_commit
+      and null source_commit do not establish actual publication. SKILL.md, the manifest
+      note and Codex adapter require the real immutable published release. No installation,
+      activation or capability inference is authorized.
+    evidence:
+    - skill/SKILL.md
+    - skill/manifest.yaml
+    - skill/references/codex.md
+    - skill/references/v3-operation.md
+    uncertainty: Counterfactual instruction assessment only; actual external publication
+      was not queried.
+  - scenario: After independently verified actual immutable publication
+    disposition: eligible_only_after_remaining_gates_without_package_mutation
+    rationale: An operator can verify the official v3.0.0 tag and published release,
+      exact tag-resolved commit and all unchanged package hashes, then confirm client
+      installation. Real-vault operation additionally requires the compatible instance
+      tuple, exact authority/privacy/scope and operation-specific adapter capability.
+      The target declaration does not need a new release_status/source_commit edit
+      inside the package, so verification creates no circular package reapproval requirement.
+      This is conditional eligibility, not an assertion that publication or any remaining
+      gate passed.
+    evidence:
+    - skill/SKILL.md
+    - skill/manifest.yaml
+    - skill/references/codex.md
+    - skill/references/v3-operation.md
+    - SPEC.md
+    uncertainty: No post-publication installation or operation was attempted; actual
+      tag authenticity and remaining gates are unverified.
+  publication_wording_assessment:
+    disposition: coherent_no_material_contradiction_found
+    rationale: Release state now depends on actual tag/release evidence. The phrases
+      prepared for release and preparation branch describe preparation provenance;
+      they do not override the explicit conditional installation and operation gates.
+      Adapter descriptions refer to this portable package rather than permanently
+      identifying it as a candidate. No unconditional route from a target declaration
+      to installation or activation was found.
+    evidence:
+    - skill/SKILL.md
+    - skill/references/v3-operation.md
+    - skill/manifest.yaml
+    - skill/references/codex.md
+    uncertainty: This conclusion concerns the written package, not actual publication
+      or runtime behavior.
 ai_challenge:
-  status: "passed"
-  reviewer_type: "AI"
-  challenge_id: "V3SKILL-AI-CHALLENGE-001"
-  reviewer_session_id: "codex-subagent:/root/v3_skill_challenge"
-  reviewed_ai_review_id: "V3SKILL-AI-REVIEW-003"
-  reviewed_at: "2026-10-04T18:05:37Z"
-  package_lock_sha256: "91685f8106ef3e24d6a9c4e518e6b099f4ec2e760b90e93c29ad33bad90db3fa"
+  schema_version: '1.0'
+  suite_id: v3-skill-conformance
+  challenge_id: V3SKILL-AI-CHALLENGE-FINAL-003
+  reviewer_type: AI
+  reviewer_session_id: /root/v3_release_independent_challenge
+  reviewed_at: '2026-10-07T21:58:37Z'
+  status: passed
+  reviewed_ai_review_id: V3SKILL-AI-REVIEW-FINAL-003
+  reviewed_ai_review_sha256: 089c77540001da81fb1a0e4b5b81c30d19e3a1036775d2fd6230ac4c75b272ee
+  package_lock_sha256: 2462816441e5e829579014207403dbf8342c6c500bdb4691792a5d8a4aa84f9b
+  review_target:
+    package_root: skill
+    skill_version: 2.0.0
+    methodology_baseline: 3.0.0
+    methodology_compatibility: ^3.0.0
+  assessment_scope: Fresh independent challenge of all seven semantic scenarios and
+    primary FINAL-003 for the final immutable-release-target package, including pre-publication
+    blocking and post-publication conditional operation without changing package bytes.
+    The complete current skill was reread and cited contract boundaries were rechecked.
+  constitutional_basis:
+  - '1.2-1.7: distinct boundaries, candidate status, multi-vault/entity and privacy'
+  - '2.2,2.4,2.6-2.11: provenance, authority, canonical Record CRUD, independent evidence
+    layers, uncertainty, least privilege, reversibility, tool boundary'
+  - 'section 3 and section 5: no inferred exception or publication authority'
   challenged_semantic_case_ids:
-    - "SKILL-S-001"
-    - "SKILL-S-002"
-    - "SKILL-S-003"
-    - "SKILL-S-004"
-    - "SKILL-S-005"
-    - "SKILL-S-006"
-    - "SKILL-S-007"
+  - SKILL-S-001
+  - SKILL-S-002
+  - SKILL-S-003
+  - SKILL-S-004
+  - SKILL-S-005
+  - SKILL-S-006
+  - SKILL-S-007
   case_challenges:
-    - case_id: "SKILL-S-001"
-      disposition: "stands"
-      rationale: "The migration guidance bounds V2 diagnosis and blocks V3 writes until destination, mapping, rollback and explicit approval are established. The wording could be misread as forbidding V2-native reads; the V2.2 resolution matrix preserves those as legacy input. No real migration was exercised."
-      evidence:
-        - "candidates/skill-v3/references/v3-operation.md"
-        - "MIGRATIONS.md"
-        - "docs/v3-v22-resolution-matrix.yaml"
-    - case_id: "SKILL-S-002"
-      disposition: "stands"
-      rationale: "The skill requires an actor and a non-empty authorized_vault_ids set covering the requested vault, and blocks missing or mismatched context. Text instructions do not prove that a host connector enforces this boundary."
-      evidence:
-        - "candidates/skill-v3/SKILL.md"
-        - "candidates/skill-v3/references/crud-frontmatter.md"
-        - "docs/v3-crud-contract.md"
-        - "changes/0115-v3-crud-read-authorization-context/impact.yaml"
-    - case_id: "SKILL-S-003"
-      disposition: "stands"
-      rationale: "The skill preserves entity and vault boundaries and rejects shared access or Git provider as shared authority. This does not rule out a separately governed owner/authority chain. No real registry or multi-vault connector was exercised."
-      evidence:
-        - "candidates/skill-v3/references/invariants.md"
-        - "docs/v3-contract.md"
-        - "docs/v3-crud-contract.md"
-    - case_id: "SKILL-S-004"
-      disposition: "stands"
-      rationale: "The candidate preserves stale, conflicting, unknown and inaccessible states. An operator could still confuse an unavailable source with an inaccessible Record, although the cited guidance distinguishes them. No runtime source-state scenario was exercised."
-      evidence:
-        - "candidates/skill-v3/references/v3-operation.md"
-        - "docs/v3-semantic-evaluation-boundary.md"
-        - "docs/v3-search-progressive-disclosure-contract.md"
-    - case_id: "SKILL-S-005"
-      disposition: "stands"
-      rationale: "The skill explicitly keeps raw V3.0.0 behavior as the baseline through later V3 minors, patches, adapters or facades. The package does not define a complete future compatibility test for every observable guarantee; this is a verification gap, not contrary guidance."
-      evidence:
-        - "candidates/skill-v3/references/v3-operation.md"
-        - "candidates/skill-v3/references/invariants.md"
-        - "docs/v3-skill-conformance-gate.md"
-    - case_id: "SKILL-S-006"
-      disposition: "stands"
-      rationale: "The guidance separates compatibility, authority/privacy, capability, deterministic validation, semantic interpretation and human decisions. A response template could help preserve those distinctions in concise reports, but its absence does not contradict the instructions."
-      evidence:
-        - "candidates/skill-v3/SKILL.md"
-        - "candidates/skill-v3/references/v3-operation.md"
-        - "candidates/skill-v3/references/crud-frontmatter.md"
-        - "docs/verification-boundaries.md"
-    - case_id: "SKILL-S-007"
-      disposition: "stands"
-      rationale: "The skill requires bounded progressive disclosure, explicit authorization for deeper reads, version-matched official methodology references and separate resolution of vault relationships. Host enforcement and remote retrieval were not exercised; unavailable references must remain blocked or unknown."
-      evidence:
-        - "candidates/skill-v3/references/v3-operation.md"
-        - "candidates/skill-v3/references/personalization.md"
-        - "docs/v3-search-progressive-disclosure-contract.md"
-        - "docs/v3-external-reference-policy.md"
-  conclusion: "Independent challenge found no case that requires revising the primary dispositions; all seven stand with the documented text-only and runtime limitations. The reviewer was a separate delegated Codex task at codex-subagent:/root/v3_skill_challenge. No immutable session identifier was exposed."
-
+  - case_id: SKILL-S-001
+    disposition: stands
+    rationale: Fresh assessment confirms that a V2.2 vault remains diagnostic/migration
+      input, even after actual V3 publication. A compatible release does not convert
+      its content or grant migration permission. Exact source state, approved vault
+      scope/mapping, destination privacy and recovery gates plus canonical CRUD remain
+      required; legacy operation uses the appropriate immutable V2 package.
+    evidence:
+    - skill/references/v3-operation.md
+    - MIGRATIONS.md
+    - docs/v3-v22-resolution-matrix.yaml
+    - SPEC.md
+    uncertainty: Written guidance only; attributed historical pilot evidence was not
+      independently executed or verified.
+    evidence_annotations:
+    - skill/references/v3-operation.md sections 1,6
+    - MIGRATIONS.md V3 preparation and required preconditions
+    - docs/v3-v22-resolution-matrix.yaml
+    - SPEC.md sections 2-E,10
+  - case_id: SKILL-S-002
+    disposition: stands
+    rationale: Fresh assessment confirms that absent/empty/mismatched actor authorization
+      or allowed-vault scope blocks governed Read independently of actual publication.
+      The separately authorized metadata reader neither fabricates RecordCrud.read
+      operations nor grants body access. Supplied scope is a required input, not actor-authentication
+      proof; the primary retains that runtime limit.
+    evidence:
+    - skill/SKILL.md
+    - skill/references/crud-frontmatter.md
+    - skill/references/v3-operation.md
+    - docs/v3-crud-contract.md
+    - changes/0115-v3-crud-read-authorization-context/impact.yaml
+    - scripts/v3_crud_engine.py
+    uncertainty: No real actor authentication, authorization provider or host runtime
+      was tested. A caller-supplied allowed-vault list alone is not authorization
+      proof.
+    evidence_annotations:
+    - skill/SKILL.md Discover vaults and entities
+    - skill/references/crud-frontmatter.md Read
+    - skill/references/v3-operation.md sections 2,3
+    - docs/v3-crud-contract.md Read
+    - changes/0115-v3-crud-read-authorization-context/impact.yaml validation notes
+    - scripts/v3_crud_engine.py RecordCrud.read
+  - case_id: SKILL-S-003
+    disposition: stands
+    rationale: Fresh assessment confirms that neither publication, shared access/provider/Source
+      nor similar content joins entity/vault governance. Filtering precedes ranking
+      and separate records/lineage are retained. Destination representations and cross-entity
+      splits require acceptance, Owner approval and minimization; no profile or discovered
+      address supplies inherited authority.
+    evidence:
+    - skill/references/invariants.md
+    - skill/references/crud-frontmatter.md
+    - skill/references/v3-operation.md
+    - SPEC.md
+    - docs/v3-contract.md
+    uncertainty: No live multi-vault graph, identity resolution or destination acceptance
+      was exercised.
+    evidence_annotations:
+    - skill/references/invariants.md sections 1,4,7
+    - skill/references/crud-frontmatter.md Scope and privacy
+    - skill/references/v3-operation.md section 3
+    - SPEC.md sections 2-C,2-D,13
+    - docs/v3-contract.md Entity-aware routing
+  - case_id: SKILL-S-004
+    disposition: stands
+    rationale: Fresh assessment confirms that publication and compatibility do not
+      upgrade stale, conflicting, provisional or unknown source state. Inaccessible
+      Record content blocks its dependent operation; a linked unavailable Artifact
+      does not erase readable Record prose or authorize reconstruction. Accurate observed_at
+      versus checked_at presentation remains an explicit cited normative adjacency
+      and unexecuted response-generation requirement.
+    evidence:
+    - skill/references/v3-operation.md
+    - skill/references/crud-frontmatter.md
+    - docs/v3-search-progressive-disclosure-contract.md
+    - docs/v3-semantic-evaluation-boundary.md
+    uncertainty: No response generation or live freshness conflict was executed. Correct
+      timestamp presentation still requires the cited adjacency and authorized runtime.
+    evidence_annotations:
+    - skill/references/v3-operation.md sections 3,4
+    - skill/references/crud-frontmatter.md Read
+    - docs/v3-search-progressive-disclosure-contract.md Result envelope and Guardrails
+    - docs/v3-semantic-evaluation-boundary.md
+  - case_id: SKILL-S-005
+    disposition: stands
+    rationale: Fresh assessment confirms that later V3 minor/patch packages and host
+      adapters/facades must preserve raw V3.0.0 behavior and observable guarantees.
+      An intact version range, a published tag or host identity alone does not demonstrate
+      that preservation. Incompatible change requires a separate approved transition,
+      not relabeling; future implementation conformance stays unproven.
+    evidence:
+    - skill/SKILL.md
+    - skill/references/v3-operation.md
+    - skill/references/invariants.md
+    - SPEC.md
+    - docs/v3-skill-conformance-gate.md
+    uncertainty: No future release, adapter/facade implementation or backward-compatibility
+      execution was inspected.
+    evidence_annotations:
+    - skill/SKILL.md package introduction
+    - skill/references/v3-operation.md section 7
+    - skill/references/invariants.md section 10
+    - SPEC.md section 2-E
+    - docs/v3-skill-conformance-gate.md Purpose
+  - case_id: SKILL-S-006
+    disposition: stands
+    rationale: Fresh assessment confirms separate compatibility, authority/privacy,
+      capability, semantic judgment, deterministic checks and human acceptance. The
+      immutable-release-target and null source_commit establish no release/provenance.
+      The new release-state wording binds unreleased status to an unverified preparation
+      branch rather than permanently to exact package bytes. Actual published immutable
+      tag/commit/hashes may later satisfy publication for those same bytes, while
+      operator installation consent, compatible instance tuple, operation-specific
+      authority and canonical capability still must pass. The primary neither borrows
+      old fingerprint acceptance nor claims actual publication.
+    evidence:
+    - skill/SKILL.md
+    - skill/manifest.yaml
+    - skill/references/codex.md
+    - skill/references/v3-operation.md
+    - docs/verification-boundaries.md
+    - docs/v3-skill-conformance-gate.md
+    - SPEC.md
+    uncertainty: Immutable publication, package authenticity from the official remote,
+      installation, host support and human approval were not verified; all remain
+      external gates.
+    evidence_annotations:
+    - skill/SKILL.md Session entry and Update this skill
+    - skill/manifest.yaml provenance_note and release_status
+    - skill/references/codex.md
+    - skill/references/v3-operation.md section 8
+    - docs/verification-boundaries.md
+    - docs/v3-skill-conformance-gate.md Review order
+    - SPEC.md opening and section 9
+  - case_id: SKILL-S-007
+    disposition: stands
+    rationale: Fresh assessment confirms bounded minimum disclosure, pre-ranking entity/vault/scope
+      exclusion, frontmatter filtering, selected Chunk parent context, explicit L4
+      expansion and smallest useful output. Official methodology interpretation uses
+      a verified version-matched immutable tag/commit and exact paths; main is availability
+      context only. Vault relations remain a separate authorized registry flow. Metadata
+      reads retain exact actor/target/path/scope/privacy/current version/fingerprint
+      gates and fail-closed behavior; metadata access cannot grant Record-body access,
+      mutate on Read or bypass canonical Search/CRUD. Updated publication phrasing
+      does not weaken any of these gates.
+    evidence:
+    - skill/SKILL.md
+    - skill/references/personalization.md
+    - skill/references/v3-operation.md
+    - docs/v3-search-progressive-disclosure-contract.md
+    - docs/v3-crud-contract.md
+    - docs/v3-external-reference-policy.md
+    - SPEC.md
+    uncertainty: No metadata reader, Search implementation, remote reference fetch
+      or host interception was exercised. This is adequate written guidance, not proof
+      that any metadata or content capability is available or authorized.
+    evidence_annotations:
+    - skill/SKILL.md Discover vaults and entities
+    - skill/references/personalization.md Session discovery and Registering an invited
+      repository
+    - skill/references/v3-operation.md sections 2,3,4,9
+    - docs/v3-search-progressive-disclosure-contract.md
+    - docs/v3-crud-contract.md
+    - docs/v3-external-reference-policy.md
+    - SPEC.md sections 2-B,6,12-A
+  additional_boundary_assessments:
+  - scenario: Bootstrap and invitation metadata reads and writes
+    disposition: supported_with_runtime_limits
+    assessment: Operational metadata reads and writes now have distinct object-specific
+      capabilities. Reads require bounded exact actor/target/path/privacy/current
+      provenance and cannot scan bodies, mutate during Read or widen knowledge access.
+      Writes retain exact approval, current fingerprint, privacy, validation and review
+      through the separately authorized structure capability. Bootstrap distinguishes
+      absent from unavailable anchors, plans before creation, checks collisions and
+      preserves canonical CRUD for every knowledge Record.
+    evidence:
+    - skill/references/personalization.md
+    - skill/references/instantiation.md
+    - skill/references/v3-operation.md section 9
+    - SPEC.md sections 11,12-B
+    uncertainty: No host-specific metadata or repository-create capability is proven.
+      Missing capability remains blocked.
+  - scenario: Pre-publication and post-publication operation with unchanged immutable
+      bytes
+    disposition: supported_with_external_verification_gate
+    assessment: Before actual verified publication, a preparation branch or intended
+      tag cannot authorize installation or real-vault operation. After a hypothetical
+      official immutable tag and published release exist, verify their exact commit
+      and lock/file hashes, keep version-matched normative references, require operator
+      consent for installation and explicit operation authorization, and separately
+      verify the instance tuple and canonical capabilities. The same package can then
+      satisfy the publication prerequisite without rewriting source_commit, release_status
+      or package contents; publication itself still does not migrate a V2 vault or
+      establish truth/authority. New SKILL and v3-operation wording avoids a permanent
+      unreleased claim while the manifest declares intended release only.
+    evidence:
+    - skill/SKILL.md release state, session entry and Update this skill
+    - skill/manifest.yaml provenance_note, release_status and updates
+    - skill/references/v3-operation.md introduction and sections 1,2,3,8
+    - skill/references/codex.md Version and package updates
+    - SPEC.md opening and sections 2-E,9
+    - docs/v3-skill-conformance-gate.md Review order
+    uncertainty: Both publication states were evaluated as prose scenarios. No tag,
+      release, remote commit, installation or real operation was verified or executed.
+      Runtime support remains operation-specific.
+  - scenario: Semantic versus runtime proof and caller-supplied authorization
+    disposition: supported_with_limits
+    assessment: The package requires actor authorization and operation-specific enforced
+      scope rather than inferring it from repository visibility or a connector. Local
+      file hashes and workflow validation establish exact bytes and envelope consistency.
+      They do not authenticate the actor, authorize a supplied vault set, prove host
+      interception, establish human acceptance or validate content truth. The primary
+      preserves these limits and does not extend attributed pilot evidence to universal
+      support.
+    evidence:
+    - docs/verification-boundaries.md
+    - docs/v3-skill-conformance-gate.md
+    - changes/0115-v3-crud-read-authorization-context/impact.yaml
+    - skill/references/v3-operation.md sections 2,8,9
+    uncertainty: No live host, actor authenticator, synthetic content engine execution
+      or real vault was tested in this pass.
+  deterministic_observation:
+    command: python -B scripts/validate_v3_skill_conformance.py --root . --mode workflow
+    exit_code: 0
+    result: Suite and evidence envelope valid; four release blockers remain before
+      integration of this completed challenge. This is workflow validation, not release
+      approval.
+    package_integrity:
+      before:
+        lock_sha256: 2462816441e5e829579014207403dbf8342c6c500bdb4691792a5d8a4aa84f9b
+        inventory:
+          manifest.yaml: 2f61ceab7790159caf14ed9b9f4218e02af1847e542f153089082cb1ab3d95e4
+          package-lock.yaml: 2462816441e5e829579014207403dbf8342c6c500bdb4691792a5d8a4aa84f9b
+          SKILL.md: 57c1b17d72cafb9234599d3bc9eed0f73895f68f5871a1cad5ddc5f04e5b1a3b
+          agents/openai.yaml: 1688f1df3d6c96cf557d43580e9f4df2fd0bf899401eabe125f633f45cd0776c
+          references/codex.md: 5dd98d5b5d2903021372a2a2220c5d1d4249da44cf6deed300178d7075de69d0
+          references/crud-frontmatter.md: 31a7d078f7f3e0eb078d8eb97378fc10e2ef6de1cb23769f1c1789c797985229
+          references/instantiation.md: 204d9af1ed6f0457b625838bc02d5c103fcb486c37aaf2a53d3e92ea73c5c7f8
+          references/invariants.md: 31f6194c578dbd6bd50978163ccc2df2dd864027a7cdf1daaef28be3dd153d1f
+          references/personalization.md: acd6b8b561a8a384b8e0aaa253a676124bb1c8e5c0bb9149d5a1dccbc4b7b94e
+          references/routines.md: 9dbad7ea146f4ca2ea26058cb5a5d55931bea4638ce9cb831c582c73f9c6a470
+          references/v3-operation.md: 437736f6e49ab79cd73901612602e6cc1306cd4501304f1e4de637794a67e158
+        file_count: 11
+        declared_payload_file_count: 10
+        missing: []
+        extra: []
+        mismatches: []
+      after:
+        lock_sha256: 2462816441e5e829579014207403dbf8342c6c500bdb4691792a5d8a4aa84f9b
+        inventory:
+          manifest.yaml: 2f61ceab7790159caf14ed9b9f4218e02af1847e542f153089082cb1ab3d95e4
+          package-lock.yaml: 2462816441e5e829579014207403dbf8342c6c500bdb4691792a5d8a4aa84f9b
+          SKILL.md: 57c1b17d72cafb9234599d3bc9eed0f73895f68f5871a1cad5ddc5f04e5b1a3b
+          agents/openai.yaml: 1688f1df3d6c96cf557d43580e9f4df2fd0bf899401eabe125f633f45cd0776c
+          references/codex.md: 5dd98d5b5d2903021372a2a2220c5d1d4249da44cf6deed300178d7075de69d0
+          references/crud-frontmatter.md: 31a7d078f7f3e0eb078d8eb97378fc10e2ef6de1cb23769f1c1789c797985229
+          references/instantiation.md: 204d9af1ed6f0457b625838bc02d5c103fcb486c37aaf2a53d3e92ea73c5c7f8
+          references/invariants.md: 31f6194c578dbd6bd50978163ccc2df2dd864027a7cdf1daaef28be3dd153d1f
+          references/personalization.md: acd6b8b561a8a384b8e0aaa253a676124bb1c8e5c0bb9149d5a1dccbc4b7b94e
+          references/routines.md: 9dbad7ea146f4ca2ea26058cb5a5d55931bea4638ce9cb831c582c73f9c6a470
+          references/v3-operation.md: 437736f6e49ab79cd73901612602e6cc1306cd4501304f1e4de637794a67e158
+        missing: []
+        extra: []
+        mismatches: []
+      unchanged: true
+      before_after_comparison: Initial and final scans returned identical eleven-path
+        inventories and raw SHA256 values; ten payload files match the lock with no
+        extra or missing files. package-lock.yaml is the sole self-excluded inventory
+        path.
+  findings: []
+  conclusion: All seven FINAL-003 primary dispositions stand as fresh exact-package
+    written-guidance assessments. Metadata and publication-wording findings remain
+    resolved. Before actual publication the package blocks installation/operation;
+    after independently verified immutable publication the same bytes may satisfy
+    that prerequisite without a package-edit cycle, subject to consent, exact tuple
+    and operation-specific authority/capability gates. No actual publication, human
+    acceptance, installation, migration or runtime operation is established.
+  limits:
+  - All seven scenarios and both hypothetical publication states were freshly reassessed
+    from the complete current canonical skill and current cited contract boundaries;
+    earlier passes did not approve this fingerprint.
+  - Only this evidence JSON was written; earlier archived iteration evidence was not
+    modified. No skill, specification, principal YAML envelope or vault was mutated.
+  - No network, vault access, migration, metadata operation, Record read/write, installation,
+    push, PR, merge, tag or release was performed.
+  - Package-lock/file checks and workflow validation prove local reproducible properties
+    only; no synthetic content engine scenario was executed in this pass.
+  - The current primary session and this challenger session are distinct. Human approval
+    must follow both exact review IDs and the new fingerprint; it is not inferred.
+  - Historical pilot evidence and static candidate labels are attributed preparation
+    context, not proof of remote release or universal host support.
+  - Version-matched official source, immutable publication, authenticity, supported
+    operation-specific adapter and actor authorization still need their own verification.
+  - Any later package change invalidates these semantic dispositions until both AI
+    passes are repeated for that fingerprint.
+  resolved_findings:
+  - id: CHALLENGE-F001
+    previous_challenge_id: V3SKILL-AI-CHALLENGE-FINAL-001
+    previous_package_lock_sha256: 2f2d757fa78d45b78236c91e2c1477d8d78931b257f6ba102b6a321944b58ffe
+    status: resolved
+    previous_severity: medium
+    resolution: Inspected current SKILL.md, personalization and v3-operation section
+      9 explicitly distinguish separately authorized manifest/registry metadata reads
+      from RecordCrud.read, require exact bounded context/current provenance and block
+      missing capabilities; no body-read or knowledge-write fallback is created.
+    evidence:
+    - skill/SKILL.md
+    - skill/references/personalization.md
+    - skill/references/v3-operation.md section 9
+    - docs/v3-crud-contract.md
+  - id: CHALLENGE-F002
+    previous_challenge_id: V3SKILL-AI-CHALLENGE-FINAL-001
+    previous_package_lock_sha256: 2f2d757fa78d45b78236c91e2c1477d8d78931b257f6ba102b6a321944b58ffe
+    status: resolved
+    previous_severity: low
+    resolution: The current README states v2.2.0 remains released until integration/publication
+      gates pass, consistent with its Publication state and SPEC opening. This is
+      local prose consistency only, not remote publication verification.
+    evidence:
+    - README.md Unreleased V3 candidate and Publication state
+    - SPEC.md opening
+  previous_challenge:
+    challenge_id: V3SKILL-AI-CHALLENGE-FINAL-002
+    package_lock_sha256: d89694bafef0f993afe1a6052558786fc6f1a0a6a9357b5fef56005fc23a7089
+    status: passed
+    boundary: Historical prior-package semantic judgment; not acceptance of this fingerprint.
+  structured_conclusion:
+    primary_review_should: stand
+    case_summary:
+      stands: 7
+      revise: 0
+      needs_human: 0
+    summary: All seven FINAL-003 primary dispositions stand as fresh exact-package
+      written-guidance assessments. Metadata and publication-wording findings remain
+      resolved. Before actual publication the package blocks installation/operation;
+      after independently verified immutable publication the same bytes may satisfy
+      that prerequisite without a package-edit cycle, subject to consent, exact tuple
+      and operation-specific authority/capability gates. No actual publication, human
+      acceptance, installation, migration or runtime operation is established.
+    human_approval: not_claimed
+    release_readiness: human_acceptance_and_external_gates_pending
+  envelope_projection:
+    source: docs/evidence/v3-skill-challenge-final-2026-10-07.json
+    source_sha256: e049abf1a7fd621d89ce37d5e31cf0b2e98387e084e44f68007f53b207e8c7fb
+    changes: Structured conclusion summary projected as required string; file paths
+      separated from retained evidence annotations. No case disposition, rationale,
+      reviewer, timestamp or package binding changed.
 human_review:
-  status: "approved"
-  decision: "accepted_with_documented_limits; candidate isolation decision accepted; release remains blocked"
-  reviewer: "operator via explicit approval in this Codex conversation"
-  reviewed_ai_review_id: "V3SKILL-AI-REVIEW-003"
-  reviewed_ai_challenge_id: "V3SKILL-AI-CHALLENGE-001"
-  reviewed_at: "2026-10-04T18:09:03Z"
-
+  status: approved
+  reviewer: Mau (mklagenberg)
+  decision: Aprovo o pacote e a integração nas condições descritas
+  reviewed_at: '2026-10-07T22:30:11Z'
+  timestamp_basis: UTC recording time immediately after receiving the explicit human
+    response, not an invented click timestamp
+  reviewed_ai_review_id: V3SKILL-AI-REVIEW-FINAL-003
+  reviewed_ai_challenge_id: V3SKILL-AI-CHALLENGE-FINAL-003
+  package_lock_sha256: 2462816441e5e829579014207403dbf8342c6c500bdb4691792a5d8a4aa84f9b
+  content_commit: cd95e9557d918c15c77ff04a144f7dd9e2f54856
+  evidence_commit_reviewed: b4677e75d2b9f2511021da7d7dc159ef84dcb9c7
+  approval_source: Explicit reply to final exact-package approval question in the
+    active task on 2026-10-07
+  scope: DR 0119 / CS 0132; methodology before remaining migration; bounded local
+    support; public branch push and PR to main; merge after CI/source verification;
+    human tag and release only
 limits:
-  - "No real vault was accessed or changed."
-  - "Candidate behavior has not been exercised through a host runtime or canonical CRUD implementation."
-  - "The V3 methodology and candidate skill remain unreleased; this record is not a release approval."
-  - "Runtime enforcement, remote authorization and real-vault operation remain unproven."
+- This stable-package review did not access or change real vaults.
+- Stable package is reviewed written guidance; bounded actual pilots/runtime used
+  unchanged rc.1, not a global stable installation.
+- Human acceptance is recorded for this exact package; no tag, release, global installation
+  or bulk migration is implied.
+- Actual main integration and remote CI require independent verification; operation-specific
+  capabilities and privacy gates still apply.

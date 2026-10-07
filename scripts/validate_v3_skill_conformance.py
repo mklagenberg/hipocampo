@@ -10,7 +10,7 @@ from pathlib import Path
 
 import yaml
 
-from validate_compatibility import state as compatibility_state
+from validate_compatibility import state as compatibility_state, satisfies, version
 
 
 def load_yaml(path: Path) -> dict:
@@ -113,9 +113,19 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
     skill_range = manifest.get("methodology", {}).get("compatibility", "")
     target = cases.get("target_methodology", "3.0.0")
     active_methodology_version = active_contract.get("methodology", {}).get("version")
-    methodology_is_released = active_methodology_version == target
-    candidate_is_released = skill.get("release_status") == "released" and bool(
-        manifest.get("updates", {}).get("release_ref")
+    methodology_target_prepared = satisfies(active_methodology_version, f"^{target}")
+    release_ref = manifest.get("updates", {}).get("release_ref")
+    release_version = version(release_ref) if isinstance(release_ref, str) else None
+    declared_version = version(active_methodology_version)
+    package_release_target_declared = (
+        skill.get("release_status") in {"released", "immutable-release-target"}
+        and isinstance(release_ref, str) and release_ref.startswith("v")
+        and satisfies(release_ref, f"^{target}")
+        and release_version is not None and declared_version is not None
+        and release_ref == "v" + ".".join(str(part) for part in release_version)
+        and release_version <= declared_version
+        and manifest.get("updates", {}).get("immutable_package") ==
+        f"https://github.com/mklagenberg/hipocampo/tree/{release_ref}/{package_root_value.strip('/')}/"
     )
     package_version = skill.get("version")
     expected_lock = review_target.get("package_lock_sha256")
@@ -313,6 +323,8 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
             errors.append("AI challenge timestamp must follow the primary AI semantic review")
 
     if human.get("status") == "approved":
+        if human.get("package_lock_sha256") != package_lock_sha256:
+            errors.append("human approval must bind to the current package-lock fingerprint")
         human_reviewed_at = parse_timestamp(human.get("reviewed_at"), "human review", errors)
         if not isinstance(human.get("reviewer"), str) or not human["reviewer"].strip():
             errors.append("human approval must identify the reviewer")
@@ -326,10 +338,10 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
             errors.append("human review timestamp must follow the AI challenge")
 
     if mode == "release":
-        if not methodology_is_released:
-            blockers.append(f"methodology target {target} is not the active released version ({active_methodology_version})")
-        if not candidate_is_released:
-            blockers.append("candidate manifest does not identify an immutable released skill package")
+        if not methodology_target_prepared:
+            blockers.append(f"methodology target {target} is not the declared preparation target ({active_methodology_version})")
+        if not package_release_target_declared:
+            blockers.append("package manifest does not identify the exact immutable release target")
         if not covers_target:
             blockers.append(f"skill compatibility {skill_range!r} does not cover V3.0.0")
         if ai.get("status") != "passed" or reviewed_ids != semantic_ids:
@@ -348,12 +360,12 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
             errors.append("AI readiness review status must be recorded")
         if assessment == "ready" and not covers_target:
             errors.append("review says ready although the skill compatibility range excludes V3.0.0")
-        if assessment == "ready" and (not methodology_is_released or not candidate_is_released or reviewed_ids != semantic_ids or ai.get("status") != "passed" or challenge.get("status") != "passed" or human.get("status") != "approved"):
+        if assessment == "ready" and (not methodology_target_prepared or not package_release_target_declared or reviewed_ids != semantic_ids or ai.get("status") != "passed" or challenge.get("status") != "passed" or human.get("status") != "approved"):
             errors.append("ready assessment requires complete AI, challenge and human approval")
-        if not methodology_is_released:
-            blockers.append(f"methodology target {target} is not the active released version ({active_methodology_version})")
-        if not candidate_is_released:
-            blockers.append("candidate remains unreleased and cannot be installed")
+        if not methodology_target_prepared:
+            blockers.append(f"methodology target {target} is not the declared preparation target ({active_methodology_version})")
+        if not package_release_target_declared:
+            blockers.append("package lacks an immutable release target; installation is unverified")
         if not covers_target:
             blockers.append(f"skill compatibility {skill_range!r} does not cover V3.0.0")
         if ai.get("status") != "passed":
@@ -365,12 +377,12 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
                 blockers.append("AI challenge is not passed")
         if human.get("status") != "approved":
             blockers.append("human review remains pending")
-        if ai.get("status") == "not_run_no_v3_compatible_skill_candidate":
+        if ai.get("status") in {"not_run_no_v3_compatible_skill_candidate", "not_run_pending_primary_ai_review"}:
             if reviewed_ids:
                 errors.append("semantic review marked not-run must not claim reviewed cases")
             if challenge.get("status") != "not_run_no_ai_semantic_review":
                 errors.append("AI challenge must not be claimed before an AI semantic review")
-            blockers.append("no V3-compatible skill candidate is available for semantic cases")
+            blockers.append("primary AI semantic review is pending" if ai.get("status") == "not_run_pending_primary_ai_review" else "no V3-compatible skill candidate is available for semantic cases")
         elif ai.get("status") not in {"passed", "completed_with_findings"}:
             errors.append("AI semantic review must be completed or explicitly not run")
         elif challenge.get("status") not in {"passed", "completed_with_findings", "not_run_pending_independent_ai_session"}:
@@ -408,7 +420,7 @@ def main() -> int:
     if blockers:
         print(f"validate_v3_skill_conformance: OK — suite and evidence envelope valid; {len(blockers)} release blocker(s) remain")
     else:
-        print("validate_v3_skill_conformance: OK — suite and review evidence are complete")
+        print("validate_v3_skill_conformance: OK — package and review evidence complete for handoff; actual publication remains a separate external gate")
     if human_approved:
         print("  Human review is recorded; semantic conclusions remain assessments, not deterministic proofs.")
     else:

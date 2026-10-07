@@ -4,11 +4,89 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+## [3.0.0] — 2026-10-07 (prepared; not published)
+
+### Changed
+
+- Prepare the first V3/LTE major: governed Record/Chunk/Collection identities,
+  independent knowledge states, entity/vault authority, Artifact provenance,
+  progressive disclosure, canonical CRUD and bounded operational metadata.
+- Prepare canonical portable skill 2.0.0 with ^3.0.0 compatibility and an exact
+  package lock. Preserve reviewed rc.1 and the previous specification/package.
+- Align new-vault scaffold proposals and tuple validation with V3; existing
+  vaults still need separately approved mappings and canonical migration.
+- Replace obsolete fixed skill-version validation with tuple/hash integrity
+  checks. Distinguish preparation, human acceptance and actual publication.
+
+### Limits and adoption
+
+- Demonstrated runtime is bounded local Python/Git; other adapters require
+  operation-specific verification. No global installation or universal host
+  enforcement is claimed. Actual restoration was not executed.
+- Three accepted local pilot migrations passed fresh reload; 335 reviewed
+  knowledge items remain retained. Publication does not accept their proposals.
+- MAJOR adoption and recovery: MIGRATIONS.md and docs/v3-migration-execution.md.
+- Final content/package review, integration and manual publication are pending.
+
+### Accumulated V3 development
+
+
+- **Reviewed local pilot results (Change Set 0131):** records three explicitly
+  accepted one-item pilots migrated through canonical CRUD, reloaded in fresh
+  processes and compared with their approved proposals. One presented personal
+  pilot remains held for a visibility correction. Other proposals remain
+  unaccepted; real restoration, whole-vault adoption and release are unproven.
+
+- **Fingerprinted legacy and canonical recovery (Change Set 0130):** adds an
+  explicit observed-legacy conversion contract that preserves unknown version,
+  body and legacy fields, plus ticket-bound recovery through canonical CRUD.
+  The implemented contract and presented local pilots were subsequently
+  reviewed and accepted. Per-item privacy/policy gates still apply; synthetic
+  recovery alone does not prove real-vault readiness or real restoration.
+
+- **Scoped local V3 experiment (Change Set 0129):** records operator acceptance
+  of task refresh, local candidate use and canonical persistence architecture.
+  Keeps per-item approvals, runtime evidence and V3 release gates separate;
+  preserves the reviewed candidate package and uncertain original locks.
+
+- **Canonical Markdown-backed V3 CRUD and migration executor (Change Set
+  0128):** adds persistent Create/Update/Read loading through the Record CRUD
+  gateway and an internal, manifest-bound V2-to-V3 migration operation. The
+  executor defaults to dry-run, checks source fingerprints and migration
+  branch gates, and fails closed on interrupted batches. Synthetic fixtures do
+  not prove semantic readiness or authorize real-vault writes.
+
+- **Synthetic migration-branch and runtime request gates (Change Set 0127):**
+  exercises an interrupted partial migration in a temporary Git repository and
+  verifies that `main` remains at its baseline until validation. Expands the
+  synthetic capability/authentication matrix around Search and canonical CRUD
+  Read, including missing, observational, unavailable, valid, and revoked
+  contexts. These test doubles do not prove enforcement by a real host or cover
+  side effects outside Git.
+
+- **Human confirmation for V3 coverage-gap assessments (Change Set 0126):**
+  records the operator's confirmation of all three semantic dispositions from
+  Change Set 0125. This closes their review gate without turning semantic
+  assessment into deterministic proof or runtime enforcement.
+
+- **V3 cross-engine coverage-gap scenarios (Change Set 0125):** adds six
+  executable synthetic cases for case-to-assertion binding, authorization
+  revocation, restricted Chunks, transfer retries, interrupted migration
+  preflight, and missing skill capability; adds three semantic assessments,
+  confirmed by the operator in Change Set 0126. The 63 existing bindings now
+  carry and validate exact assertion IDs and command targets. Search excludes restricted Chunk
+  content from ranking and expansion, and migration preflight blocks
+  already-started execution state. Runtime migration recovery and host
+  authorization remain outside the evidence produced here.
+
 - **Isolated V3 skill candidate (Change Set 0123):** adds a complete,
   integrity-locked `2.0.0-rc.1` package with `^3.0.0` compatibility while
-  preserving the released V2 skill. The primary AI semantic review passed the
-  six synthetic cases; a separate AI challenge and human decision remain
-  pending. The candidate is not installable or activated.
+  preserving the released V2 skill. The primary AI semantic review and
+  independent challenge cover all seven semantic cases; the human accepted
+  the candidate-isolation decision with documented limits. The methodology
+  and skill remain unreleased. The original isolation approval did not
+  authorize installation, real-vault operation or activation; Decision 0117
+  separately permits the scoped local experiment described in Change Set 0129.
 
 - **V3 skill conformance gate (Change Set 0122):** adds synthetic deterministic
   compatibility cases and an AI-first semantic review plus AI challenge before

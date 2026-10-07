@@ -143,3 +143,7 @@ epistemic types. Their permitted action and precedence are authoritative in
 ## Retroactive backfill — what Lote E2 did
 
 Every cell marked `TBD — Lote E2` in the Lote E1 revision of this document is now filled in, per the method described in "Status of this document" above: walking `CHANGELOG.md` from `[1.0.0]` forward, cross-referencing the `decisions/` directory listing, and spot-reading a handful of Decision Records directly (`decisions/0002`, `0029`, `0033`) where `CHANGELOG.md`'s own bullet text left the attribution ambiguous, rather than trusting every citation at face value. No cell was left as `TBD` a second time; where the underlying source material itself doesn't support single-date precision (the `entity`/`domain` row, the `AGENTS.md` "Instance type" row), that imprecision is stated explicitly rather than resolved by guessing.
+
+## Skill publication declaration
+
+`immutable-release-target` is an operational skill-manifest release_status: it identifies the intended immutable release reference and package path. It is not a knowledge type, actual publication proof, installation permission or a compatible-vault declaration. Verify the actual tag, commit and published package hashes separately. `prepared-unreleased` identifies a preparation surface; historical candidate declarations stay historical. Later V3 minor/patch release checks preserve the raw V3.0.0 baseline, while validating the intended package reference against the declared major and version.

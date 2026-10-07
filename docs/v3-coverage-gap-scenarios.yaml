@@ -1,0 +1,141 @@
+schema_version: "1.0"
+status: "unreleased-v3-candidate"
+privacy: "synthetic-only"
+mutation: "none"
+deterministic_cases:
+  - id: DET-BIND-001
+    assertion_id: coverage.binding_rejects_unknown_or_misdirected_case
+    runner: v3-coverage-gap-scenarios
+    handler: binding_mutation
+    expected: rejected
+  - id: DET-SEARCH-REVOCATION-001
+    assertion_id: search.revocation_between_snapshot_and_read_fails_closed
+    runner: v3-coverage-gap-scenarios
+    handler: authorization_revocation
+    input:
+      revoke_after_candidate_snapshot: true
+      requested_disclosure: L4
+      explicit_expansion_authorization: true
+    expected:
+      status: blocked
+      disclosure_level: L0
+      body_returned: false
+      mutation: none
+  - id: DET-SEARCH-CHUNK-001
+    assertion_id: search.restricted_chunk_excluded_from_rank_and_disclosure
+    runner: v3-coverage-gap-scenarios
+    handler: chunk_effective_restriction
+    input:
+      record_visibility: internal
+      visible_chunk_visibility: internal
+      restricted_chunk_visibility: restricted
+      requested_disclosure: L4
+    expected:
+      restricted_text_in_rank: false
+      restricted_text_in_selected_chunks: false
+      restricted_text_in_expanded_content: false
+  - id: DET-TRANSFER-RETRY-001
+    assertion_id: transfer.replayed_acceptance_creates_one_record_and_event
+    runner: v3-coverage-gap-scenarios
+    handler: transfer_retry
+    input:
+      acknowledgement_lost_after_first_acceptance: true
+      retry_same_receipt: true
+    expected:
+      status: current
+      records: 1
+      crud_events: 1
+  - id: DET-MIGRATION-INTERRUPT-001
+    assertion_id: migration.interrupted_branch_isolated_until_validation
+    runner: v3-coverage-gap-scenarios
+    handler: migration_interruption
+    input:
+      execution_state: interrupted
+      mapped_items: 2
+      total_items: 5
+      rollback: tested
+    expected:
+      status: blocked
+      source_changed: false
+      target_promoted: false
+      runtime_resume_tested: false
+      partial_change_on_task_branch: true
+      main_sha_unchanged: true
+      premature_merge: false
+  - id: DET-SKILL-CAPABILITY-001
+    assertion_id: skill.capability_authorization_gate_fails_closed_before_io
+    runner: v3-coverage-gap-scenarios
+    handler: missing_skill_capability
+    input:
+      required_capability: canonical_v3_crud_read
+      capability_available: false
+      authorization_context: missing
+    expected:
+      disposition: unavailable
+      read_performed: false
+      write_performed: false
+      capability_matrix:
+        - capability: proven
+          authorization_context: missing
+          disposition: authorization_required
+          read_performed: false
+        - capability: observational
+          authorization_context: valid
+          disposition: unavailable
+          read_performed: false
+        - capability: unavailable
+          authorization_context: valid
+          disposition: unavailable
+          read_performed: false
+        - capability: authorization_required
+          authorization_context: valid
+          disposition: authorization_required
+          read_performed: false
+        - capability: proven
+          authorization_context: valid
+          disposition: accepted
+          read_performed: true
+          canonical_reads: 1
+      revocation_after_snapshot:
+        status: blocked
+        disclosure_level: L0
+        body_returned: false
+        mutation: none
+
+semantic_cases:
+  - id: SEM-MIGRATION-SCOPE-001
+    engine: migration-compatibility
+    fixture:
+      accepted_decision_scope: "entity-a/project-alpha"
+      accepted_decision_validity: "2026-01-01/2026-12-31"
+      conflicting_source_scope: "entity-a/project-alpha"
+      out_of_scope_source: "entity-a/project-beta"
+      preserve_prior_source: true
+    expected_assessment:
+      in_scope: resolved_within_decision_boundary
+      outside_scope: needs_review
+      history: preserved
+    review_boundary: human-semantic-review
+  - id: SEM-CROSS-ENGINE-001
+    engine: "ingress>artifact-provenance>package>delivery-transfer>crud"
+    fixture:
+      initial_epistemic_state: reported_unconfirmed
+      transfer_receipt: accepted
+      semantic_review: pending
+      crud_create_authorized: false
+    expected_assessment:
+      epistemic_state: reported_unconfirmed
+      transfer_acceptance_promotes_knowledge: false
+      durable_crud_write: blocked
+    review_boundary: explicit-human-decision
+  - id: SEM-LEARNING-CORRELATED-001
+    engine: learning-evolution
+    fixture:
+      alerts: 4
+      distinct_root_event_fingerprints: 1
+      independent_source_count: 1
+    expected_assessment:
+      new_rule: not_established
+      disposition: needs_review
+      preserve_source_lineage: true
+    review_boundary: REM-or-human-review

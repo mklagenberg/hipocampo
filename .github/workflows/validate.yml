@@ -26,10 +26,14 @@ jobs:
         run: python scripts/validate_skill_docs.py --root .
       - name: Validate skill package integrity
         run: python scripts/validate_skill_package.py --root .
+      - name: Validate release integrity regressions
+        run: python scripts/validate_v3_release_regressions.py --root .
       - name: Validate cross-surface methodology contracts
         run: python scripts/validate_contracts.py --root .
       - name: Validate V3 skill conformance gate
         run: python scripts/validate_v3_skill_conformance.py --root . --mode workflow
+      - name: Validate integrated V3 engines and scoped Git recovery
+        run: python scripts/validate_v3_engine_suite.py --root .
       - name: Validate Change Set structure
         run: python scripts/validate_change.py --root .
       - name: Resolve change validation base

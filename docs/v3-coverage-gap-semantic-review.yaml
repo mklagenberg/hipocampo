@@ -1,0 +1,52 @@
+schema_version: "1.0"
+review_policy:
+  status: "ai-assessed-human-confirmed"
+  privacy: "synthetic-only"
+  record_mutations: "none"
+  passes: 2
+  second_pass: "same-reviewer-adversarial-self-challenge; not an independent reviewer"
+  reviewed_at: "2026-10-04T16:00:00-03:00"
+  semantic_limit: "assessments preserve expected boundaries; they do not prove semantic truth or runtime enforcement"
+  human_confirmation: "confirmed"
+  confirmed_at: "2026-10-04"
+cases:
+  - id: SEM-MIGRATION-SCOPE-001
+    primary_disposition: "resolved_within_decision_boundary"
+    adversarial_disposition: "resolved_within_decision_boundary"
+    human_disposition: "resolved_within_decision_boundary"
+    rationale: "An accepted decision resolves only its declared entity, scope and validity window. Material outside that envelope remains needs_review, and the earlier source remains in history."
+    countercheck: "A newer timestamp or topical similarity alone does not extend the decision to project-beta."
+    evidence_refs:
+      - "docs/v3-coverage-gap-scenarios.yaml#SEM-MIGRATION-SCOPE-001"
+      - "docs/v3-contract.md"
+      - "decisions/0099-v3-migration-fixture-gate.md"
+    constitution_refs: ["FF-CON-0001:2.5", "FF-CON-0001:2.8"]
+    decision_refs: ["FF-DEC-0059"]
+  - id: SEM-CROSS-ENGINE-001
+    primary_disposition: "reported_unconfirmed"
+    adversarial_disposition: "reported_unconfirmed"
+    human_disposition: "reported_unconfirmed"
+    rationale: "Ingress, Artifact, Package and Transfer may preserve or carry the report, but an accepted receipt does not establish the report as knowledge. With semantic review pending and no CRUD authorization, durable creation remains blocked."
+    countercheck: "Operational acceptance, hash integrity and delivery success do not supply missing authority or semantic review."
+    evidence_refs:
+      - "docs/v3-coverage-gap-scenarios.yaml#SEM-CROSS-ENGINE-001"
+      - "docs/v3-contract.md"
+      - "docs/v3-semantic-evaluation-boundary.md"
+    constitution_refs: ["FF-CON-0001:2.4", "FF-CON-0001:2.7", "FF-CON-0001:2.8"]
+    decision_refs: ["FF-DEC-0059"]
+  - id: SEM-LEARNING-CORRELATED-001
+    primary_disposition: "needs_review"
+    adversarial_disposition: "needs_review"
+    human_disposition: "needs_review"
+    rationale: "Four alerts with one root-event fingerprint and one independent source are one corroborating signal, not four independent observations. They can trigger review but cannot establish a new rule."
+    countercheck: "Alert count is not evidence independence; source lineage and causal identity must be checked before a learning proposal."
+    evidence_refs:
+      - "docs/v3-coverage-gap-scenarios.yaml#SEM-LEARNING-CORRELATED-001"
+      - "docs/engines/learning-evolution.md"
+    constitution_refs: ["FF-CON-0001:2.7", "FF-CON-0001:2.8"]
+    decision_refs: ["FF-DEC-0059"]
+human_review:
+  status: "confirmed"
+  reviewer: "operator"
+  confirmed_at: "2026-10-04"
+  decision: "The operator confirms all three semantic dispositions and their stated boundaries. This confirms the assessments for this review; it does not prove semantic truth or runtime enforcement."

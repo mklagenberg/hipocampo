@@ -6,14 +6,15 @@ policy:
   normative_basis: "v3-constitutional-test-basis.yaml"
   deterministic_bindings: "engines/deterministic-case-bindings.yaml"
   semantic_revalidation_command: "python scripts/validate_v3_semantic_constitutional_revalidation.py --root ."
+  coverage_gap_scenario_command: "python scripts/validate_v3_coverage_gap_scenarios.py --root ."
 engines:
   - id: crud
     name: "Record CRUD"
     contract: "docs/v3-crud-contract.md"
-    modules: ["scripts/v3_crud_engine.py", "scripts/v3_mcp_crud_adapter.py"]
-    deterministic_commands: ["python scripts/validate_v3_crud.py --root .", "python scripts/validate_v3_crud_use_cases.py --root ."]
+    modules: ["scripts/v3_crud_engine.py", "scripts/v3_mcp_crud_adapter.py", "scripts/v3_record_store.py", "scripts/v3_migration_executor.py"]
+    deterministic_commands: ["python scripts/validate_v3_crud.py --root .", "python scripts/validate_v3_crud_use_cases.py --root .", "python scripts/validate_v3_migration_executor.py", "python scripts/validate_v3_legacy_recovery.py"]
     write_boundary: "canonical RecordCrud only"
-    deterministic_cases: [create-valid, update-versioned, reject-stale-write, reject-mcp-bypass, read-requires-authorization-context]
+    deterministic_cases: [create-valid, update-versioned, reject-stale-write, reject-mcp-bypass, read-requires-authorization-context, migrate-through-canonical-gateway, load-persisted-records, block-interrupted-migration, reject-stale-migration-source, reject-unreviewed-migration, legacy-normalization-through-crud]
     semantic_cases:
       - id: CRUD-S-001
         fixture_ref: "v3-semantic-fixtures.yaml#new-versus-curated"

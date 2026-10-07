@@ -1,0 +1,32 @@
+change_set:
+  id: "0130-fingerprinted-legacy-and-canonical-recovery"
+  class: "normative"
+  semver: "none"
+  status: "accepted"
+  backfill: false
+  decisions:
+    - "decisions/0118-fingerprinted-legacy-and-canonical-recovery.md"
+impact:
+  - artifact: "SPEC.md, decisions/0118-fingerprinted-legacy-and-canonical-recovery.md, CHANGELOG.md, MIGRATIONS.md, docs/v3-crud-contract.md, docs/v3-migration-execution.md"
+    status: "updated"
+    note: "Defines explicit observed-legacy input and exact-ticket canonical recovery within the approved local experiment."
+  - artifact: "scripts/v3_migration_engine.py, scripts/v3_migration_executor.py, scripts/v3_crud_engine.py, scripts/v3_record_store.py, scripts/validate_v3_legacy_recovery.py, scripts/scan_v3_queues.py, docs/v3-f0-script-classification.yaml, docs/engines/test-matrix.yaml"
+    status: "updated"
+    note: "Implements guarded route, exclusive CRUD recovery and synthetic real-Git regressions without real Record writes."
+  - artifact: "skill/, candidates/skill-v3/, COMPATIBILITY.yaml, UPGRADE.md, ROADMAP.md, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "No released package, compatibility, adoption action, direction or conformance claim changes."
+validation:
+  commands:
+    - "python -B scripts/validate_v3_legacy_recovery.py"
+    - "python -B scripts/validate_v3_migration_executor.py"
+    - "python -B scripts/validate_v3_engine_suite.py --root ."
+    - "python -B scripts/validate_hipocampo.py --root ."
+    - "python -B scripts/validate_change.py --root ."
+    - "python -B scripts/validate_contracts.py --root ."
+    - "python -B scripts/validate_skill_package.py --root ."
+    - "python -B scripts/validate_v3_skill_conformance.py --root ."
+  evidence:
+    - "scripts/validate_v3_legacy_recovery.py"
+    - "docs/v3-migration-execution.md"
+  notes: "Accepted implemented contract after presentation and human review on 2026-10-07. Separate synthetic Git recovery from explicitly accepted local pilots. Personal visibility correction remains held; passing tests alone never authorizes a real item. Freeze this Change Set at the acceptance checkpoint."

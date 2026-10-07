@@ -9,6 +9,8 @@ from pathlib import Path
 
 import yaml
 
+from v3_case_bindings import validate_binding_set
+
 
 ALLOWED_BOUNDARIES = {
     "human-semantic-review", "explicit-human-decision", "REM-or-human-review",
@@ -37,8 +39,8 @@ def main() -> int:
     bindings = yaml.safe_load((root / "docs/engines/deterministic-case-bindings.yaml").read_text(encoding="utf-8"))
     basis = yaml.safe_load((root / "docs/v3-constitutional-test-basis.yaml").read_text(encoding="utf-8"))
     binding_map = {(item.get("engine"), item.get("id")): item for item in bindings.get("cases", [])}
+    errors: list[str] = validate_binding_set(matrix.get("engines", []), bindings.get("cases", []))
     basis_map = {item.get("case_id"): item for item in basis.get("cases", [])}
-    errors: list[str] = []
     command_count = 0
     semantic_revalidation_count = 0
     deterministic_case_count = 0
@@ -101,6 +103,24 @@ def main() -> int:
                     f"{semantic_revalidation_command} ({output})"
                 )
 
+    coverage_gap_scenario_command = matrix.get("policy", {}).get("coverage_gap_scenario_command")
+    if not isinstance(coverage_gap_scenario_command, str) or not coverage_gap_scenario_command.strip():
+        errors.append("policy: missing coverage-gap scenario command")
+    else:
+        command_count += 1
+        try:
+            argv = shlex.split(coverage_gap_scenario_command)
+            result = subprocess.run(argv, cwd=root, capture_output=True, text=True, check=False)
+        except (OSError, ValueError) as exc:
+            errors.append(f"policy: could not execute coverage-gap scenarios: {exc}")
+        else:
+            if result.returncode != 0:
+                output = (result.stdout + result.stderr).strip().replace("\n", " | ")
+                errors.append(
+                    "policy: coverage-gap scenario validation failed: "
+                    f"{coverage_gap_scenario_command} ({output})"
+                )
+
     if errors:
         print(f"validate_v3_engine_suite: FAILED — {len(errors)} error(s)")
         for error in errors:
@@ -110,8 +130,9 @@ def main() -> int:
         "validate_v3_engine_suite: OK — "
         f"{command_count} deterministic commands executed, "
         f"{semantic_revalidation_count} semantic revalidation command executed, "
-        f"{deterministic_case_count} deterministic cases assigned, "
-        f"{semantic_case_count} semantic cases review-bound"
+        f"{deterministic_case_count} existing deterministic cases assigned, "
+        f"{semantic_case_count} existing semantic cases review-bound, "
+        "plus the six executable coverage-gap scenarios and three semantic assessments (see their recorded human-review status)"
     )
     return 0
 

@@ -69,6 +69,39 @@ semantic truth. A mutation requires both when the operation changes governed
 knowledge; mechanical metadata normalization may use the deterministic CRUD
 path without pretending to resolve semantic questions.
 
+The canonical gateway may use a persistence adapter. The adapter serializes and
+stores the already validated Record; it does not interpret, amend, or approve
+the proposal. `RecordCrud.create` and `RecordCrud.update` call that adapter only
+after their semantic and deterministic checks pass. Reads can load persisted V3
+Records back into the gateway so later updates compare the expected version and
+the exact on-disk state.
+
+The narrow legacy vocabulary normalizer also submits its controlled field
+change through the gateway's deterministic normalization operation. It cannot
+change prose or any field outside the declared mapping, and it uses a revision
+and source fingerprint check before its atomic write.
+
+V2-to-V3 conversion is an explicit internal `RecordCrud.migrate` operation. It
+requires a complete target Record, an accepted semantic review, a source hash,
+an exact-vault approval reference, and completed mapping, privacy, destination,
+rollback, and inventory gates. It replaces the source document only after the
+gateway validates the proposal. The logical MCP adapter does not expose this
+operation. The migration executor only prepares and submits proposals; it
+never writes Record files directly. The executable procedure and recovery
+limits are documented in `v3-migration-execution.md`.
+
+Decision 0118 adds the scoped `fingerprinted-legacy-v1` conversion contract:
+effective version remains `unknown`, the exact body and parsed legacy fields
+are preserved, and a recovery ticket is written in own Git administration
+before Record persistence. Internal `RecordCrud.recover_migration` requires
+an accepted review and exact-ticket/vault/entity approval. It restores only
+the unchanged initial migration result to its ticket-bound original bytes,
+rejects later Record updates, and leaves unrelated working changes untouched.
+Neither operation is exposed by the MCP adapter. Source-present after an
+interruption is a no-write observation, not proof of completed rollback.
+Reusing the original manifest after recovery is blocked by the retained ticket;
+a new attempt requires separately governed reexecution.
+
 The MCP surface is a transport adapter, not a second persistence layer. It may
 expose only the canonical `create`, `read`, `update` and governed `delete`
 operations. A request must carry its actor, reason, expected Record version,

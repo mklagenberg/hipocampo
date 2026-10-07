@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Validate cross-surface contracts that structural link checks cannot see.
 
-This validator protects the v2.2.0 consistency contracts: the canonical
+This validator protects the declared methodology consistency contracts: the canonical
 manifest fields, six invariants, registered-anchor discovery, privacy routing,
 and the Codex adapter. It intentionally checks a small set of durable agreements rather
 than attempting to infer methodology semantics from arbitrary prose.
@@ -15,15 +15,14 @@ from pathlib import Path
 
 REQUIRED = {
     "SPEC.md": [
-        "Version: 2.2.0",
         "instance.policy_profile",
         "instance.curation_level",
         "discovery.registered_repositories",
         "4. Default convention from the scaffold profile",
     ],
     "skill/references/invariants.md": [
-        "Six rules",
-        "## 6. Content declared in the repository",
+        "## 6. Repository state outranks cached skill state",
+        "canonical CRUD",
     ],
     "skill/references/personalization.md": [
         "anchor_repository",
@@ -35,10 +34,6 @@ REQUIRED = {
         "package-lock.yaml",
     ],
     "skill/manifest.yaml": [
-        'version: "1.3.0"',
-        'compatibility: "^2.1.0"',
-        'target: "codex"',
-        'package_lock: "skill/package-lock.yaml"',
     ],
     "scaffold/skeleton/hipocampo.yaml": [
         "policy_profile:",
@@ -71,6 +66,28 @@ def main() -> int:
     args = parser.parse_args()
     root = Path(args.root).resolve()
     errors: list[str] = []
+    import yaml
+    from validate_compatibility import satisfies
+    contract = yaml.safe_load((root / "COMPATIBILITY.yaml").read_text(encoding="utf-8"))
+    manifest = yaml.safe_load((root / "skill/manifest.yaml").read_text(encoding="utf-8"))
+    if not any(item.get("target") == "codex" for item in manifest.get("adapters", []) if isinstance(item, dict)):
+        errors.append("manifest must declare the codex adapter")
+    if manifest.get("skill", {}).get("package_lock") != "skill/package-lock.yaml":
+        errors.append("manifest must identify the canonical package lock")
+    methodology_version = contract["methodology"]["version"]
+    if "Version: " + methodology_version not in (root / "SPEC.md").read_text(encoding="utf-8"):
+        errors.append("SPEC version differs from the compatibility tuple")
+    if contract["skill"]["required_version"] != manifest["skill"]["version"]:
+        errors.append("canonical skill version differs from the compatibility tuple")
+    if not satisfies(methodology_version, manifest["methodology"]["compatibility"]):
+        errors.append("canonical skill does not support the declared methodology")
+    for profile_path in ["scaffold/profiles/pessoal.yaml", "scaffold/profiles/empresa.yaml"]:
+        profile = yaml.safe_load((root / profile_path).read_text(encoding="utf-8"))
+        if not satisfies(methodology_version, profile["methodology"]["compatibility"]):
+            errors.append(profile_path + ": scaffold does not support the target methodology")
+    skeleton = yaml.safe_load((root / "scaffold/skeleton/hipocampo.yaml").read_text(encoding="utf-8"))
+    if not satisfies(methodology_version, skeleton["hipocampo"]["compatibility"]):
+        errors.append("scaffold skeleton does not support the target methodology")
 
     for relative, snippets in REQUIRED.items():
         path = root / relative

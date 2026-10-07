@@ -26,7 +26,7 @@ def main() -> int:
     frontmatter_findings: list[dict] = []
     staleness_findings: list[dict] = []
     for path in sorted(root.rglob("*.md")):
-        if any(part in {".git", "meta"} for part in path.parts):
+        if any(part in {".git", "meta"} for part in path.relative_to(root).parts):
             continue
         fm, stale = scan_document(path, now, target_path=path.relative_to(root))
         frontmatter_findings.extend(fm)

@@ -1,0 +1,28 @@
+change_set:
+  id: "0131-reviewed-local-pilot-results"
+  class: "operational"
+  semver: "none"
+  status: "implemented"
+  backfill: false
+  decisions:
+    - "decisions/0118-fingerprinted-legacy-and-canonical-recovery.md"
+impact:
+  - artifact: "CHANGELOG.md, MIGRATIONS.md, docs/v3-migration-execution.md"
+    status: "updated"
+    note: "Projects actual scoped pilot acceptance, preflight/write/reload and retained privacy correction without exposing private knowledge."
+  - artifact: "SPEC.md, decisions/0118-fingerprinted-legacy-and-canonical-recovery.md, changes/0130-fingerprinted-legacy-and-canonical-recovery/"
+    status: "reviewed"
+    note: "Accepted conversion/recovery gates remain sufficient and unchanged; the accepted Change Set is frozen. No new normative obligation or exception."
+  - artifact: "scripts/, skill/, candidates/skill-v3/, scaffold/, COMPATIBILITY.yaml, UPGRADE.md, ROADMAP.md, moda.yaml, conformance/moda.yaml"
+    status: "reviewed"
+    note: "Engine and immutable package unchanged; mixed legacy/V3 local results do not establish whole-instance adoption, release or broader conformance."
+validation:
+  commands:
+    - "python -B scripts/validate_hipocampo.py --root ."
+    - "python -B scripts/validate_contracts.py --root ."
+    - "python -B scripts/validate_change.py --root ."
+    - "python -B scripts/validate_skill_package.py --root ."
+    - "python -B scripts/validate_v3_skill_conformance.py --root ."
+  evidence:
+    - "docs/v3-migration-execution.md"
+  notes: "Fresh real-vault reload and source/preimage checks stay in the originating private boundary; management reports only aggregate counts and scoped runtime limitations. No real restoration or global installation claim."

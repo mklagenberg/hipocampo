@@ -1,7 +1,6 @@
 # V3 skill conformance gate
 
-**Status:** required for the unreleased V3 skill release; the current installed
-package remains V2-compatible and is not a V3 candidate.
+**Status:** required for the unreleased V3 skill release; the canonical branch prepares the final skill 2.0.0 package; installation and publication remain unproven.
 
 ## Purpose
 
@@ -54,8 +53,7 @@ inputs only. The skill candidate is not exercised against real vault content.
 ## Commands and gates
 
 - CI runs `python scripts/validate_v3_skill_conformance.py --mode workflow`.
-  This validates the suite, deterministic outcomes, the isolated package at
-  `candidates/skill-v3/`, its file lock, review-envelope consistency and
+  This validates the suite, deterministic outcomes, the exact package identified by review_target.package_root, its file lock, review-envelope consistency and
   package binding without claiming V3 release readiness.
 - The release checklist runs
   `python scripts/validate_v3_skill_conformance.py --mode release` after the
@@ -63,11 +61,11 @@ inputs only. The skill candidate is not exercised against real vault content.
   compatible package, complete AI and AI-challenge coverage for the exact
   package, and recorded human approval.
 
-The V2 skill at `skill/` remains the released package and is unchanged. The
+The prior V2 package is byte-preserved in docs/legacy/hipocampo-skill-1.3.0.zip. The final V3 skill is prepared at skill/ and requires its own fingerprint-bound reviews. The
 isolated `2.0.0-rc.1` V3 candidate has a primary AI semantic review, independent
 AI challenge, and human approval recorded against the same package fingerprint.
 This approves the semantic assessments and the candidate-isolation decision;
 it does not release or activate the candidate. The methodology and skill
-candidate remain unreleased, and runtime enforcement has not been demonstrated.
+candidate remain unreleased, and runtime enforcement has been demonstrated only in the bounded local experiment described in v3-migration-execution.md; it is not universal host support.
 Real-vault operation remains blocked until the methodology and skill releases,
 compatible tuple, and adapter capability/authorization gates are satisfied.

@@ -7,3 +7,6 @@ This directory is the scaffold of the Hipocampo methodology: the profiles, the f
 - **`license-templates/`** — the two `LICENSE` templates (personal/corporate) and the selection logic, migrated from the toolkit without any change to the legal content.
 
 Full operational procedure (who executes it, in what order, what to present to the user before writing): `hipocampo/skill/references/instantiation.md`.
+## V3 source and object boundary
+
+Profiles version 2.0.0 target ^3.0.0. Use the verified immutable methodology release and resolved commit, not HEAD of main. Structure generation creates authorized metadata and proposal documentation; it never directly persists a Record. Confirm initial active Collections, actor/scope and canonical CRUD before first knowledge admission. Existing content and conflicting files are never overwritten automatically.

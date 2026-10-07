@@ -66,3 +66,7 @@ The release is blocked until the methodology's own release gate (`RELEASE-CHECKL
 - Multi-agent orchestration — Hipocampo is designed for one agent at a time, client-side (`decisions/0025`).
 - Silently updating an installed skill or content already generated in an instance.
 - External MODA conformance certification — MODA 1.0 doesn't offer this, and Hipocampo doesn't intend to invent its own.
+
+## V3 release closure
+
+Prepare the V3.0.0 contract and stable 2.0.0 portable skill, complete exact-package AI/human review and manual publication before resuming separately accepted vault migration. Local preparation is not release or universal runtime proof.

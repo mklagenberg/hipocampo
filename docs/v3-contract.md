@@ -1,8 +1,6 @@
 # Hipocampo V3 contract — unreleased candidate
 
-This is the implementation contract for the unreleased `v3.0.0`/LTE work. The
-active released specification remains v2.2.0 until a future release gate
-promotes this candidate. Existing v2 instances remain readable and are not
+This is the implementation contract for the unreleased `v3.0.0`/LTE work. The prepared V3 specification is SPEC.md; the active externally published release remains v2.2.0 until the human publication gate passes. Existing v2 instances remain readable and are not
 migrated by merely reading this document.
 
 The L4R closure adds logical authority resolution, bilateral local ledgers,
@@ -51,7 +49,7 @@ The unreleased V3 governance envelope may additionally carry:
 entity: "entity-id"
 scope: "knowledge-scope"
 vault:
-  id: "vault-id"
+  vault_id: "vault-id"
   profile: "entity | team | personal"
   role: "anchor | additional"
 governance:
@@ -68,6 +66,8 @@ source:
 maturity, write access, or automatic access to an entity anchor. The existing
 `entity`/`role` manifest model remains separate from the candidate vault
 profile.
+`vault_id` is the canonical stable vault identifier in the V3 envelope and
+matches the CRUD and migration executor contracts.
 
 `confidence`, `attributed_to`, and `evidence` remain optional. A source hash
 identifies a version; it does not prove truth, quality, or authorization.
@@ -201,9 +201,7 @@ The following documents record the unreleased MRL-0005 candidate boundary:
 - `docs/v3-external-reference-policy.md` — comparison/inspiration boundary for
   external references.
 
-These documents are candidate contracts only. They do not activate V3 for
-existing instances, override the released v2.2.0 `SPEC.md`, or constitute a
-migration plan.
+These adjacencies form the V3 contract prepared in SPEC.md. Preparation does not activate V3 for existing instances or constitute a vault migration plan.
 
 ## MRL-0006 candidate contracts
 

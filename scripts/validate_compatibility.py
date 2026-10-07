@@ -48,19 +48,9 @@ def state(case: dict) -> str:
 
 
 def package_is_intact(root: Path) -> bool:
-    lock = yaml.safe_load((root / "skill" / "package-lock.yaml").read_text(encoding="utf-8"))
-    expected = {item["path"]: item["sha256"] for item in lock["package"]["files"]}
-    actual_paths = {
-        path.relative_to(root / "skill").as_posix(): path
-        for path in (root / "skill").rglob("*")
-        if path.is_file() and path.name != "package-lock.yaml"
-    }
-    if set(expected) != set(actual_paths):
-        return False
-    return all(
-        hashlib.sha256(actual_paths[relative].read_bytes()).hexdigest() == digest
-        for relative, digest in expected.items()
-    )
+    # Keep one canonical integrity boundary instead of weaker duplicate logic.
+    from validate_skill_package import validate
+    return not validate(root)
 
 
 def vault_manifest_is_valid(path: Path, contract: dict) -> tuple[bool, dict]:

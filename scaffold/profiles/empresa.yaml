@@ -1,15 +1,15 @@
 profile:
   id: "empresa"
-  version: "1.0.0"
+  version: "2.0.0"
   purpose: "Generates a Hipocampo content repository whose owner is a company (e.g., hipocampo-company, hipocampo-company-vault)."
 
 methodology:
-  compatibility: "^2.1.1"
+  compatibility: "^3.0.0"
 
 engine:
-  version: "1.0.0"
+  version: "2.0.0"
   source_repository: "https://github.com/mklagenberg/hipocampo"
-  source_commit: "<filled in by the agent at instantiation time, HEAD of main>"
+  source_commit: "<filled in by the agent at instantiation time, verified immutable release commit>"
 
 inputs:
   - id: "repository_name"
@@ -65,7 +65,7 @@ outputs:
   - path: "example/exemplo-nota.md"
     operation: "generate"
     ownership: "user-authored"
-    note: "Illustrative; the user deletes or replaces it before the first real document."
+    note: "Proposal illustration only, not a persisted Record. The first real Record is created by canonical CRUD after Collection acceptance."
   - path: "hipocampo.yaml"
     operation: "generate"
     ownership: "managed-structure"

@@ -93,3 +93,16 @@ cases:
     unsafe_raw_fallback: false
     semantic_review: partial
     expected: partial
+  - id: "interrupted-after-partial-mapping"
+    source_version: "2.2.0"
+    target_version: "3.0.0"
+    mapping: complete
+    privacy: proven
+    rollback: tested
+    target_contract: verified
+    human_approval: present
+    unsafe_raw_fallback: false
+    execution_state: interrupted
+    mapped_items: 2
+    total_items: 5
+    expected: blocked

@@ -7,6 +7,8 @@ from pathlib import Path
 
 import yaml
 
+from v3_case_bindings import validate_binding_set
+
 
 EXPECTED_ENGINES = {
     "crud", "artifact-provenance", "ingress", "rem-curation", "package",
@@ -41,6 +43,7 @@ def main() -> int:
         errors.append("catalog policy must declare sanitized-no-real-content")
     engines = data.get("engines", []) if isinstance(data, dict) else []
     bindings = bindings_data.get("cases", []) if isinstance(bindings_data, dict) else []
+    errors.extend(validate_binding_set(engines, bindings))
     binding_map: dict[tuple[str, str], dict] = {}
     for index, binding in enumerate(bindings):
         if not isinstance(binding, dict):

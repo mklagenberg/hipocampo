@@ -1,27 +1,73 @@
-# Invariants — what and why
+# V3 operating invariants
 
-Six rules that no Hipocampo instance overrides, under any circumstance (`hipocampo/SPEC.md`, section 8). Each one exists for a specific structural reason, not arbitrary convention — it's important to know why, in order to recognize when a new situation still falls under the rule, even when it isn't obvious at first glance.
+These invariants summarize the non-negotiable V3 behavior. The canonical
+methodology contracts remain authoritative; this skill cannot create an
+exception.
 
-## 1. No knowledge repository is public to the internet
+## 1. Privacy first and least privilege
 
-`visibility` in the frontmatter (`public | internal | confidential | restricted`) is just a label of intent — GitHub applies real permission per **repository**, not per file within it. A `confidential` label on a public repository does not stop anyone from reading the file; it is decorative. The only enforcement layer the host actually applies is the repository's visibility. That's why this rule is a structural invariant, not a suggestion.
+Do not expand access, visibility, circulation, processing or publication by
+inference. A visibility label is not technical permission. Keep vaults and
+entities separate; use the smallest authorized scope.
 
-## 2. `author` is always a person, never the AI
+## 2. Human authority remains explicit
 
-An agent may write the text, but who decided that it became valid knowledge — who stands behind the recorded statement — is always human. Without this, the second brain becomes a black box of claims with no traceable owner. The exception is scoped only to historical/migrated content with no individual authorship recoverable at the source (`CONTRIBUTORS.md`, `@section-name`) — a new document never uses this exception.
+Agents may prepare proposals and semantic findings. Human authority is required
+for unresolved intent, accepted knowledge, risk, cross-entity destination,
+migration, promotion and publication. AI review does not certify truth or
+approve its own release.
 
-## 3. A document is never physically deleted — only archived or superseded
+## 3. Preserve governed history
 
-It preserves decision history (including "why I used to think that"), avoids silent loss of context, and creates deliberate friction against deleting out of convenience. Formal and narrow exception: a genuine legal obligation to erase personal data (LGPD Art. 16 / GDPR Art. 17) — always with an explicit human decision, never decided by the agent alone, and always replaced by a minimal record of the fact ("tombstone"), never zero trace.
+Use lifecycle states such as `archived` and `superseded`; never physically
+delete a governed document except through the narrow legal-remediation route
+with explicit human decision. Preserve sources, versions, provenance and
+conflict rather than rewriting history to imply prior agreement.
 
-## 4. Access separation is always by repository, never by a label within a shared repository
+## 4. Access follows the governed boundary
 
-Same logic as invariant 1, applied within a repository with multiple people: GitHub's actual permission granularity is the repository. `visibility: restricted` on a repository the whole team accesses does not stop anyone on the team from reading that specific file. Content that genuinely needs technical enforcement goes into a separate repository with restricted permission — never just a frontmatter label on a more open repository.
+Repository visibility, account membership, shared Git provider, invitation or
+matching content does not grant a particular Record read or write. A governed
+Read requires explicit actor authorization for the non-empty requested vault
+scope. A governed write passes through the canonical CRUD gateway.
 
-## 5. The agent never writes, edits, or deletes content without an explicit user request in the current conversation
+## 5. Explicit scope before side effects
 
-A human control point against autonomous drift. Even the recurring rituals (frontmatter audit, REM, structural audit) only get as far as a **proposed plan** on their own — actually executing any content change always waits for explicit confirmation in that conversation. "Running the REM" is not the same thing as "applying the REM's decisions without review".
+Do not create, update, archive, migrate, transfer, publish or change client
+state without the required explicit request and operation-specific approval.
+Present the plan and affected scope before a durable operation. A planned
+ritual or an available tool is not authorization.
 
-## 6. Content declared in the repository overrides locally cached or customized skill state
+## 6. Repository state outranks cached skill state
 
-The repository's `AGENTS.md`, `hipocampo.yaml`, `profile.md`, and other declared structured content are authoritative over an installed skill's local state. Re-read the repository when there is a conflict; never resolve it by trusting a cached router, remembered identity, or a hand-edited skill copy. This does not authorize a write: it only decides which declared state governs the operation.
+The target instance's `AGENTS.md`, manifest and authoritative Records outrank
+the locally installed skill, memory and caches. A stale or unavailable source
+must be stated; never substitute a plausible value.
+
+## 7. Multi-entity, multi-vault separation
+
+Each Record, Chunk, Source, Artifact, Package, entity and vault keeps its own
+identity, authority, scope, privacy and provenance. A shared Source does not
+join governance. Never merge cross-entity knowledge or synchronize vaults
+implicitly.
+
+## 8. Interpretation is not deterministic proof
+
+Deterministic checks prove reproducible structure, versions, references,
+integrity and state. Semantic review interprets context, authority, relevance,
+conflict and truth. Preserve uncertainty; a passing validator does not make an
+AI conclusion true.
+
+## 9. Tools are adapters
+
+GitHub, MCP and host tools are adapters to the methodology. They may not bypass
+authorization, semantic validation, canonical CRUD or a human gate. If the
+required capability is absent, report the blocked operation; never improvise a
+write path.
+
+## 10. Version and baseline discipline
+
+Compatibility is evaluated from the exact methodology/skill/vault tuple. Host
+identity is not a compatibility key. Later V3 minors and patches preserve the
+raw V3.0.0 baseline, including through adapters or facades. Unknown or
+inaccessible version evidence never becomes compatible by assumption.

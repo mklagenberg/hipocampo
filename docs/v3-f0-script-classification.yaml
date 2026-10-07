@@ -57,12 +57,24 @@ scripts:
   - path: scripts/v3_migration_engine.py
     class: deterministic
     proof: "synthetic migration preflight outcome from declared blocking conditions"
+  - path: scripts/v3_migration_executor.py
+    class: deterministic
+    proof: "manifest, source hash, branch, privacy, authorization and recovery gates; semantic mapping quality remains reviewed"
+  - path: scripts/v3_record_store.py
+    class: deterministic
+    proof: "canonical CRUD persistence, document parsing, atomic replacement and integrity checks; record meaning remains semantic"
+  - path: scripts/validate_v3_legacy_recovery.py
+    class: deterministic
+    proof: "synthetic observed-legacy conversion and canonical recovery with actual Git; no real-vault authorization, semantic or privacy proof"
   - path: scripts/v3_learning_engine.py
     class: hybrid
     proof: "sanitized signal identity, deduplication and candidate boundary; semantic gap assessment remains reviewed"
   - path: scripts/v3_search_engine.py
     class: hybrid
     proof: "bounded CRUD reads, disclosure guardrails and no-mutation checks; relevance, authority and epistemic interpretation remain semantic"
+  - path: scripts/v3_case_bindings.py
+    class: deterministic
+    proof: "canonical assertion identifiers and exact case-to-command binding validation"
   - path: scripts/validate_v3_migration.py
     class: deterministic
     proof: "migration fixture coverage and expected typed outcomes"

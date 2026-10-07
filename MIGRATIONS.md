@@ -1,5 +1,23 @@
 # Hipocampo — Migrations
 
+## V3.0.0 release preparation — explicit adoption required
+
+The prepared target is methodology 3.0.0 / skill 2.0.0 / vault ^3.0.0.
+Verify the actual immutable publication before installation or activation.
+V2 instances do not become compatible by changing a range. Keep the
+appropriate immutable V2 package for legacy operation until governed migration
+passes. Use per-vault inventory, complete review, accepted Collections and
+exact mappings, privacy/source/context gates, canonical CRUD conversion and
+fresh reload. Preserve original prose, Unicode/newlines, all legacy fields,
+attachments, relations, provenance and unknown source state. Recovery requires
+the exact immutable ticket and human acceptance; no direct edits or Git reset.
+The scaffold creates proposal/operational structure, never a Record directly.
+See [release scope](docs/v3-release-preparation.md) and
+[execution procedure](docs/v3-migration-execution.md). The historical candidate
+sections below retain their original boundary; this section defines the
+prepared adoption target and does not certify publication or full migration.
+
+
 Migration guide for each MAJOR version jump (SemVer — see SPEC.md, section 9, and DISCLAIMER.md).
 
 MINOR and PATCH migration requires no action — see DISCLAIMER.md, section "Versioning and what it means for you". This file only documents MAJOR jumps, which require active migration by definition.
@@ -31,6 +49,25 @@ Before a real migration, the operator must have:
 Missing mapping, unknown privacy, unavailable destination, missing rollback or
 missing approval blocks migration.
 
+The scoped experiment may also prepare the explicit observed-legacy route in
+[Decision 0118](decisions/0118-fingerprinted-legacy-and-canonical-recovery.md).
+Unknown effective version is retained, with exact body and legacy-field
+bindings. The source conversion contract must be accepted separately; generic
+unknown compatibility never permits writes. A reviewed recovery procedure
+and its test evidence are required before real migration; canonical CRUD
+creates the immutable ticket before persistence. Restoring a real result
+additionally requires approval of that exact ticket. Selection of
+options 1B/2A/3A authorizes implementation and four pilot decision sheets,
+not acceptance of their unpresented content or privacy claims.
+
+After the concrete sheets and implemented procedure were presented, the
+operator separately accepted them. Three conforming one-item pilots completed
+canonical migration and fresh-process verification locally on 2026-10-07;
+the personal pilot is held for acceptance of a prepared visibility correction.
+This result does not authorize other proposals or promote whole-instance
+compatibility. Exact restoration preimages were verified, but no real ticket
+restoration was executed. See [the scoped execution evidence boundary](docs/v3-migration-execution.md#real-pilot-evidence-boundary).
+
 The synthetic preflight cases in
 `docs/v3-migration-fixtures.yaml` and their deterministic evaluator in
 `scripts/validate_v3_migration.py` are the first executable check of this
@@ -60,6 +97,13 @@ classify real repositories.
 
 ### Execution sequence
 
+For the explicitly authorized local WRK-0074 experiment, apply the scoped
+entry envelope in [Decision 0117](decisions/0117-scoped-local-v3-experiment.md).
+Refresh clean main once per task, then check fingerprints on its dedicated
+branch. An isolated worktree stays inside its own vault boundary and does not
+authorize removing an original lock. Individual mapping, privacy and recovery
+gates in the sequence below remain mandatory.
+
 1. Freeze the selected source inventory and capture its version and hashes.
 2. Resolve compatibility and target access without writing.
 3. Apply the approved mapping to synthetic fixtures first.
@@ -69,6 +113,12 @@ classify real repositories.
 7. Run V3 validation and REM before any record becomes current or curated.
 8. Reconcile the source and destination ledgers, then close the migration only
    when the LTE gate accepts the evidence.
+
+The unreleased V3 candidate's deterministic executor, manifest contract,
+dry-run/apply commands, and interrupted-batch behavior are documented in
+[`docs/v3-migration-execution.md`](docs/v3-migration-execution.md). The executor
+does not replace any precondition above and does not prove that a vault's
+semantic mapping, privacy assessment, or inventory is complete.
 
 No step above authorizes remote transport, publication, deletion or V3
 activation by itself.

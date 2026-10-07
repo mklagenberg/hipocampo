@@ -1,46 +1,67 @@
-# Maintenance rituals — frontmatter audit, REM, structural audit
+# V3 maintenance rituals
 
-Three rituals, different cadences, always scoped to **one repository at a time** — each Hipocampo repository has its own `inbox/` and its own queue. Full reference: `hipocampo/SPEC.md`, sections 5-A, 5-B, 5-C.
+The rituals remain scoped to one authorized vault at a time. They are
+read/assessment workflows, not permission to expand scope or persist changes.
+Full V3 state and validation rules remain in the canonical specification and
+contracts.
 
-## Execution order in a daily cycle
+## Order in a daily cycle
 
-1. **Frontmatter audit** (deterministic, first)
-2. **REM ritual** (consolidation + update, reads the output of step 1)
+1. Run the deterministic frontmatter audit.
+2. Review its findings semantically through REM.
+3. Present proposed changes and wait for the required human authorization
+   before CRUD persistence.
 
-The structural audit runs separately, on a weekly cadence.
+The structural audit runs separately on its declared cadence.
 
-## 1. Frontmatter audit — daily, deterministic
+## 1. Frontmatter audit — deterministic
 
-Mechanical scan of the frontmatter (never the body) of every document in a repository: expired `ttl` (per `temporality`), missing required field, a deprecated pt-BR controlled-vocabulary value still in use (e.g. `source: conversa` instead of `source: conversation`) — matched literally against `hipocampo/docs/vocabulary-dictionary.md`, no judgment involved — other mechanically detectable violation. Produces/updates `meta/fila-de-manutencao.md`. **Never decides disposition** — only reports. This is not AI agent judgment: it's a fixed-rule, reproducible scan. See decision 0017 and decision 0035.
+Inspect only the explicitly authorized repository/vault scope. Check declared
+schema, required metadata, controlled vocabulary and mechanical freshness
+conditions. Do not scan Record bodies as part of the frontmatter-only pass.
+Produce findings with source reference, field and rule; do not decide truth,
+authority, merge or disposition, and do not write records.
 
-## 2. REM ritual — daily, two functions
+## 2. REM — semantic review and governed change proposal
 
-**Consolidate:** read `inbox/` (short-term memory — already passed through an attention gate, e.g. a session dump/check-in, but not yet atomic nor in the right place; it's a sanitization stage, not raw capture). Decide per item: becomes a new document, merges with an existing one, or is discarded.
+For each finding or inbox item:
 
-**Update old memories:** read `meta/fila-de-manutencao.md` (output of the frontmatter audit) and decide the disposition of each pending item: revalidate (including via external research when `source: url` — the same trigger as the `deep-research` skill), archive, supersede, or fix a field — normalizing a flagged deprecated vocabulary value (per `hipocampo/docs/vocabulary-dictionary.md`) to its current English form is a routine "fix a field," presented the same way as any other field fix, not skipped or auto-applied.
+- review context, provenance, entity, scope, vault, authority, privacy, maturity,
+  staleness and conflict;
+- keep facts, accounts, opinions, memories, inferences, hypotheses,
+  recommendations and decision candidates distinct;
+- preserve multiple perspectives in separate Records or Chunks where required;
+- recommend create, update, archive, supersede, discard or revalidation only
+  with reasons, evidence and uncertainty;
+- present the complete plan before any mutation.
 
-**Always present the full plan for either of the two functions before any write** — the same explicit-request invariant (see `invariants.md`, item 5), applied to this ritual specifically. See decision 0008, decision 0016.
+REM is not an automatic write. Once explicitly authorized, a governed change
+must pass semantic review and deterministic validation through canonical CRUD.
+Unresolved meaning, authority, privacy or intent stays blocked or
+`needs_review` for human decision.
 
-### Example of a cycle
+## 3. Structural audit — periodic
 
-> `meta/fila-de-manutencao.md` (produced by the frontmatter audit) lists: `projetos/case-acme.md` with `ttl` expired 40 days ago, `temporality: ephemeral`.
->
-> REM ritual, "update old memories" function: since it's `ephemeral` and has passed its deadline without renewal, the section 5 rule already pre-flags it as "suggestion: archive/supersede". The agent presents: "`case-acme.md` has a `ttl` expired 40 days ago, `ephemeral` — I suggest marking `status: archived`. Confirm?" — never applies it on its own.
+Within the confirmed scope, review:
 
-## 3. Structural audit — weekly, four functions
+1. **Atomicity:** whether each Record remains one coherent governed unit;
+2. **Placement:** whether its entity, vault, scope and Collection are correct;
+3. **Privacy, security and provenance:** whether access, minimization,
+   redaction and source lineage remain valid;
+4. **Lifecycle and freshness:** whether maturity, staleness, conflicts,
+   supersession and relevant source versions are represented honestly;
+5. **Relationships:** whether Chunk parentage, Artifact versions and
+   cross-vault references remain explicit and valid.
 
-1. **Atomicity** — do recently consolidated documents (or ones flagged by the queue) still represent a single concept, or should they be split?
-2. **Positioning** — does the `category`/folder structure still make sense? Is any document outside the scope declared in the repository's `AGENTS.md` (section "Scope of this repository")?
-3. **Privacy, security, and data provenance** — within the selected audit scope or maintenance queue, does a document contain a credential, non-public financial value, prohibited sensitive data, or a public financial value without its URL/date citation? Public-repository material is anonymized as required by `decisions/0050`. This is not an implicit full-history sweep after a methodology update; findings are queued and remediated progressively through CRUD or REM, with confirmation.
+Never turn an audit into a broad historical sweep just because a methodology
+version changed. Findings are reported first. Moves, splits, merges, state
+changes and deletion are governed mutations and require human approval and the
+CRUD path.
 
-4. **Controlled-vocabulary check on repository-level fields** — `hipocampo.yaml`'s `instance.policy_profile`, `instance.curation_level`, and legacy fields aren't scanned by the daily frontmatter audit (that one only covers document frontmatter). Whenever the structural audit reads the manifest, it checks their values against `hipocampo/docs/vocabulary-dictionary.md` too, and flags a deprecated value the same way as any other finding below — never rewritten on its own.
+## Reporting
 
-Any finding from the four functions is always presented to the responsible human before any action — moving, splitting, or removing a document never happens on its own. See decision 0019 and decision 0035.
-
-### Example
-
-> Weekly audit of the corporate repository (`AGENTS.md` declares "Instance type: corporativa" — the deprecated pt-BR value, still valid). It finds `trabalho/negociacao-fornecedor-y.md` citing a contract value in R$. This is exactly what the sensitive-data policy prohibits for a corporate instance (vendor value). The agent flags it: "I found a vendor contract value in `negociacao-fornecedor-y.md` — the corporate instance policy does not allow this, not even under `restricted`. Do you want me to remove the absolute value (keeping the rest of the document), or would you rather review it yourself?" — it never edits on its own. Separately, since `AGENTS.md` still declares the deprecated `corporativa` value, the agent also notes it as a normalization candidate for this same audit cycle: "Also, unrelated to the finding above: this repository's `AGENTS.md` still uses the older 'Instance type: corporativa' — want me to update it to 'corporate' (`hipocampo/docs/vocabulary-dictionary.md`)? Purely cosmetic, doesn't change behavior."
-
-## Automation (scheduled tasks)
-
-A recurring cadence is a good candidate for an agentic `scheduled task` (daily frontmatter audit + REM in sequence; weekly structural audit separately). Automation is an implementation decision per instance, not part of the methodology itself — configuring it (or not) is up to whoever operates that instance.
+Separate deterministic findings, AI semantic interpretation, unavailable
+evidence and human decisions. State which vault and scope were inspected, the
+source/version checked, what was not inspected, and which actions remain
+pending. A green structural audit does not establish truth or grant migration
+or publication authority.
