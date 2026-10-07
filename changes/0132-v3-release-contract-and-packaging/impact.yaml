@@ -2,7 +2,7 @@ change_set:
   id: "0132-v3-release-contract-and-packaging"
   class: "normative"
   semver: "major"
-  status: "proposed"
+  status: "accepted"
   backfill: false
   decisions:
     - "decisions/0119-v3-release-contract-and-packaging.md"

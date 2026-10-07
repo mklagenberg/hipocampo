@@ -81,8 +81,18 @@ def main():
         with patch.object(gate,'load_yaml',side_effect=lambda p: value if p==review_path else real_loader(p)):
             return gate.validate(root,'release')
     errors,blockers=gate_fixture(actual)
+    assert not errors,(errors,blockers)
+    if actual.get('human_review',{}).get('status')=='approved':
+        assert not blockers,blockers
+    else:
+        assert any('human' in item for item in blockers),blockers
+    results.append({'case':'actual envelope respects its recorded human decision','passed':True})
+    pending=copy.deepcopy(actual);pending['assessment_status']='blocked'
+    pending['human_review']={'status':'pending','decision':None,
+        'package_lock_sha256':actual['review_target']['package_lock_sha256']}
+    errors,blockers=gate_fixture(pending)
     assert not errors and any('human' in item for item in blockers),(errors,blockers)
-    results.append({'case':'actual final package stays blocked with real human decision pending','passed':True})
+    results.append({'case':'synthetic pending human decision remains blocked after real acceptance','passed':True})
     fixture=copy.deepcopy(actual);fixture['assessment_status']='ready'
     fixture['human_review']={
         'status':'approved','reviewer':'synthetic fixture only',

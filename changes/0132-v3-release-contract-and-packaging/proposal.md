@@ -31,3 +31,14 @@ and exact-ticket recovery. No automatic adoption or direct Record rewrite.
 
 Implementation preparation authorized; acceptance, merge and publication are
 pending exact final review. This Change Set is not frozen as accepted.
+
+## Recorded acceptance
+
+Accepted by explicit operator response on 2026-10-07 for frozen content cd95e955,
+final skill lock 2462816441e5e829579014207403dbf8342c6c500bdb4691792a5d8a4aa84f9b
+and both FINAL-003 AI reviews. Preparation-time pending status above is historical.
+Integration is authorized through a PR to main after CI/content verification;
+publication is human-only. A post-acceptance test-fixture correction separates
+synthetic pending-human input from the actual approved envelope, so the test
+continues to reject missing approval without requiring a real decision to stay
+pending forever. It changes neither package bytes nor the normative gate.

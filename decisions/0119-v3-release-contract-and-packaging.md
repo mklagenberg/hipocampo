@@ -1,6 +1,6 @@
 # 0119 — V3 release contract and stable skill packaging
 
-**Status:** Proposed; implementation preparation authorized, final acceptance pending
+**Status:** Accepted; exact-package human review recorded on 2026-10-07
 
 **Date:** 2026-10-07
 
@@ -67,3 +67,12 @@ Preparation is authorized by the operator's 2026-10-07 request to execute the
 ForgeFlow loop through release preparation. This record remains proposed until
 the exact final content, package fingerprint, reviews and residual risks are
 presented and explicitly accepted. Merge remains human-reviewed.
+
+## Recorded human acceptance
+
+The operator explicitly accepted frozen content cd95e955 and package lock
+`2462816441e5e829579014207403dbf8342c6c500bdb4691792a5d8a4aa84f9b` after primary review FINAL-003 and the separate challenge FINAL-003.
+Acceptance recorded at 2026-10-07T22:30:11Z from the active task response.
+Public branch push/PR and merge after current CI/content checks are authorized.
+Manual tag/release, remaining vault mappings and global installation are separate.
+The preparation-time pending statement above remains historical.

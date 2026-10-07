@@ -1,6 +1,6 @@
 {
   "prepared_at": "2026-10-07T22:22:40.022261+00:00",
-  "state": "blocked_human_and_remote_gates",
+  "state": "human_approved_remote_integration_pending",
   "repository": "mklagenberg/hipocampo",
   "branch": "release/v3.0.0-preparation-2026-10-07",
   "content_commit": "cd95e9557d918c15c77ff04a144f7dd9e2f54856",
@@ -108,8 +108,9 @@
       }
     ],
     "release_regressions": {
-      "passed": 27,
-      "total": 27
+      "passed": 28,
+      "total": 28,
+      "historical_before_acceptance": 27
     },
     "integrated_suite": {
       "deterministic_commands": 25,
@@ -125,10 +126,47 @@
       "change_sets_checked": 98
     },
     "release_gate": {
-      "exit_code": 2,
-      "result": "two blocker messages for the one pending human-review gate",
-      "log_sha256": "c1ea61844141446a1595168881e9214c0e91f632ed19801a28ba11f9bcfee3d8"
-    }
+      "exit_code": 0,
+      "result": "local package/review gate passed; actual remote integration and publication separate",
+      "log_sha256": "107d0d6b014d97b0627f691ef0ab09f633a2eab32090c99c12813946608c1c18"
+    },
+    "post_approval_checks": [
+      {
+        "check": "post-approval-regressions",
+        "exit_code": 0,
+        "log_sha256": "d86b5f9ba2b29c0862247a5601ecb2209de4c3b269495f955ed388d398ea8c9f"
+      },
+      {
+        "check": "post-approval-release",
+        "exit_code": 0,
+        "log_sha256": "107d0d6b014d97b0627f691ef0ab09f633a2eab32090c99c12813946608c1c18"
+      },
+      {
+        "check": "post-approval-workflow",
+        "exit_code": 0,
+        "log_sha256": "107d0d6b014d97b0627f691ef0ab09f633a2eab32090c99c12813946608c1c18"
+      },
+      {
+        "check": "post-approval-structure",
+        "exit_code": 0,
+        "log_sha256": "166def7a2e4a6ad09f9e942ce358e93848f579dd8ec1574f44239f77c14a0230"
+      },
+      {
+        "check": "post-approval-package",
+        "exit_code": 0,
+        "log_sha256": "5ad892a219d8072b5532efa050fa00e345019ed4da72b56b24bae234ec9811e1"
+      },
+      {
+        "check": "post-approval-contracts",
+        "exit_code": 0,
+        "log_sha256": "df2fd6e0aac968e50192fe9b7c58002e04d37a3c457f50b847bd22cf411e83c8"
+      },
+      {
+        "check": "post-approval-changes",
+        "exit_code": 0,
+        "log_sha256": "a40e1a9d2db05f695a8f8fa973e4e66c068796b9f63aa97ce99bb0f729208c99"
+      }
+    ]
   },
   "reviews": [
     {
@@ -142,7 +180,7 @@
       "sha256": "e049abf1a7fd621d89ce37d5e31cf0b2e98387e084e44f68007f53b207e8c7fb"
     }
   ],
-  "approval": "not_present",
+  "approval": "explicit_human_approved_exact_package_and_integration",
   "evidence_boundaries": {
     "final_stable_skill": "package integrity, synthetic compatibility, primary semantic review and separate challenge",
     "actual_pilots": "preceding authorized rc.1 experiment; three migrated and freshly reloaded",
@@ -154,20 +192,12 @@
   },
   "external_gates": [
     {
-      "gate": "H_RELEASE",
-      "state": "pending_exact_package_human_decision"
-    },
-    {
-      "gate": "H_INTEGRATION",
-      "state": "explicit_push_PR_merge_scope_confirmation_pending_after_prior_prohibition"
-    },
-    {
       "gate": "MAIN_CI",
-      "state": "not_submitted_or_integrated"
+      "state": "authorized_not_submitted_yet"
     },
     {
       "gate": "PUBLICATION",
-      "state": "human_action_only_after_other_gates"
+      "state": "human_action_only_after_verified_integration"
     }
   ],
   "publication_form": "docs/releases/v3.0.0-publication-form.md",
@@ -176,5 +206,8 @@
   "global_installation": false,
   "ACL_changes": false,
   "remote_writes": 0,
-  "tag_or_release_created": false
+  "tag_or_release_created": false,
+  "updated_at": "2026-10-07T22:35:04.897813+00:00",
+  "human_review_record": "docs/v3-skill-conformance-ai-review.yaml",
+  "post_acceptance_delta": "Test-only correction makes pending-human rejection synthetic and verifies the actual envelope according to its recorded decision. No normative gate or package bytes changed."
 }
