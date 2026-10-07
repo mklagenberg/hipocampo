@@ -1,0 +1,180 @@
+{
+  "prepared_at": "2026-10-07T22:22:40.022261+00:00",
+  "state": "blocked_human_and_remote_gates",
+  "repository": "mklagenberg/hipocampo",
+  "branch": "release/v3.0.0-preparation-2026-10-07",
+  "content_commit": "cd95e9557d918c15c77ff04a144f7dd9e2f54856",
+  "source_base": "25cb7f6c8cfb176c94d16c0f66fa00fee327982b",
+  "remote_main_verified": "3447690a2b59931f8a9efbbb8de1ffd692d9cb8f",
+  "remote_main_verification": "GitHub read-only branch response; not integration proof",
+  "versions": {
+    "methodology": "3.0.0",
+    "skill": "2.0.0",
+    "compatibility": "^3.0.0",
+    "semver": "major"
+  },
+  "package_lock_sha256": "2462816441e5e829579014207403dbf8342c6c500bdb4691792a5d8a4aa84f9b",
+  "validation": {
+    "local_checks": [
+      {
+        "check": "structure",
+        "command": [
+          "python",
+          "scripts/validate_hipocampo.py",
+          "--root",
+          "."
+        ],
+        "exit_code": 0,
+        "log_sha256": "166def7a2e4a6ad09f9e942ce358e93848f579dd8ec1574f44239f77c14a0230"
+      },
+      {
+        "check": "skill-docs",
+        "command": [
+          "python",
+          "scripts/validate_skill_docs.py",
+          "--root",
+          "."
+        ],
+        "exit_code": 0,
+        "log_sha256": "d76b3b2ec6fa6655d67559fbb148619df85f7d529aba47d8df34faad5ccf84a2"
+      },
+      {
+        "check": "package",
+        "command": [
+          "python",
+          "scripts/validate_skill_package.py",
+          "--root",
+          "."
+        ],
+        "exit_code": 0,
+        "log_sha256": "5ad892a219d8072b5532efa050fa00e345019ed4da72b56b24bae234ec9811e1"
+      },
+      {
+        "check": "contracts",
+        "command": [
+          "python",
+          "scripts/validate_contracts.py",
+          "--root",
+          "."
+        ],
+        "exit_code": 0,
+        "log_sha256": "df2fd6e0aac968e50192fe9b7c58002e04d37a3c457f50b847bd22cf411e83c8"
+      },
+      {
+        "check": "changes",
+        "command": [
+          "python",
+          "scripts/validate_change.py",
+          "--root",
+          "."
+        ],
+        "exit_code": 0,
+        "log_sha256": "a40e1a9d2db05f695a8f8fa973e4e66c068796b9f63aa97ce99bb0f729208c99"
+      },
+      {
+        "check": "regressions",
+        "command": [
+          "python",
+          "scripts/validate_v3_release_regressions.py",
+          "--root",
+          "."
+        ],
+        "exit_code": 0,
+        "log_sha256": "9ed12069d4bcd21b599d32dbfc4ca9b8b49829ac8868ecdf30501aa5a4c2084f"
+      },
+      {
+        "check": "workflow",
+        "command": [
+          "python",
+          "scripts/validate_v3_skill_conformance.py",
+          "--root",
+          ".",
+          "--mode",
+          "workflow"
+        ],
+        "exit_code": 0,
+        "log_sha256": "7f6d8cf2aeaab82620696cbb22ac4dc68dca5407351c1600bac760a49da17d84"
+      },
+      {
+        "check": "engines",
+        "command": [
+          "python",
+          "scripts/validate_v3_engine_suite.py",
+          "--root",
+          "."
+        ],
+        "exit_code": 0,
+        "log_sha256": "50357c6eb0f15f2b0d103fe11f1f7b7452b0bab3d8bdb7a1a14db1bb54ee814c"
+      }
+    ],
+    "release_regressions": {
+      "passed": 27,
+      "total": 27
+    },
+    "integrated_suite": {
+      "deterministic_commands": 25,
+      "semantic_revalidation_commands": 1,
+      "existing_deterministic_cases": 69,
+      "review_bound_semantic_cases": 33,
+      "additional_coverage_gap_scenarios": 6,
+      "additional_semantic_assessments": 3
+    },
+    "differential_change_sets": {
+      "task_base": "passed",
+      "remote_main_base": "passed",
+      "change_sets_checked": 98
+    },
+    "release_gate": {
+      "exit_code": 2,
+      "result": "two blocker messages for the one pending human-review gate",
+      "log_sha256": "c1ea61844141446a1595168881e9214c0e91f632ed19801a28ba11f9bcfee3d8"
+    }
+  },
+  "reviews": [
+    {
+      "kind": "primary",
+      "path": "docs/evidence/v3-skill-primary-final-2026-10-07.json",
+      "sha256": "089c77540001da81fb1a0e4b5b81c30d19e3a1036775d2fd6230ac4c75b272ee"
+    },
+    {
+      "kind": "challenge",
+      "path": "docs/evidence/v3-skill-challenge-final-2026-10-07.json",
+      "sha256": "e049abf1a7fd621d89ce37d5e31cf0b2e98387e084e44f68007f53b207e8c7fb"
+    }
+  ],
+  "approval": "not_present",
+  "evidence_boundaries": {
+    "final_stable_skill": "package integrity, synthetic compatibility, primary semantic review and separate challenge",
+    "actual_pilots": "preceding authorized rc.1 experiment; three migrated and freshly reloaded",
+    "retained_items": 335,
+    "actual_restoration": "not_executed",
+    "synthetic_git_recovery": "41-case engine validator in integrated suite",
+    "runtime": "bounded local Python/Git experiment; no global stable installation",
+    "moda": "mapped/partial; scoped follow-up, not full reaudit"
+  },
+  "external_gates": [
+    {
+      "gate": "H_RELEASE",
+      "state": "pending_exact_package_human_decision"
+    },
+    {
+      "gate": "H_INTEGRATION",
+      "state": "explicit_push_PR_merge_scope_confirmation_pending_after_prior_prohibition"
+    },
+    {
+      "gate": "MAIN_CI",
+      "state": "not_submitted_or_integrated"
+    },
+    {
+      "gate": "PUBLICATION",
+      "state": "human_action_only_after_other_gates"
+    }
+  ],
+  "publication_form": "docs/releases/v3.0.0-publication-form.md",
+  "human_review": "docs/releases/v3.0.0-human-review.md",
+  "private_content_included": false,
+  "global_installation": false,
+  "ACL_changes": false,
+  "remote_writes": 0,
+  "tag_or_release_created": false
+}
