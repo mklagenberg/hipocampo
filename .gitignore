@@ -46,3 +46,21 @@ $RECYCLE.BIN/
 .Spotlight-V100/
 .Trashes/
 .fseventsd/
+
+# Local working boundaries; never part of the public methodology package
+/.tmp/
+/.backup/
+/private/
+/knowledge_vaults/
+/management/
+/.ai-sessions/
+
+# Local secrets and disposable execution/editor output
+.env
+.env.*
+!.env.example
+*.log
+*.tmp
+*.bak
+*.orig
+*.rej

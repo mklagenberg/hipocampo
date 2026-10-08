@@ -55,5 +55,14 @@ authority after the earlier no-push round, reviewed PR/main/CI verification and
 manual publication are pending. The release validator intentionally reports
 the human gate. These dependencies are not erased by green local tests.
 
-See [readiness](../../docs/releases/v3.0.0-readiness.json) and
+See [the approval envelope](../../docs/v3-skill-conformance-ai-review.yaml) and
 [human review](../../docs/releases/v3.0.0-human-review.md).
+
+## Follow-up reference correction — 2026-10-08
+
+The consumed pre-integration readiness draft was removed from the release source
+under proposed Change Set 0133. Only its link was redirected to the retained
+approval envelope; the assessment above remains the dated 2026-10-07 review.
+The subsequent privacy audit found a third-party identifier in Decision 0117
+and proposed its narrow anonymization under Decision 0050. The earlier scoped
+assessment is not current privacy clearance. No historical finding is erased.

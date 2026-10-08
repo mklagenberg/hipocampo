@@ -15,7 +15,7 @@ Set 0128. Individual knowledge and Collection approvals were excluded.
 
 Allow the WRK-0074 local experiment in hipocampo-personal-vault,
 hipocampo-concepts, hipocampo-company and hipocampo-company-vault. Keep the
-personal and Gauge entities separated and enforce each vault's restrictions.
+personal and [Corporate entity] entities separated and enforce each vault's restrictions.
 Use dedicated `migration/v3-*` local branches. Refresh clean main once per
 task and bind the operational copy, remote, base and source/context hashes.
 Preserved original copies with uncertain locks remain untouched; an isolated
@@ -64,3 +64,13 @@ Require separate pilot, recovery and real persistence evidence before scale.
 The operator explicitly accepted the three presented questions on 2026-10-06
 and instructed execution to continue. This decision records that scope; it
 does not accept individual proposals or confer release approval.
+
+## Publication-boundary correction — 2026-10-08
+
+The third-party entity identifier in the Decision was replaced with the
+explicit placeholder `[Corporate entity]` under accepted Decision 0050 and
+Change Set 0133. This is the narrow in-place anonymization expressly permitted
+by Decision 0050 for accepted evidence. The four named repositories, original
+authority evidence, restrictions and task scope remain unchanged; no new
+authorization or exception is created. Detailed entity identity remains in
+the authorized local governance boundary.

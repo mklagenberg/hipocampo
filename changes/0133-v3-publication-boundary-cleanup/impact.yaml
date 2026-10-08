@@ -1,0 +1,36 @@
+change_set:
+  id: "0133-v3-publication-boundary-cleanup"
+  class: "operational"
+  semver: "patch"
+  status: "proposed"
+  backfill: false
+  decisions:
+    - "decisions/0050-no-nominal-entity-citation-in-methodology-repository.md"
+    - "decisions/0117-scoped-local-v3-experiment.md"
+impact:
+  - artifact: ".gitignore, CHANGELOG.md"
+    status: "updated"
+    note: "Exclude local/private/transient work and expose the proposed publication correction."
+  - artifact: "decisions/0117-scoped-local-v3-experiment.md"
+    status: "updated"
+    note: "Narrow dated token anonymization under the explicit frozen-evidence provision of accepted DR 0050."
+  - artifact: "docs/releases/v3.0.0-pr-description.md, docs/releases/v3.0.0-publication-form.md, docs/releases/v3.0.0-readiness.json"
+    status: "updated"
+    note: "Remove consumed operator handoff drafts after exact local recovery preservation; no history rewrite."
+  - artifact: "docs/releases/v3.0.0-human-review.md, audits/moda/2026-10-07-v3-release-preparation-audit.md"
+    status: "updated"
+    note: "Retain durable review evidence; repair removed-draft references with dated provenance."
+  - artifact: "skill, candidates/skill-v3, docs/evidence, docs/legacy/hipocampo-skill-1.3.0.zip, SPEC-V2.2.md"
+    status: "reviewed"
+    note: "Approved package, review iterations and deliberate public archives unchanged; ZIP payload inspected, not a private backup."
+validation:
+  commands:
+    - "python scripts/validate_hipocampo.py --root ."
+    - "python scripts/validate_skill_package.py --root ."
+    - "python scripts/validate_contracts.py --root ."
+    - "python scripts/validate_v3_release_regressions.py --root ."
+    - "python scripts/validate_v3_skill_conformance.py --root . --mode release"
+    - "python scripts/validate_change.py --root ."
+  evidence:
+    - "changes/0133-v3-publication-boundary-cleanup/proposal.md"
+  notes: "Full tracked-tree, PR-history and embedded-archive audit is recorded locally; no raw vault content is copied. Human correction acceptance and remote CI/main verification remain gates."
