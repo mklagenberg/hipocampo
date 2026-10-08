@@ -39,10 +39,24 @@ document is transported or edited by this correction.
 
 Operational packaging/privacy correction under existing rules; no changed
 knowledge obligation or skill tuple. Patch-class if released independently;
-currently proposed within the unpublished 3.0.0 target. Original public files
+included within the unpublished 3.0.0 target. Original public files
 are recoverable from the exact pre-correction commit and verified local
 preimages. No vault migration, global installation or ACL change.
 
 ## Status
 
-Proposed local correction; not accepted, submitted, merged or published.
+Accepted by the operator on 2026-10-08 after review of local proposal
+`9d2b1168b5d335e9cddfe24ba3132f783bfb03f2`. Remote submission, CI/main
+verification and integration remain independently verifiable. Publication is manual.
+
+
+## Actual acceptance and integration scope
+
+Recorded at 2026-10-08T16:02:11Z, the operator answered:
+"Pode aplicar as correções e ações, fazer uma nova PR, e preparar a release pra mim."
+This directly follows the presented proposal, including conditional integration
+of only `review/v3-publication-boundary-2026-10-08`. The operator authorizes the
+correction, branch submission, PR and integration after CI/source verification;
+the tag and GitHub Release remain manual. No history rewrite, vault write,
+installation or ACL change is included. Approved skill package bytes and its
+existing fingerprint-bound semantic reviews remain unchanged.

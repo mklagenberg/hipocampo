@@ -2,7 +2,7 @@ change_set:
   id: "0133-v3-publication-boundary-cleanup"
   class: "operational"
   semver: "patch"
-  status: "proposed"
+  status: "accepted"
   backfill: false
   decisions:
     - "decisions/0050-no-nominal-entity-citation-in-methodology-repository.md"
@@ -10,7 +10,7 @@ change_set:
 impact:
   - artifact: ".gitignore, CHANGELOG.md"
     status: "updated"
-    note: "Exclude local/private/transient work and expose the proposed publication correction."
+    note: "Exclude local/private/transient work and expose the accepted publication correction."
   - artifact: "decisions/0117-scoped-local-v3-experiment.md"
     status: "updated"
     note: "Narrow dated token anonymization under the explicit frozen-evidence provision of accepted DR 0050."
@@ -33,4 +33,4 @@ validation:
     - "python scripts/validate_change.py --root ."
   evidence:
     - "changes/0133-v3-publication-boundary-cleanup/proposal.md"
-  notes: "Full tracked-tree, PR-history and embedded-archive audit is recorded locally; no raw vault content is copied. Human correction acceptance and remote CI/main verification remain gates."
+  notes: "Full tracked-tree, PR-history and embedded-archive audit is recorded locally; no raw vault content is copied. Human correction acceptance recorded; remote CI/main verification remain independent gates."
