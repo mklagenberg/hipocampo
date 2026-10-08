@@ -4,10 +4,15 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
-## [3.0.0] — 2026-10-07 (prepared; not published)
+## [3.0.0] — 2026-10-08 (prepared; not published)
 
 ### Changed
 
+- **Publication-boundary correction (Change Set 0133):** anonymize the
+  third-party identifier under Decision 0050, exclude local/private working
+  roots and disposable output, and remove consumed operator-specific
+  PR/publication/readiness drafts from the source package. Preserve durable
+  package reviews, legacy sources and the exact approved skill bytes.
 - Prepare the first V3/LTE major: governed Record/Chunk/Collection identities,
   independent knowledge states, entity/vault authority, Artifact provenance,
   progressive disclosure, canonical CRUD and bounded operational metadata.
