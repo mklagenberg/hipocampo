@@ -26,3 +26,6 @@
 *.ppt binary
 *.pptx binary
 *.pptm binary
+
+# Preserve the exact reviewed package-lock bytes across client operating systems.
+skill/package-lock.yaml -text -eol whitespace=cr-at-eol
