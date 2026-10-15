@@ -1,7 +1,7 @@
-# V3 candidate — documentation architecture and local extensions
+# V3.0.0 contract — documentation architecture and local extensions
 
-**Status:** unreleased V3 candidate. This document does not duplicate or
-replace the released `SPEC.md`.
+**Status:** published in V3.0.0. This document does not duplicate or replace
+the released `SPEC.md`.
 
 ## Authority layers
 
@@ -36,4 +36,4 @@ does not become normative merely because it is easy to read.
 
 ## Release-preparation projection
 
-This adjacency is included by the prepared V3 SPEC. Unreleased/candidate wording above records development state, not proof of publication. Its normative scope is subordinate to SPEC and accepted decisions; existing vault adoption remains separately governed.
+This adjacency is included by the published V3 SPEC. Implementation status in this document describes capability boundaries; existing vault adoption remains separately governed.

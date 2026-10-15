@@ -1,6 +1,6 @@
-# V3 candidate — structural language and content language
+# V3.0.0 contract — structural language and content language
 
-**Status:** unreleased V3 candidate.
+**Status:** published in V3.0.0.
 
 The methodology repository is always written in English. Vault structure is
 also always written in English: filenames and structural directories,
@@ -14,4 +14,4 @@ alternative canonical methodology surfaces. Formal structural support for
 ES-419 or another translated methodology surface is not claimed in this wave.
 
 Technical identifiers, field names and interoperability tokens are not
-translated. This candidate does not migrate existing vault content.
+translated. This contract does not migrate existing vault content.

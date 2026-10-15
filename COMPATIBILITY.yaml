@@ -1,16 +1,19 @@
 schema_version: '1.0'
 methodology:
   id: hipocampo
-  version: 3.0.0
+  version: 3.0.1
   supported_vault_range: ^3.0.0
   specification: SPEC.md
   taxonomy: docs/taxonomy.md
   vocabulary: docs/vocabulary-dictionary.md
   taxonomy_revision: '1.0'
   vocabulary_revision: '1.0'
+  # Snapshot state when this commit was prepared. Publication/installability is
+  # established externally from immutable:true, release/tag target, pinned
+  # commit, and package hashes.
   release_state: prepared-unreleased
 skill:
-  required_version: 2.0.0
+  required_version: 2.0.1
   manifest: skill/manifest.yaml
   package_lock: skill/package-lock.yaml
   package_integrity_required: true

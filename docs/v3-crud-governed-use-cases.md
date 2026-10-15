@@ -1,6 +1,6 @@
 # V3 governed CRUD use cases and validation plan
 
-**Status:** unreleased V3 candidate; normative implementation gate.
+**Status:** published V3.0.0 contract; implementation evidence remains bounded.
 
 ## Boundary
 

@@ -1,6 +1,6 @@
-# V3 candidate — session and cache boundary
+# V3.0.0 contract — session and cache boundary
 
-**Status:** unreleased V3 candidate; derived from D6.1 and D6.5.
+**Status:** published in V3.0.0; derived from D6.1 and D6.5.
 
 Session context and cache are transient surfaces. They do not become durable
 Hipocampo knowledge by being visible to an agent. A sensory capture requires

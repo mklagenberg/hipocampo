@@ -34,10 +34,11 @@ Canonical de:para reference for every controlled-vocabulary field this methodolo
 
 ## Compatibility aliases
 
-## Unreleased V3 candidate terms
+## V3 terms outside the V2.2.0 frontmatter contract
 
-These terms are candidate V3 governance concepts, not changes to the active
-v2.2.0 frontmatter contract:
+These terms are part of the published V3 methodology. They are not changes to
+the V2.2.0 frontmatter contract; use the version-matched V3 contracts when
+operating a V3 instance:
 
 | Term | Meaning | Governing decision |
 |---|---|---|
@@ -50,13 +51,13 @@ v2.2.0 frontmatter contract:
 | `User` | Authorized consumer or operator | `decisions/0074` |
 | `Source` | Provenance origin; not a governance role | `decisions/0074` |
 
-### Unreleased V3 conversational aliases
+### V3 conversational aliases outside the V2.2.0 frontmatter contract
 
-The candidate alias map and ambiguity rules are maintained in
+The V3 alias map and ambiguity rules are maintained in
 [`docs/v3-vocabulary-and-aliases.md`](v3-vocabulary-and-aliases.md), with
 fixtures in [`docs/v3-vocabulary-fixtures.yaml`](v3-vocabulary-fixtures.yaml).
 These aliases resolve conversational wording to the canonical V3 vocabulary;
-they do not add new persisted types to the active v2.2.0 contract.
+they do not add persisted types to the V2.2.0 contract.
 
 The V3 `Source` concept is broader than the v2 frontmatter `source` field. The
 frontmatter field remains governed by `SPEC.md`; the V3 concept identifies the
@@ -101,4 +102,4 @@ Before a contribution introduces a canonical term, alias, enum value, schema fie
 
 ## Skill publication declaration
 
-`immutable-release-target` is an operational skill-manifest release_status: it identifies the intended immutable release reference and package path. It is not a knowledge type, actual publication proof, installation permission or a compatible-vault declaration. Verify the actual tag, commit and published package hashes separately. `prepared-unreleased` identifies a preparation surface; historical candidate declarations stay historical. Later V3 minor/patch release checks preserve the raw V3.0.0 baseline, while validating the intended package reference against the declared major and version.
+`immutable-release-target` is an operational skill-manifest `release_status`: it identifies the intended versioned release reference and package path; it does not itself prove publication or provider-enforced immutability. `COMPATIBILITY.yaml:methodology.release_state` records the source snapshot's preparation state, not current publication. A later release tag can preserve `prepared-unreleased`; that marker alone neither proves nor disproves publication. Installation requires a published GitHub Release reporting `immutable: true`, a tag resolving to the release target, a pinned commit and matching package hashes. Block if release immutability cannot be established. Neither status proves operator consent or vault compatibility. Later V3 minor/patch release checks preserve the raw V3.0.0 baseline while validating the intended package reference against the declared major and version.

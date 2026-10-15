@@ -1,8 +1,8 @@
-# Hipocampo V3 selective Package delivery — unreleased candidate
+# Hipocampo V3 selective Package delivery — published contract
 
-This document defines the selective Package, authority, conciliation and
-revalidation boundary for the unreleased V3 candidate. It does not activate V3
-for existing v2 instances.
+This document defines the published V3 selective Package, authority,
+conciliation and revalidation boundary. Publication does not activate V3 for
+existing v2 instances.
 
 ## Separate authorities
 

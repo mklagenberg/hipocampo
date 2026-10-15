@@ -4,7 +4,32 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
-## [3.0.0] — 2026-10-08 (prepared; not published)
+## [3.0.1] — 2026-10-15 (prepared; not published)
+
+### Fixed
+
+- Reconcile the public release markers with the verified v3.0.0 publication.
+  Correct the skill and compatibility tuple to v3.0.1 / 2.0.1 for this
+  follow-up package; preserve the V3.0.0 contract and `^3.0.0` vault range.
+- Make installation guidance require a published GitHub Release with
+  `immutable: true`, an exact tag-resolved commit and matching package hashes.
+  A null self-referential `source_commit` no longer contradicts independently
+  verified release provenance.
+- Clarify that package installation, existing-vault migration, authorization,
+  and host runtime capability are separate gates.
+
+### Limits and adoption
+
+- This PATCH changes release/package metadata and client-side install guidance;
+  it does not change the V3.0.0 data contract or require vault migration.
+- V3.0.0 publication is verified at commit
+  `89ccdd9badadda07eecc2e23c8002fac7b53771c`, but its GitHub Release is not
+  immutable and does not satisfy the current installation gate. The v3.0.1
+  tag and GitHub Release must be created together by the operator after this
+  change lands on `main`; the release must report `immutable: true`. Neither
+  is created by this change.
+
+## [3.0.0] — 2026-10-08 (published)
 
 ### Changed
 
@@ -13,10 +38,10 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
   roots and disposable output, and remove consumed operator-specific
   PR/publication/readiness drafts from the source package. Preserve durable
   package reviews, legacy sources and the exact approved skill bytes.
-- Prepare the first V3/LTE major: governed Record/Chunk/Collection identities,
+- Publish the first V3/LTE major: governed Record/Chunk/Collection identities,
   independent knowledge states, entity/vault authority, Artifact provenance,
   progressive disclosure, canonical CRUD and bounded operational metadata.
-- Prepare canonical portable skill 2.0.0 with ^3.0.0 compatibility and an exact
+- Publish canonical portable skill 2.0.0 with ^3.0.0 compatibility and an exact
   package lock. Preserve reviewed rc.1 and the previous specification/package.
 - Align new-vault scaffold proposals and tuple validation with V3; existing
   vaults still need separately approved mappings and canonical migration.
@@ -31,9 +56,15 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 - Three accepted local pilot migrations passed fresh reload; 335 reviewed
   knowledge items remain retained. Publication does not accept their proposals.
 - MAJOR adoption and recovery: MIGRATIONS.md and docs/v3-migration-execution.md.
-- Final content/package review, integration and manual publication are pending.
+- The release was published stable/latest after its approved integration.
+  This changelog and other repository markers retained their pre-publication
+  wording; version 3.0.1 corrects that mismatch without rewriting tag v3.0.0.
 
-### Accumulated V3 development
+### V3 development history (pre-publication)
+
+The entries below preserve the classification and limits recorded while V3 was
+being developed. They are historical notes and do not override the published
+V3.0.0 status above.
 
 
 - **Reviewed local pilot results (Change Set 0131):** records three explicitly

@@ -1,6 +1,6 @@
-# V3 candidate — operational correlation
+# V3.0.0 contract — operational correlation
 
-**Status:** unreleased V3 candidate; derived from D6.3 and D6.2.
+**Status:** published in V3.0.0; derived from D6.3 and D6.2.
 
 The correlation envelope uses `correlation_id`, `causation_id`, object IDs,
 fingerprints, evidence references, rule revision and state. It may relate CRUD,

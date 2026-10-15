@@ -1,9 +1,13 @@
 # Hipocampo — Instance Upgrade Guide
 
-## V3.0.0 release preparation — explicit adoption required
+## V3.0.1 package correction — explicit adoption required
 
-The prepared target is methodology 3.0.0 / skill 2.0.0 / vault ^3.0.0.
-Verify the actual immutable publication before installation or activation.
+The package target is methodology 3.0.1 / skill 2.0.1 / vault ^3.0.0. V3.0.0
+was published; this patch corrects stale release-state and installation
+markers without changing the V3.0.0 contract or the vault compatibility range.
+Verify the v3.0.1 GitHub Release reports `immutable: true`, its tag resolves
+to the release target, and all package hashes match before installation or
+activation.
 V2 instances do not become compatible by changing a range. Keep the
 appropriate immutable V2 package for legacy operation until governed migration
 passes. Use per-vault inventory, complete review, accepted Collections and
@@ -15,7 +19,7 @@ The scaffold creates proposal/operational structure, never a Record directly.
 See [release scope](docs/v3-release-preparation.md) and
 [execution procedure](docs/v3-migration-execution.md). The historical candidate
 sections below retain their original boundary; this section defines the
-prepared adoption target and does not certify publication or full migration.
+corrected package target and does not certify host runtime or full migration.
 
 
 **Cumulative and idempotent** checklist: what an instance should have, today, to be conformant with the current version of the methodology — no matter which old version it started from. Unlike `CHANGELOG.md` (chronological history of what changed) and `MIGRATIONS.md` (only MAJOR change steps, which break compatibility), this document is the practical "what to do now" list, always relative to the present. See `decisions/0024-upgrade-md-cumulative-checklist.md`.
@@ -37,7 +41,7 @@ This document is updated with every methodology release (mandatory step of the r
 - [ ] **[Recommended, since SPEC section 11]** `AGENTS.md` is the instance's canonical instruction file — not `CLAUDE.md`. If your instance still only uses `CLAUDE.md`, create `AGENTS.md` with the complete content (invariants, scope, local extensions) and leave `CLAUDE.md` as a thin, few-line pointer. See `decisions/0015-agents-md-canonical-instruction-file.md`.
 - [ ] **[Recommended, since v2.1.0]** `hipocampo.yaml` declares `instance.policy_profile` (`personal` or `corporate`) — the sole criterion the structural audit uses to select the sensitive-data policy. A legacy `AGENTS.md` “Instance type” declaration remains readable until this manifest field is added; never keep both as active sources of truth.
 - [ ] **[Mandatory, since v2.0.0]** This repository **does not have** its own `skill/` folder. The skill always runs client-side, per person/AI environment — never per repository (see `decisions/0025-skill-is-client-side-never-per-repository.md`). If your instance still carries a `skill/` folder (inherited from the old "Use this template"), delete it — it never had a functional effect, and keeping it suggests a wrong mental model ("each repo has its own skill").
-- [ ] **[Recommended, since v2.1.0]** The installed skill is version 1.2.0 or newer; its package is checked against the immutable release tag and package lock, and it keeps only `anchor_repository` in host-local state. It does not maintain a repository router or identity table.
+- [ ] **[Recommended, since v2.1.0]** The installed skill is version 1.2.0 or newer; its package is checked against the published release, tag-resolved commit and package lock, and it keeps only `anchor_repository` in host-local state. It does not maintain a repository router or identity table.
 - [ ] **[Recommended, since v2.1.0]** The personal anchor's manifest registers each externally invited repository as an address in `discovery.registered_repositories`, only after the operator confirms the target manifest and scope.
 - [ ] **[Recommended, if applicable — SPEC section 12]** If you operate more than one git account resolving to the same human author, that relationship is recorded in the personal instance's `AGENTS.md`/`profile.md`, never in a local skill router.
 - [ ] **[Recommended, since v2.1.0]** This repository has a `hipocampo.yaml` manifest at its root with `instance.entity`, `instance.role`, `instance.policy_profile`, `instance.curation_level`, and scaffold provenance. If it predates v2.1.0, `instance.tier` remains valid until you explicitly replace it with `curation_level`.

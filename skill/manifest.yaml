@@ -1,16 +1,17 @@
 manifest_version: '1.0'
 skill:
   name: hipocampo
-  version: 2.0.0
+  version: 2.0.1
   release_status: immutable-release-target
   core_path: skill/
   source_repository: https://github.com/mklagenberg/hipocampo
-  candidate_base_commit: b0c67e5cbd02016fc47ccefc9bf1337803c30adf
+  candidate_base_commit: 89ccdd9badadda07eecc2e23c8002fac7b53771c
   source_commit: null
   package_lock: skill/package-lock.yaml
-  provenance_note: This immutable package declares an intended release, not its existence.
-    Resolve the actually published v3.0.0 tag and verify its exact commit and package
-    hashes before installation or operation; source_commit null is not verified provenance.
+  provenance_note: Resolve the published v3.0.1 release and tag to the exact source
+    commit, then verify every package-lock hash before installation or operation.
+    source_commit is null because embedding a package's own commit would be self-referential;
+    the independently resolved tag and hashes establish provenance.
 methodology:
   compatibility: ^3.0.0
   baseline_contract: 3.0.0
@@ -42,8 +43,8 @@ adapters:
   verification_status: instructions-only
 updates:
   availability_manifest: https://github.com/mklagenberg/hipocampo/blob/main/skill/manifest.yaml
-  immutable_package: https://github.com/mklagenberg/hipocampo/tree/v3.0.0/skill/
-  release_ref: v3.0.0
+  immutable_package: https://github.com/mklagenberg/hipocampo/tree/v3.0.1/skill/
+  release_ref: v3.0.1
   package_lock: skill/package-lock.yaml
   package_hash_algorithm: sha256
   advisories: https://github.com/mklagenberg/hipocampo/blob/main/CHANGELOG.md (a formal

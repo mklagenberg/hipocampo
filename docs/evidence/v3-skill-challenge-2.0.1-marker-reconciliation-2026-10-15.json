@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "suite_id": "v3-skill-conformance",
+  "challenge_id": "V3SKILL-AI-CHALLENGE-PATCH-002",
+  "reviewer_type": "AI",
+  "reviewer_session_id": "codex-subagent:/root/v3_final_marker_challenge",
+  "reviewed_at": "2026-10-15T19:12:33Z",
+  "status": "passed",
+  "reviewed_ai_review_id": "V3SKILL-AI-REVIEW-PATCH-001",
+  "reviewed_ai_review_sha256": "c406245a0fd56399bc196c88b915089d7a4e51c69eb8c4c88fd31566a0c04827",
+  "package_lock_sha256": "9387fc8301ef65b1979f4baef2faa1766510698edc3b3d910f405a287dbcfa36",
+  "review_target": {
+    "package_root": "skill",
+    "skill_version": "2.0.1",
+    "methodology_baseline": "3.0.0",
+    "methodology_compatibility": "^3.0.0",
+    "package_lock": "skill/package-lock.yaml"
+  },
+  "assessment_scope": "Independent adversarial challenge of all seven semantic cases and the final publication-marker reconciliation, skill install guidance, taxonomy/vocabulary, scaffold, Decision 0053 alignment and release checklist.",
+  "conclusion": "All seven cases stand. The compatibility release_state accurately describes the source snapshot, while external publication requires the immutable GitHub Release and matching tag target. V3.0.0 is recorded as published but does not meet immutable installation gate; v3.0.1 / skill 2.0.1 remains an unreleased target pending human review, merge and manual immutable publication. No real vault or host runtime was exercised.",
+  "challenged_semantic_case_ids": [
+    "SKILL-S-001",
+    "SKILL-S-002",
+    "SKILL-S-003",
+    "SKILL-S-004",
+    "SKILL-S-005",
+    "SKILL-S-006",
+    "SKILL-S-007"
+  ],
+  "case_challenges": [
+    {
+      "case_id": "SKILL-S-001",
+      "disposition": "stands",
+      "rationale": "The V3 skill preserves the separate V2 migration gate and never treats publication as approval to write migrated content.",
+      "evidence": [
+        "skill/references/v3-operation.md",
+        "MIGRATIONS.md"
+      ]
+    },
+    {
+      "case_id": "SKILL-S-002",
+      "disposition": "stands",
+      "rationale": "Explicit actor and authorized_vault_ids coverage remain required before governed reads; login or repository access does not substitute.",
+      "evidence": [
+        "skill/references/v3-operation.md",
+        "docs/v3-crud-contract.md"
+      ]
+    },
+    {
+      "case_id": "SKILL-S-003",
+      "disposition": "stands",
+      "rationale": "Entity, vault, source and scope boundaries remain distinct; shared provider access does not authorize cross-entity reads.",
+      "evidence": [
+        "skill/references/invariants.md",
+        "docs/v3-contract.md"
+      ]
+    },
+    {
+      "case_id": "SKILL-S-004",
+      "disposition": "stands",
+      "rationale": "Unknown, stale or conflicting source state remains explicit and does not become truth through retrieval or hashes.",
+      "evidence": [
+        "skill/references/invariants.md",
+        "docs/v3-semantic-evaluation-boundary.md"
+      ]
+    },
+    {
+      "case_id": "SKILL-S-005",
+      "disposition": "stands",
+      "rationale": "The skill retains raw V3.0.0 as its baseline; the patch changes only publication markers and installation guidance.",
+      "evidence": [
+        "skill/references/invariants.md",
+        "docs/v3-skill-conformance-gate.md"
+      ]
+    },
+    {
+      "case_id": "SKILL-S-006",
+      "disposition": "stands",
+      "rationale": "Package integrity, compatibility, semantic review, human approval, authorization and host capability remain separate gates.",
+      "evidence": [
+        "skill/SKILL.md",
+        "skill/references/v3-operation.md"
+      ]
+    },
+    {
+      "case_id": "SKILL-S-007",
+      "disposition": "stands",
+      "rationale": "Installation resolves the manifest-selected release tag, requires GitHub immutable:true and tag-target match, pins the commit, checks hashes, and keeps the source-snapshot release_state distinct from external publication proof. The scaffold uses main only for availability metadata.",
+      "evidence": [
+        "skill/references/v3-operation.md",
+        "scaffold/skeleton/POST-INSTANTIATION.md",
+        "decisions/0053-progressive-privacy-licensing-and-skill-integrity.md"
+      ]
+    }
+  ],
+  "findings": [],
+  "limits": [
+    "No real-vault content was read or changed.",
+    "No Claude, Copilot or other host runtime was tested.",
+    "Human approval remains pending.",
+    "The v3.0.1 tag and GitHub Release are not created."
+  ]
+}

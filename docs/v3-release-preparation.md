@@ -1,6 +1,15 @@
-# V3.0.0 release preparation
+# V3.0.0 release record
 
-**State:** prepared locally; final human acceptance, integration and publication pending.
+**State:** published and independently verified on 2026-10-08. The v3.0.0 tag
+resolves to `89ccdd9badadda07eecc2e23c8002fac7b53771c`; the stable/latest
+GitHub Release and successful main CI were verified. See the [release](https://github.com/mklagenberg/hipocampo/releases/tag/v3.0.0)
+and [verified commit](https://github.com/mklagenberg/hipocampo/commit/89ccdd9badadda07eecc2e23c8002fac7b53771c).
+This page retains preparation context; its pending-gate wording below is
+historical and was closed by that publication.
+The v3.0.0 GitHub Release is not marked immutable, so it satisfies the
+publication record but not the current skill-installation integrity gate.
+Install the next versioned skill package only after its GitHub Release reports
+`immutable: true` and the tag target and package hashes are verified.
 
 ## Scope
 
@@ -31,15 +40,13 @@ Private details stay in their owning vault. Aggregate pilot evidence is
 projected in v3-migration-execution.md. Historical rc.1 reviews bind only that
 unchanged package. The canonical 2.0.0 package requires fresh reviews.
 
-## Release gates
+## Release record and remaining adoption gates
 
-Freeze content and package hashes; run repository/contract/package/scaffold,
-negative and integrated engine checks. Primary AI review and independent AI
-challenge precede exact final human approval. Create a later evidence-only
-commit and verify ancestry and diff. Integrate through a reviewed PR to main,
-verify actual main content and CI, then complete the exact English GitHub form.
-The human creates the immutable tag and GitHub Release together. A local
-release-preparation check never proves these remote events occurred.
+The content and package were reviewed, integrated through PR #60, and published
+as tag/release v3.0.0 after final human approval. The tag-resolved source,
+release metadata, CI and locked package hashes were independently checked.
+Those publication checks do not establish migration, restoration, LTE, or
+universal host runtime capability.
 
 ## Recovery and adoption
 
@@ -50,6 +57,14 @@ unknown. Reconcile partial effects before any reexecution. Existing V2
 instances can continue with the appropriate immutable V2 package while their
 V3 migrations remain unaccepted. Never weaken local vault restrictions.
 
-## Immutable package declaration
+## V3.0.0 package provenance
 
-The stable manifest declares an immutable-release-target with exact intended tag/path. This is not a publication claim. The target declaration is kept unchanged when publication later happens, avoiding a package-hash/review cycle. A source_commit null is explicitly unverified; the operator must resolve the actual published tag and verify its exact commit and file hashes. The release validator checks local package/review readiness only; actual main, CI, approval, tag absence and publication remain separate external gates.
+The stable manifest's `immutable-release-target` value declares the intended
+versioned package path; by itself it is not publication proof. For an
+installable package, verify the GitHub Release reports `immutable: true`,
+resolve its tag to the exact target commit, pin it and verify all package-lock
+hashes. V3.0.0 was published but does not meet the current immutability gate.
+`source_commit: null` is not a substitute for external provenance and is not a
+contradiction when the release and tag are independently verified. The release
+validator checks local package/review readiness only; actual main, CI,
+approval, tag and publication are separate external facts.

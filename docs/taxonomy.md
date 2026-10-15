@@ -3,9 +3,10 @@
 **Contract revision:** `1.4` — Search interpretation status and authorized
 disclosure with unresolved conflict added by Change Set `0118`; Record prose
 and independent Artifact access boundary added by Change Set `0114`; Search &
-Progressive Disclosure concepts were added by Change Set `0108`; V3 candidate
-profiles and governance terms originated in Change Set `0074`; compatibility
-states originated in Change Set `0058`.
+Progressive Disclosure concepts were added by Change Set `0108`; V3 entity-aware
+profiles and governance terms originated in Change Set `0074` and shipped in
+V3.0.0; compatibility states originated in Change Set `0058` and shipped in
+V2.2.0.
 
 A single index of every controlled field, enum, and named concept this methodology defines — what it is, where it's authoritatively defined, and when it was introduced or last changed. This document doesn't re-argue any rationale — every row points at the `SPEC.md` section and/or Decision Record that actually carries it. See `decisions/0047-taxonomy-map.md` for why this document exists and why it originally shipped in two lotes.
 
@@ -104,7 +105,7 @@ Not duplicated here — see `docs/step-classification.md` (deterministic / discr
 
 | Concept | Values | Introduced | Last changed | Source |
 |---|---|---|---|---|
-| Compatibility decision state | `compatible` \| `compatible_with_upgrade` \| `migration_required` \| `unsupported_or_unknown` \| `access_unavailable` | Change Set 0058, unreleased | — | `COMPATIBILITY.yaml`, `SPEC.md` §2-E, `decisions/0058-canonical-compatibility-contract.md` |
+| Compatibility decision state | `compatible`, `compatible_with_upgrade`, `migration_required`, `unsupported_or_unknown`, `access_unavailable` | V2.2.0, Change Set `0058` | — | `COMPATIBILITY.yaml`, `SPEC.md` §2-E, `decisions/0058-canonical-compatibility-contract.md` |
 
 These are operational decision states, not document frontmatter values and not
 epistemic types. Their permitted action and precedence are authoritative in
@@ -116,29 +117,29 @@ epistemic types. Their permitted action and precedence are authoritative in
 - Legacy `instance.tier` and `AGENTS.md` “Instance type” remain readable only as compatibility aliases; new manifests use `instance.curation_level` and `instance.policy_profile` (`decisions/0052`).
 - New named methodology concepts are admitted only after the term-governance check in `docs/vocabulary-dictionary.md`; the taxonomy records the concept and its authoritative source, while the dictionary records controlled values and aliases.
 
-## 10. Unreleased V3 entity-aware governance concepts
+## 10. V3 entity-aware governance concepts outside the V2.2 contract
 
 | Concept | Values / meaning | Introduced | Source |
 |---|---|---|---|
-| Vault profile | `entity` | `team` | `personal`; policy profile, not authority or maturity | V3 candidate, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
-| Governance role | `Owner` | `Authority` | `Curator` | `User`; orthogonal permissions and accountability | V3 candidate, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
-| `Source` | Provenance origin such as person, conversation, observation, Artifact, Record, vault, or external system | V3 candidate, Change Set `0074` | `decisions/0074`, `docs/v3-contract.md` |
-| Entity-bound split | Explicit Source-preserving decomposition into Records/Chunks for compatible entity and scope boundaries | V3 candidate, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
-| Transfer mode | `local` | `intra-entity` | `inter-entity`; different destination gates | V3 candidate, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
+| Vault profile | `entity`, `team`, `personal`; policy profile, not authority or maturity | V3.0.0, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
+| Governance role | `Owner`, `Authority`, `Curator`, `User`; orthogonal permissions and accountability | V3.0.0, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
+| `Source` | Provenance origin such as person, conversation, observation, Artifact, Record, vault, or external system | V3.0.0, Change Set `0074` | `decisions/0074`, `docs/v3-contract.md` |
+| Entity-bound split | Explicit Source-preserving decomposition into Records/Chunks for compatible entity and scope boundaries | V3.0.0, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
+| Transfer mode | `local`, `intra-entity`, `inter-entity`; different destination gates | V3.0.0, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
 
-## 11. Unreleased V3 Search & Progressive Disclosure concepts
+## 11. V3 Search & Progressive Disclosure concepts outside the V2.2 contract
 
 | Concept | Values / meaning | Introduced | Source |
 |---|---|---|---|
-| Logical engine | `Search & Progressive Disclosure`; read-side capability, not necessarily a physical module | V3 candidate, Change Set `0108` | `decisions/0108`, `docs/engines/catalog.md` |
-| Disclosure level | `L0` none; `L1` metadata; `L2` Record envelope; `L3` selected Chunk content; `L4` expanded authorized content | V3 candidate, Change Set `0108` | `decisions/0108`, `docs/v3-search-progressive-disclosure-contract.md` |
-| Result dimension | `relevance`, `authority`, `privacy`, `epistemic_status`, `disclosure_level`, `evidence`, `limits`, `retrieval_path` remain independent | V3 candidate, Change Set `0108` | `docs/v3-search-progressive-disclosure-contract.md` |
-| Presentation mode | `prose-default`; `structured-on-request` only after an explicit request | V3 candidate, Change Set `0108` | `decisions/0108`, `docs/v3-search-progressive-disclosure-contract.md` |
-| Search disposition | `accepted`, `blocked`, `needs_review`, `partial`; disposition does not prove semantic truth | V3 candidate, Change Set `0108` | `docs/v3-search-progressive-disclosure-fixtures.yaml`, `docs/engines/test-matrix.yaml` |
-| Search interpretation status | `needs_review \| not_assessed`; independent of operation disposition, disclosure level and truth | V3 candidate, Change Set `0118` | `docs/v3-search-progressive-disclosure-contract.md`, Decision `0112` |
-| Search mutation boundary | `none`; Record writes remain exclusively under canonical Record CRUD | V3 candidate, Change Set `0108` | `decisions/0108`, `docs/v3-search-progressive-disclosure-contract.md` |
-| Artifact representation format | `prose`; persisted material representation carried by the Record | V3 candidate, Change Set `0114` | `decisions/0109`, `docs/v3-artifact-contract.md` |
-| Artifact access boundary | Artifact availability limits direct verification/currentness but does not block readable Record prose | V3 candidate, Change Set `0114` | `decisions/0109`, `docs/v3-search-progressive-disclosure-contract.md` |
+| Logical engine | `Search & Progressive Disclosure`; read-side capability, not necessarily a physical module | V3.0.0, Change Set `0108` | `decisions/0108`, `docs/engines/catalog.md` |
+| Disclosure level | `L0` none; `L1` metadata; `L2` Record envelope; `L3` selected Chunk content; `L4` expanded authorized content | V3.0.0, Change Set `0108` | `decisions/0108`, `docs/v3-search-progressive-disclosure-contract.md` |
+| Result dimension | `relevance`, `authority`, `privacy`, `epistemic_status`, `disclosure_level`, `evidence`, `limits`, `retrieval_path` remain independent | V3.0.0, Change Set `0108` | `docs/v3-search-progressive-disclosure-contract.md` |
+| Presentation mode | `prose-default`; `structured-on-request` only after an explicit request | V3.0.0, Change Set `0108` | `decisions/0108`, `docs/v3-search-progressive-disclosure-contract.md` |
+| Search disposition | `accepted`, `blocked`, `needs_review`, `partial`; disposition does not prove semantic truth | V3.0.0, Change Set `0108` | `docs/v3-search-progressive-disclosure-fixtures.yaml`, `docs/engines/test-matrix.yaml` |
+| Search interpretation status | `needs_review` or `not_assessed`; independent of operation disposition, disclosure level and truth | V3.0.0, Change Set `0118` | `docs/v3-search-progressive-disclosure-contract.md`, Decision `0112` |
+| Search mutation boundary | `none`; Record writes remain exclusively under canonical Record CRUD | V3.0.0, Change Set `0108` | `decisions/0108`, `docs/v3-search-progressive-disclosure-contract.md` |
+| Artifact representation format | `prose`; persisted material representation carried by the Record | V3.0.0, Change Set `0114` | `decisions/0109`, `docs/v3-artifact-contract.md` |
+| Artifact access boundary | Artifact availability limits direct verification/currentness but does not block readable Record prose | V3.0.0, Change Set `0114` | `docs/v3-search-progressive-disclosure-contract.md` |
 
 ## Retroactive backfill — what Lote E2 did
 
@@ -146,4 +147,4 @@ Every cell marked `TBD — Lote E2` in the Lote E1 revision of this document is 
 
 ## Skill publication declaration
 
-`immutable-release-target` is an operational skill-manifest release_status: it identifies the intended immutable release reference and package path. It is not a knowledge type, actual publication proof, installation permission or a compatible-vault declaration. Verify the actual tag, commit and published package hashes separately. `prepared-unreleased` identifies a preparation surface; historical candidate declarations stay historical. Later V3 minor/patch release checks preserve the raw V3.0.0 baseline, while validating the intended package reference against the declared major and version.
+`immutable-release-target` is an operational skill-manifest `release_status`: it identifies the intended versioned release reference and package path; it does not itself prove publication or provider-enforced immutability. `COMPATIBILITY.yaml:methodology.release_state` records the source snapshot's preparation state, not current publication. A later release tag can preserve `prepared-unreleased`; that marker alone neither proves nor disproves publication. Installation requires a published GitHub Release reporting `immutable: true`, a tag resolving to the release target, a pinned commit and matching package hashes. Block if release immutability cannot be established. Neither status proves operator consent or vault compatibility. Later V3 minor/patch release checks preserve the raw V3.0.0 baseline while validating the intended package reference against the declared major and version.

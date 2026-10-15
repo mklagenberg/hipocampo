@@ -1,6 +1,6 @@
 # Learning & Evolution Engine
 
-**Status:** unreleased V3 candidate; logical capability boundary.
+**Status:** published in V3.0.0; logical capability boundary.
 
 Learning & Evolution discovers candidate use cases from bounded operational
 signals and sanitized lessons learned. It may read events, audits, validator

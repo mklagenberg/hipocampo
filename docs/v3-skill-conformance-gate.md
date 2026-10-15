@@ -1,6 +1,9 @@
 # V3 skill conformance gate
 
-**Status:** required for the unreleased V3 skill release; the canonical branch prepares the final skill 2.0.0 package; installation and publication remain unproven.
+**Status:** required for each V3 skill package release. Skill 2.0.0 was
+published as part of v3.0.0. The v3.0.1 patch changes the package and therefore
+requires fresh, fingerprint-bound AI review, independent challenge and human
+approval; old reviews remain historical evidence for skill 2.0.0 only.
 
 ## Purpose
 
@@ -48,7 +51,8 @@ V3.0 operations, authorization scope, multi-vault/entity boundaries, stale or
 conflicting source material, later V3 releases that must preserve the raw V3.0
 contract through an adapter or facade, and least-disclosure reads with
 version-matched official methodology references. These cases use synthetic
-inputs only. The skill candidate is not exercised against real vault content.
+inputs only. The portable skill has not been exercised against real vault
+content.
 
 ## Commands and gates
 
@@ -57,15 +61,19 @@ inputs only. The skill candidate is not exercised against real vault content.
   package binding without claiming V3 release readiness.
 - The release checklist runs
   `python scripts/validate_v3_skill_conformance.py --mode release` after the
-  V3 skill candidate and AI review exist. Release readiness requires a V3
+  changed V3 skill package and AI review exist. Release readiness requires a V3
   compatible package, complete AI and AI-challenge coverage for the exact
   package, and recorded human approval.
 
-The prior V2 package is byte-preserved in docs/legacy/hipocampo-skill-1.3.0.zip. The final V3 skill is prepared at skill/ and requires its own fingerprint-bound reviews. The
-isolated `2.0.0-rc.1` V3 candidate has a primary AI semantic review, independent
+The prior V2 package is byte-preserved in docs/legacy/hipocampo-skill-1.3.0.zip.
+The published V3.0.0 skill 2.0.0 remains in tag v3.0.0; each changed package
+requires its own fingerprint-bound reviews. The isolated `2.0.0-rc.1` V3
+candidate has a primary AI semantic review, independent
 AI challenge, and human approval recorded against the same package fingerprint.
 This approves the semantic assessments and the candidate-isolation decision;
-it does not release or activate the candidate. The methodology and skill
-candidate remain unreleased, and runtime enforcement has been demonstrated only in the bounded local experiment described in v3-migration-execution.md; it is not universal host support.
-Real-vault operation remains blocked until the methodology and skill releases,
-compatible tuple, and adapter capability/authorization gates are satisfied.
+it does not release or activate the candidate. That historical candidate
+remains separate from the published package, and
+runtime enforcement has been demonstrated only in the bounded local experiment
+described in v3-migration-execution.md; it is not universal host support.
+Real-vault operation requires a compatible tuple and operation-specific
+adapter capability/authorization after release verification.

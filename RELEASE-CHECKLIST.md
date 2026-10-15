@@ -25,4 +25,4 @@ Nothing further is required beyond what's already in `decisions/0014`/`0021` —
 
 ## Preparation versus publication
 
-A prepared version heading is an intended target, not evidence of a tag. Preserve the exact package fingerprint for AI review, independent challenge and final human decision. Verify the content commit and subsequent evidence-only diff. Before issuing an executable publication handoff, verify the reviewed PR/main commit, required CI, tag absence and exact final target. The agent never creates a tag or GitHub Release.
+A prepared version heading is an intended target, not evidence of a tag. Preserve the exact package fingerprint for AI review, independent challenge and final human decision. Verify the content commit and subsequent evidence-only diff. Before issuing an executable publication handoff, verify the reviewed PR/main commit, required CI, tag absence and exact final target. The human publisher must create the GitHub Release with repository immutable releases enabled, then verify the release reports `immutable: true` and its tag resolves to the reviewed target commit before installation. The agent never creates a tag or GitHub Release.

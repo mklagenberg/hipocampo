@@ -1,14 +1,16 @@
 # Roadmap
 
-Last revised: **2026-09-30**
+Last revised: **2026-10-15**
 
 This roadmap communicates direction, not a date commitment. Only an approved release plan or formal milestone creates a delivery commitment. Detailed work lives in Decision Records and PRs; completed work lives in `CHANGELOG.md`.
 
-## Current direction — v3.0.0 / LTE
+## Current direction — published v3.0.0 / LTE and adoption
 
-The active released contract remains `v2.2.0`. The next normative boundary is
-one major `v3.0.0`/LTE release; the MRL-0003 through MRL-0006 waves are internal
-execution lineages, not independent releases.
+The active released contract is `v3.0.0`, published on 2026-10-08. The
+v3.0.1 PATCH follow-up corrects publication markers and skill install guidance;
+it preserves the V3.0.0 contract and `^3.0.0` vault compatibility range. The
+MRL-0003 through MRL-0006 waves are internal execution lineages, not separate
+releases.
 
 The current direction is governed by Multi Entity, Multi Vault and Privacy
 First. Knowledge circulation is selective Package delivery, not promotion or
@@ -22,21 +24,20 @@ authority, and labelled external references. Change Set 0108 adds the logical
 Search & Progressive Disclosure boundary: relevance does not grant authority
 or disclosure, and the default presentation remains didactic prose.
 
-**Status:** X3 and X4 are complete in the checkout. D5.1–D5.6 are accepted,
-MRL-0005/X5, MRL-0006/X6 and F0 are implemented as unreleased V3 candidates.
-No v2 instance migration, remote transport, tag, release or V3 activation has
-occurred.
+**Status:** V3.0.0 publication is complete. X3 and X4 are complete in the
+checkout. D5.1–D5.6 are accepted; MRL-0005/X5, MRL-0006/X6 and F0 are included
+in the published methodology with bounded implementation/runtime evidence.
+Publication did not migrate v2 instances or establish universal host runtime,
+remote transport, restoration or LTE completion.
 
-**Next direction:** F0 is closed in the local candidate. Prepare and validate
-the v2 → v3 migration, then pass the integrated LTE readiness gate and the
-human publication gate. The semantic Search cases and current local changes
-must also complete their human review and normal integration path. No real
-vault migration, V3 activation or publication has been authorized or performed.
+**Next direction:** continue per-vault v2 → v3 migration preparation, then pass
+the integrated LTE readiness gate. Semantic Search and current local changes
+must complete their human review and normal integration path. No additional
+real-vault migration or V3 activation is inferred from methodology publication.
 
 MRL-0006 decisions D6.1–D6.5 and F0 decisions D0.1–D0.4 are accepted in
-management. X6 and F0 candidate contracts are implemented and validated in the
-checkout; the candidate remains unpublished and subject to the migration, LTE
-and human publication gates.
+management. X6 and F0 contracts were included in the published V3 baseline;
+remaining migration, LTE and host-runtime gates are independent of publication.
 
 ## Historical foundation — v2.0.0, v2.1.1 and v2.2.0
 

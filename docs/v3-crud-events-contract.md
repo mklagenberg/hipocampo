@@ -1,6 +1,6 @@
-# V3 candidate — CRUD operational events
+# V3.0.0 contract — CRUD operational events
 
-**Status:** unreleased V3 candidate; derived from D6.3.
+**Status:** published in V3.0.0; derived from D6.3.
 
 Only governed CRUD and exceptional actions emit operational events. Every
 durable Record mutation is a governed CRUD action; no engine or transport may

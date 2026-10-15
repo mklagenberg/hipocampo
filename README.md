@@ -38,26 +38,31 @@ This repository is being evaluated and brought into conformance with [MODA](http
 - Latest audit: [`audits/moda/2026-08-17-v1.0.0-self-audit.md`](audits/moda/2026-08-17-v1.0.0-self-audit.md)
 <!-- moda:disclosure:end -->
 
-Current version: **3.0.0** ([SemVer](https://semver.org/lang/pt-BR/)).
+Current version: **3.0.1** ([SemVer](https://semver.org/lang/pt-BR/)).
 
-## Unreleased V3 candidate
+## Published V3 baseline and adoption boundary
 
-The repository also contains an unreleased V3 candidate. Its human-facing
-entry point is [`docs/v3-contract.md`](docs/v3-contract.md), which links the
-candidate contracts for vocabulary, documentation architecture, vault privacy,
-language, surface authority and external references. The released contract
-remains v2.2.0 until the human integration and publication gates pass.
+V3.0.0 was published on 2026-10-08. Version 3.0.1 corrects the publication
+markers and install guidance that remained stale in that released source; it
+preserves the V3.0.0 contract and vault compatibility range. See the
+[release record](docs/v3-release-preparation.md) and [changelog](CHANGELOG.md).
+Publication does not mean that existing vaults have migrated, that restoration
+or LTE is complete, or that every AI host exposes a verified V3 runtime.
 
-MRL-0006 adds candidate operational-trace contracts for layered events,
+The V3 contract includes MRL-0006's operational-trace rules for layered events,
 session/cache boundaries, CRUD audit metadata, structured correlation,
-host-capability disclosure and revocation reach. No durable host log, remote
-invalidation, migration or V3 activation is performed by this checkout.
+host-capability disclosure and revocation reach. This release does not claim a
+durable host log, remote invalidation, migration or V3 activation for existing
+vaults.
 
-The F0 candidate adds a script-level classification, phase-specific
-verification matrix, layered evidence boundary, hardcode review and typed
-outcomes for incomplete proof. It remains unreleased and does not turn
-semantic evaluation into deterministic truth.
+F0 defines script-level classification, phase-specific verification, layered
+evidence boundaries, hardcode review and typed outcomes for incomplete proof.
+Semantic evaluation remains distinct from deterministic validation.
 
 ## Publication state
 
-This branch prepares V3.0.0; the latest published release remains v2.2.0 until manual publication is verified. The canonical skill target is 2.0.0, while historical rc.1 stays unchanged. See [release preparation](docs/v3-release-preparation.md). Existing vaults require separate accepted migration; the portable package does not imply universal host capability.
+The latest published release remains v3.0.0 until the v3.0.1 patch is
+published. This branch prepares the v3.0.1 / skill 2.0.1 package; install it
+only after its release reports `immutable: true`, the tag resolves to the
+release target, and package hashes are independently verified. Existing vaults require separate accepted migration, and every host
+still needs operation-specific capability verification.
