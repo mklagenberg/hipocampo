@@ -102,4 +102,20 @@ Before a contribution introduces a canonical term, alias, enum value, schema fie
 
 ## Skill publication declaration
 
-`immutable-release-target` is an operational skill-manifest `release_status`: it identifies the intended versioned release reference and package path; it does not itself prove publication or provider-enforced immutability. `COMPATIBILITY.yaml:methodology.release_state` records the source snapshot's preparation state, not current publication. A later release tag can preserve `prepared-unreleased`; that marker alone neither proves nor disproves publication. Installation requires a published GitHub Release reporting `immutable: true`, a tag resolving to the release target, a pinned commit and matching package hashes. Block if release immutability cannot be established. Neither status proves operator consent or vault compatibility. Later V3 minor/patch release checks preserve the raw V3.0.0 baseline while validating the intended package reference against the declared major and version.
+`immutable-release-target` identifies the intended stable package reference;
+`release-target` identifies source identity, not a remote publication event.
+Stable installation verifies immutable published release metadata, resolved
+commit and hashes. Explicit experimental installation/execution verifies the
+pinned source snapshot and inventory; an RC may have only a tag. Candidate and
+final-readiness findings emit WARNING without stopping valid canonical engine
+calls. Integrity, compatibility, privacy and authorization remain enforced.
+See [distribution and channels](v3-distribution-and-channels.md).
+
+## Experimental execution and final readiness
+
+`stable` selects the verified immutable published distribution; `experimental`
+is an explicit execution channel for pinned snapshots or RC tags. WARNING is
+structured diagnostic severity and never a replacement for operation failure.
+`release-target` declares source identity; final readiness is assessed before
+publication and provider metadata confirms publication afterward. These are
+operational values, not new Record maturity, authority or epistemic states.

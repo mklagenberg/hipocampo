@@ -35,7 +35,57 @@ def parse_timestamp(value: object, label: str, errors: list[str]) -> datetime | 
     return parsed
 
 
-def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
+def validate_external(root: Path, mode: str, cases: dict, review: dict,
+                      receipt: dict | None = None) -> tuple[list[str], list[str]]:
+    """Schema 2 routes approval outside the payload, not into a frozen pending flag."""
+    from validate_skill_package import validate as package_errors
+    from v3_distribution import make_inventory
+    from v3_preflight import review_errors
+    errors = package_errors(root)
+    manifest = load_yaml(root / "skill/manifest.yaml")
+    contract = load_yaml(root / "COMPATIBILITY.yaml")
+    target = review.get("review_target", {})
+    lock_hash = hashlib.sha256((root / "skill/package-lock.yaml").read_bytes()).hexdigest()
+    if (review.get("assessment_status") != "external-receipt"
+            or target.get("skill_version") != manifest["skill"]["version"]
+            or target.get("package_lock_sha256") != lock_hash
+            or target.get("methodology_baseline") != "3.0.0"):
+        errors.append("external review routing must bind to the exact skill package and V3.0.0 baseline")
+    if (manifest["methodology"]["baseline_contract"] != "3.0.0"
+            or not satisfies("3.0.0", manifest["methodology"]["compatibility"])
+            or manifest["updates"]["release_ref"] != "v" + contract["methodology"]["version"]):
+        errors.append("external review package must preserve the baseline and exact distribution target")
+    if any(p.suffix not in {".md", ".yaml"} for p in (root / "skill").rglob("*") if p.is_file()):
+        errors.append("portable skill remains instructions-only; executables belong to the separate runtime")
+    if cases.get("target_methodology") != "3.0.0" or cases.get("baseline_contract") != "3.0.0" or cases.get("privacy") != "synthetic-only":
+        errors.append("case suite must preserve the synthetic V3.0.0 baseline")
+    for case in cases.get("deterministic_cases", []):
+        if compatibility_state(case["input"]) != case.get("expected_state"):
+            errors.append("deterministic skill conformance case failed: " + case["id"])
+    semantic = cases.get("semantic_cases", [])
+    ids = {item["id"] for item in semantic}
+    if not ids or len(ids) != len(semantic):
+        errors.append("semantic case identifiers must be nonempty and unique")
+    for case in semantic:
+        if not case.get("question") or not case.get("required_disposition") or not case.get("contract_refs"):
+            errors.append("semantic case requires a question, disposition and normative references")
+        for reference in case.get("contract_refs", []):
+            if not (root / reference).is_file():
+                errors.append("missing semantic contract reference: " + reference)
+    inventory = make_inventory(root)
+    pending = review_errors(receipt, inventory["payload_sha256"])
+    if receipt:
+        for role in ("ai_review", "independent_challenge"):
+            if set(receipt.get(role, {}).get("semantic_case_ids", [])) != ids:
+                pending.append(role + " must cover every canonical semantic skill case")
+        required_hosts = set(manifest.get("runtime", {}).get("required_host_modes", []))
+        observed = {host.get("mode") for host in receipt.get("host_observations", []) if host.get("status") == "passed"}
+        if not required_hosts or not required_hosts.issubset(observed):
+            pending.append("all declared host modes need observed exact-payload evidence")
+    return errors, pending
+
+
+def validate(root: Path, mode: str, receipt: dict | None = None) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     blockers: list[str] = []
     cases_path = root / "docs" / "v3-skill-conformance-cases.yaml"
@@ -46,6 +96,9 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
         active_contract = load_yaml(root / "COMPATIBILITY.yaml")
     except (OSError, yaml.YAMLError, ValueError) as exc:
         return [f"cannot load conformance inputs: {exc}"], []
+
+    if review.get("schema_version") == "2.0":
+        return validate_external(root, mode, cases, review, receipt)
 
     review_target = review.get("review_target", {})
     package_root_value = review_target.get("package_root")
@@ -396,10 +449,12 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
-    parser.add_argument("--mode", choices=("workflow", "release"), default="workflow")
+    parser.add_argument("--mode", choices=("workflow", "release", "experimental"), default="workflow")
+    parser.add_argument("--receipt", type=Path, help="external exact-payload review receipt; never inside the reviewed payload")
     args = parser.parse_args()
     root = Path(args.root).resolve()
-    errors, blockers = validate(root, args.mode)
+    receipt = load_yaml(args.receipt) if args.receipt else None
+    errors, blockers = validate(root, args.mode, receipt)
     human_approved = False
     try:
         review = load_yaml(root / "docs" / "v3-skill-conformance-ai-review.yaml")
@@ -419,6 +474,9 @@ def main() -> int:
         return 2
     if blockers:
         print(f"validate_v3_skill_conformance: OK — suite and evidence envelope valid; {len(blockers)} release blocker(s) remain")
+        if args.mode == "experimental":
+            for blocker in blockers:
+                print(f"  [WARNING] final readiness only: {blocker}")
     else:
         print("validate_v3_skill_conformance: OK — package and review evidence complete for handoff; actual publication remains a separate external gate")
     if human_approved:

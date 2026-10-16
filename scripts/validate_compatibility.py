@@ -8,28 +8,16 @@ import sys
 from pathlib import Path
 
 import yaml
+from v3_channel import matches, parse_version
 
 
 def version(value: str) -> tuple[int, int, int] | None:
-    try:
-        parts = value.strip().lstrip("v").split(".")
-        if len(parts) != 3:
-            return None
-        return tuple(int(part) for part in parts)  # type: ignore[return-value]
-    except (AttributeError, ValueError):
-        return None
+    parsed = parse_version(value)
+    return parsed[0] if parsed else None
 
 
-def satisfies(candidate: str, requirement: str) -> bool:
-    parsed = version(candidate)
-    if parsed is None or not isinstance(requirement, str) or not requirement.startswith("^"):
-        return False
-    minimum = version(requirement[1:])
-    if minimum is None:
-        return False
-    if minimum[0] > 0:
-        return parsed >= minimum and parsed[0] == minimum[0]
-    return parsed >= minimum and parsed[:2] == minimum[:2]
+def satisfies(candidate: str, requirement: str, *, experimental: bool = False) -> bool:
+    return matches(candidate, requirement, experimental=experimental)
 
 
 def state(case: dict) -> str:
@@ -67,6 +55,7 @@ def vault_manifest_is_valid(path: Path, contract: dict) -> tuple[bool, dict]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
+    parser.add_argument("--channel", choices=("stable", "experimental"), default="stable")
     parser.add_argument(
         "--vault-manifest",
         help="path to a real hipocampo.yaml; defaults to the checked-in reference fixture",
@@ -92,7 +81,7 @@ def main() -> int:
         errors.append("skill/manifest.yaml: skill version does not match the required compatibility version")
     if skill["methodology"]["compatibility"] != contract["methodology"]["supported_vault_range"]:
         errors.append("skill/manifest.yaml: methodology.compatibility diverges from COMPATIBILITY.yaml")
-    if not satisfies(expected_methodology, skill["methodology"]["compatibility"]):
+    if not satisfies(expected_methodology, skill["methodology"]["compatibility"], experimental=args.channel == "experimental"):
         errors.append("skill/manifest.yaml: compatibility does not cover the canonical methodology version")
     if not (root / "skill" / "package-lock.yaml").is_file():
         errors.append("skill/package-lock.yaml: required package lock is missing")
@@ -110,7 +99,7 @@ def main() -> int:
         vault_valid, vault = False, {}
     if not vault_valid:
         errors.append(f"{vault_path}: required vault fields are incomplete")
-    elif not satisfies(expected_methodology, vault["hipocampo"]["compatibility"]):
+    elif not satisfies(expected_methodology, vault["hipocampo"]["compatibility"], experimental=args.channel == "experimental"):
         errors.append(f"{vault_path}: compatibility declaration does not cover the canonical methodology version")
 
     expected_states = {item["id"] for item in contract["states"]}

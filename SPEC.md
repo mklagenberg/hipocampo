@@ -1,11 +1,13 @@
 # Hipocampo — SPEC
 
-Version: 3.0.1 · Follows [SemVer](https://semver.org/lang/pt-BR/)
+Version: 3.1.0 · Follows [SemVer](https://semver.org/lang/pt-BR/)
 
-V3.0.0 was published on 2026-10-08. This v3.0.1 PATCH corrects the release and
-skill-package markers; it preserves the V3.0.0 normative contract. Verify the
-exact published immutable release, matching tag-resolved commit and package
-hashes before installation. Reading, merging or installing a file does not adopt V3 in an
+V3.0.0 was published on 2026-10-08. Version 3.1.0 adds executable distribution
+and an explicit experimental channel while preserving the V3.0.0 contract.
+Stable installation verifies the published immutable release; experimental
+installation verifies an explicitly selected pinned snapshot and its hashes.
+See [distribution and channels](docs/v3-distribution-and-channels.md).
+Reading, merging or installing a file does not adopt V3 in an
 existing vault. See the [release record](docs/v3-release-preparation.md).
 
 The V3 contract consists of this specification and the following normative
@@ -226,9 +228,15 @@ manifest and additive local instructions; 3. verified operational skill;
 ## 9. Versioning
 
 SemVer applies to public methodology obligations. Incompatible V2-to-V3
-adoption is MAJOR. Skill and adapter versions are independent. Tags and GitHub
-Releases are immutable human actions after accepted frozen evidence and
-verified integration. Every release updates specification, changelog,
+adoption is MAJOR. Skill and adapter versions are independent. Stable tags and
+GitHub Releases are human actions after accepted frozen evidence and verified
+integration. An optional experimental RC can be only a tag; its candidate
+status produces a WARNING and permits valid canonical engine operations.
+It requires no GitHub Release or future stable publication. Integrity,
+authorization and actual operation contracts remain mandatory. The complete
+channel and preflight rules are in [distribution](docs/v3-distribution-and-channels.md)
+and [Decision 0120](decisions/0120-executable-distribution-and-experimental-channel.md).
+Every release updates specification, changelog,
 compatibility, skill/scaffold and upgrade/migration guidance. Never infer
 publication from a version declaration or move an existing tag.
 
@@ -298,3 +306,6 @@ on resumption reconcile persisted effects before repeating a write.
 3.0.0 was published as the first V3/LTE major. Version 3.0.1 is a PATCH marker
 and package-guidance correction; earlier history remains in CHANGELOG.md and
 the preserved V2 snapshot. Decision 0119 was accepted before publication.
+
+Version 3.1.0 adds compatible executable distribution and experimental execution
+under Decision 0120; source identity does not claim a publication event.

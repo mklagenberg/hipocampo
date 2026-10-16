@@ -1,25 +1,27 @@
 package:
   name: hipocampo
-  version: 2.0.1
+  version: 2.1.0
   hash_algorithm: sha256
   files:
   - path: agents/openai.yaml
     sha256: 1688f1df3d6c96cf557d43580e9f4df2fd0bf899401eabe125f633f45cd0776c
   - path: manifest.yaml
-    sha256: d5080b4f5d0391b390c7de47fffec36639cda65c92e454aa8e0574ecf3db4564
+    sha256: 4493caa75bc82baf18fe3bc5a912734ee861be5a831b1a432b0aa17498f2299d
   - path: references/codex.md
-    sha256: 82c75dcd3378fa3b1458ed8ef71af639e12ba0373bc3182932b408cce437a999
+    sha256: f0ebb3cc808f87782b4acb88bf8b4e10bca32dd9113565e70f9dd7c9aa83f3fb
   - path: references/crud-frontmatter.md
     sha256: 31a7d078f7f3e0eb078d8eb97378fc10e2ef6de1cb23769f1c1789c797985229
   - path: references/instantiation.md
-    sha256: bb5e1163ad34ec3c8944f1f0044d4d098af32aa065758d7e26c698343d1baefa
+    sha256: 189ba631647eae7f82934174a801f621fd507f4eae1b6976e677e030ceecd676
   - path: references/invariants.md
     sha256: 31f6194c578dbd6bd50978163ccc2df2dd864027a7cdf1daaef28be3dd153d1f
   - path: references/personalization.md
     sha256: acd6b8b561a8a384b8e0aaa253a676124bb1c8e5c0bb9149d5a1dccbc4b7b94e
   - path: references/routines.md
     sha256: 9dbad7ea146f4ca2ea26058cb5a5d55931bea4638ce9cb831c582c73f9c6a470
+  - path: references/runtime.md
+    sha256: 34bcdd17ca8ff7d296c4629357963769dd6aa8e90a94bb49d1e05f30ff2def3b
   - path: references/v3-operation.md
-    sha256: e7f8bf7806e5119a1f8aba6b70e88e8d9e7e20793f7fabb6fea89b70be3963c8
+    sha256: 1e7adb5e64e5ee11131935da710915dcdeb12228e82723d247cef8d8db406b9a
   - path: SKILL.md
-    sha256: 66ec56e2b42747fed96d558f77824a8c9bbe5a0d5191285fe78ef5f79a7e7f4d
+    sha256: 305817e84d6b20c4b0016e91190e21a33ac7dedc5ed0f7fbd4181a36183dcaf3

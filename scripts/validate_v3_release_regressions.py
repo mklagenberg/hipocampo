@@ -76,6 +76,38 @@ def main():
     import validate_v3_skill_conformance as gate
     review_path=root/'docs/v3-skill-conformance-ai-review.yaml'
     actual=yaml.safe_load(review_path.read_text(encoding='utf-8'))
+    if actual.get('schema_version') == '2.0':
+        from v3_distribution import make_inventory
+        now=datetime.now(timezone.utc)
+        payload=make_inventory(root)['payload_sha256']
+        ids=[item['id'] for item in yaml.safe_load((root/'docs/v3-skill-conformance-cases.yaml').read_text(encoding='utf-8'))['semantic_cases']]
+        required=yaml.safe_load((root/'skill/manifest.yaml').read_text(encoding='utf-8'))['runtime']['required_host_modes']
+        receipt={'payload_sha256':payload,'host_observations':[{'mode':mode,'status':'passed','payload_sha256':payload,'evidence':'synthetic fixture only'} for mode in required]}
+        for i,role in enumerate(('ai_review','independent_challenge','human_approval')):
+            receipt[role]={'status':'approved' if role=='human_approval' else 'passed','identity':'synthetic-only',
+                'session':role+'-synthetic-session','evidence':'synthetic fixture; not actual approval',
+                'payload_sha256':payload,'at':(now+timedelta(seconds=i)).isoformat(),'semantic_case_ids':ids}
+        errors,blockers=gate.validate(root,'release')
+        assert not errors and blockers,(errors,blockers)
+        results.append({'case':'current source routes final review externally without claiming approval','passed':True})
+        errors,blockers=gate.validate(root,'release',receipt)
+        assert not errors and not blockers,(errors,blockers)
+        results.append({'case':'complete synthetic external receipt passes before tag exists','passed':True})
+        for label,mutate in [
+            ('wrong full payload',lambda v:v.update(payload_sha256='0'*64)),
+            ('missing final human approval',lambda v:v.pop('human_approval')),
+            ('stale human payload',lambda v:v['human_approval'].update(payload_sha256='0'*64)),
+            ('human before challenge',lambda v:v['human_approval'].update(at=v['ai_review']['at'])),
+            ('same AI session',lambda v:v['independent_challenge'].update(session=v['ai_review']['session'])),
+            ('missing evidence',lambda v:v['human_approval'].pop('evidence')),
+            ('missing semantic coverage',lambda v:v['independent_challenge'].update(semantic_case_ids=[])),
+            ('missing declared host',lambda v:v.update(host_observations=v['host_observations'][:-1])),
+        ]:
+            changed=copy.deepcopy(receipt);mutate(changed);errors,blockers=gate.validate(root,'release',changed)
+            assert errors or blockers,label
+            results.append({'case':label,'passed':True})
+        print(json.dumps({'suite':'v3-release-regressions','privacy':'synthetic-only','passed':len(results),'cases':results},ensure_ascii=False))
+        return 0
     real_loader=gate.load_yaml
     def gate_fixture(value):
         with patch.object(gate,'load_yaml',side_effect=lambda p: value if p==review_path else real_loader(p)):

@@ -11,7 +11,7 @@ Keep only the personal anchor pointer and verified installation metadata in
 
 ```yaml
 anchor_repository: "owner/private-personal-anchor"
-installed_skill_version: "2.0.1"
+installed_skill_version: "2.1.0"
 installed_package_hash: "sha256:..."
 last_checked: "YYYY-MM-DDThh:mm:ssZ"
 ```
@@ -36,15 +36,10 @@ does not define compatibility. Reuse a successful normal source check for at
 most `P7D` and a security check for at most `P1D`; when unavailable, mark it
 offline and do not infer compatibility.
 
-Install only a released skill package from the versioned tag named by its
-manifest, after confirming the release exists, its target matches the
-tag-resolved commit, pinning that commit, and checking the package lock and all
-declared hashes. Also require the GitHub Release to report `immutable: true`;
-block if that status cannot be established. `COMPATIBILITY.yaml:methodology.release_state`
-records the source snapshot's preparation state and does not supersede this
-external publication check; a historical `prepared-unreleased` value inside a
-released tag is not by itself a blocker. Never
-install an unreleased candidate or unverified branch, self-update, overwrite
-local state or change client-local files without the operator's confirmation.
+Stable installs verify the versioned immutable release, resolved source and
+hashes. For explicit experimental use follow [runtime](runtime.md): a pinned
+snapshot/RC tag needs no GitHub Release. Emit WARNING for candidate/final-review
+state and let valid canonical calls execute. Retain operation-specific checks
+and do not silently update, overwrite state or activate globally.
 
 Never self-update; a package-lock.yaml verifies the exact package bytes, not authorization.

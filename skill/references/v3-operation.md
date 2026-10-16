@@ -1,7 +1,7 @@
 # V3 operation and compatibility
 
 This is the skill-side operating guide for the V3.0.0 contract, carried in
-skill package 2.0.1 for the v3.0.1 patch release. An unverified preparation
+skill package 2.1.0 for the v3.1.0 distribution. An unverified preparation
 branch is not a published release. The normative method remains in the
 canonical contracts; this document routes an agent through their gates. It
 does not activate V3 for an existing instance.
@@ -82,20 +82,15 @@ gap. Do not simulate a governed read by scanning vault files directly.
    permitted level or block.
 6. **Resolve only relevant adjacencies.** When a retrieved item raises a
    methodology question, consult the official repository declared by this
-   package's `manifest.yaml` (`source_repository`). Use the published release
-   tag as the versioned release reference for normative behavior. The
-   compatibility file's `release_state` is a source-snapshot marker, not
-   publication proof; a historical `prepared-unreleased` value does not
-   override independently verified release metadata. Confirm that the
-   published GitHub Release reports `immutable: true`, its tag resolves to the
-   release target, pin that commit, verify the package hashes, and record the
-   exact file paths examined. If release immutability cannot be established,
-   block installation. Follow only direct links
-   and dependency references needed to resolve the question, then stop. Use
-   `main` only to check release/update availability, not to silently replace
-   the contract of an already verified release. If the matching release or
-   source commit cannot be established, report the methodology interpretation
-   as unknown and do not infer a rule.
+   package's `manifest.yaml` (`source_repository`). Stable resolves the
+   published immutable release and exact commit (`immutable: true`). Explicit
+   experimental execution resolves its chosen commit or RC tag and verifies
+   hashes; no GitHub Release or future stable tag is required. Candidate and
+   final-review pending states emit WARNING and permit valid canonical calls.
+   A `release-target` source declaration does not establish publication.
+   Follow only needed direct dependencies at the selected pinned source;
+   never silently replace it with main. Unknown integrity or incompatible
+   operation context blocks that action with a specific diagnostic.
 
    This official-repository lookup is separate from vault relationships. To
    resolve a vault's `$alias:path.md` or `related` reference, use the authorized
@@ -108,8 +103,8 @@ gap. Do not simulate a governed read by scanning vault files directly.
 
 The contract's disclosure levels are `L0` none, `L1` metadata, `L2` Record
 envelope/frontmatter, `L3` selected Chunk and `L4` explicitly authorized
-expansion. See [Search & Progressive Disclosure](../../docs/v3-search-progressive-disclosure-contract.md)
-for the normative V3 contract at the verified published release and pinned commit.
+expansion. See [runtime and source resolution](runtime.md) to locate the normative
+Search & Progressive Disclosure contract at the selected pinned source.
 
 ## 4. Read and preserve source state
 

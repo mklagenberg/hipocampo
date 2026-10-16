@@ -1,0 +1,60 @@
+change_set:
+  id: 0135-executable-distribution-and-experimental-channel
+  class: normative
+  semver: minor
+  status: proposed
+  backfill: false
+  decisions:
+  - decisions/0120-executable-distribution-and-experimental-channel.md
+impact:
+- artifact: .github/workflows/validate.yml
+  status: updated
+  note: Enforce actual installed RC execution in CI.
+- artifact: CHANGELOG.md, COMPATIBILITY.yaml, GETTING-STARTED.md, MIGRATIONS.md, README.md,
+    RELEASE-CHECKLIST.md, ROADMAP.md, SPEC.md, UPGRADE.md, moda.yaml, requirements-dev.txt,
+    requirements-runtime.txt
+  status: updated
+  note: Synchronize independent versions, source state, public contract and runtime
+    dependency declaration.
+- artifact: conformance/moda.yaml
+  status: updated
+  note: Synchronize independent versions, source state, public contract and runtime
+    dependency declaration.
+- artifact: decisions/0120-executable-distribution-and-experimental-channel.md
+  status: updated
+  note: Record explicit accepted direction and its limited override of stable-only
+    candidate rules.
+- artifact: docs/bootstrap-invitation-procedure.md, docs/engines/catalog.md, docs/invite-template.md,
+    docs/release-dependencies.json, docs/releases/v3.0.1-review-envelope.yaml, docs/taxonomy.md,
+    docs/v3-distribution-and-channels.md, docs/v3-release-preparation.md, docs/v3-runtime-usage.md,
+    docs/v3-skill-conformance-ai-review.yaml, docs/v3-skill-conformance-gate.md, docs/vocabulary-dictionary.md
+  status: updated
+  note: Reconcile active operations, invitations, external review routing and historical
+    release evidence.
+- artifact: scaffold/README.md, scaffold/skeleton/POS-INSTANCIACAO.md, scaffold/skeleton/POST-INSTANTIATION.md,
+    scaffold/skeleton/hipocampo.yaml
+  status: updated
+  note: Clarify source selection while preserving profile/schema identities.
+- artifact: scripts/v3_channel.py, scripts/v3_distribution.py, scripts/v3_preflight.py,
+    scripts/v3_runtime.py, scripts/validate_compatibility.py, scripts/validate_v3_engine_suite.py,
+    scripts/validate_v3_preview_runtime.py, scripts/validate_v3_release_regressions.py,
+    scripts/validate_v3_skill_conformance.py
+  status: updated
+  note: Implement runtime, inventory/install/archive, channels, preflight and integrated
+    regression coverage.
+- artifact: skill/SKILL.md, skill/manifest.yaml, skill/package-lock.yaml, skill/references/codex.md,
+    skill/references/instantiation.md, skill/references/runtime.md, skill/references/v3-operation.md
+  status: updated
+  note: Project channel, runtime and independent version rules into the portable skill.
+validation:
+  commands:
+  - python scripts/validate_hipocampo.py --root .
+  - python scripts/validate_skill_docs.py --root .
+  - python scripts/validate_skill_package.py --root .
+  - python scripts/validate_contracts.py --root .
+  - python scripts/validate_change.py --root .
+  - python scripts/validate_v3_preview_runtime.py --root .
+  - python scripts/v3_preflight.py --root . --channel experimental
+  evidence: []
+  notes: Synthetic-only runtime tests; final external review/host receipt and human
+    tag/release remain required for final handoff.

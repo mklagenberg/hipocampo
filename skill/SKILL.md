@@ -10,18 +10,24 @@ description: >
 
 # Hipocampo V3 Skill
 
-**Skill package:** `2.0.1`. **Methodology compatibility:**
-`^3.0.0`. **Release state:** verify the exact published immutable release, tag target and package hashes; a preparation branch is not a release. The compatibility file's `release_state` records the state when that source snapshot was prepared; it can remain `prepared-unreleased` inside a later published tag. It is not publication evidence and must not override verified release metadata. Require the GitHub Release's `immutable: true`, matching tag target, pinned commit and package hashes before installation; stop if immutability cannot be established. This package preserves the raw
+**Skill package:** `2.1.0`. **Methodology compatibility:**
+`^3.0.0`. **Execution channel:** stable is the default and requires the exact
+published immutable release, tag-resolved commit and package hashes.
+Explicit experimental execution verifies a pinned source commit/inventory;
+a candidate or RC tag needs no GitHub Release or future stable publication.
+Emit WARNING and allow valid engine operations. Publication/final-review
+pending states do not block experimental execution. Integrity, authorization,
+privacy and actual contract failures still block the affected action.
+See [runtime and channels](references/runtime.md). This package preserves the raw
 V3.0.0 contract. Later V3 minors and patches must remain compatible with that
 baseline, including when an implementation uses an adapter or facade. The AI
 host is not part of the version tuple.
 
 Installation makes the client-side instructions available; it does not
-activate a vault or prove that the host implements V3 operations. Before using
-the skill with a real vault, verify the published release, exact tag-resolved
-commit and locked package hashes. Then independently verify the instance tuple,
-authorization, privacy/scope and operation-specific tool capabilities. The
-released V2 skill remains a separate package and contract.
+activate a vault or prove that the host implements V3 operations. Before using the skill with a real vault, verify the chosen channel and pinned
+source, full distribution integrity, compatible instance tuple and operation
+capability/authorization. Stable verifies immutable publication; explicit
+experimental use emits WARNING and does not wait for the future stable tag.
 
 ## Session entry and compatibility
 
@@ -109,8 +115,7 @@ The skill package version is independent from the methodology and host-adapter
 versions. Verify a released package against its published release, the tag's
 resolved commit and its package lock. Never install from an unverified branch,
 self-update, or change client-local files without the operator's confirmation.
-The intended package release is `v3.0.1`; verify that its tag and published
-release resolve to the same source commit and that every package-lock hash
-matches before installation. Pin the resolved commit for the session; a branch
-is not a release. Keep operator confirmation, instance compatibility,
-authorization and runtime-capability checks separate from package integrity.
+The stable target is `v3.1.0`; a target declaration is not publication proof.
+For an explicitly requested experimental install, use the pinned snapshot and
+full distribution hashes instead of demanding the future stable release.
+Never silently change an installed version or overwrite a previous install.

@@ -1,79 +1,26 @@
-# V3 skill conformance gate
+# V3 skill and distribution conformance gate
 
-**Status:** required for each V3 skill package release. Skill 2.0.0 was
-published as part of v3.0.0. The v3.0.1 patch changes the package and therefore
-requires fresh, fingerprint-bound AI review, independent challenge and human
-approval; old reviews remain historical evidence for skill 2.0.0 only.
+The case suite preserves raw V3.0.0 behavior. Portable skill 2.1.0 remains
+instructions-only; its separately installed runtime has its own executable tests.
+The current routing envelope uses schema 2.0 and declares `external-receipt`;
+it does not freeze a pending human verdict into the operational payload.
+Historical 2.0.0/2.0.1 review evidence remains in docs/releases/ and Git history.
 
-## Purpose
+Run `python scripts/validate_v3_skill_conformance.py --root . --mode workflow`
+for structural development validation. Experimental mode reports missing final
+reviews as WARNING and never authorizes a private action or hides byte errors.
+For final handoff, run release mode with `--receipt <external-file>` and the
+aggregate `scripts/v3_preflight.py --channel stable --receipt <external-file>`.
 
-Verify that the canonical skill package guides an agent to operate according
-to the frozen V3.0.0 contract and preserves the V3.0.0 baseline in later V3
-minor and patch releases. This gate is about the skill and its declared
-methodology compatibility; it does not select a required AI host or access a
-real vault.
+The receipt binds the full payload digest. AI review covers every semantic
+case, a distinct independent session challenges those cases after the primary
+review, then a human explicitly approves the exact payload. Host observations
+cover each required mode declared by the runtime manifest. Identity, evidence,
+payload binding and ordered timestamps are mandatory. A receipt template or
+agent-created pending file is not approval. Evidence-only changes must preserve
+the reviewed operational digest; no pre-tag gate waits for publication.
 
-## Review order
-
-1. Run the deterministic cases in `v3-skill-conformance-cases.yaml`.
-2. An AI reviewer assesses the exact skill package against every semantic
-   scenario and the cited V3 contracts. The AI records dispositions, reasons,
-   evidence references, uncertainty and findings in
-   `v3-skill-conformance-ai-review.yaml`.
-3. A second AI pass challenges the first review for missed cases, unsupported
-   assumptions, privacy or authority violations, and confusion between
-   deterministic proof and semantic interpretation. It records the identifier
-   of the first review, its own review-session identifier, timestamp and
-   package fingerprint, and whether the first review should stand or be
-   revised. The challenge must come from a separate AI review session.
-4. A human reviews the AI assessment and the underlying evidence, resolves
-   findings, and records the identifiers of both AI reviews and a later
-   timestamp with the final decision. Human approval cannot be inferred from a
-   passing script or an AI disposition.
-
-The AI passes are semantic evaluations, not proofs of truth. The deterministic
-validator checks case coverage, provenance, package binding and review order;
-it does not certify that an AI conclusion is correct. Any change to the skill
-package invalidates its semantic review until the AI passes are repeated for
-the new package-lock fingerprint.
-
-## Deterministic cases
-
-The suite checks package/methodology/vault compatibility states and fail-closed
-behavior, including a V2-compatible skill presented with a V3.0 vault, an
-intact V3-compatible tuple, a V2 vault requiring migration, unavailable
-sources, and package-integrity failure.
-
-## Semantic cases
-
-The suite asks whether the skill correctly handles V2.2 source diagnosis,
-V3.0 operations, authorization scope, multi-vault/entity boundaries, stale or
-conflicting source material, later V3 releases that must preserve the raw V3.0
-contract through an adapter or facade, and least-disclosure reads with
-version-matched official methodology references. These cases use synthetic
-inputs only. The portable skill has not been exercised against real vault
-content.
-
-## Commands and gates
-
-- CI runs `python scripts/validate_v3_skill_conformance.py --mode workflow`.
-  This validates the suite, deterministic outcomes, the exact package identified by review_target.package_root, its file lock, review-envelope consistency and
-  package binding without claiming V3 release readiness.
-- The release checklist runs
-  `python scripts/validate_v3_skill_conformance.py --mode release` after the
-  changed V3 skill package and AI review exist. Release readiness requires a V3
-  compatible package, complete AI and AI-challenge coverage for the exact
-  package, and recorded human approval.
-
-The prior V2 package is byte-preserved in docs/legacy/hipocampo-skill-1.3.0.zip.
-The published V3.0.0 skill 2.0.0 remains in tag v3.0.0; each changed package
-requires its own fingerprint-bound reviews. The isolated `2.0.0-rc.1` V3
-candidate has a primary AI semantic review, independent
-AI challenge, and human approval recorded against the same package fingerprint.
-This approves the semantic assessments and the candidate-isolation decision;
-it does not release or activate the candidate. That historical candidate
-remains separate from the published package, and
-runtime enforcement has been demonstrated only in the bounded local experiment
-described in v3-migration-execution.md; it is not universal host support.
-Real-vault operation requires a compatible tuple and operation-specific
-adapter capability/authorization after release verification.
+The final external receipt is assembled before publication and may be attached
+to the final draft. Installing stable separately verifies the actual immutable
+published release and tag/source identity. Installing experimental needs only
+the explicitly selected verified snapshot; an optional RC may be tag-only.

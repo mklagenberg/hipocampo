@@ -38,7 +38,7 @@ This repository is being evaluated and brought into conformance with [MODA](http
 - Latest audit: [`audits/moda/2026-08-17-v1.0.0-self-audit.md`](audits/moda/2026-08-17-v1.0.0-self-audit.md)
 <!-- moda:disclosure:end -->
 
-Current version: **3.0.1** ([SemVer](https://semver.org/lang/pt-BR/)).
+Current version: **3.1.0** ([SemVer](https://semver.org/lang/pt-BR/)).
 
 ## Published V3 baseline and adoption boundary
 
@@ -59,10 +59,14 @@ F0 defines script-level classification, phase-specific verification, layered
 evidence boundaries, hardcode review and typed outcomes for incomplete proof.
 Semantic evaluation remains distinct from deterministic validation.
 
-## Publication state
+## Installation and publication channels
 
-The latest published release remains v3.0.0 until the v3.0.1 patch is
-published. This branch prepares the v3.0.1 / skill 2.0.1 package; install it
-only after its release reports `immutable: true`, the tag resolves to the
-release target, and package hashes are independently verified. Existing vaults require separate accepted migration, and every host
-still needs operation-specific capability verification.
+Version 3.1.0 adds a callable local runtime and an explicit experimental channel,
+with independent skill 2.1.0, preserving the 3.0.0 data contract. Follow
+[runtime installation](docs/v3-runtime-usage.md) and
+[distribution/channel rules](docs/v3-distribution-and-channels.md).
+Stable installation verifies the official immutable published release and hashes.
+Experimental installation fixes a source commit or RC tag, needs no GitHub Release,
+and emits WARNING while valid canonical operations continue. Operation-specific
+authorization and integrity checks remain mandatory. A version heading is an
+identity declaration; query the provider to establish actual publication.

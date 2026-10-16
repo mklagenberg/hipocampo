@@ -1,28 +1,49 @@
-# Hipocampo — Release Checklist
+# Hipocampo — release checklist
 
-Minimal checklist for cutting a new version of the methodology itself. Expands `decisions/0014-mandatory-release-routine.md`, `decisions/0021-release-cadence-policy.md`, and `decisions/0023-operational-criterion-for-semver-scope.md` into a single, concrete run-through — it doesn't replace those Decision Records, it operationalizes them. Scaled to a one-person project: every item below is something that can genuinely go wrong (and has), not process for its own sake.
+This checklist implements Decisions 0014/0021/0023/0037 and 0120. Use one
+cohesive Change Set, not a publication loop that leaves essential work afterward.
 
-Work accumulates on `main` via normal PRs between releases (`decisions/0021`) — this checklist runs once, at the point a release is actually being cut, not on every PR. Per-PR contract correctness is instead caught continuously in CI (`.github/workflows/validate.yml`) by `scripts/validate_hipocampo.py`, `scripts/validate_skill_docs.py`, `scripts/validate_skill_package.py`, `scripts/validate_change.py`, and `scripts/validate_contracts.py`.
+## Before the final tag
 
-## Checklist
+- [ ] Classify public impact and independent methodology/skill/runtime versions.
+- [ ] Synchronize SPEC, decisions, taxonomy/vocabulary, README, changelog,
+  COMPATIBILITY, skill manifest/references, scaffold and upgrade/migration guidance.
+- [ ] Install the complete distribution in isolation; preserve the previous install.
+- [ ] Exercise actual entrypoint and canonical engines. Explicit experimental/RC
+  execution emits WARNING and completes valid operations without a GitHub Release.
+- [ ] Preserve failure controls for integrity, actual compatibility and authorization.
+- [ ] Verify new-session use, recovery, dependency install and declared host modes.
+- [ ] Justify any actual RC tag by an additional test; otherwise issue no RC.
+  RC can be tag-only and requires neither final approval nor future stable tag.
+- [ ] Freeze/test operational payload and bind independent AI/human review to its
+  digest outside that payload. Never embed the payload's own final hash in itself.
+- [ ] Verify PR integration on main and correspondence to the tested fingerprint.
+- [ ] Run repository/package/contracts, complete engine suite and differential
+  Change Set checks. Run the aggregate final preflight with external review receipt.
+- [ ] No known essential documentation, manifest, runtime or readiness gap remains.
+- [ ] Draft includes every distribution asset, inventory/checksums, receipt and
+  final notes. The exact English human form is generated only when gates pass.
+- [ ] Reconfirm exact resolved commit/tag absence, protection settings and future
+  release immutability before the human creates the stable tag and GitHub Release.
 
-- [ ] **Scope classified.** Apply the MAJOR/MINOR/PATCH test from `decisions/0023` to the accumulated `[Unreleased]` changes — does an existing instance become formally incompatible with no action (MAJOR), stay valid but lag behind (MINOR), or is this only clarification/correction (PATCH)? Record the classification and the reasoning in the release PR/commit, even when the answer is obvious.
-- [ ] **Validation gates are green.** Run `python scripts/validate_hipocampo.py --root .`, `python scripts/validate_skill_docs.py --root .`, `python scripts/validate_skill_package.py --root .`, `python scripts/validate_change.py --root .`, and `python scripts/validate_contracts.py --root .` on the release branch. They must all exit 0; a new warning or coverage change must be understood, not ignored.
-- [ ] **No open blocking finding.** No unresolved `major` finding from the latest MODA self-audit (`audits/moda/`) is being newly introduced or made worse by this release. Existing known gaps stay honestly declared in `conformance/moda.yaml` — a release never silently papers over a gap it hasn't actually closed.
-- [ ] **`CHANGELOG.md` is dated.** The `[Unreleased]` section becomes a real `## [X.Y.Z] - YYYY-MM-DD` heading (today's date, in the release commit) — never left as `[Unreleased]` past the point the tag is cut, and never backdated.
-- [ ] **`README.md` version matches.** `Current version: **X.Y.Z**` in `README.md` is updated to the same version — this is exactly what the validation script's check 3 verifies; run it again after bumping both files.
-- [ ] **Migration check (`decisions/0014`, item 1).** MAJOR: `MIGRATIONS.md` gets a real new entry with the migration guide from the previous version. MINOR/PATCH: explicitly confirm in the release PR/commit that no active migration is required — a "no action needed" that isn't written down doesn't count as having checked.
-- [ ] **`UPGRADE.md` reviewed.** If this release adds anything an existing instance should adopt (new field, new invariant, new convention), add the corresponding cumulative checklist item(s) — same discipline as any other round (`decisions/0024`).
-- [ ] **Skill/scaffold self-sync (successor to the old `hipocampo-toolkit` sync step, `decisions/0032`).** Since the toolkit was consolidated into this repository, "toolkit synchronization" in `decisions/0014` now means: does `skill/references/*.md` and `scaffold/` (profiles, skeleton) already reflect every new invariant, section, or default convention this release adds to `SPEC.md`? A `SPEC.md` change that isn't projected into the operational skill/scaffold is exactly the kind of drift `decisions/0014` was written to prevent, only the target moved.
-- [ ] **V3 skill conformance, AI before human.** For a V3 skill release, run `python scripts/validate_v3_skill_conformance.py --root . --mode release`. The AI semantic review and its AI challenge pass must cover the exact package fingerprint before a human reviews the evidence and records approval. A passing deterministic validator alone is not semantic approval.
-- [ ] **Change Sets accounted for.** Every `operational`/`normative` change in this release has a corresponding `changes/<id>/` entry (`decisions/0031`) — either created during the round or, for older work, explicitly out of scope per that Decision Record's backfill rationale.
-- [ ] **Tag + GitHub Release, together.** Cut in the same step, never one without the other (`SPEC.md`, section 9) — today a manual action outside the writing tools available via MCP (`decisions/0014`, item 3).
-- [ ] **Merge landed where it was supposed to.** After merging, confirm on `main` itself (fresh clone or `pull_request_read`/`get_files`, not just "the merge button said success") that every expected file and commit actually reached `main` — a PR whose base is another feature branch, not `main`, only lands there once that base branch itself is merged into `main` in a separate step. This step exists because it has already gone wrong once in this repository's own history (PR #28, base stacked on PR #27's branch, required a follow-up PR #29 to actually reach `main`) — a stacked-PR base is not by itself a problem, but assuming "merged" means "on `main`" without checking, is.
+## After publication
 
-## After release
+Verify the actual tag, resolved source, attached bytes/hashes, channel and
+immutable:true through the consumer path. Use provider release/asset verification
+where applicable; generated source archives are not attested attached assets.
+This confirms the prepared distribution; it is not the moment to finish README,
+change a manifest or implement a missing adapter. Fix newly discovered file
+defects in another version, never move/reuse the old identity. Editable release
+notes do not repair immutable files.
 
-Nothing further is required beyond what's already in `decisions/0014`/`0021` — no separate announcement step, no changelog-of-the-changelog. The tag and the GitHub Release are the record.
+## Channels and repetition
 
-## Preparation versus publication
+Default stable requires verified immutable publication before installation.
+Explicit experimental use pins source/inventory and treats final-readiness gaps
+as warnings, preserving all operation gates. Signed/annotated tags and tag rules
+have distinct identity/protection properties; tag-only RC is not an immutable
+GitHub Release. Human merge/tag/release control remains applicable.
 
-A prepared version heading is an intended target, not evidence of a tag. Preserve the exact package fingerprint for AI review, independent challenge and final human decision. Verify the content commit and subsequent evidence-only diff. Before issuing an executable publication handoff, verify the reviewed PR/main commit, required CI, tag absence and exact final target. The human publisher must create the GitHub Release with repository immutable releases enabled, then verify the release reports `immutable: true` and its tag resolves to the reviewed target commit before installation. The agent never creates a tag or GitHub Release.
+Rerun checks affected by source, dependency, policy or instruction drift. If a
+change is strictly external evidence and digest remains identical, do not repeat
+unrelated work by habit. No final gate depends on the future tag it authorizes.
