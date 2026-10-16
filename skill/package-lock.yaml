@@ -8,7 +8,7 @@ package:
   - path: manifest.yaml
     sha256: 4493caa75bc82baf18fe3bc5a912734ee861be5a831b1a432b0aa17498f2299d
   - path: references/codex.md
-    sha256: f0ebb3cc808f87782b4acb88bf8b4e10bca32dd9113565e70f9dd7c9aa83f3fb
+    sha256: bc9f2add8eb56de060e3db3b144ee962069c0167410d28f71a31724a4be64a76
   - path: references/crud-frontmatter.md
     sha256: 31a7d078f7f3e0eb078d8eb97378fc10e2ef6de1cb23769f1c1789c797985229
   - path: references/instantiation.md
@@ -24,4 +24,4 @@ package:
   - path: references/v3-operation.md
     sha256: 1e7adb5e64e5ee11131935da710915dcdeb12228e82723d247cef8d8db406b9a
   - path: SKILL.md
-    sha256: 305817e84d6b20c4b0016e91190e21a33ac7dedc5ed0f7fbd4181a36183dcaf3
+    sha256: d15ec5f5e57760f8c888c436c3b57b75434b546cd237e82d90ebe589e24a2e14

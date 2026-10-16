@@ -4,7 +4,7 @@ description: >
   Operates an instance of the Hipocampo V3 methodology through the tools and
   adapters available in the current environment. Use for authorized,
   version-aware, multi-vault knowledge operations, CRUD, migration preparation,
-  and maintenance rituals. Verify the published package and instance
+  and maintenance rituals. Verify the selected source channel and instance
   compatibility tuple before real-vault operations.
 ---
 
@@ -32,7 +32,7 @@ experimental use emits WARNING and does not wait for the future stable tag.
 ## Session entry and compatibility
 
 Before a durable operation, follow **[V3 operation and compatibility](references/v3-operation.md)**.
-Determine the exact methodology release, skill package and vault declaration;
+Determine the selected methodology version/source, skill package and vault declaration;
 do not infer content version from a manifest's compatibility range alone.
 Continue only when the tuple is compatible and the required authority,
 privacy, scope and operation-specific capability checks pass. Treat unknown,

@@ -31,7 +31,7 @@ publication.
 
 ## Version and package updates
 
-On activation, verify the released methodology/skill/vault tuple. The AI host
+On activation, verify the selected channel and methodology/skill/vault tuple. The AI host
 does not define compatibility. Reuse a successful normal source check for at
 most `P7D` and a security check for at most `P1D`; when unavailable, mark it
 offline and do not infer compatibility.

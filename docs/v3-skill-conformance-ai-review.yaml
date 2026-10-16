@@ -8,7 +8,7 @@ review_target:
   skill_version: 2.1.0
   methodology_compatibility: ^3.0.0
   package_lock: package-lock.yaml
-  package_lock_sha256: b88bc145a60943f0cbf1d24e87a0d9c2d6e93cdc0f7d5a1dfb0aba86c4121949
+  package_lock_sha256: f76efc5f00b66de65bf68b32e8bb4042448767a1de95b4e0c7ddcffd1ae1e10f
 evidence_contract: docs/v3-skill-conformance-gate.md
 receipt_required_for: stable final handoff; experimental execution emits WARNING
 historical_reviews:
