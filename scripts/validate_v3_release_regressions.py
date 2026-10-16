@@ -106,6 +106,18 @@ def main():
             changed=copy.deepcopy(receipt);mutate(changed);errors,blockers=gate.validate(root,'release',changed)
             assert errors or blockers,label
             results.append({'case':label,'passed':True})
+        loader=gate.load_yaml
+        manifest_path=root/'skill/manifest.yaml'
+        for label,mutate in [
+            ('noncanonical package origin',lambda v:v['skill'].update(source_repository='https://example.invalid/untrusted')),
+            ('mismatched source package URL',lambda v:v['updates'].update(immutable_package='https://example.invalid/package')),
+            ('wrong exact distribution target',lambda v:v['updates'].update(release_ref='v4.0.0')),
+        ]:
+            altered=copy.deepcopy(loader(manifest_path));mutate(altered)
+            with patch.object(gate,'load_yaml',side_effect=lambda path: altered if path==manifest_path else loader(path)):
+                errors,blockers=gate.validate(root,'release',receipt)
+            assert errors or blockers,label
+            results.append({'case':label,'passed':True})
         print(json.dumps({'suite':'v3-release-regressions','privacy':'synthetic-only','passed':len(results),'cases':results},ensure_ascii=False))
         return 0
     real_loader=gate.load_yaml
