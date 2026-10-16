@@ -1,9 +1,10 @@
 # Hipocampo — Migrations
 
-## V3.0.0 release preparation — explicit adoption required
+## V3.0.0 published release — explicit adoption required
 
-The prepared target is methodology 3.0.0 / skill 2.0.0 / vault ^3.0.0.
-Verify the actual immutable publication before installation or activation.
+The published baseline is methodology 3.0.0 / skill 2.0.0 / vault ^3.0.0.
+For a later package, verify its exact published release, tag-resolved commit and
+package hashes before installation or activation.
 V2 instances do not become compatible by changing a range. Keep the
 appropriate immutable V2 package for legacy operation until governed migration
 passes. Use per-vault inventory, complete review, accepted Collections and
@@ -13,9 +14,9 @@ attachments, relations, provenance and unknown source state. Recovery requires
 the exact immutable ticket and human acceptance; no direct edits or Git reset.
 The scaffold creates proposal/operational structure, never a Record directly.
 See [release scope](docs/v3-release-preparation.md) and
-[execution procedure](docs/v3-migration-execution.md). The historical candidate
+[execution procedure](docs/v3-migration-execution.md). Historical candidate
 sections below retain their original boundary; this section defines the
-prepared adoption target and does not certify publication or full migration.
+published adoption target and does not certify full migration.
 
 
 Migration guide for each MAJOR version jump (SemVer — see SPEC.md, section 9, and DISCLAIMER.md).
@@ -26,11 +27,11 @@ MINOR and PATCH migration requires no action — see DISCLAIMER.md, section "Ver
 
 Each instance declares, in its own `CLAUDE.md`/README, the version or compatibility range it implements. When a new MAJOR version is released, find here the section corresponding to the jump you need to make (for example, "1.x → 2.0") before updating your instance's version declaration.
 
-## 2.x → 3.0 (V3 candidate; not active)
+## 2.x → 3.0 (published V3 target; migration remains per-vault)
 
-V3 is sovereign over V2.2, but existing V2.x vaults remain readable until an
-explicit migration is approved. This section is a planning boundary for the
-unreleased V3 candidate; it is not an instruction to migrate a real vault.
+V3 is sovereign over V2.2. Existing V2.x vaults remain readable until an
+explicit migration is approved. This section describes the published V3
+target; it is not an instruction to migrate a real vault.
 
 ### Required preconditions
 
@@ -114,7 +115,7 @@ gates in the sequence below remain mandatory.
 8. Reconcile the source and destination ledgers, then close the migration only
    when the LTE gate accepts the evidence.
 
-The unreleased V3 candidate's deterministic executor, manifest contract,
+The published V3 contract's deterministic executor, manifest contract,
 dry-run/apply commands, and interrupted-batch behavior are documented in
 [`docs/v3-migration-execution.md`](docs/v3-migration-execution.md). The executor
 does not replace any precondition above and does not prove that a vault's

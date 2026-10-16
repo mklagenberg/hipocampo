@@ -1,18 +1,25 @@
-# Hipocampo V3 contract — unreleased candidate
+# Hipocampo V3 contract — published baseline and implementation boundaries
 
-This is the implementation contract for the unreleased `v3.0.0`/LTE work. The prepared V3 specification is SPEC.md; the active externally published release remains v2.2.0 until the human publication gate passes. Existing v2 instances remain readable and are not
-migrated by merely reading this document.
+The V3.0.0 methodology contract was published on 2026-10-08; `SPEC.md` is its
+normative source. This document describes the V3 contract and the implementation
+boundaries that remain relevant after publication. Existing V2 instances remain
+readable and are not migrated by merely reading this document.
 
-The L4R closure adds logical authority resolution, bilateral local ledgers,
+Labels such as “candidate” in the historical implementation subsections below
+describe the maturity or runtime evidence for those components, not whether
+the methodology release exists. The published normative obligations remain in
+`SPEC.md`; no subsection proves universal host capability or vault adoption.
+
+The L4R closure defines logical authority resolution, bilateral local ledgers,
 REM-pending local receipt, privacy-bounded transparency, and deterministic
-backward/forward Package auditing. These additions remain an unreleased V3
-candidate and do not activate V3 for existing instances.
+backward/forward Package auditing. Publication of these contracts does not
+assert whole-host runtime deployment or activate V3 for existing instances.
 
-The Search & Progressive Disclosure candidate adds a bounded read-side engine
+The Search & Progressive Disclosure contract defines a bounded read-side engine
 with explicit `L0`–`L4` disclosure levels, independent relevance/authority/
 privacy/epistemic dimensions and prose-first presentation. Its contract is in
-`docs/v3-search-progressive-disclosure-contract.md`; it remains local and
-read-only until a later host and authorization gate.
+`docs/v3-search-progressive-disclosure-contract.md`; runtime remains bounded by
+the available host and authorization gates.
 
 ## Record and Chunk metadata
 
@@ -43,7 +50,7 @@ they do not replace, reconstruct or become a prerequisite for reading the
 persisted Record prose. Artifact availability is therefore independent from
 Record readability.
 
-The unreleased V3 governance envelope may additionally carry:
+The V3 governance envelope may additionally carry:
 
 ```yaml
 entity: "entity-id"
@@ -64,8 +71,7 @@ source:
 `Owner`, `Authority`, `Curator`, and `User` are distinct operational roles.
 `Source` is provenance, not a role. A profile does not grant authority,
 maturity, write access, or automatic access to an entity anchor. The existing
-`entity`/`role` manifest model remains separate from the candidate vault
-profile.
+`entity`/`role` manifest model remains separate from the V3 vault profile.
 `vault_id` is the canonical stable vault identifier in the V3 envelope and
 matches the CRUD and migration executor contracts.
 
@@ -184,9 +190,11 @@ See `decisions/0071-v3-record-state-and-queue-contract.md` and
 delivery, authority succession, conciliation and Package purpose gates are
 defined in `docs/v3-package-delivery-contract.md`.
 
-## D5 candidate contracts
+## D5 contract and implementation boundaries
 
-The following documents record the unreleased MRL-0005 candidate boundary:
+The following documents define MRL-0005 boundaries included in the published
+V3.0.0 specification; implementation remains subject to the limits stated in
+each document:
 
 - `docs/v3-vocabulary-and-aliases.md` — canonical terms and didactic
   clarification for ambiguous conversational aliases;
@@ -201,11 +209,11 @@ The following documents record the unreleased MRL-0005 candidate boundary:
 - `docs/v3-external-reference-policy.md` — comparison/inspiration boundary for
   external references.
 
-These adjacencies form the V3 contract prepared in SPEC.md. Preparation does not activate V3 for existing instances or constitute a vault migration plan.
+These adjacencies form the V3 contract published in SPEC.md. Publication does not activate V3 for existing instances or constitute a vault migration plan.
 
-## MRL-0006 candidate contracts
+## MRL-0006 contract and implementation boundaries
 
-The unreleased MRL-0006 candidate adds bounded operational transparency:
+The MRL-0006 contract adds bounded operational transparency:
 
 - `docs/v3-operational-events-contract.md` — layered events, proof limits and
   redaction;
@@ -221,12 +229,12 @@ The unreleased MRL-0006 candidate adds bounded operational transparency:
 - `docs/v3-x6-fixtures.yaml` and `scripts/validate_v3_x6.py` — deterministic
   and adversarial candidate validation.
 
-These are candidate-only surfaces. They do not enable durable host logging,
+These bounded implementation surfaces do not enable durable host logging,
 remote cache invalidation, migration, publication or V3 activation.
 
-## F0 candidate contracts
+## F0 validation boundaries
 
-The unreleased F0 candidate reviews deterministic scripts after the V3
+F0 reviews deterministic scripts after the V3
 contracts are assembled:
 
 - `docs/v3-f0-contract.md` — classification, phase gates, layered evidence and
@@ -240,5 +248,5 @@ contracts are assembled:
 - `docs/v3-f0-fixtures.yaml` and `scripts/validate_v3_f0.py` — complete,
   partial, authorization-required and blocked proof scenarios.
 
-These surfaces remain candidate-only. They do not activate V3, migrate vaults,
+These surfaces do not activate V3 in existing instances or migrate vaults,
 transport Packages remotely or publish a release.

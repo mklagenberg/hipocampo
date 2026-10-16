@@ -1,6 +1,6 @@
-# V3 candidate — surface authority and offline behavior
+# V3.0.0 contract — surface authority and offline behavior
 
-**Status:** unreleased V3 candidate.
+**Status:** published in V3.0.0.
 
 The methodology `SPEC.md` and accepted Decision Records are the **normative sources**.
 The skill is a procedural adapter that locates and applies those

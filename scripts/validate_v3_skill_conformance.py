@@ -166,7 +166,7 @@ def validate(root: Path, mode: str) -> tuple[list[str], list[str]]:
         ("L0-L4 disclosure levels", operation, "L4", "references/v3-operation.md"),
         ("official repository adjacency rule", operation, "source_repository", "references/v3-operation.md"),
         ("no direct filesystem scan", operation, "scanning vault files directly", "references/v3-operation.md"),
-        ("version-pinned source references", operation, "immutable release", "references/v3-operation.md"),
+        ("version-pinned source references", operation, "immutable: true", "references/v3-operation.md"),
         ("separate vault relationship resolution", operation, "registry procedure for that vault scope", "references/v3-operation.md"),
     )
     for label, content, marker, filename in guidance_checks:

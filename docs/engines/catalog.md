@@ -1,6 +1,6 @@
 # V3 logical engine catalog
 
-**Status:** unreleased V3 candidate; logical organization only.
+**Status:** published in V3.0.0; logical organization only.
 
 An engine is a capability boundary used to explain behavior, organize use
 cases, assign tests and evolve the methodology consistently. It is not

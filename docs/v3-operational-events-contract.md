@@ -1,6 +1,6 @@
-# V3 candidate — operational event envelope
+# V3.0.0 contract — operational event envelope
 
-**Status:** unreleased V3 candidate; derived from D6.1 and D6.2.
+**Status:** published in V3.0.0; derived from D6.1 and D6.2. Runtime evidence remains bounded.
 
 Operational events are deterministic transparency and traceability records.
 They are not Records, Packages, ledgers, authority declarations or a second

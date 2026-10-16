@@ -3,7 +3,7 @@
 from pathlib import Path
 import argparse, copy, hashlib, json, uuid
 import subprocess
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 import yaml
 from validate_skill_package import validate
@@ -94,10 +94,24 @@ def main():
     assert not errors and any('human' in item for item in blockers),(errors,blockers)
     results.append({'case':'synthetic pending human decision remains blocked after real acceptance','passed':True})
     fixture=copy.deepcopy(actual);fixture['assessment_status']='ready'
+    challenge=fixture['ai_challenge']
+    challenge['status']='passed'
+    challenge['reviewer_session_id']='synthetic-challenge-session'
+    challenge['reviewed_at']=datetime.now(timezone.utc).isoformat()
+    challenge['reviewed_ai_review_id']=fixture['ai_semantic_review']['review_id']
+    challenge['package_lock_sha256']=fixture['review_target']['package_lock_sha256']
+    challenge['reviewer_type']='AI'
+    challenge['conclusion']='Synthetic validator fixture only; not an actual challenge approval.'
+    challenge['challenged_semantic_case_ids']=list(fixture['ai_semantic_review']['reviewed_semantic_case_ids'])
+    challenge['case_challenges']=[
+        {'case_id':case_id,'disposition':'stands','rationale':'Synthetic validator input only.',
+         'evidence':['skill/references/v3-operation.md']}
+        for case_id in challenge['challenged_semantic_case_ids']
+    ]
     fixture['human_review']={
         'status':'approved','reviewer':'synthetic fixture only',
         'decision':'synthetic validator input, not a real approval',
-        'reviewed_at':datetime.now(timezone.utc).isoformat(),
+        'reviewed_at':(datetime.now(timezone.utc)+timedelta(seconds=2)).isoformat(),
         'reviewed_ai_review_id':fixture['ai_semantic_review']['review_id'],
         'reviewed_ai_challenge_id':fixture['ai_challenge']['challenge_id'],
         'package_lock_sha256':fixture['review_target']['package_lock_sha256']}

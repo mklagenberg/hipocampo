@@ -1,6 +1,6 @@
-# V3 candidate — revocation and reach matrix
+# V3.0.0 contract — revocation and reach matrix
 
-**Status:** unreleased V3 candidate; derived from D6.5.
+**Status:** published in V3.0.0; derived from D6.5. Runtime reach remains bounded by the declared surface evidence.
 
 Revocation is an operational event with requester, approver, target, scope,
 reason class, mechanism, result and a reach matrix. Each surface is marked

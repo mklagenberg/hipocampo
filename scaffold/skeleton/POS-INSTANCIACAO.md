@@ -4,4 +4,4 @@
 
 ## V3 activation gate
 
-Confirm the immutable methodology release, skill 2.0.0 package hashes and vault ^3.0.0 tuple. Verify the actor, authorized vault scope and canonical CRUD capability. Accept the first active Collection before creating any Record. The example is proposal documentation, not a Record; do not turn it into knowledge by direct editing. No inbox is generated. Block activation if any required declaration or capability is unknown.
+Confirm the published immutable methodology release, the skill version and package hashes named by its canonical manifest, and the vault ^3.0.0 tuple. Verify the GitHub Release reports `immutable: true`, its tag resolves to the release target, pin that commit and check every package-lock hash. Verify the actor, authorized vault scope and canonical CRUD capability. Accept the first active Collection before creating any Record. The example is proposal documentation, not a Record; do not turn it into knowledge by direct editing. No inbox is generated. Block activation if any required declaration or capability is unknown.

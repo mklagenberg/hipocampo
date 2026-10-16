@@ -1,12 +1,12 @@
 # Hipocampo — SPEC
 
-Version: 3.0.0 · Follows [SemVer](https://semver.org/lang/pt-BR/)
+Version: 3.0.1 · Follows [SemVer](https://semver.org/lang/pt-BR/)
 
-**Release preparation, not a publication claim.** This branch prepares the
-V3.0.0 normative contract. Human acceptance, integration and the immutable tag
-and GitHub Release must still be verified. The latest published contract
-remains v2.2.0 until those gates pass. Reading, merging or installing a file
-does not adopt V3 in an existing vault. See [release preparation](docs/v3-release-preparation.md).
+V3.0.0 was published on 2026-10-08. This v3.0.1 PATCH corrects the release and
+skill-package markers; it preserves the V3.0.0 normative contract. Verify the
+exact published immutable release, matching tag-resolved commit and package
+hashes before installation. Reading, merging or installing a file does not adopt V3 in an
+existing vault. See the [release record](docs/v3-release-preparation.md).
 
 The V3 contract consists of this specification and the following normative
 adjacencies. They define one baseline, not optional alternative schemas:
@@ -133,7 +133,8 @@ acceptance where applicable, and is never automatic synchronization.
 ## 2-E. Compatibility decision gate
 
 Use COMPATIBILITY.yaml and the verified methodology/skill/vault tuple.
-Prepared target: methodology 3.0.0, skill 2.0.0, vault range ^3.0.0.
+Current package target: methodology 3.0.1, skill 2.0.1, vault range ^3.0.0.
+V3.0.0 remains the preserved contract baseline.
 Host identity is not part of the tuple. V2 content is diagnostic or migration
 input, not silently compatible. Unknown, inaccessible or integrity-failed
 evidence fails closed. Later V3 minors and patches preserve the raw V3.0.0
@@ -294,6 +295,6 @@ on resumption reconcile persisted effects before repeating a write.
 
 ## Version history
 
-3.0.0 is prepared as the first V3/LTE major; not yet published. Earlier
-version history remains in CHANGELOG.md and the preserved V2 snapshot.
-Decision 0119 remains proposed until final human acceptance.
+3.0.0 was published as the first V3/LTE major. Version 3.0.1 is a PATCH marker
+and package-guidance correction; earlier history remains in CHANGELOG.md and
+the preserved V2 snapshot. Decision 0119 was accepted before publication.

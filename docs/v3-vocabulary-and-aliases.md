@@ -1,7 +1,7 @@
-# V3 candidate — canonical vocabulary and conversational aliases
+# V3.0.0 contract — canonical vocabulary and conversational aliases
 
-**Status:** unreleased V3 candidate. It does not change the active v2.2.0
-contract or migrate existing vaults.
+**Status:** published in V3.0.0. Existing vaults are not migrated by this
+contract's publication.
 
 ## Canonical terms
 
@@ -44,4 +44,4 @@ needed.
 
 ## Release-preparation projection
 
-This adjacency is included by the prepared V3 SPEC. Unreleased/candidate wording above records development state, not proof of publication. Its normative scope is subordinate to SPEC and accepted decisions; existing vault adoption remains separately governed.
+This adjacency is included by the published V3 SPEC. Existing vault adoption remains separately governed.

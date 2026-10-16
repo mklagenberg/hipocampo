@@ -1,6 +1,6 @@
-# V3 candidate — external references
+# V3.0.0 contract — external references
 
-**Status:** unreleased V3 candidate.
+**Status:** published in V3.0.0.
 
 OKF, KSoR, Agent Knowledge and similar materials may be cited in sections
 labelled `comparison`, `inspiration`, `research` or `context`. The citation
