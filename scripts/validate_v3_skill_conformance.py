@@ -89,12 +89,15 @@ def validate_external(root: Path, mode: str, cases: dict, review: dict,
                 errors.append("missing semantic contract reference: " + reference)
     inventory = make_inventory(root)
     pending = review_errors(receipt, inventory["payload_sha256"])
-    if receipt:
+    if isinstance(receipt, dict):
         for role in ("ai_review", "independent_challenge"):
-            if set(receipt.get(role, {}).get("semantic_case_ids", [])) != ids:
+            entry = receipt.get(role)
+            case_ids = entry.get("semantic_case_ids", []) if isinstance(entry, dict) else []
+            if not isinstance(case_ids, list) or any(not isinstance(item, str) for item in case_ids) or set(case_ids) != ids:
                 pending.append(role + " must cover every canonical semantic skill case")
         required_hosts = set(manifest.get("runtime", {}).get("required_host_modes", []))
-        observed = {host.get("mode") for host in receipt.get("host_observations", []) if host.get("status") == "passed"}
+        hosts = receipt.get("host_observations", [])
+        observed = {host.get("mode") for host in hosts if isinstance(host, dict) and host.get("status") == "passed"} if isinstance(hosts, list) else set()
         if not required_hosts or not required_hosts.issubset(observed):
             pending.append("all declared host modes need observed exact-payload evidence")
     return errors, pending

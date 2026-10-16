@@ -102,6 +102,10 @@ def main():
             ('missing evidence',lambda v:v['human_approval'].pop('evidence')),
             ('missing semantic coverage',lambda v:v['independent_challenge'].update(semantic_case_ids=[])),
             ('missing declared host',lambda v:v.update(host_observations=v['host_observations'][:-1])),
+            ('null pending human timestamp',lambda v:v['human_approval'].update(at=None)),
+            ('null human approval entry',lambda v:v.update(human_approval=None)),
+            ('malformed independent coverage',lambda v:v['independent_challenge'].update(semantic_case_ids=[{}])),
+            ('malformed host observation',lambda v:v.update(host_observations=[None])),
         ]:
             changed=copy.deepcopy(receipt);mutate(changed);errors,blockers=gate.validate(root,'release',changed)
             assert errors or blockers,label

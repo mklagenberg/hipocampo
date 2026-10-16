@@ -45,6 +45,8 @@ def validate_graph(nodes: list[dict]) -> list[str]:
 def review_errors(receipt: dict | None, payload: str) -> list[str]:
     if receipt is None:
         return ["final receipt is absent: AI review, independent challenge, human approval and host evidence required"]
+    if not isinstance(receipt, dict):
+        return ["final receipt must be a mapping"]
     errors = []
     if receipt.get("payload_sha256") != payload:
         errors.append("review receipt belongs to another payload")
@@ -52,12 +54,18 @@ def review_errors(receipt: dict | None, payload: str) -> list[str]:
     sessions = []
     for role in ("ai_review", "independent_challenge", "human_approval"):
         entry = receipt.get(role, {})
+        if not isinstance(entry, dict):
+            errors.append(role + " is incomplete or malformed")
+            continue
         if entry.get("status") != ("approved" if role == "human_approval" else "passed"):
             errors.append(role + " is incomplete")
         if not entry.get("identity") or not entry.get("evidence") or entry.get("payload_sha256") != payload:
             errors.append(role + " needs identity, evidence and exact payload binding")
         try:
-            instant = datetime.fromisoformat(entry["at"].replace("Z", "+00:00"))
+            value = entry.get("at")
+            if not isinstance(value, str):
+                raise ValueError("timestamp is not recorded")
+            instant = datetime.fromisoformat(value.replace("Z", "+00:00"))
             if instant.tzinfo is None:
                 raise ValueError("timezone required")
             times.append(instant)
@@ -74,7 +82,7 @@ def review_errors(receipt: dict | None, payload: str) -> list[str]:
         errors.append("declared-host observations are absent")
     else:
         for host in hosts:
-            if host.get("status") != "passed" or not host.get("mode") or not host.get("evidence") or host.get("payload_sha256") != payload:
+            if not isinstance(host, dict) or host.get("status") != "passed" or not host.get("mode") or not host.get("evidence") or host.get("payload_sha256") != payload:
                 errors.append("host observation lacks a passed mode, evidence or payload binding")
     return errors
 
