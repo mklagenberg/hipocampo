@@ -56,6 +56,7 @@ def make_inventory(root: Path) -> dict:
 
 def contained(root: Path, relative: str) -> Path:
     if (not isinstance(relative, str) or not relative or "\\" in relative or ":" in relative
+            or any(ord(char) < 32 for char in relative)
             or relative.startswith("/") or any(part in {"", ".", ".."} for part in relative.split("/"))):
         raise ChannelError("non-canonical payload path")
     candidate = root / relative
@@ -104,6 +105,23 @@ def source_identity(root: Path, expected: str, *, allow_dirty: bool = False) -> 
         raise ChannelError("source origin is not the canonical methodology repository")
     if not allow_dirty and git("status", "--porcelain", "--untracked-files=normal"):
         raise ChannelError("installation requires a clean pinned source checkout")
+    # Git can call a CRLF working copy clean while its committed blob is LF.
+    # A commit alone therefore does not identify the actual distributed bytes.
+    files = payload_files(root)
+    queries = b"".join((expected + ":" + relative + "\n").encode("utf-8") for relative in files)
+    blobs = subprocess.run(["git", "-C", str(root), "cat-file", "--batch"], input=queries,
+                           capture_output=True, check=True).stdout
+    offset = 0
+    for relative in files:
+        end = blobs.find(b"\n", offset)
+        header = blobs[offset:end].split()
+        if len(header) != 3 or header[1] != b"blob":
+            raise ChannelError("payload is not completely represented by the pinned commit")
+        size = int(header[2])
+        committed = blobs[end + 1:end + 1 + size]
+        offset = end + size + 2
+        if contained(root, relative).read_bytes() != committed:
+            raise ChannelError("checkout bytes differ from pinned Git blob; honor .gitattributes: " + relative)
 
 
 def read_api(path: str) -> dict:
