@@ -1,5 +1,17 @@
 # V3 logical engine catalog
 
+## Current executable distribution route
+
+For methodology 3.1.0 use the pinned-source runtime/channel procedure, optional
+RC tag and external-payload final receipt. Experimental emits WARNING and allows
+valid canonical engine operations; no GitHub Release/future stable is needed.
+Stable still verifies actual immutable publication. Prior dated pilot/publication
+statements below are historical, not current execution blockers. No private-vault
+rollout, global install or unsupported-host claim is implied.
+
+See [complete runtime procedure](../v3-runtime-usage.md).
+
+
 **Status:** published in V3.0.0; logical organization only.
 
 An engine is a capability boundary used to explain behavior, organize use

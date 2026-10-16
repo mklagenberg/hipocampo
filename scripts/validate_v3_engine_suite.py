@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import shlex
 import subprocess
+import sys
 from pathlib import Path
 
 import yaml
@@ -32,6 +33,7 @@ def load_fixture(root: Path, reference: str) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
+    parser.add_argument("--channel", choices=("stable", "experimental"), default="stable")
     args = parser.parse_args()
     root = Path(args.root).resolve()
     matrix_path = root / "docs/engines/test-matrix.yaml"
@@ -62,8 +64,12 @@ def main() -> int:
             command_count += 1
             try:
                 argv = shlex.split(command)
-                result = subprocess.run(argv, cwd=root, capture_output=True, text=True, check=False)
-            except (OSError, ValueError) as exc:
+                if argv[0] in {"python", "python3"}:
+                    argv[0] = sys.executable
+                if len(argv) > 1 and Path(argv[1]).name == "validate_compatibility.py":
+                    argv.extend(["--channel", args.channel])
+                result = subprocess.run(argv, cwd=root, capture_output=True, text=True, check=False, timeout=180)
+            except (OSError, ValueError, subprocess.TimeoutExpired) as exc:
                 errors.append(f"{engine_id}: could not execute {command!r}: {exc}")
                 continue
             if result.returncode != 0:
@@ -92,8 +98,10 @@ def main() -> int:
         semantic_revalidation_count = 1
         try:
             argv = shlex.split(semantic_revalidation_command)
-            result = subprocess.run(argv, cwd=root, capture_output=True, text=True, check=False)
-        except (OSError, ValueError) as exc:
+            if argv[0] in {"python", "python3"}:
+                argv[0] = sys.executable
+            result = subprocess.run(argv, cwd=root, capture_output=True, text=True, check=False, timeout=180)
+        except (OSError, ValueError, subprocess.TimeoutExpired) as exc:
             errors.append(f"policy: could not execute semantic revalidation: {exc}")
         else:
             if result.returncode != 0:
@@ -110,8 +118,10 @@ def main() -> int:
         command_count += 1
         try:
             argv = shlex.split(coverage_gap_scenario_command)
-            result = subprocess.run(argv, cwd=root, capture_output=True, text=True, check=False)
-        except (OSError, ValueError) as exc:
+            if argv[0] in {"python", "python3"}:
+                argv[0] = sys.executable
+            result = subprocess.run(argv, cwd=root, capture_output=True, text=True, check=False, timeout=180)
+        except (OSError, ValueError, subprocess.TimeoutExpired) as exc:
             errors.append(f"policy: could not execute coverage-gap scenarios: {exc}")
         else:
             if result.returncode != 0:

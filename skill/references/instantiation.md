@@ -1,6 +1,6 @@
 # V3 Bootstrap and instantiation
 
-Use the canonical scaffold profile and V3 contracts from the verified, version-matched published release for a new vault. Confirm the tag resolves to the release target, pin its commit and verify profile/package hashes; HEAD of main is availability context, never the scaffold provenance source. This
+Use the canonical scaffold profile and V3 contracts from the verified, version-matched source for a new vault. Stable uses the immutable published release; explicit experimental use pins its commit/RC tag and hashes, emits WARNING and requires no GitHub Release or future stable. Confirm the tag resolves to the release target, pin its commit and verify profile/package hashes; HEAD of main is availability context, never the scaffold provenance source. This
 procedure creates a plan first; a repository name, invitation, tool or available
 account does not itself authorize repository creation or governed writes.
 

@@ -4,7 +4,27 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
-## [3.0.1] — 2026-10-15 (prepared; not published)
+## [3.1.0] — 2026-10-16
+
+### Added
+
+- Explicit experimental execution of pinned snapshots/optional tag-only RCs.
+  Candidate warnings preserve successful canonical motor execution; stable
+  selection still requires the published immutable release.
+- Isolated local CLI distribution and bounded OS-principal policy adapter for
+  canonical CRUD/Search, executable installation, inventory and recovery.
+- Pre-tag aggregate preflight with external exact-payload review receipt,
+  dependency-cycle checks and real installed runtime regressions.
+
+### Fixed
+
+- Reconcile current README, manifests, skill, scaffold guidance and prompts;
+  source identity no longer acts as a frozen denial of later publication.
+- Keep final-only readiness requirements separate from candidate execution,
+  and preserve independent methodology/skill versions and the 3.0.0 baseline.
+
+
+## [3.0.1] — 2026-10-16
 
 ### Fixed
 

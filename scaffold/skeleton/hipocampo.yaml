@@ -20,7 +20,7 @@ hipocampo:
   manifest_version: "1.0"
   compatibility: "^3.0.0"
   verified_against: "<fill in: version of hipocampo/SPEC.md at instantiation time>"
-  verified_commit: "<fill in: commit resolved from the verified immutable methodology release used as the scaffold source>"
+  verified_commit: "<fill in: commit resolved from the verified source selected for the stable or explicit experimental channel>"
 
 instance:
   repository: "<fill in: URL of this repository>"

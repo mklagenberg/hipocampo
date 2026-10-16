@@ -7,13 +7,13 @@ framework:
 subject:
   id: "hipocampo"
   kind: "methodology"
-  version: "3.0.1"
+  version: "3.1.0"
   adoption_mode: "retrospective"
 
 assessment:
   claim_stage: "mapped"
   result: "partial"
-  scope: "Historical V2 control evidence retained with the published V3 source and the V3.0.1 package-marker correction; no full MODA reaudit or whole-vault adoption claim. Dated prior notes remain historical."
+  scope: "Historical MODA mapping retained with compatible 3.1.0 executable distribution/channel additions; no full MODA reaudit, private-vault adoption or unobserved-host claim."
 
 controls:
   problem_and_purpose:

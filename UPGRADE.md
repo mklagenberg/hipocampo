@@ -1,5 +1,18 @@
 # Hipocampo — Instance Upgrade Guide
 
+
+## V3.1 executable distribution and experimental channel
+
+Use [runtime installation](docs/v3-runtime-usage.md) and the
+[channel contract](docs/v3-distribution-and-channels.md). Stable requires the
+verified immutable published release. Explicit experimental use pins a source
+commit/optional RC tag and hashes; it emits WARNING and allows valid canonical
+engine operations without a GitHub Release or future stable publication.
+No Record-schema migration is required from compatible V3.0.x; V2 adoption
+retains its separate governed migration. Preserve previous installs and user
+state. Do not activate globally or change an instance without authorization.
+
+
 ## V3.0.1 package correction — explicit adoption required
 
 The package target is methodology 3.0.1 / skill 2.0.1 / vault ^3.0.0. V3.0.0
