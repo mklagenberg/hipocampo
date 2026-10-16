@@ -47,10 +47,20 @@ def validate_external(root: Path, mode: str, cases: dict, review: dict,
     target = review.get("review_target", {})
     lock_hash = hashlib.sha256((root / "skill/package-lock.yaml").read_bytes()).hexdigest()
     if (review.get("assessment_status") != "external-receipt"
+            or review.get("suite_id") != "v3-skill-conformance"
+            or target.get("package_root") != "skill"
+            or target.get("skill_manifest") != "manifest.yaml"
+            or target.get("package_lock") != "package-lock.yaml"
             or target.get("skill_version") != manifest["skill"]["version"]
             or target.get("package_lock_sha256") != lock_hash
             or target.get("methodology_baseline") != "3.0.0"):
         errors.append("external review routing must bind to the exact skill package and V3.0.0 baseline")
+    release_ref = manifest.get("updates", {}).get("release_ref")
+    if (manifest.get("skill", {}).get("source_repository") != "https://github.com/mklagenberg/hipocampo"
+            or manifest.get("skill", {}).get("release_status") not in {"released", "immutable-release-target"}
+            or manifest.get("updates", {}).get("immutable_package") !=
+                f"https://github.com/mklagenberg/hipocampo/tree/{release_ref}/skill/"):
+        errors.append("external review must preserve canonical source and exact package reference")
     if (manifest["methodology"]["baseline_contract"] != "3.0.0"
             or not satisfies("3.0.0", manifest["methodology"]["compatibility"])
             or manifest["updates"]["release_ref"] != "v" + contract["methodology"]["version"]):
@@ -59,7 +69,12 @@ def validate_external(root: Path, mode: str, cases: dict, review: dict,
         errors.append("portable skill remains instructions-only; executables belong to the separate runtime")
     if cases.get("target_methodology") != "3.0.0" or cases.get("baseline_contract") != "3.0.0" or cases.get("privacy") != "synthetic-only":
         errors.append("case suite must preserve the synthetic V3.0.0 baseline")
-    for case in cases.get("deterministic_cases", []):
+    deterministic = cases.get("deterministic_cases", [])
+    if not deterministic or len({item.get("id") for item in deterministic}) != len(deterministic):
+        errors.append("deterministic cases must be nonempty and uniquely identified")
+    for case in deterministic:
+        if not case.get("id") or not case.get("expected_action"):
+            errors.append("deterministic cases require identity and expected action")
         if compatibility_state(case["input"]) != case.get("expected_state"):
             errors.append("deterministic skill conformance case failed: " + case["id"])
     semantic = cases.get("semantic_cases", [])
