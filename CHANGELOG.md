@@ -4,6 +4,12 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+### Changed
+
+- Document the existing LF repository policy for contributors and generate a
+  reviewed `.gitattributes` default for new vaults, with binary and
+  byte-preservation exceptions. Existing vaults adopt the guidance separately.
+
 ### Fixed
 
 - Bump the independently versioned skill candidate to 2.2.0 for bundled V2

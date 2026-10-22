@@ -1,0 +1,34 @@
+change_set:
+  id: 0139-lf-line-endings-guidance
+  class: operational
+  semver: patch
+  status: proposed
+  backfill: false
+  decisions:
+  - decisions/0113-cross-platform-repository-hygiene.md
+  - decisions/0123-lf-text-with-byte-preservation-exceptions.md
+impact:
+- artifact: decisions/0123-lf-text-with-byte-preservation-exceptions.md
+  status: updated
+  note: Record the durable LF default and exact-byte exceptions.
+- artifact: docs/line-endings.md, CONTRIBUTING.md, scaffold/README.md
+  status: updated
+  note: Document LF behavior, byte-preservation exceptions and review steps.
+- artifact: scaffold/profiles/pessoal.yaml, scaffold/profiles/empresa.yaml, scaffold/skeleton/.gitattributes, scaffold/skeleton/POST-INSTANTIATION.md
+  status: updated
+  note: Emit a versioned LF default for newly generated vaults.
+- artifact: CHANGELOG.md
+  status: updated
+  note: Announce the operational guidance and scaffold output.
+- artifact: .gitattributes, SPEC.md, docs/taxonomy.md, management/CONSTITUTION.md, skill/
+  status: not-applicable
+  note: Existing methodology attributes and contract suffice; no new term, schema or bundled skill instruction.
+validation:
+  commands:
+  - python scripts/validate_hipocampo.py --root .
+  - python scripts/validate_contracts.py --root .
+  - python scripts/validate_change.py --root . --base <base> --head <head>
+  - git check-attr text eol -- README.md scaffold/skeleton/.gitattributes
+  evidence:
+  - changes/0139-lf-line-endings-guidance/proposal.md
+  notes: No existing vault blob is renormalized by this Change Set.
