@@ -10,6 +10,12 @@ The V3 contract uses one persisted vocabulary for `Record`, `Chunk`,
 `Curator`, `User`, and `Source`. `Source` is provenance, not a governance
 role. An alias is a routing convenience, not a persisted type.
 
+`Vault` names every Hipocampo knowledge repository. `entity`, `team`, and
+`personal` are its three V3 policy profiles, not three repository kinds.
+`concepts` is a possible subject, scope or historical repository name, never
+a fourth profile. The V2-era `curation_level: content | vault` is a separate
+field and cannot establish a V3 profile.
+
 An Artifact-linked Record also declares its material representation as
 `format: prose`. This describes the persisted Record content, not a promise
 that the referenced Artifact can be fetched. Structured metadata can support

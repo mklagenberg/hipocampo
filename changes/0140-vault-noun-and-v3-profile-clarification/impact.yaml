@@ -1,0 +1,39 @@
+change_set:
+  id: 0140-vault-noun-and-v3-profile-clarification
+  class: normative
+  semver: patch
+  status: proposed
+  backfill: false
+  decisions:
+  - decisions/0041-entity-model-and-vault-vocabulary.md
+  - decisions/0074-v3-entity-aware-crud-and-vault-profiles.md
+impact:
+- artifact: SPEC.md, docs/v3-vocabulary-and-aliases.md, docs/v3-crud-contract.md
+  status: updated
+  note: Make the already accepted Vault noun and three-profile V3 contract explicit.
+- artifact: docs/taxonomy.md, README.md, BEST-PRACTICES.md
+  status: updated
+  note: Align current conceptual and user-facing navigation.
+- artifact: BEST-PRACTICES-V2.md, GETTING-STARTED-V2.md
+  status: updated
+  note: Label older repository-vault wording as historical without changing V2 behavior.
+- artifact: scripts/validate_v3_crud.py
+  status: updated
+  note: Reject concepts and old curation values as V3 vault profiles.
+- artifact: CHANGELOG.md
+  status: updated
+  note: Announce the clarification.
+- artifact: skill/, scaffold/, vault manifests, Records, management/CONSTITUTION.md
+  status: not-applicable
+  note: No bundled skill or scaffold content change, real-vault adoption, constitutional amendment or data migration in this correction.
+validation:
+  commands:
+  - python scripts/validate_hipocampo.py --root .
+  - python scripts/validate_contracts.py --root .
+  - python scripts/validate_skill_docs.py --root .
+  - python scripts/validate_skill_package.py --root .
+  - python scripts/validate_v3_crud.py --root .
+  - python scripts/validate_change.py --root . --base <base> --head <head>
+  evidence:
+  - changes/0140-vault-noun-and-v3-profile-clarification/proposal.md
+  notes: Remote manifest review is recorded in management; no vault file is changed.

@@ -154,6 +154,14 @@ def main() -> int:
         "team vault without scope",
         errors,
     )
+    for invalid_profile in ("concepts", "content", "vault"):
+        expect_block(
+            lambda profile=invalid_profile: validate_vault_contract({
+                "vault_id": "vault-a", "entity": "entity-a", "profile": profile, "role": "additional",
+            }),
+            f"legacy or subject label used as vault profile: {invalid_profile}",
+            errors,
+        )
     team_vault = {
         "vault_id": "entity-a-project-alpha",
         "entity": "entity-a",

@@ -12,6 +12,10 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ### Fixed
 
+- Clarify that every Hipocampo knowledge repository is a Vault and that V3
+  vault profiles are only `entity`, `team` or `personal`. Mark V2 wording as
+  historical and assert that `concepts`, `content` and `vault` are not V3
+  profiles; compatible legacy manifests remain unchanged.
 - Bump the independently versioned skill candidate to 2.2.0 for bundled V2
   read instructions and references. Add a PR gate that rejects changed skill
   content without a higher skill version; external methodology references
