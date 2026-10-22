@@ -28,6 +28,9 @@ impact:
 - artifact: scripts/vault_profile_selection.py, scripts/validate_vault_profile_selection.py, docs/v3-vault-profile-selection-fixtures.yaml, scripts/validate_bootstrap_invitation.py, scripts/validate_contracts.py
   status: updated
   note: Exercise selection and missing-profile outcomes, and lock cross-surface declarations.
+- artifact: .github/workflows/validate.yml
+  status: updated
+  note: Keep profile-selection and Bootstrap regression checks on every PR.
 - artifact: real Vaults, Records, ACLs, client installations, historical releases, MIGRATIONS.md, management/CONSTITUTION.md
   status: not-applicable
   note: No automatic adoption, content migration, access change or constitutional exception.
