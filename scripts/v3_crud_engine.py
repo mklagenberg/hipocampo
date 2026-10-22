@@ -350,6 +350,7 @@ class RecordCrud:
             self._records = deepcopy(records or {})
         self.events: list[dict] = []
         self._idempotency: dict[str, dict] = {}
+        self._idempotency_fingerprints: dict[str, str] = {}
         self._migration_fingerprints: dict[str, str] = {}
         for record in self._records.values():
             validate_record_structure(record, self.active_collections)
@@ -359,16 +360,28 @@ class RecordCrud:
         """Read-only snapshot; callers cannot mutate the persistence store."""
         return deepcopy(self._records)
 
-    def _cached(self, idempotency_key: str | None) -> dict | None:
-        return deepcopy(self._idempotency[idempotency_key]) if idempotency_key in self._idempotency else None
+    @staticmethod
+    def _request_fingerprint(payload: dict) -> str:
+        encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=True, default=str).encode("utf-8")
+        return hashlib.sha256(encoded).hexdigest()
 
-    def _remember(self, idempotency_key: str | None, result: dict) -> dict:
+    def _cached(self, idempotency_key: str | None, fingerprint: str) -> dict | None:
+        if not idempotency_key or idempotency_key not in self._idempotency:
+            return None
+        if self._idempotency_fingerprints.get(idempotency_key) != fingerprint:
+            raise ContractError("idempotency key was reused for a different CRUD request")
+        return deepcopy(self._idempotency[idempotency_key])
+
+    def _remember(self, idempotency_key: str | None, result: dict, fingerprint: str) -> dict:
         if idempotency_key:
             self._idempotency[idempotency_key] = deepcopy(result)
+            self._idempotency_fingerprints[idempotency_key] = fingerprint
         return deepcopy(result)
 
     def create(self, record: dict, *, semantic_review: dict, actor: str, reason: str, idempotency_key: str | None = None) -> dict:
-        cached = self._cached(idempotency_key)
+        fingerprint = self._request_fingerprint({"operation": "create", "record": record,
+                                                 "semantic_review": semantic_review, "actor": actor, "reason": reason})
+        cached = self._cached(idempotency_key, fingerprint)
         if cached:
             return cached
         if not actor or not reason:
@@ -383,7 +396,7 @@ class RecordCrud:
         self._records[structural["record_id"]] = structural
         event = _event("created", structural, actor=actor, result="accepted", reason=reason)
         self.events.append(event)
-        return self._remember(idempotency_key, {"status": "accepted", "record": structural, "event": event})
+        return self._remember(idempotency_key, {"status": "accepted", "record": structural, "event": event}, fingerprint)
 
     def migrate(
         self,
@@ -419,7 +432,7 @@ class RecordCrud:
         previous_fingerprint = self._migration_fingerprints.get(idempotency_key)
         if previous_fingerprint and previous_fingerprint != request_fingerprint:
             raise ContractError("migration idempotency key was reused for a different request")
-        cached = self._cached(idempotency_key)
+        cached = self._cached(idempotency_key, request_fingerprint)
         if cached:
             return cached
         if self._persistence is None:
@@ -466,7 +479,7 @@ class RecordCrud:
             "record": structural,
             "event": event,
             "recovery_ticket": ticket,
-        })
+        }, request_fingerprint)
 
     def recover_migration(self, ticket_id: str, *, expected_ticket_sha256: str,
                           recovery_context: dict, semantic_review: dict,
@@ -499,6 +512,7 @@ class RecordCrud:
             raise ContractError("canonical recovery persistence returned an invalid status")
         self._records.pop(ticket["record_id"], None)
         self._idempotency.clear()
+        self._idempotency_fingerprints.clear()
         self._migration_fingerprints.clear()
         event = {"event_type": "record_migration_recovery", "actor": actor,
             "reason": reason, "result": status, "record_id": ticket["record_id"]}
@@ -526,7 +540,10 @@ class RecordCrud:
 
     def update(self, record_id: str, patch: dict, *, expected_version: int, semantic_review: dict,
                actor: str, reason: str, operation: str = "update", idempotency_key: str | None = None) -> dict:
-        cached = self._cached(idempotency_key)
+        fingerprint = self._request_fingerprint({"operation": operation, "record_id": record_id,
+                                                 "patch": patch, "expected_version": expected_version,
+                                                 "semantic_review": semantic_review, "actor": actor, "reason": reason})
+        cached = self._cached(idempotency_key, fingerprint)
         if cached:
             return cached
         if not actor or not reason:
@@ -550,7 +567,7 @@ class RecordCrud:
         event = _event("updated", structural, actor=actor, result="accepted", reason=reason)
         event["previous_record_version"] = current["record_version"]
         self.events.append(event)
-        return self._remember(idempotency_key, {"status": "accepted", "record": structural, "event": event})
+        return self._remember(idempotency_key, {"status": "accepted", "record": structural, "event": event}, fingerprint)
 
     def normalize_legacy_frontmatter(
         self,

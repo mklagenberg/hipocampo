@@ -1,9 +1,13 @@
-# Install and run the V3 local runtime
+# Install and run the optional V3 local runtime
 
 The executable distribution composes the canonical CRUD and Search engines.
 It is separate from the instructions-only skill; it is not an MCP server.
-Python 3.12, Git and PyYAML 6.x are required. Use an isolated Python environment
-and install `requirements-runtime.txt` there; never silently modify global tools.
+Python 3.12, Git and PyYAML 6.x are required **for this local CLI route**.
+Remote-vault daily operation uses GitHub MCP through the governed CRUD path;
+the skill also specifies a no-Python route when equivalent structural proofs
+and required MCP operations are available. This local CLI does not prove a
+remote write. Use an isolated Python environment and install
+`requirements-runtime.txt` there; never silently modify global tools.
 
 ## Installation
 

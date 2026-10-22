@@ -10,7 +10,7 @@ description: >
 
 # Hipocampo V3 Skill
 
-**Skill package:** `2.3.0`. **Methodology compatibility:**
+**Skill package:** `2.4.0`. **Methodology compatibility:**
 `^3.0.0`. **Execution channel:** stable is the default and requires the exact
 published immutable release, tag-resolved commit and package hashes.
 Explicit experimental execution verifies a pinned source commit/inventory;
@@ -56,25 +56,27 @@ Keep these questions separate:
 
 A host name or shared Git provider answers none of those questions by itself.
 
-## Configure the personal anchor
+## Discover a vault
 
 This generic package contains no user-specific vault address or identity
-registry. Read **[personalization](references/personalization.md)** and keep
-only an optional personal anchor pointer in host-local state. Discover other
-repositories from authorized, current manifests; never store a second router
-or infer authorization from discovery or account access.
-Without an anchor, use bounded candidate discovery and current remote target
-verification; do not require personal-Vault creation for authorized entity
-reading. See the personalization and instantiation procedures.
+registry. Keep only an optional personal anchor pointer in host-local state.
+Use [personalization](references/personalization.md) for that path and direct
+invitations. Without an anchor, use bounded candidate discovery and verify
+the current remote target; do not require a personal Vault for authorized
+entity reading. An address, repository listing or local hint is neither a
+permission grant nor a complete Vault inventory.
 
 ## Discover vaults and entities
 
-At the start of a session that needs repository context, identify the
-requested operation and its entity, knowledge scope and target vaults. Read
-only the required manifests and metadata through an available authorized metadata-read capability, separate from RecordCrud.read. Preserve each vault as a separate authority and source.
-Shared access, account, Git provider, entity name or similar content does not
-join their governance. If actor authorization or a non-empty authorized-vault
-set is missing, empty or mismatched, block the V3 read.
+At first use, on entry to a new vault or entity, or after a change of account,
+skill or connector, run the operation-level diagnostic in
+**[V3 operation and compatibility](references/v3-operation.md)**. Identify the
+requested operation, entity, scope and exact repository. Use GitHub MCP to
+confirm the actor, remote manifest and permission for that repository. A
+confirmed repository read permits Hipocampo presentation up to `internal`
+without a prior vault registration or personal anchor. Higher classifications
+need the vault's separate clearance proof. Shared access does not join vault
+governance or confer writing or epistemic authority.
 
 For content retrieval, follow the bounded **progressive-disclosure read** in
 **[V3 operation and compatibility](references/v3-operation.md#3-progressive-disclosure-read)**.
@@ -89,18 +91,21 @@ persist a governed Record change after both required stages pass. Never write
 Records directly through a filesystem tool, GitHub contents API, MCP transport,
 engine, normalizer, migration routine or host convenience feature.
 
-If the environment does not expose the required canonical CRUD operation with
-its actor, reason, expected version, authorization scope and idempotency
-context, stop that durable operation. Do not replace it with direct file edits.
+When Python is available, use the compatible canonical engine. Otherwise
+follow the semantic CRUD procedure and perform the same required reproducible
+checks with GitHub MCP evidence. If a required check or transport operation
+cannot be performed, stop only the affected durable action. The MCP's file
+functions are transport inside CRUD, never a shortcut around it.
 
 ## Bootstrap, invitation and repository creation
 
 Keep using the established procedures in
 **[instantiation](references/instantiation.md)**, with the V3 operation
-boundary above. A repository address is not trusted discovery; confirm its
-manifest and declared scope. Any durable registration or Record mutation goes
-through the authorized V3 path. If a host cannot perform the required governed
-operation, present the plan and report the capability gap without writing.
+boundary above. A repository address is a candidate, not an authorization;
+confirm its manifest and declared scope. Joining an entity vault for read does
+not require a personal anchor. Any durable registration or Record mutation
+goes through its authorized V3 path. If a host cannot perform the required
+operation, present the plan and report the exact capability gap without writing.
 
 ## Maintenance rituals
 

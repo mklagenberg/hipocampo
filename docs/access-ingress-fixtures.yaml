@@ -1,0 +1,143 @@
+schema_version: "1.0"
+fixtures:
+  - id: internal-read-without-vault-registration
+    target: org/entity-vault
+    classification: internal
+    secure_filtering: true
+    repo_read: &verified_read
+      status: allow
+      target: org/entity-vault
+      operation: read
+      authenticated: true
+      host: github
+      account_id: account-1
+      session_id: session-1
+      proof_source: authenticated-host-read
+      nonce: nonce-1
+      head_sha: abc123
+      evidence: observed-read
+      observed_at: "2026-10-21T12:00:00Z"
+      signature: fixture-verified
+    expected: proven_repository_read
+  - id: no-target-read-proof
+    target: org/entity-vault
+    classification: internal
+    repo_read: {status: unknown, target: org/entity-vault}
+    expected: target_read_access_unproven
+  - id: caller-dict-without-authenticated-host-binding
+    target: org/entity-vault
+    classification: internal
+    secure_filtering: true
+    repo_read: {status: allow, target: org/entity-vault, operation: read, evidence: caller-claimed, observed_at: "2026-10-21T12:00:00Z"}
+    expected: target_read_access_unproven
+  - id: filtering-capability-not-proven-by-default
+    target: org/entity-vault
+    classification: internal
+    repo_read: *verified_read
+    expected: host_cannot_filter_safely
+  - id: restricted-classification
+    target: org/entity-vault
+    classification: restricted
+    secure_filtering: true
+    repo_read: *verified_read
+    expected: clearance_required
+  - id: mixed-content-host-cannot-filter
+    target: org/entity-vault
+    classification: internal
+    secure_filtering: false
+    repo_read: *verified_read
+    expected: host_cannot_filter_safely
+  - id: entity-write-with-github-write-no-grant
+    profile: entity
+    operation: create
+    expected: entity_grant_required_or_not_current
+  - id: entity-grant-scoped-to-another-target
+    profile: entity
+    operation: create
+    grant_present: true
+    grant_state_target: org/other
+    expected: entity_grant_required_or_not_current
+  - id: entity-grant-valid-but-no-mcp-crud
+    profile: entity
+    operation: create
+    grant_present: true
+    grant_valid_until: null
+    expected: mcp_or_crud_unproven
+  - id: entity-grant-missing-valid-until
+    profile: entity
+    operation: create
+    grant_present: true
+    grant_omit_valid_until: true
+    expected: entity_grant_required_or_not_current
+  - id: entity-grant-current-and-technical-pass
+    profile: entity
+    operation: create
+    grant_present: true
+    mcp_available: true
+    crud_available: true
+    expected: method_provider_mcp_and_crud_proven
+  - id: entity-grant-wrong-vault-id
+    profile: entity
+    operation: create
+    grant_present: true
+    grant_vault_id: another-vault
+    expected: entity_grant_required_or_not_current
+  - id: entity-grant-wrong-account
+    profile: entity
+    operation: create
+    grant_present: true
+    grant_account_id: account-other
+    expected: entity_grant_required_or_not_current
+  - id: entity-grant-wrong-scope
+    profile: entity
+    operation: create
+    grant_present: true
+    grant_scope: scope-other
+    expected: entity_grant_required_or_not_current
+  - id: entity-grant-expired
+    profile: entity
+    operation: create
+    grant_present: true
+    grant_valid_until: "2026-10-20T12:00:00Z"
+    expected: entity_grant_required_or_not_current
+  - id: entity-grant-revoked
+    profile: entity
+    operation: create
+    grant_present: true
+    grant_state_current: false
+    expected: entity_grant_required_or_not_current
+  - id: entity-grant-stale-state-unverified
+    profile: entity
+    operation: create
+    grant_present: true
+    grant_state_current: false
+    expected: entity_grant_required_or_not_current
+  - id: entity-grant-without-current-state-verifier
+    profile: entity
+    operation: create
+    grant_present: true
+    grant_verifier_available: false
+    expected: entity_grant_required_or_not_current
+  - id: personal-read-only-is-eligible-not-executable
+    profile: personal
+    operation: update
+    expected: provider_write_unproven
+  - id: personal-spoofed-provider-write
+    profile: personal
+    operation: update
+    provider_write_spoofed: true
+    expected: provider_write_unproven
+  - id: new-vault-creator-representative-scoped
+    actor_account_id: account-42
+    expected: new_vault_only
+  - id: no-anchor-partial-enumeration
+    candidates: [org/entity-vault]
+    expected: target_revalidation_required
+  - id: no-anchor-no-candidates-incomplete-enumeration
+    candidates: []
+    expected: absence_not_proven
+  - id: operation-layer-diagnostic
+    operation: read
+    expected: five_independent_layers
+  - id: ingress-read-findings-verified-context
+    expected: read_only_findings

@@ -7,12 +7,14 @@ paths.
 
 ## Read
 
-Before a governed Read, require an explicit actor and authorization context
-covering the requested vault. The context must include a non-empty
-`authorized_vault_ids` set containing that vault. Missing, empty, ambiguous or
-mismatched authority fails closed. Do not infer access from repository
-visibility, current login, invitation, shared Git provider or remembered
-identity.
+Before a governed Read, identify the authenticated actor, exact repository,
+entity and scope, and verify current GitHub MCP read access to that vault.
+Lack of a personal anchor or explicit vault registration does not block
+presentation through `internal`. An asserted `authorized_vault_ids` value,
+invitation, current login, cached clone or visibility label alone is not
+proof of access. `confidential` and `restricted` require separate current
+clearance under the target vault policy. If the host cannot filter before
+exposing a higher-classification body, that read mode is unavailable.
 
 Read frontmatter first and validate the record/version, entity, scope, vault,
 visibility, maturity, staleness and provenance at the time of the Read. Fetch
@@ -37,9 +39,18 @@ key, along with provenance and the relevant entity/scope/vault context.
    persist.
 2. **Deterministic validation:** the canonical CRUD gateway independently
    enforces schema, references, versions, immutable identity, allowed state
-   transitions, idempotency and atomicity before persistence.
+   transitions, idempotency and atomicity before persistence. Python is one
+   implementation, not a prerequisite. Without Python, collect reproducible
+   evidence through GitHub MCP for every required check; a semantic assertion
+   is not a substitute for an expected head, hash or version check.
 3. **Commit:** only that gateway may persist after both required validations
-   pass. Direct file writes and convenience APIs are prohibited.
+   pass. For remote vaults, the gateway uses GitHub MCP transport and verifies
+   the resulting ref and readback. Persist the Record and its key-hashed
+   idempotency receipt sidecar atomically in the same expected-head Git commit;
+   reconcile retries against the receipt and current Record before reporting
+   success. Direct file writes and convenience APIs
+   outside the gateway are prohibited. Missing MCP capability or permission
+   blocks the dependent remote mutation without implying a policy denial.
 
 Metadata-only normalization may use the deterministic CRUD path only when it
 does not make a semantic claim or change governed meaning.

@@ -38,6 +38,12 @@ jobs:
         run: python scripts/validate_v2_legacy_reader.py
       - name: Validate V2 and V3 version-age notices
         run: python scripts/validate_vault_version_notice.py
+      - name: Validate V3 remote access, ingress and classification
+        run: python scripts/validate_v3_access_runtime.py --root .
+      - name: Validate governed GitHub MCP persistence composition
+        run: python scripts/validate_v3_github_mcp_persistence.py --root .
+      - name: Validate retroactive use-case and dual-route quality gates
+        run: python scripts/validate_v3_quality_gates.py --root .
       - name: Validate V3 skill conformance gate
         run: python scripts/validate_v3_skill_conformance.py --root . --mode workflow
       - name: Validate installed RC execution and final-readiness separation

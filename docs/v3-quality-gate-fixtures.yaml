@@ -1,0 +1,1782 @@
+schema_version: '1.0'
+privacy: sanitized-no-real-content
+catalog_source: v3-crud-use-case-fixtures.yaml
+cases:
+- id: UC-CRUD-01-authorized-read
+  vector:
+    operation: read
+    authorization: matching-vault
+    record_state: present
+  expected: allow-no-write
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-02-unauthorized-read
+  vector:
+    operation: read
+    authorization: foreign-vault
+    record_state: present
+  expected: block
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-03-valid-create
+  vector:
+    operation: create
+    authorization: authorized
+    structure: valid
+  expected: allow
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-04-invalid-structure
+  vector:
+    operation: create
+    authorization: authorized
+    structure: invalid
+  expected: block
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-05-incomplete-semantic-review
+  vector:
+    operation: create
+    authorization: authorized
+    semantic_review: incomplete
+  expected: needs-review
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-06-versioned-update
+  vector:
+    operation: update
+    authorization: authorized
+    expected_version: current
+  expected: allow
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-07-concurrent-update
+  vector:
+    operation: update
+    authorization: authorized
+    expected_version: stale
+  expected: block
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-08-immutable-field-update
+  vector:
+    operation: update
+    authorization: authorized
+    immutable_identity_change: true
+  expected: block
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-09-artifact-divergence
+  vector:
+    operation: update
+    artifact: newer-available
+    used_version: existing
+  expected: preserve-used-version
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-10-processed-ingress
+  vector:
+    operation: ingress
+    minimization: complete
+    redaction: complete
+  expected: allow
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-11-raw-ingress
+  vector:
+    operation: ingress
+    minimization: incomplete
+    redaction: complete
+  expected: block
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-12-current-use-promotion
+  vector:
+    operation: create
+    current_use: true
+    staleness: current
+  expected: allow
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-13-stale-current-use
+  vector:
+    operation: create
+    current_use: true
+    staleness: stale
+  expected: block
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-14-migration-version-preflight
+  vector:
+    operation: migration
+    source_version: missing
+  expected: block
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-15-fingerprint-audit
+  vector:
+    operation: audit
+    fingerprint: mismatched
+  expected: block
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-16-archive-tombstone
+  vector:
+    operation: archive
+    authorization: authorized
+    expected_version: current
+  expected: allow
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-17-idempotent-mcp-retry
+  vector:
+    operation: create
+    idempotency: same-key-same-payload
+  expected: one-mutation
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-18-mcp-bypass
+  vector:
+    operation: unsupported-write
+    canonical_crud: bypass
+  expected: block
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-19-read-without-authorization-context
+  vector:
+    operation: read
+    authorization: absent
+    record_state: present
+  expected: block
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-20-read-with-empty-authorization-scope
+  vector:
+    operation: read
+    authorization: empty
+    record_state: present
+  expected: block
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+- id: UC-CRUD-21-direct-read-without-authorization-context
+  vector:
+    operation: direct-read
+    authorization: absent
+    record_state: present
+  expected: block
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+dual_capabilities:
+- id: canonical-record-mutation
+  mode: dual
+  invariants:
+  - authorization
+  - semantic-review-gate
+  - structure
+  - expected-version
+  - idempotency
+  - canonical-write-boundary
+  vectors:
+  - id: valid-create
+    semantic_fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-03-valid-create
+    semantic_expected: allow
+    deterministic_case_key: matrix:crud/reject-mcp-bypass
+    deterministic_expected: allow
+  - id: invalid-structure
+    semantic_fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-04-invalid-structure
+    semantic_expected: block
+    deterministic_case_key: matrix:crud/reject-mcp-bypass
+    deterministic_expected: block
+  - id: stale-update
+    semantic_fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-13-stale-current-use
+    semantic_expected: block
+    deterministic_case_key: matrix:crud/reject-stale-write
+    deterministic_expected: block
+  - id: incomplete-semantic-review
+    semantic_fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-05-incomplete-semantic-review
+    semantic_expected: needs-review
+    deterministic_case_key: matrix:crud/reject-mcp-bypass
+    deterministic_expected: block
+    justified_difference: Semantic route labels the need for review; deterministic
+      contract route blocks an incomplete review envelope.
+  justified_differences:
+  - Semantic truth remains reviewer judgment; deterministic route proves reproducible
+    contract properties. Review-needed and blocked are distinct route outcomes when
+    the deterministic envelope is incomplete.
+- id: semantic-curation-review
+  mode: semantic-only
+  rationale: Meaning, authority, conflict and relevance require contextual judgment;
+    no deterministic substitute is claimed.
+portfolio_cases:
+- key: matrix:crud/create-valid
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_crud.py --root .
+  assertion_id: crud.create_valid
+- key: matrix:crud/update-versioned
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_crud.py --root .
+  assertion_id: crud.update_versioned
+- key: matrix:crud/reject-stale-write
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_crud.py --root .
+  assertion_id: crud.reject_stale_write
+- key: matrix:crud/reject-mcp-bypass
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_crud_use_cases.py --root .
+  assertion_id: crud.reject_mcp_bypass
+- key: matrix:crud/read-requires-authorization-context
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_crud_use_cases.py --root .
+  assertion_id: crud.read_requires_authorization_context
+- key: matrix:crud/migrate-through-canonical-gateway
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_migration_executor.py
+  assertion_id: crud.migrate_through_canonical_gateway
+- key: matrix:crud/load-persisted-records
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_migration_executor.py
+  assertion_id: crud.load_persisted_records
+- key: matrix:crud/block-interrupted-migration
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_migration_executor.py
+  assertion_id: crud.block_interrupted_migration
+- key: matrix:crud/reject-stale-migration-source
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_migration_executor.py
+  assertion_id: crud.reject_stale_migration_source
+- key: matrix:crud/reject-unreviewed-migration
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_migration_executor.py
+  assertion_id: crud.reject_unreviewed_migration
+- key: matrix:crud/legacy-normalization-through-crud
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_migration_executor.py
+  assertion_id: crud.legacy_normalization_through_crud
+- key: matrix:crud/CRUD-S-001
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#new-versus-curated
+  fixture_ref: v3-semantic-fixtures.yaml#new-versus-curated
+  expected: needs_review
+- key: matrix:crud/CRUD-S-002
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#duplicate-scope
+  fixture_ref: v3-semantic-fixtures.yaml#duplicate-scope
+  expected: blocked
+- key: matrix:crud/CRUD-S-003
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#constitutional-rule-without-exception
+  fixture_ref: v3-semantic-fixtures.yaml#constitutional-rule-without-exception
+  expected: blocked
+- key: matrix:artifact-provenance/validate-hash
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_artifacts.py --root .
+  assertion_id: artifact.validate_hash
+- key: matrix:artifact-provenance/monotonic-version
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_artifacts.py --root .
+  assertion_id: artifact.monotonic_version
+- key: matrix:artifact-provenance/preserve-used-version
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_artifacts.py --root .
+  assertion_id: artifact.preserve_used_version
+- key: matrix:artifact-provenance/representation-hash-match
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_artifacts.py --root .
+  assertion_id: artifact.representation_hash_match
+- key: matrix:artifact-provenance/record-content-independent-of-artifact
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_artifacts.py --root .
+  assertion_id: artifact.record_content_independent
+- key: matrix:artifact-provenance/ART-S-001
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#multimodal-divergence
+  fixture_ref: v3-semantic-fixtures.yaml#multimodal-divergence
+  expected: needs_review
+- key: matrix:artifact-provenance/ART-S-002
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#inaccessible-artifact
+  fixture_ref: v3-semantic-fixtures.yaml#inaccessible-artifact
+  expected: blocked
+- key: matrix:ingress/require-minimization
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_ingress.py
+  assertion_id: ingress.require_minimization
+- key: matrix:ingress/require-anonymization
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_ingress.py
+  assertion_id: ingress.require_anonymization
+- key: matrix:ingress/reject-raw-material
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_ingress.py
+  assertion_id: ingress.reject_raw_material
+- key: matrix:ingress/read-is-non-mutating
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_ingress.py
+  assertion_id: ingress.read_is_non_mutating
+- key: matrix:ingress/ING-S-001
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#translation-modality-shift
+  fixture_ref: v3-semantic-fixtures.yaml#translation-modality-shift
+  expected: needs_review
+- key: matrix:ingress/ING-S-002
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#isolated-observation
+  fixture_ref: v3-semantic-fixtures.yaml#isolated-observation
+  expected: provisional
+- key: matrix:rem-curation/separate-queues
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_queues.py --root .
+  assertion_id: rem.separate_queues
+- key: matrix:rem-curation/expire-ttl
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_queues.py --root .
+  assertion_id: rem.expire_ttl
+- key: matrix:rem-curation/idempotent-normalization
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_queues.py --root .
+  assertion_id: rem.idempotent_normalization
+- key: matrix:rem-curation/block-unsupported-queue
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_semantic_fixtures.py --root .
+  assertion_id: rem.block_unsupported_queue
+- key: matrix:rem-curation/REM-S-001
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#temporal-conflict
+  fixture_ref: v3-semantic-fixtures.yaml#temporal-conflict
+  expected: blocked
+- key: matrix:rem-curation/REM-S-002
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#causal-hypothesis
+  fixture_ref: v3-semantic-fixtures.yaml#causal-hypothesis
+  expected: provisional
+- key: matrix:package/select-valid-chunks
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_package_delivery.py --root .
+  assertion_id: package.select_valid_chunks
+- key: matrix:package/preserve-parent-context
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_package_delivery.py --root .
+  assertion_id: package.preserve_parent_context
+- key: matrix:package/calculate-fingerprint
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_package_delivery.py --root .
+  assertion_id: package.calculate_fingerprint
+- key: matrix:package/block-weak-destination
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_package_delivery.py --root .
+  assertion_id: package.block_weak_destination
+- key: matrix:package/PKG-S-001
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#partial-package
+  fixture_ref: v3-semantic-fixtures.yaml#partial-package
+  expected: blocked
+- key: matrix:package/PKG-S-002
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#new-versus-curated
+  fixture_ref: v3-semantic-fixtures.yaml#new-versus-curated
+  expected: needs_review
+- key: matrix:delivery-transfer/require-destination-acceptance
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_transfer.py
+  assertion_id: delivery.require_destination_acceptance
+- key: matrix:delivery-transfer/hold-for-rem
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_transfer.py
+  assertion_id: delivery.hold_for_rem
+- key: matrix:delivery-transfer/block-stale-current-use
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_transfer.py
+  assertion_id: delivery.block_stale_current_use
+- key: matrix:delivery-transfer/preserve-retraction-history
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_transfer.py
+  assertion_id: delivery.preserve_retraction_history
+- key: matrix:delivery-transfer/DEL-S-001
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#new-versus-curated
+  fixture_ref: v3-semantic-fixtures.yaml#new-versus-curated
+  expected: needs_review
+- key: matrix:delivery-transfer/DEL-S-002
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#reported-not-confirmed
+  fixture_ref: v3-semantic-fixtures.yaml#reported-not-confirmed
+  expected: provisional
+- key: matrix:governance/block-unauthorized-destination
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_policy_evaluator.py
+  assertion_id: governance.block_unauthorized_destination
+- key: matrix:governance/validate-profile
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_multivault.py
+  assertion_id: governance.validate_profile
+- key: matrix:governance/detect-authority-cycle
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_multivault.py
+  assertion_id: governance.detect_authority_cycle
+- key: matrix:governance/require-inter-entity-minimization
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_privacy_gate.py
+  assertion_id: governance.require_inter_entity_minimization
+- key: matrix:governance/block-constitutional-exception-without-record
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_constitutional_cases.py
+  assertion_id: governance.block_constitutional_exception_without_record
+- key: matrix:governance/require-bounded-exception
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_constitutional_cases.py
+  assertion_id: governance.require_bounded_exception
+- key: matrix:governance/require-rejudgment-after-amendment
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_constitutional_cases.py
+  assertion_id: governance.require_rejudgment_after_amendment
+- key: matrix:governance/block-non-waivable-override
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_constitutional_cases.py
+  assertion_id: governance.block_non_waivable_override
+- key: matrix:governance/GOV-S-001
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#inaccessible-artifact
+  fixture_ref: v3-semantic-fixtures.yaml#inaccessible-artifact
+  expected: blocked
+- key: matrix:governance/GOV-S-002
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#decision-candidate
+  fixture_ref: v3-semantic-fixtures.yaml#decision-candidate
+  expected: needs_review
+- key: matrix:governance/GOV-S-003
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#bounded-constitutional-exception
+  fixture_ref: v3-semantic-fixtures.yaml#bounded-constitutional-exception
+  expected: needs_review
+- key: matrix:governance/GOV-S-004
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#constitutional-amendment-rejudgment
+  fixture_ref: v3-semantic-fixtures.yaml#constitutional-amendment-rejudgment
+  expected: needs_review
+- key: matrix:operational-audit/redact-event
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_x6.py --root .
+  assertion_id: audit.redact_event
+- key: matrix:operational-audit/pair-ledgers
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_l4r_closure.py
+  assertion_id: audit.pair_ledgers
+- key: matrix:operational-audit/reject-fingerprint-mismatch
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_l4r_closure.py
+  assertion_id: audit.reject_fingerprint_mismatch
+- key: matrix:operational-audit/represent-inaccessible-frontier
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_l4r_closure.py
+  assertion_id: audit.represent_inaccessible_frontier
+- key: matrix:operational-audit/AUD-S-001
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#inaccessible-artifact
+  fixture_ref: v3-semantic-fixtures.yaml#inaccessible-artifact
+  expected: blocked
+- key: matrix:operational-audit/AUD-S-002
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#temporal-conflict
+  fixture_ref: v3-semantic-fixtures.yaml#temporal-conflict
+  expected: blocked
+- key: matrix:migration-compatibility/require-source-target-version
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_migration.py --root .
+  assertion_id: migration.require_source_target_version
+- key: matrix:migration-compatibility/require-rollback
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_migration.py --root .
+  assertion_id: migration.require_rollback
+- key: matrix:migration-compatibility/block-raw-fallback
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_migration.py --root .
+  assertion_id: migration.block_raw_fallback
+- key: matrix:migration-compatibility/preserve-v22-line
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_compatibility.py --root .
+  assertion_id: migration.preserve_v22_line
+- key: matrix:migration-compatibility/MIG-S-001
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#translation-modality-shift
+  fixture_ref: v3-semantic-fixtures.yaml#translation-modality-shift
+  expected: needs_review
+- key: matrix:migration-compatibility/MIG-S-002
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#stale-source
+  fixture_ref: v3-semantic-fixtures.yaml#stale-source
+  expected: blocked
+- key: matrix:maintenance/normalize-supported-term
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_hipocampo.py --root .
+  assertion_id: maintenance.normalize_supported_term
+- key: matrix:maintenance/preserve-revision
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_queues.py --root .
+  assertion_id: maintenance.preserve_revision
+- key: matrix:maintenance/block-semantic-queue
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_queues.py --root .
+  assertion_id: maintenance.block_semantic_queue
+- key: matrix:maintenance/block-direct-record-write
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_queues.py --root .
+  assertion_id: maintenance.block_direct_record_write
+- key: matrix:maintenance/MNT-S-001
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#duplicate-scope
+  fixture_ref: v3-semantic-fixtures.yaml#duplicate-scope
+  expected: blocked
+- key: matrix:maintenance/MNT-S-002
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#reported-not-confirmed
+  fixture_ref: v3-semantic-fixtures.yaml#reported-not-confirmed
+  expected: provisional
+- key: matrix:learning-evolution/sanitize-signal
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_learning_engine.py --root .
+  assertion_id: learning.sanitize_signal
+- key: matrix:learning-evolution/deduplicate-signal
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_learning_engine.py --root .
+  assertion_id: learning.deduplicate_signal
+- key: matrix:learning-evolution/classify-known-case
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_learning_engine.py --root .
+  assertion_id: learning.classify_known_case
+- key: matrix:learning-evolution/block-unreviewed-activation
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_learning_engine.py --root .
+  assertion_id: learning.block_unreviewed_activation
+- key: matrix:learning-evolution/LEARN-S-001
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#new-versus-curated
+  fixture_ref: v3-semantic-fixtures.yaml#new-versus-curated
+  expected: needs_review
+- key: matrix:learning-evolution/LEARN-S-002
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#decision-candidate
+  fixture_ref: v3-semantic-fixtures.yaml#decision-candidate
+  expected: needs_review
+- key: matrix:learning-evolution/LEARN-S-003
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#reported-not-confirmed
+  fixture_ref: v3-semantic-fixtures.yaml#reported-not-confirmed
+  expected: rework_required
+- key: matrix:learning-evolution/LEARN-S-004
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#inaccessible-artifact
+  fixture_ref: v3-semantic-fixtures.yaml#inaccessible-artifact
+  expected: blocked
+- key: matrix:learning-evolution/LEARN-S-005
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#exception-by-analogy
+  fixture_ref: v3-semantic-fixtures.yaml#exception-by-analogy
+  expected: blocked
+- key: matrix:search-progressive-disclosure/reject-unauthorized-expansion
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_search_progressive_disclosure.py --root .
+  assertion_id: search.reject_unauthorized_expansion
+- key: matrix:search-progressive-disclosure/preserve-independent-dimensions
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_search_progressive_disclosure.py --root .
+  assertion_id: search.preserve_independent_dimensions
+- key: matrix:search-progressive-disclosure/prose-default
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_search_progressive_disclosure.py --root .
+  assertion_id: search.prose_default
+- key: matrix:search-progressive-disclosure/structured-only-on-request
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_search_progressive_disclosure.py --root .
+  assertion_id: search.structured_only_on_request
+- key: matrix:search-progressive-disclosure/require-bounded-request-context
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_search_progressive_disclosure.py --root .
+  assertion_id: search.require_bounded_request_context
+- key: matrix:search-progressive-disclosure/block-unauthorized-vault-scope
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_search_progressive_disclosure.py --root .
+  assertion_id: search.block_unauthorized_vault_scope
+- key: matrix:search-progressive-disclosure/preserve-authorized-expansion
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_search_progressive_disclosure.py --root .
+  assertion_id: search.preserve_authorized_expansion
+- key: matrix:search-progressive-disclosure/preserve-authorized-conflict-at-L4
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_search_progressive_disclosure.py --root .
+  assertion_id: search.preserve_authorized_conflict_at_l4
+- key: matrix:search-progressive-disclosure/limit-stale-source
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_search_progressive_disclosure.py --root .
+  assertion_id: search.limit_stale_source
+- key: matrix:search-progressive-disclosure/block-restricted-content
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_search_progressive_disclosure.py --root .
+  assertion_id: search.block_restricted_content
+- key: matrix:search-progressive-disclosure/preserve-record-prose-with-inaccessible-artifact
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_search_progressive_disclosure.py --root .
+  assertion_id: search.preserve_record_prose_with_inaccessible_artifact
+- key: matrix:search-progressive-disclosure/block-inaccessible-record-content
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_search_progressive_disclosure.py --root .
+  assertion_id: search.block_inaccessible_record_content
+- key: matrix:search-progressive-disclosure/keep-scope-collision-candidates-separate
+  kind: deterministic
+  disposition: preserved
+  evidence: docs/engines/test-matrix.yaml
+  command: python scripts/validate_v3_search_progressive_disclosure.py --root .
+  assertion_id: search.keep_scope_collision_candidates_separate
+- key: matrix:search-progressive-disclosure/SPD-S-001
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#search-ranking-vs-epistemic-state
+  fixture_ref: v3-semantic-fixtures.yaml#search-ranking-vs-epistemic-state
+  expected: needs_review
+- key: matrix:search-progressive-disclosure/SPD-S-002
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#disclosure-without-authorization
+  fixture_ref: v3-semantic-fixtures.yaml#disclosure-without-authorization
+  expected: blocked
+- key: matrix:search-progressive-disclosure/SPD-S-003
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#record-content-with-inaccessible-artifact
+  fixture_ref: v3-semantic-fixtures.yaml#record-content-with-inaccessible-artifact
+  expected: partial
+- key: matrix:search-progressive-disclosure/SPD-S-004
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#search-scope-collision
+  fixture_ref: v3-semantic-fixtures.yaml#search-scope-collision
+  expected: needs_review
+- key: matrix:search-progressive-disclosure/SPD-S-005
+  kind: semantic
+  disposition: preserved
+  evidence: v3-semantic-fixtures.yaml#authorized-expansion-with-unresolved-conflict
+  fixture_ref: v3-semantic-fixtures.yaml#authorized-expansion-with-unresolved-conflict
+  expected: needs_review
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-01-authorized-read
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-01-authorized-read
+  expected:
+    expected: allow-no-write
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-02-unauthorized-read
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-02-unauthorized-read
+  expected:
+    expected: block
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-03-valid-create
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-03-valid-create
+  expected:
+    expected: allow
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-04-invalid-structure
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-04-invalid-structure
+  expected:
+    expected: block
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-05-incomplete-semantic-review
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-05-incomplete-semantic-review
+  expected:
+    expected: needs-review
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-06-versioned-update
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-06-versioned-update
+  expected:
+    expected: allow
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-07-concurrent-update
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-07-concurrent-update
+  expected:
+    expected: block
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-08-immutable-field-update
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-08-immutable-field-update
+  expected:
+    expected: block
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-09-artifact-divergence
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-09-artifact-divergence
+  expected:
+    expected: preserve-used-version
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-10-processed-ingress
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-10-processed-ingress
+  expected:
+    expected: allow
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-11-raw-ingress
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-11-raw-ingress
+  expected:
+    expected: block
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-12-current-use-promotion
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-12-current-use-promotion
+  expected:
+    expected: allow
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-13-stale-current-use
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-13-stale-current-use
+  expected:
+    expected: block
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-14-migration-version-preflight
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-14-migration-version-preflight
+  expected:
+    expected: block
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-15-fingerprint-audit
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-15-fingerprint-audit
+  expected:
+    expected: block
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-16-archive-tombstone
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-16-archive-tombstone
+  expected:
+    expected: allow
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-17-idempotent-mcp-retry
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-17-idempotent-mcp-retry
+  expected:
+    expected: one-mutation
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-18-mcp-bypass
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-18-mcp-bypass
+  expected:
+    expected: block
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-19-read-without-authorization-context
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-19-read-without-authorization-context
+  expected:
+    expected: block
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-20-read-with-empty-authorization-scope
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-20-read-with-empty-authorization-scope
+  expected:
+    expected: block
+- key: fixture:v3-crud-use-case-fixtures.yaml#UC-CRUD-21-direct-read-without-authorization-context
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-use-case-fixtures.yaml
+  fixture_ref: v3-crud-use-case-fixtures.yaml#UC-CRUD-21-direct-read-without-authorization-context
+  expected:
+    expected: block
+- key: fixture:v3-crud-fixtures.yaml#valid-record-with-chunk
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#valid-record-with-chunk
+  expected:
+    expected: allow
+- key: fixture:v3-crud-fixtures.yaml#orphan-chunk
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#orphan-chunk
+  expected:
+    expected: block
+- key: fixture:v3-crud-fixtures.yaml#weaker-chunk-visibility
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#weaker-chunk-visibility
+  expected:
+    expected: block
+- key: fixture:v3-crud-fixtures.yaml#inactive-collection
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#inactive-collection
+  expected:
+    expected: block
+- key: fixture:v3-crud-fixtures.yaml#chunk-read-with-parent-context
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#chunk-read-with-parent-context
+  expected:
+    expected: allow-with-context
+- key: fixture:v3-crud-fixtures.yaml#physical-move
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#physical-move
+  expected:
+    expected: identity-and-membership-preserved
+- key: fixture:v3-crud-fixtures.yaml#partial-package
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#partial-package
+  expected:
+    expected: allow-with-explicit-partial-context
+- key: fixture:v3-crud-fixtures.yaml#incompatible-destination
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#incompatible-destination
+  expected:
+    expected: block
+- key: fixture:v3-crud-fixtures.yaml#stale-current-send
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#stale-current-send
+  expected:
+    expected: block
+- key: fixture:v3-crud-fixtures.yaml#artifact-version-change
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#artifact-version-change
+  expected:
+    expected: record-not-silently-updated
+- key: fixture:v3-crud-fixtures.yaml#duplicate-chunk-id
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#duplicate-chunk-id
+  expected:
+    expected: block
+- key: fixture:v3-crud-fixtures.yaml#tag-does-not-membership
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#tag-does-not-membership
+  expected:
+    expected: collection-required
+- key: fixture:v3-crud-fixtures.yaml#entity-aware-source-lineage
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#entity-aware-source-lineage
+  expected:
+    expected: allow-with-source-and-local-mode
+- key: fixture:v3-crud-fixtures.yaml#user-cannot-create-governed-content
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#user-cannot-create-governed-content
+  expected:
+    expected: block
+- key: fixture:v3-crud-fixtures.yaml#authority-resolution-required
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#authority-resolution-required
+  expected:
+    expected: block
+- key: fixture:v3-crud-fixtures.yaml#team-vault-requires-scope
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#team-vault-requires-scope
+  expected:
+    expected: block
+- key: fixture:v3-crud-fixtures.yaml#intra-entity-delivery
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#intra-entity-delivery
+  expected:
+    expected: allow
+- key: fixture:v3-crud-fixtures.yaml#inter-entity-delivery-needs-owner-approval
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#inter-entity-delivery-needs-owner-approval
+  expected:
+    expected: block
+- key: fixture:v3-crud-fixtures.yaml#governed-inter-entity-delivery
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#governed-inter-entity-delivery
+  expected:
+    expected: allow
+- key: fixture:v3-crud-fixtures.yaml#personal-project-governed-split
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#personal-project-governed-split
+  expected:
+    expected: allow-with-lineage
+- key: fixture:v3-crud-fixtures.yaml#mutable-chunk-cannot-be-shared
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#mutable-chunk-cannot-be-shared
+  expected:
+    expected: block
+- key: fixture:v3-crud-fixtures.yaml#cross-entity-split-needs-delivery-governance
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#cross-entity-split-needs-delivery-governance
+  expected:
+    expected: block
+- key: fixture:v3-crud-fixtures.yaml#governed-package-retains-transfer-context
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-crud-fixtures.yaml
+  fixture_ref: v3-crud-fixtures.yaml#governed-package-retains-transfer-context
+  expected:
+    expected: allow-with-transfer-context
+- key: fixture:v3-semantic-fixtures.yaml#reported-not-confirmed
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#reported-not-confirmed
+  expected:
+    input_kind: reported-statement
+    expected_epistemic: Account
+    expected_maturity: new-or-provisional
+    required_guard: do not present as confirmed fact
+    negative_behavior: do not upgrade by retrieval ranking or recency
+    review_boundary: human-semantic-review
+- key: fixture:v3-semantic-fixtures.yaml#causal-hypothesis
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#causal-hypothesis
+  expected:
+    input_kind: causal-interpretation
+    expected_epistemic: Hypothesis
+    expected_maturity: provisional
+    required_guard: preserve evidence and limits
+    negative_behavior: do not state the causal claim as established
+    review_boundary: human-semantic-review
+- key: fixture:v3-semantic-fixtures.yaml#temporal-conflict
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#temporal-conflict
+  expected:
+    input_kind: conflicting-time-bounded-statements
+    expected_epistemic: unresolved-conflict
+    expected_maturity: review-required
+    required_guard: retain both provenance and validity windows
+    negative_behavior: do not choose solely by newest date
+    review_boundary: human-semantic-review
+- key: fixture:v3-semantic-fixtures.yaml#decision-candidate
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#decision-candidate
+  expected:
+    input_kind: proposed-action
+    expected_epistemic: decision-candidate
+    expected_maturity: provisional
+    required_guard: separate proposal from approved decision
+    negative_behavior: do not treat intention as a decision
+    review_boundary: explicit-human-decision
+- key: fixture:v3-semantic-fixtures.yaml#new-versus-curated
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#new-versus-curated
+  expected:
+    input_kind: new-item-conflicting-with-curated-record
+    expected_epistemic: unresolved-conflict
+    expected_maturity: new
+    required_guard: use curated record for current knowledge and surface the pending
+      item
+    negative_behavior: do not replace curated knowledge silently
+    review_boundary: REM-or-human-review
+- key: fixture:v3-semantic-fixtures.yaml#duplicate-scope
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#duplicate-scope
+  expected:
+    input_kind: overlapping-records-with-different-scope
+    expected_epistemic: unresolved-conflict
+    expected_maturity: review-required
+    required_guard: preserve separate provenance and visibility
+    negative_behavior: do not merge without semantic review
+    review_boundary: human-semantic-review
+- key: fixture:v3-semantic-fixtures.yaml#multimodal-divergence
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#multimodal-divergence
+  expected:
+    input_kind: text-table-or-chart-divergence
+    expected_epistemic: Account
+    expected_maturity: review-required
+    required_guard: flag representation divergence
+    negative_behavior: do not select a representation silently
+    review_boundary: human-semantic-review
+- key: fixture:v3-semantic-fixtures.yaml#inaccessible-artifact
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#inaccessible-artifact
+  expected:
+    input_kind: unavailable-artifact
+    expected_epistemic: insufficient-evidence
+    expected_maturity: blocked
+    required_guard: state the access limitation
+    negative_behavior: do not reconstruct missing content as fact
+    review_boundary: host-or-human-review
+- key: fixture:v3-semantic-fixtures.yaml#partial-package
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#partial-package
+  expected:
+    input_kind: partial-selection-without-context
+    expected_epistemic: context-incomplete
+    expected_maturity: blocked
+    required_guard: carry parent context and provenance
+    negative_behavior: do not present a partial selection as complete
+    review_boundary: human-semantic-review
+- key: fixture:v3-semantic-fixtures.yaml#translation-modality-shift
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#translation-modality-shift
+  expected:
+    input_kind: translation-changing-obligation-strength
+    expected_epistemic: projection-divergence
+    expected_maturity: review-required
+    required_guard: preserve source authority and flag the shift
+    negative_behavior: do not silently normalize may into must
+    review_boundary: human-semantic-review
+- key: fixture:v3-semantic-fixtures.yaml#isolated-observation
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#isolated-observation
+  expected:
+    input_kind: single-observation-generalized
+    expected_epistemic: Account
+    expected_maturity: provisional
+    required_guard: retain observation scope
+    negative_behavior: do not generalize one observation into a universal fact
+    review_boundary: human-semantic-review
+- key: fixture:v3-semantic-fixtures.yaml#stale-source
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#stale-source
+  expected:
+    input_kind: expired-source-backed-record
+    expected_epistemic: revalidation-required
+    expected_maturity: stale
+    required_guard: revalidate before presenting as current
+    negative_behavior: do not treat expired material as current guidance
+    review_boundary: research-or-human-review
+- key: fixture:v3-semantic-fixtures.yaml#constitutional-rule-without-exception
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#constitutional-rule-without-exception
+  expected:
+    input_kind: specific-rule-conflicting-with-constitution-without-decision-record
+    expected_epistemic: decision-candidate
+    expected_maturity: blocked
+    required_guard: block the rule until an accepted and scoped exception Decision
+      Record exists
+    negative_behavior: do not infer an exception from operational convenience
+    review_boundary: explicit-human-decision
+- key: fixture:v3-semantic-fixtures.yaml#bounded-constitutional-exception
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#bounded-constitutional-exception
+  expected:
+    input_kind: specific-rule-with-explicit-scoped-exception-decision
+    expected_epistemic: decision-candidate
+    expected_maturity: review-required
+    required_guard: verify clause, entity, vault, scope, duration, risk and review
+      condition
+    negative_behavior: do not generalize a bounded exception by analogy
+    review_boundary: explicit-human-decision
+- key: fixture:v3-semantic-fixtures.yaml#constitutional-amendment-rejudgment
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#constitutional-amendment-rejudgment
+  expected:
+    input_kind: constitutional-change-affecting-active-specific-rule
+    expected_epistemic: unresolved-conflict
+    expected_maturity: review-required
+    required_guard: inventory and rejudge affected rules before new use
+    negative_behavior: do not silently retain or delete the affected rule
+    review_boundary: explicit-human-decision
+- key: fixture:v3-semantic-fixtures.yaml#exception-by-analogy
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#exception-by-analogy
+  expected:
+    input_kind: existing-exception-applied-outside-declared-scope
+    expected_epistemic: decision-candidate
+    expected_maturity: blocked
+    required_guard: keep the exception within its declared scenario, entity, vault,
+      scope and duration
+    negative_behavior: do not expand an exception through analogy
+    review_boundary: explicit-human-decision
+- key: fixture:v3-semantic-fixtures.yaml#search-ranking-vs-epistemic-state
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#search-ranking-vs-epistemic-state
+  expected:
+    input_kind: highly-ranked-result-with-uncertain-authority-and-conflict
+    expected_epistemic: unresolved-conflict
+    expected_maturity: review-required
+    required_guard: preserve relevance separately from authority and epistemic state
+    negative_behavior: do not present a highly-ranked result as settled knowledge
+    review_boundary: human-semantic-review
+- key: fixture:v3-semantic-fixtures.yaml#disclosure-without-authorization
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#disclosure-without-authorization
+  expected:
+    input_kind: request-for-expanded-content-without-explicit-authorization
+    expected_epistemic: decision-candidate
+    expected_maturity: blocked
+    required_guard: block disclosure escalation and preserve the requested boundary
+    negative_behavior: do not infer permission from relevance, recency or a matching
+      term
+    review_boundary: explicit-human-decision
+- key: fixture:v3-semantic-fixtures.yaml#inaccessible-search-evidence
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#inaccessible-search-evidence
+  expected:
+    input_kind: relevant-result-with-inaccessible-source-frontier
+    expected_epistemic: insufficient-evidence
+    expected_maturity: blocked
+    required_guard: state the access limitation and do not reconstruct missing content
+    negative_behavior: do not fill an inaccessible evidence frontier by plausibility
+    review_boundary: host-or-human-review
+- key: fixture:v3-semantic-fixtures.yaml#record-content-with-inaccessible-artifact
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#record-content-with-inaccessible-artifact
+  expected:
+    input_kind: record-with-prose-and-unavailable-artifact
+    expected_epistemic: provenance-limited
+    expected_maturity: partial
+    required_guard: present persisted Record prose and state the Artifact limitation
+    negative_behavior: do not block Record reading or reconstruct the Artifact for
+      display
+    review_boundary: host-or-human-review
+- key: fixture:v3-semantic-fixtures.yaml#search-scope-collision
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#search-scope-collision
+  expected:
+    input_kind: same-term-results-across-entities-or-vaults
+    expected_epistemic: unresolved-conflict
+    expected_maturity: review-required
+    required_guard: filter outside-entity, vault and knowledge-scope candidates; keep
+      eligible multi-vault candidates separate and do not merge
+    negative_behavior: do not treat a matching term as shared governance, authority
+      or permission
+    review_boundary: human-semantic-review
+- key: fixture:v3-semantic-fixtures.yaml#authorized-expansion-with-unresolved-conflict
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-semantic-fixtures.yaml
+  fixture_ref: v3-semantic-fixtures.yaml#authorized-expansion-with-unresolved-conflict
+  expected:
+    input_kind: explicitly-authorized-expanded-result-with-conflicting-provenance
+    expected_epistemic: unresolved-conflict
+    expected_maturity: review-required
+    required_guard: authorization permits requested disclosure only; preserve each
+      source and provenance separately, and keep any combined interpretation needs_review
+    negative_behavior: do not convert operation acceptance or authorization into epistemic
+      settlement or a consolidated conclusion
+    review_boundary: explicit-human-decision
+- key: fixture:bootstrap-invitation-fixtures.yaml#capable-create
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/bootstrap-invitation-fixtures.yaml
+  fixture_ref: bootstrap-invitation-fixtures.yaml#capable-create
+  expected:
+    action: create-after-confirmation
+- key: fixture:bootstrap-invitation-fixtures.yaml#incapable-manual-fallback
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/bootstrap-invitation-fixtures.yaml
+  fixture_ref: bootstrap-invitation-fixtures.yaml#incapable-manual-fallback
+  expected:
+    action: blocked-until-authorized
+- key: fixture:bootstrap-invitation-fixtures.yaml#invitation-accessible-compatible
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/bootstrap-invitation-fixtures.yaml
+  fixture_ref: bootstrap-invitation-fixtures.yaml#invitation-accessible-compatible
+  expected:
+    action: register-address
+- key: fixture:bootstrap-invitation-fixtures.yaml#invitation-inaccessible
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/bootstrap-invitation-fixtures.yaml
+  fixture_ref: bootstrap-invitation-fixtures.yaml#invitation-inaccessible
+  expected:
+    action: blocked
+- key: fixture:bootstrap-invitation-fixtures.yaml#invitation-incompatible
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/bootstrap-invitation-fixtures.yaml
+  fixture_ref: bootstrap-invitation-fixtures.yaml#invitation-incompatible
+  expected:
+    action: blocked
+- key: fixture:bootstrap-invitation-fixtures.yaml#no-write-before-confirmation
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/bootstrap-invitation-fixtures.yaml
+  fixture_ref: bootstrap-invitation-fixtures.yaml#no-write-before-confirmation
+  expected:
+    action: blocked
+- key: fixture:bootstrap-invitation-fixtures.yaml#invited-entity-read-without-personal-anchor
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/bootstrap-invitation-fixtures.yaml
+  fixture_ref: bootstrap-invitation-fixtures.yaml#invited-entity-read-without-personal-anchor
+  expected:
+    action: bounded-read-after-target-and-permission-proof
+- key: fixture:access-ingress-fixtures.yaml#internal-read-without-vault-registration
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#internal-read-without-vault-registration
+  expected:
+    expected: proven_repository_read
+- key: fixture:access-ingress-fixtures.yaml#no-target-read-proof
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#no-target-read-proof
+  expected:
+    expected: target_read_access_unproven
+- key: fixture:access-ingress-fixtures.yaml#caller-dict-without-authenticated-host-binding
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#caller-dict-without-authenticated-host-binding
+  expected:
+    expected: target_read_access_unproven
+- key: fixture:access-ingress-fixtures.yaml#filtering-capability-not-proven-by-default
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#filtering-capability-not-proven-by-default
+  expected:
+    expected: host_cannot_filter_safely
+- key: fixture:access-ingress-fixtures.yaml#restricted-classification
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#restricted-classification
+  expected:
+    expected: clearance_required
+- key: fixture:access-ingress-fixtures.yaml#mixed-content-host-cannot-filter
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#mixed-content-host-cannot-filter
+  expected:
+    expected: host_cannot_filter_safely
+- key: fixture:access-ingress-fixtures.yaml#entity-write-with-github-write-no-grant
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#entity-write-with-github-write-no-grant
+  expected:
+    expected: entity_grant_required_or_not_current
+- key: fixture:access-ingress-fixtures.yaml#entity-grant-scoped-to-another-target
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#entity-grant-scoped-to-another-target
+  expected:
+    expected: entity_grant_required_or_not_current
+- key: fixture:access-ingress-fixtures.yaml#entity-grant-valid-but-no-mcp-crud
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#entity-grant-valid-but-no-mcp-crud
+  expected:
+    expected: mcp_or_crud_unproven
+- key: fixture:access-ingress-fixtures.yaml#entity-grant-missing-valid-until
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#entity-grant-missing-valid-until
+  expected:
+    expected: entity_grant_required_or_not_current
+- key: fixture:access-ingress-fixtures.yaml#entity-grant-current-and-technical-pass
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#entity-grant-current-and-technical-pass
+  expected:
+    expected: method_provider_mcp_and_crud_proven
+- key: fixture:access-ingress-fixtures.yaml#entity-grant-wrong-vault-id
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#entity-grant-wrong-vault-id
+  expected:
+    expected: entity_grant_required_or_not_current
+- key: fixture:access-ingress-fixtures.yaml#entity-grant-wrong-account
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#entity-grant-wrong-account
+  expected:
+    expected: entity_grant_required_or_not_current
+- key: fixture:access-ingress-fixtures.yaml#entity-grant-wrong-scope
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#entity-grant-wrong-scope
+  expected:
+    expected: entity_grant_required_or_not_current
+- key: fixture:access-ingress-fixtures.yaml#entity-grant-expired
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#entity-grant-expired
+  expected:
+    expected: entity_grant_required_or_not_current
+- key: fixture:access-ingress-fixtures.yaml#entity-grant-revoked
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#entity-grant-revoked
+  expected:
+    expected: entity_grant_required_or_not_current
+- key: fixture:access-ingress-fixtures.yaml#entity-grant-stale-state-unverified
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#entity-grant-stale-state-unverified
+  expected:
+    expected: entity_grant_required_or_not_current
+- key: fixture:access-ingress-fixtures.yaml#entity-grant-without-current-state-verifier
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#entity-grant-without-current-state-verifier
+  expected:
+    expected: entity_grant_required_or_not_current
+- key: fixture:access-ingress-fixtures.yaml#personal-read-only-is-eligible-not-executable
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#personal-read-only-is-eligible-not-executable
+  expected:
+    expected: provider_write_unproven
+- key: fixture:access-ingress-fixtures.yaml#personal-spoofed-provider-write
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#personal-spoofed-provider-write
+  expected:
+    expected: provider_write_unproven
+- key: fixture:access-ingress-fixtures.yaml#new-vault-creator-representative-scoped
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#new-vault-creator-representative-scoped
+  expected:
+    expected: new_vault_only
+- key: fixture:access-ingress-fixtures.yaml#no-anchor-partial-enumeration
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#no-anchor-partial-enumeration
+  expected:
+    expected: target_revalidation_required
+- key: fixture:access-ingress-fixtures.yaml#no-anchor-no-candidates-incomplete-enumeration
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#no-anchor-no-candidates-incomplete-enumeration
+  expected:
+    expected: absence_not_proven
+- key: fixture:access-ingress-fixtures.yaml#operation-layer-diagnostic
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#operation-layer-diagnostic
+  expected:
+    expected: five_independent_layers
+- key: fixture:access-ingress-fixtures.yaml#ingress-read-findings-verified-context
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/access-ingress-fixtures.yaml
+  fixture_ref: access-ingress-fixtures.yaml#ingress-read-findings-verified-context
+  expected:
+    expected: read_only_findings
+- key: fixture:v3-ingress-fixtures.yaml#secret-redaction
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-ingress-fixtures.yaml
+  fixture_ref: v3-ingress-fixtures.yaml#secret-redaction
+  expected:
+    raw_inbox: false
+- key: fixture:v3-ingress-fixtures.yaml#read-only-detection
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-ingress-fixtures.yaml
+  fixture_ref: v3-ingress-fixtures.yaml#read-only-detection
+  expected:
+    write_performed: false
+- key: fixture:v3-ingress-fixtures.yaml#rem-double-check
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-ingress-fixtures.yaml
+  fixture_ref: v3-ingress-fixtures.yaml#rem-double-check
+  expected:
+    status: passed
+- key: fixture:v3-ingress-fixtures.yaml#declassification-without-approval
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-ingress-fixtures.yaml
+  fixture_ref: v3-ingress-fixtures.yaml#declassification-without-approval
+  expected:
+    status: blocked
+- key: fixture:v3-profile-fixtures.yaml#accepted-curator
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-profile-fixtures.yaml
+  fixture_ref: v3-profile-fixtures.yaml#accepted-curator
+  expected:
+    status: accepted
+- key: fixture:v3-profile-fixtures.yaml#revoked-membership
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-profile-fixtures.yaml
+  fixture_ref: v3-profile-fixtures.yaml#revoked-membership
+  expected:
+    status: not_authorized
+- key: fixture:v3-profile-fixtures.yaml#local-violation
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-profile-fixtures.yaml
+  fixture_ref: v3-profile-fixtures.yaml#local-violation
+  expected:
+    audit: recorded
+- key: fixture:v3-profile-fixtures.yaml#additive-correction
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-profile-fixtures.yaml
+  fixture_ref: v3-profile-fixtures.yaml#additive-correction
+  expected:
+    audit: preserved
+- key: fixture:v3-search-progressive-disclosure-fixtures.yaml#reject-unauthorized-expansion
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-search-progressive-disclosure-fixtures.yaml
+  fixture_ref: v3-search-progressive-disclosure-fixtures.yaml#reject-unauthorized-expansion
+  expected:
+    expected_disposition: blocked
+- key: fixture:v3-search-progressive-disclosure-fixtures.yaml#preserve-independent-dimensions
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-search-progressive-disclosure-fixtures.yaml
+  fixture_ref: v3-search-progressive-disclosure-fixtures.yaml#preserve-independent-dimensions
+  expected:
+    expected_disposition: needs_review
+- key: fixture:v3-search-progressive-disclosure-fixtures.yaml#prose-default
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-search-progressive-disclosure-fixtures.yaml
+  fixture_ref: v3-search-progressive-disclosure-fixtures.yaml#prose-default
+  expected:
+    expected_disposition: partial
+- key: fixture:v3-search-progressive-disclosure-fixtures.yaml#structured-only-on-request
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-search-progressive-disclosure-fixtures.yaml
+  fixture_ref: v3-search-progressive-disclosure-fixtures.yaml#structured-only-on-request
+  expected:
+    expected_disposition: accepted
+- key: fixture:v3-search-progressive-disclosure-fixtures.yaml#require-bounded-request-context
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-search-progressive-disclosure-fixtures.yaml
+  fixture_ref: v3-search-progressive-disclosure-fixtures.yaml#require-bounded-request-context
+  expected:
+    expected_disposition: blocked
+- key: fixture:v3-search-progressive-disclosure-fixtures.yaml#search-verified-read-without-registry
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-search-progressive-disclosure-fixtures.yaml
+  fixture_ref: v3-search-progressive-disclosure-fixtures.yaml#search-verified-read-without-registry
+  expected:
+    expected_disposition: partial
+- key: fixture:v3-search-progressive-disclosure-fixtures.yaml#block-unauthorized-vault-scope
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-search-progressive-disclosure-fixtures.yaml
+  fixture_ref: v3-search-progressive-disclosure-fixtures.yaml#block-unauthorized-vault-scope
+  expected:
+    expected_disposition: blocked
+- key: fixture:v3-search-progressive-disclosure-fixtures.yaml#preserve-authorized-expansion
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-search-progressive-disclosure-fixtures.yaml
+  fixture_ref: v3-search-progressive-disclosure-fixtures.yaml#preserve-authorized-expansion
+  expected:
+    expected_disposition: accepted
+- key: fixture:v3-search-progressive-disclosure-fixtures.yaml#preserve-authorized-conflict-at-L4
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-search-progressive-disclosure-fixtures.yaml
+  fixture_ref: v3-search-progressive-disclosure-fixtures.yaml#preserve-authorized-conflict-at-L4
+  expected:
+    expected_disposition: accepted
+- key: fixture:v3-search-progressive-disclosure-fixtures.yaml#limit-stale-source
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-search-progressive-disclosure-fixtures.yaml
+  fixture_ref: v3-search-progressive-disclosure-fixtures.yaml#limit-stale-source
+  expected:
+    expected_disposition: partial
+- key: fixture:v3-search-progressive-disclosure-fixtures.yaml#block-restricted-content
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-search-progressive-disclosure-fixtures.yaml
+  fixture_ref: v3-search-progressive-disclosure-fixtures.yaml#block-restricted-content
+  expected:
+    expected_disposition: blocked
+- key: fixture:v3-search-progressive-disclosure-fixtures.yaml#preserve-record-prose-with-inaccessible-artifact
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-search-progressive-disclosure-fixtures.yaml
+  fixture_ref: v3-search-progressive-disclosure-fixtures.yaml#preserve-record-prose-with-inaccessible-artifact
+  expected:
+    expected_disposition: partial
+- key: fixture:v3-search-progressive-disclosure-fixtures.yaml#block-inaccessible-record-content
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-search-progressive-disclosure-fixtures.yaml
+  fixture_ref: v3-search-progressive-disclosure-fixtures.yaml#block-inaccessible-record-content
+  expected:
+    expected_disposition: blocked
+- key: fixture:v3-search-progressive-disclosure-fixtures.yaml#keep-scope-collision-candidates-separate
+  kind: source-fixture
+  disposition: preserved
+  evidence: docs/v3-search-progressive-disclosure-fixtures.yaml
+  fixture_ref: v3-search-progressive-disclosure-fixtures.yaml#keep-scope-collision-candidates-separate
+  expected:
+    expected_disposition: needs_review

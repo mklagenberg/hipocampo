@@ -1,6 +1,6 @@
 # V3 Bootstrap and instantiation
 
-Use the canonical scaffold profile and V3 contracts from the verified, version-matched source for a new vault. Stable uses the immutable published release; explicit experimental use pins its commit/RC tag and hashes, emits WARNING and requires no GitHub Release or future stable. Confirm the tag resolves to the release target, pin its commit and verify profile/package hashes; HEAD of main is availability context, never the scaffold provenance source. This
+Use the canonical scaffold profile and V3 contracts from the verified, version-matched source for a new vault. Stable uses the immutable published release; explicit experimental use pins its commit/RC tag and hashes, emits WARNING and requires no GitHub Release or future stable. When a tag is selected, confirm it resolves to the intended source; otherwise pin the selected commit directly. Verify profile/package hashes; HEAD of main is availability context, never the scaffold provenance source. This
 procedure creates a plan first; a repository name, invitation, tool or available
 account does not itself authorize repository creation or governed writes.
 
@@ -14,11 +14,17 @@ personal material elsewhere. Discovery without an anchor uses only bounded
 candidate addresses or temporary private project hints and revalidates each
 remote target. If a configured anchor exists but is unavailable or invalid,
 report that condition rather than treating it as absent.
+No personal anchor is required to join an existing vault for read. An explicit
+invitation or target address can start with remote diagnosis and manifest
+verification. Run Bootstrap only when the operator chooses to create a vault.
+If a configured anchor exists but is unavailable or invalid, report that
+condition rather than treating it as absent. A direct target may still be
+diagnosed independently.
 
 ## Inputs and plan
 
 Collect every profile-required value from the operator: repository address or
-requested name, explicitly selected V3 `vault_profile`, entity,
+requested name, explicitly selected V3 `vault_profile`, separately confirmed entity,
 anchor/additional role, `policy_profile`,
 `curation_level`, owner, language, scope and applicable privacy constraints.
 Do not infer required values or copy another vault's identity and metadata.
@@ -46,9 +52,20 @@ authority or capability is missing, stop with a plan and a blocked result.
 
 ## Creation and validation
 
-Create a private repository only after the explicit profile choice and exact
-plan confirmation, and when the host exposes an authorized create
-capability. Populate approved operational manifests and registries through the separately authorized structure capability; they are not Records and are not persisted by RecordCrud. Persist every knowledge Record only through canonical CRUD; never use direct filesystem or GitHub contents writes as a substitute. Use
+Create a private repository only after explicit profile choice and exact plan
+confirmation, and when the GitHub MCP exposes an authorized create capability.
+If it does not, remote creation is unavailable; an
+explicitly requested local proto-vault has no remote truth or GitHub receipt.
+Populate approved operational manifests and registries through the separately
+authorized structure capability; they are not Records and are not persisted
+by RecordCrud. Record the authenticated human creator as initial
+representative in `governance.authorized_representatives` for **this new
+vault only**, with stable account ID, entity, actions, scope and validity;
+record the grant event in `meta/representative-events.yaml`. A typed login,
+GitHub admin role or the agent's own account cannot establish that human
+binding or authority over an existing entity vault. Persist every knowledge
+Record only through canonical CRUD; never use direct filesystem or GitHub
+contents writes as a substitute. Use
 the selected scaffold profile as the source of generated structure and
 preserve its declared ownership classes.
 

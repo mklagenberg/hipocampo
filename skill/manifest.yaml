@@ -1,11 +1,11 @@
 manifest_version: '1.0'
 skill:
   name: hipocampo
-  version: 2.3.0
+  version: 2.4.0
   release_status: immutable-release-target
   core_path: skill/
   source_repository: https://github.com/mklagenberg/hipocampo
-  candidate_base_commit: de31594c4e3b63ad405ad5f2f5e6856c821695a3
+  candidate_base_commit: 30e5f9f8d427d1e4d102c0a7e432fc4ee5c238c6
   source_commit: null
   package_lock: skill/package-lock.yaml
   provenance_note: Resolve the selected source to its exact commit and verify the
@@ -18,28 +18,28 @@ methodology:
 adapters:
 - target: claude
   version: 1.0.0
-  package: portable instructions plus separately installed local CLI runtime; host
-    loading/operation must be observed
+  package: portable instructions; optional separately installed local CLI runtime;
+    GitHub MCP operation and host loading must be observed
   verification_status: not-assessed
 - target: chatgpt
   version: 1.0.0
-  package: host-side deployment is separate; runtime conformance is not assessed by
-    this portable package
+  package: host-side deployment is separate; GitHub MCP and runtime conformance
+    are not assessed by this portable package
   verification_status: not-assessed
 - target: gemini
   version: 1.0.0
-  package: host-side deployment is separate; runtime conformance is not assessed by
-    this portable package
+  package: host-side deployment is separate; GitHub MCP and runtime conformance
+    are not assessed by this portable package
   verification_status: not-assessed
 - target: github-copilot
   version: 1.0.0
-  package: portable instructions plus separately installed local CLI runtime; host
-    loading/operation must be observed
+  package: portable instructions; optional separately installed local CLI runtime;
+    GitHub MCP operation and host loading must be observed
   verification_status: not-assessed
 - target: codex
   version: 2.0.0
-  package: portable instructions plus separately installed local CLI runtime; host
-    loading/operation must be observed
+  package: portable instructions; optional separately installed local CLI runtime;
+    GitHub MCP operation and host loading must be observed
   verification_status: instructions-only
 updates:
   availability_manifest: https://github.com/mklagenberg/hipocampo/blob/main/skill/manifest.yaml

@@ -17,6 +17,17 @@ No Record-schema migration is required from compatible V3.0.x; V2 adoption
 retains its separate governed migration. Preserve previous installs and user
 state. Do not activate globally or change an instance without authorization.
 
+## V3.1.0 profile and remote-ingress clarification
+
+No Record-schema migration is required. Directly identified targets may be
+read without a personal anchor or registration entry, after checking the
+target manifest and access. Before using the new profile-based rules on a
+legacy vault, verify a scoped representative grant or perform a separately
+authorized adoption that records one. A legacy manifest keeps its prior
+versioned authorization and CRUD behavior until adoption; do not infer a profile
+or historical creator identity from repository metadata. Python availability
+does not change CRUD requirements.
+
 
 ## V3.0.0 published release — explicit adoption required
 

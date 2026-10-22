@@ -87,10 +87,11 @@ def guard_record(record: dict, policy: dict) -> None:
         raise ChannelError("Record identity/path/entity/vault/scope is outside the granted policy")
 
 
-def dispatch(root: Path, request: dict, policy: dict) -> dict:
+def dispatch(root: Path, request: dict, policy: dict, *, remote_persistence=None) -> dict:
     """Authorization precedes body reads; mutations have exactly one CRUD gateway."""
     from v3_crud_engine import RecordCrud
     from v3_record_store import MarkdownRecordStore, parse_record
+    from v3_mcp_crud_adapter import McpCrudAdapter
     from v3_search_engine import search
 
     if not isinstance(request, dict):
@@ -100,6 +101,8 @@ def dispatch(root: Path, request: dict, policy: dict) -> dict:
         raise ChannelError("runtime exposes create/read/update/delete(archive)/search")
     if any(key in request for key in ("actor", "authorized_vault_ids", "vault_scope", "entity", "scope")):
         raise ChannelError("request may not supply or widen its authorization context")
+    if remote_persistence is not None and remote_persistence.repository != policy.get("repository"):
+        raise ChannelError("remote CRUD repository does not match the instance policy")
     ids = request.get("record_ids") if operation == "search" else [request.get("record_id")]
     if operation == "create":
         guard_record(request.get("record", {}), policy)
@@ -111,19 +114,22 @@ def dispatch(root: Path, request: dict, policy: dict) -> dict:
         relative = policy["record_paths"].get(record_id)
         if not relative:
             raise ChannelError("Record identity is outside the granted policy")
-        path = safe_path(root, relative)
-        header = read_header(path)
-        guard_record(header, policy)
-        if header.get("record_id") != record_id:
-            raise ChannelError("selected Record identity does not match its authorized path")
-        records[record_id] = parse_record(path.read_bytes())
+        if remote_persistence is not None:
+            records[record_id] = remote_persistence.load_one(record_id, relative, policy["active_collections"])
+        else:
+            path = safe_path(root, relative)
+            header = read_header(path)
+            guard_record(header, policy)
+            if header.get("record_id") != record_id:
+                raise ChannelError("selected Record identity does not match its authorized path")
+            records[record_id] = parse_record(path.read_bytes())
         guard_record(records[record_id], policy)
     if operation == "update":
         proposed = deepcopy(records[request["record_id"]])
         proposed.update(request.get("patch", {}))
         guard_record(proposed, policy)
-    crud = RecordCrud(policy["active_collections"], records,
-                      persistence=MarkdownRecordStore(root))
+    persistence = remote_persistence if remote_persistence is not None else MarkdownRecordStore(root)
+    crud = RecordCrud(policy["active_collections"], records, persistence=persistence)
     if operation == "search":
         query = {key: request[key] for key in ("query", "requested_disclosure", "request_id",
                  "presentation", "explicit_structured_request", "explicit_expansion_authorization") if key in request}
@@ -132,7 +138,7 @@ def dispatch(root: Path, request: dict, policy: dict) -> dict:
         return search(crud, query)
     call = deepcopy(request)
     call["actor"] = {"authorized_vault_ids": [policy["vault_id"]]} if operation == "read" else policy["actor"]
-    return crud.apply(call)
+    return McpCrudAdapter(crud, remote_persistence=remote_persistence).call(call)
 
 
 def installation_context(installation: Path, channel: str, expected_payload: str) -> tuple[dict, dict, list]:
@@ -150,7 +156,7 @@ def installation_context(installation: Path, channel: str, expected_payload: str
 
 
 def execute(installation: Path, instance: Path, request: dict, *, policy_path: str,
-            channel: str, expected_payload: str) -> dict:
+            channel: str, expected_payload: str, remote_persistence=None) -> dict:
     metadata, contract, diagnostics = installation_context(installation, channel, expected_payload)
     instance = instance.resolve(strict=True)
     if not isinstance(request, dict):
@@ -158,7 +164,7 @@ def execute(installation: Path, instance: Path, request: dict, *, policy_path: s
     policy = runtime_policy(instance, policy_path, request.get("operation"))
     if not matches(contract["methodology"]["version"], policy["compatibility"], experimental=channel == "experimental"):
         raise ChannelError("instance contract is incompatible with the selected distribution")
-    result = dispatch(instance, request, policy)
+    result = dispatch(instance, request, policy, remote_persistence=remote_persistence)
     return {"status": "completed", "result": result, "diagnostics": diagnostics,
             "source": {"commit": metadata["source_commit"], "payload_sha256": expected_payload,
                        "channel": channel}}

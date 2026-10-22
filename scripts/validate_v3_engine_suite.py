@@ -131,6 +131,21 @@ def main() -> int:
                     f"{coverage_gap_scenario_command} ({output})"
                 )
 
+    for command in matrix.get("policy", {}).get("supplemental_deterministic_commands", []):
+        command_count += 1
+        try:
+            argv = shlex.split(command)
+            if argv[0] in {"python", "python3"}:
+                argv[0] = sys.executable
+            result = subprocess.run(argv, cwd=root, capture_output=True, text=True,
+                                    check=False, timeout=180)
+        except (OSError, ValueError, IndexError, subprocess.TimeoutExpired) as exc:
+            errors.append(f"policy: could not execute supplemental command {command!r}: {exc}")
+            continue
+        if result.returncode != 0:
+            output = (result.stdout + result.stderr).strip().replace("\n", " | ")
+            errors.append(f"policy: supplemental command failed: {command} ({output})")
+
     if errors:
         print(f"validate_v3_engine_suite: FAILED — {len(errors)} error(s)")
         for error in errors:

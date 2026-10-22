@@ -13,6 +13,7 @@ import yaml
 
 from v3_crud_engine import ContractError, RecordCrud
 from v3_search_engine import SearchContractError, search
+from v3_access_runtime import read_eligibility
 
 
 LEVELS = ["L0", "L1", "L2", "L3", "L4"]
@@ -22,6 +23,7 @@ EXPECTED = {
     "prose-default": ("partial", "L2"),
     "structured-only-on-request": ("accepted", "L2"),
     "require-bounded-request-context": ("blocked", "L0"),
+    "search-verified-read-without-registry": ("partial", "L2"),
     "block-unauthorized-vault-scope": ("blocked", "L0"),
     "preserve-authorized-expansion": ("accepted", "L4"),
     "preserve-authorized-conflict-at-L4": ("accepted", "L4"),
@@ -103,6 +105,78 @@ def run_runtime_cases(errors: list[str]) -> None:
         "knowledge_scope": "scope-a",
         "requested_disclosure": "L2",
     }
+
+    # A target-scoped provider read can supply Search context without an internal
+    # vault registry entry. The access result is created by the runtime gate.
+    manifest = {"vault_id": "vault-a", "entity": "entity-a", "repository": "org/entity-vault"}
+    proof = {"status": "allow", "target": "org/entity-vault", "operation": "read", "authenticated": True,
+        "host": "github", "account_id": "account-1", "session_id": "session-1",
+        "proof_source": "authenticated-host-read", "nonce": "nonce-fresh-1", "head_sha": "abc123",
+        "evidence": "observed-github-read", "observed_at": "2026-10-21T12:00:00Z", "signature": "fixture-verified"}
+    verifier = lambda item: item.get("signature") == "fixture-verified"
+    access = read_eligibility(target="org/entity-vault", repo_read=proof, vault=manifest, classification="internal",
+                              secure_filtering=True, host_proof_verifier=verifier)
+    if not access.get("eligible"):
+        errors.append("target-scoped observed GitHub read did not produce a Search context")
+    else:
+        private_records = {
+            "rec-internal": runtime_record("rec-internal", text="alpha approved", visibility="internal"),
+            "rec-confidential": runtime_record("rec-confidential", text="alpha secret", visibility="confidential"),
+        }
+        private_records["rec-internal"]["chunks"].append({"chunk_id": "rec-internal-private", "parent_record_id": "rec-internal",
+            "text_ref": "private-section", "text": "vault-secret", "visibility": "confidential", "staleness": "current"})
+        context_crud = RecordCrud({"collection-a": {"collection_id": "collection-a", "active": True}}, private_records)
+        context_request = {key: value for key, value in base.items() if key != "authorized_vault_ids"}
+        context_request.update({"request_id": "search-verified-read", "vault_scope": ["vault-a"],
+                                "verified_read_contexts": [access["context"]]})
+        rechecks = []
+        def fresh_checker(context):
+            rechecks.append(context["target"])
+            return {"repo_read": {**proof, "nonce": f"nonce-fresh-{len(rechecks) + 1}", "observed_at": "2026-10-21T12:01:00Z"},
+                    "vault": manifest, "secure_filtering": True}
+        try:
+            context_result = search(context_crud, context_request, read_context_checker=fresh_checker, host_proof_verifier=verifier)
+            refs = [item["record_ref"] for item in context_result["results"]]
+            if refs != ["rec-internal"] or context_result["trail"]["retrieval_path"] != "verified-github-read-context+local-crud-read":
+                errors.append("verified GitHub read did not enable bounded internal Search or leaked a higher-class result")
+            expanded_context = search(context_crud, {**context_request, "request_id": "search-verified-read-expansion",
+                "requested_disclosure": "L4", "explicit_expansion_authorization": True},
+                read_context_checker=fresh_checker, host_proof_verifier=verifier)
+            if any("vault-secret" in str(item) for item in expanded_context["results"]):
+                errors.append("verified internal context exposed a confidential Chunk through expansion")
+            if len(rechecks) != 2:
+                errors.append("Search reused prior host access proof instead of rechecking each operation")
+        except SearchContractError as exc:
+            errors.append(f"verified GitHub read Search path failed: {exc}")
+        try:
+            search(context_crud, context_request)
+            errors.append("Search trusted a supplied context without fresh host verification")
+        except SearchContractError:
+            pass
+        try:
+            search(context_crud, context_request, read_context_checker=lambda _: {"repo_read": proof, "vault": manifest,
+                "secure_filtering": True}, host_proof_verifier=verifier)
+            errors.append("Search accepted a replayed read proof with the old nonce")
+        except SearchContractError:
+            pass
+        try:
+            switched = {**proof, "account_id": "account-2", "nonce": "nonce-switched"}
+            search(context_crud, context_request, read_context_checker=lambda _: {"repo_read": switched, "vault": manifest,
+                "secure_filtering": True}, host_proof_verifier=verifier)
+            errors.append("Search reused access proof after authenticated account changed")
+        except SearchContractError:
+            pass
+        try:
+            search(context_crud, context_request, read_context_checker=lambda _: {"repo_read": {**proof, "status": "deny"},
+                "vault": manifest, "secure_filtering": True}, host_proof_verifier=verifier)
+            errors.append("Search allowed access after the fresh host recheck reported revocation")
+        except SearchContractError:
+            pass
+        try:
+            search(context_crud, {**context_request, "verified_read_contexts": [{**access["context"], "proof": {"status": "allow", "target": "org/other", "operation": "read", "authenticated": True, "host": "github", "account_id": "account-1", "session_id": "session-1", "proof_source": "host", "nonce": "n", "head_sha": "sha", "evidence": "wrong", "observed_at": "t"}}]}, read_context_checker=fresh_checker, host_proof_verifier=verifier)
+            errors.append("Search accepted a verified read context for another repository")
+        except SearchContractError:
+            pass
     before = crud.records
     try:
         prose = search(crud, base)
@@ -416,7 +490,7 @@ def main() -> int:
         for error in errors:
             print(f"  [FAIL] {error}")
         return 1
-    print("validate_v3_search_progressive_disclosure: OK — contract envelope and 13 sanitized fixtures")
+    print(f"validate_v3_search_progressive_disclosure: OK — contract envelope and {len(EXPECTED)} sanitized fixtures")
     return 0
 
 

@@ -68,8 +68,10 @@ Semantic evaluation remains distinct from deterministic validation.
 
 ## Installation and publication channels
 
-Version 3.1.0 adds a callable local runtime and an explicit experimental channel,
-with independent skill 2.3.0, preserving the 3.0.0 data contract. Follow
+The 3.1.0 release candidate adds a callable local runtime, an explicit experimental
+channel, direct-target ingress without a personal-anchor prerequisite, and
+profile-based write eligibility with scoped entity grants. Skill 2.4.0 is an
+independent package version; the V3.0.0 Record data contract remains supported. Follow
 [runtime installation](docs/v3-runtime-usage.md) and
 [distribution/channel rules](docs/v3-distribution-and-channels.md).
 Stable installation verifies the official immutable published release and hashes.

@@ -24,6 +24,7 @@ hipocampo:
 
 instance:
   repository: "<fill in: URL of this repository>"
+  vault_id: "<generate immutable opaque vault identifier; never derive from repository slug>"
   entity: "<fill in: entity identifier, e.g. personal, or a specific company/family name>"
   vault_profile: "<fill in: explicitly selected team | personal | entity; team is suggested, never assumed>"
   role: "<fill in: anchor | additional>"
@@ -31,6 +32,19 @@ instance:
   policy_profile: "<fill in: personal | corporate — selects the sensitive-data policy>"
   curation_level: "<fill in: content | vault>"
   language: "en"
+
+# At creation, bind the authenticated human creator to this new vault only.
+# Fill the stable account ID from the GitHub MCP, not a typed login or agent ID.
+# The grant is methodological; it does not create GitHub permissions.
+governance:
+  authorized_representatives:
+    - account_id: "<stable authenticated human account ID>"
+      vault_id: "<same immutable value as instance.vault_id>"
+      entity: "<same confirmed value as instance.entity>"
+      actions: [create, update, archive, manage_representatives]
+      scope: "<scope of this new vault only>"
+      valid_from: "<grant timestamp in ISO 8601>"
+      valid_until: null
 
 # Present only in an anchor vault. This is an operator-confirmed address list,
 # not a router: each listed repository remains authoritative for its own
@@ -40,8 +54,8 @@ discovery:
 
 scaffold:
   profile: "<fill in: pessoal | empresa>"    # scaffold profile id — literal filename token, not translated (PR #27)
-  profile_version: "2.1.0"
-  engine_version: "2.1.0"
+  profile_version: "2.2.0"
+  engine_version: "2.2.0"
   source_repository: "https://github.com/mklagenberg/hipocampo"
   source_commit: "<fill in: same commit as hipocampo.verified_commit>"
 

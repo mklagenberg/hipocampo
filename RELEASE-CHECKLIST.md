@@ -1,11 +1,16 @@
 # Hipocampo — release checklist
 
-This checklist implements Decisions 0014/0021/0023/0037 and 0120. Use one
+This checklist implements Decisions 0014/0021/0023/0037/0120/0121. Use one
 cohesive Change Set, not a publication loop that leaves essential work afterward.
 
 ## Before the final tag
 
 - [ ] Classify public impact and independent methodology/skill/runtime versions.
+- [ ] Confirm each new profile/grant rule is reflected across SPEC, skill,
+  scaffold, compatibility and fixtures; verify no personal anchor prerequisite.
+- [ ] Compare candidate requirements with the last stable baseline under
+  Decision 0023; candidate tests must run against the pinned candidate itself,
+  never depend on a future stable publication.
 - [ ] Synchronize SPEC, decisions, taxonomy/vocabulary, README, changelog,
   COMPATIBILITY, skill manifest/references, scaffold and upgrade/migration guidance.
 - [ ] Install the complete distribution in isolation; preserve the previous install.

@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
+
+from v3_access_runtime import read_eligibility
 
 
 class IngressError(ValueError):
@@ -53,8 +56,42 @@ def process_ingress(*, record: dict, destination_vault: dict, operation: str, en
     return {"status": "processed", "local_record": local_record, "raw_inbox": False}
 
 
-def read_findings(*, record: dict) -> dict:
+def read_findings(*, record: dict, verified_read_context: dict | None = None,
+                  read_context_checker: Callable[[dict], dict | None] | None = None,
+                  host_proof_verifier: Callable[[dict], bool] | None = None,
+                  metadata_proof_verifier: Callable[[dict, dict, dict], bool] | None = None) -> dict:
     """READ-only detection; persistence belongs to CREATE/UPDATE."""
+    if verified_read_context is not None:
+        if read_context_checker is None or host_proof_verifier is None:
+            raise IngressError("READ findings requires a fresh authenticated host recheck")
+        try:
+            current = read_context_checker(dict(verified_read_context))
+        except Exception as exc:
+            raise IngressError("READ findings host recheck failed") from exc
+        if not isinstance(current, dict):
+            raise IngressError("READ findings host recheck did not confirm current access")
+        proof = current.get("repo_read", {})
+        if proof.get("nonce") == verified_read_context.get("proof", {}).get("nonce"):
+            raise IngressError("READ findings recheck reused a prior nonce")
+        target = verified_read_context.get("target")
+        manifest = current.get("vault", {})
+        eligibility = read_eligibility(target=target, repo_read=proof, vault=manifest,
+            classification=verified_read_context.get("classification"),
+            secure_filtering=current.get("secure_filtering") is True,
+            host_proof_verifier=host_proof_verifier,
+            legacy_registry=current.get("legacy_registry"),
+            metadata_proof=current.get("metadata_proof"),
+            metadata_proof_verifier=metadata_proof_verifier)
+        record_vault_id = record.get("vault", {}).get("vault_id") or record.get("destination_vault_id")
+        fresh_context = eligibility.get("context")
+        if (not eligibility.get("eligible") or not isinstance(fresh_context, dict)
+                or fresh_context.get("target") != verified_read_context.get("target")
+                or fresh_context.get("vault_id") != verified_read_context.get("vault_id")
+                or fresh_context.get("entity") != verified_read_context.get("entity")
+                or fresh_context.get("account_id") != verified_read_context.get("account_id")):
+            raise IngressError("READ findings requires a fresh verified target-scoped read context")
+        if record_vault_id != verified_read_context.get("vault_id") or record.get("entity") not in (None, verified_read_context.get("entity")):
+            raise IngressError("READ findings context does not match the record boundary")
     return {
         "write_performed": False,
         "frontmatter": list(record.get("frontmatter_findings", [])),

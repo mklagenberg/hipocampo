@@ -5,8 +5,10 @@ from __future__ import annotations
 from copy import deepcopy
 from datetime import datetime
 import re
+from collections.abc import Callable
 
-from v3_crud_engine import ContractError, RecordCrud, effective_visibility
+from v3_crud_engine import ContractError, RecordCrud, VISIBILITY_RANK, effective_visibility
+from v3_access_runtime import read_eligibility
 
 
 LEVELS = ("L0", "L1", "L2", "L3", "L4")
@@ -24,7 +26,7 @@ def _lower_level(left: str, right: str) -> str:
 
 def _validate_request(request: dict) -> dict:
     required = {
-        "request_id", "query", "entity", "vault_scope", "authorized_vault_ids",
+        "request_id", "query", "entity", "vault_scope",
         "knowledge_scope", "requested_disclosure",
     }
     missing = required - request.keys()
@@ -36,10 +38,32 @@ def _validate_request(request: dict) -> dict:
         raise SearchContractError("query must be non-empty")
     if not isinstance(request["entity"], str) or not request["entity"].strip():
         raise SearchContractError("entity must be non-empty")
-    for field in ("vault_scope", "authorized_vault_ids"):
+    for field in ("vault_scope",):
         if not isinstance(request[field], list) or not request[field] or any(not isinstance(item, str) or not item.strip() for item in request[field]):
             raise SearchContractError(f"{field} must be a non-empty list of strings")
-    if not set(request["vault_scope"]).issubset(set(request["authorized_vault_ids"])):
+    explicit_ids = request.get("authorized_vault_ids", [])
+    if not isinstance(explicit_ids, list) or any(not isinstance(item, str) or not item.strip() for item in explicit_ids):
+        raise SearchContractError("authorized_vault_ids must be a list of strings when supplied")
+    contexts = request.get("verified_read_contexts", [])
+    if not isinstance(contexts, list) or any(not isinstance(item, dict) for item in contexts):
+        raise SearchContractError("verified_read_contexts must be a list of verified context mappings")
+    context_ids = set()
+    for context in contexts:
+        proof = context.get("proof", {})
+        target = context.get("target")
+        if (context.get("access_basis") != "observed_target_read" or context.get("entity") != request["entity"]
+                or not context.get("vault_id") or context.get("classification") not in {"public", "internal"}
+                or not isinstance(target, str) or "/" not in target
+                or proof.get("status") != "allow" or proof.get("target") != target or proof.get("operation") != "read"
+                or proof.get("authenticated") is not True or not proof.get("host")
+                or proof.get("account_id") != context.get("account_id") or not proof.get("session_id")
+                or not proof.get("proof_source") or not proof.get("nonce") or not proof.get("head_sha")
+                or not proof.get("evidence") or not proof.get("observed_at")):
+            raise SearchContractError("verified read context lacks exact-target observed GitHub read proof")
+        context_ids.add(context["vault_id"])
+    if not explicit_ids and not context_ids:
+        raise SearchContractError("search requires explicit authorized_vault_ids or verified_read_contexts")
+    if not set(request["vault_scope"]).issubset(set(explicit_ids) | context_ids):
         raise SearchContractError("vault_scope must be contained in authorized_vault_ids")
     if not isinstance(request["knowledge_scope"], str) or not request["knowledge_scope"].strip():
         raise SearchContractError("knowledge_scope must be non-empty")
@@ -56,6 +80,11 @@ def _validate_request(request: dict) -> dict:
     return deepcopy(request)
 
 
+def _verified_context_for(record: dict, contexts: list[dict], entity: str) -> dict | None:
+    vault_id = record.get("vault", {}).get("vault_id")
+    return next((item for item in contexts if item.get("vault_id") == vault_id and item.get("entity") == entity), None)
+
+
 def _terms(query: str) -> list[str]:
     return re.findall(r"[\w-]+", query.casefold())
 
@@ -68,27 +97,36 @@ def _chunk_content_allowed(record: dict, chunk: dict) -> bool:
     )
 
 
-def _record_text(record: dict) -> str:
+def _within_clearance(record: dict, chunk: dict, clearance: str | None) -> bool:
+    if clearance is None:
+        return True
+    visibility = effective_visibility([record, chunk])
+    rank = VISIBILITY_RANK.get(visibility)
+    return rank is not None and rank <= VISIBILITY_RANK[clearance]
+
+
+def _record_text(record: dict, clearance: str | None = None) -> str:
     parts = [str(record.get("title", "")), str(record.get("text", ""))]
     for chunk in record.get("chunks", []):
-        if not _chunk_content_allowed(record, chunk):
+        if not _chunk_content_allowed(record, chunk) or not _within_clearance(record, chunk, clearance):
             continue
         parts.extend([str(chunk.get("text_ref", "")), str(chunk.get("text", ""))])
     return " ".join(parts).casefold()
 
 
-def _relevance(record: dict, terms: list[str]) -> float:
-    haystack = _record_text(record)
+def _relevance(record: dict, terms: list[str], clearance: str | None = None) -> float:
+    haystack = _record_text(record, clearance)
     if not terms:
         return 0.0
     return round(sum(term in haystack for term in set(terms)) / len(set(terms)), 3)
 
 
-def _matching_chunks(record: dict, terms: list[str]) -> list[dict]:
+def _matching_chunks(record: dict, terms: list[str], clearance: str | None = None) -> list[dict]:
     return [
         deepcopy(chunk)
         for chunk in record.get("chunks", [])
         if _chunk_content_allowed(record, chunk)
+        and _within_clearance(record, chunk, clearance)
         and any(term in str(chunk.get("text", "")).casefold() for term in terms)
     ]
 
@@ -164,6 +202,7 @@ def _result_envelope(
     chunks: list[dict],
     artifact_accessible: bool,
     record_readable: bool,
+    visibility_clearance: str | None = None,
 ) -> dict:
     requested = request["requested_disclosure"]
     explicit = request.get("explicit_expansion_authorization", False)
@@ -244,7 +283,7 @@ def _result_envelope(
         envelope["expanded_content"] = [
             {"chunk_id": chunk.get("chunk_id"), "text": chunk.get("text", "")}
             for chunk in record.get("chunks", [])
-            if _chunk_content_allowed(record, chunk)
+            if _chunk_content_allowed(record, chunk) and _within_clearance(record, chunk, visibility_clearance)
         ]
     return envelope
 
@@ -274,11 +313,41 @@ def _prose(envelopes: list[dict], request: dict) -> str:
     return " ".join(parts)
 
 
-def search(crud: RecordCrud, request: dict) -> dict:
+def search(crud: RecordCrud, request: dict, *,
+           read_context_checker: Callable[[dict], dict | None] | None = None,
+           host_proof_verifier: Callable[[dict], bool] | None = None) -> dict:
     """Run a local read-only search through the canonical CRUD read boundary."""
     if not isinstance(crud, RecordCrud):
         raise SearchContractError("search requires the canonical RecordCrud gateway")
     validated = _validate_request(request)
+    if validated.get("verified_read_contexts"):
+        if read_context_checker is None or host_proof_verifier is None:
+            raise SearchContractError("verified Search context requires fresh authenticated host recheck and proof verifier")
+        refreshed = []
+        for hint in validated["verified_read_contexts"]:
+            try:
+                current = read_context_checker(deepcopy(hint))
+            except Exception as exc:
+                raise SearchContractError("GitHub read recheck failed; Search is blocked") from exc
+            if not isinstance(current, dict):
+                raise SearchContractError("GitHub read access was not freshly revalidated for this Search")
+            target = hint["target"]
+            current_proof = current.get("repo_read", {})
+            if current_proof.get("nonce") == hint.get("proof", {}).get("nonce"):
+                raise SearchContractError("GitHub read recheck reused a prior nonce; Search is blocked")
+            eligibility = read_eligibility(
+                target=target, repo_read=current_proof, vault=current.get("vault", {}),
+                classification=hint["classification"], secure_filtering=current.get("secure_filtering") is True,
+                host_proof_verifier=host_proof_verifier)
+            context = eligibility.get("context")
+            if (not eligibility.get("eligible") or not isinstance(context, dict)
+                    or context.get("vault_id") != hint.get("vault_id")
+                    or context.get("entity") != hint.get("entity")
+                    or context.get("target") != target
+                    or context.get("account_id") != hint.get("account_id")):
+                raise SearchContractError("fresh GitHub read proof did not authorize this Search target")
+            refreshed.append(context)
+        validated["verified_read_contexts"] = refreshed
     before = crud.records
     before_events = len(crud.events)
     terms = _terms(validated["query"])
@@ -290,16 +359,31 @@ def search(crud: RecordCrud, request: dict) -> dict:
             continue
         if snapshot.get("scope") != validated["knowledge_scope"]:
             continue
-        relevance = _relevance(snapshot, terms)
+        verified_context = _verified_context_for(snapshot, validated.get("verified_read_contexts", []), validated["entity"])
+        if verified_context is not None:
+            # Apply the verified context's classification cap before ranking, so
+            # even hit presence, titles and snippets cannot reveal higher classes.
+            visibility = effective_visibility([snapshot])
+            rank = VISIBILITY_RANK.get(visibility)
+            clearance = VISIBILITY_RANK[verified_context["classification"]]
+            if rank is None or rank > clearance or snapshot.get("privacy") == "blocked":
+                continue
+        clearance = verified_context["classification"] if verified_context is not None else None
+        relevance = _relevance(snapshot, terms, clearance)
         if relevance <= 0:
             continue
         artifact_accessible = _artifact_accessible(snapshot)
         record_readable = True
         try:
+            vault_id = snapshot.get("vault", {}).get("vault_id")
+            if vault_id in validated.get("authorized_vault_ids", []):
+                actor = {"authorized_vault_ids": validated["authorized_vault_ids"]}
+            else:
+                actor = {"authorized_vault_ids": [vault_id]}
             read = crud.apply({
                 "operation": "read",
                 "record_id": record_id,
-                "actor": {"authorized_vault_ids": validated["authorized_vault_ids"]},
+                "actor": actor,
             })
             record = read["record"]
         except ContractError as exc:
@@ -310,9 +394,10 @@ def search(crud: RecordCrud, request: dict) -> dict:
             record,
             validated,
             relevance=relevance,
-            chunks=_matching_chunks(record, terms),
+            chunks=_matching_chunks(record, terms, clearance),
             artifact_accessible=artifact_accessible,
             record_readable=record_readable,
+            visibility_clearance=clearance,
         ))
     envelopes.sort(key=lambda item: (-item["relevance"], item["record_ref"]))
     if any(item["disposition"] == "blocked" for item in envelopes):
@@ -334,7 +419,7 @@ def search(crud: RecordCrud, request: dict) -> dict:
         "vault_scope": sorted(validated["vault_scope"]),
         "returned_level": LEVELS[returned_level],
         "disposition": disposition,
-        "retrieval_path": "redacted-local-crud-read",
+        "retrieval_path": "verified-github-read-context+local-crud-read" if validated.get("verified_read_contexts") else "explicit-authorized-local-crud-read",
         "limits": limits,
     }
     if validated.get("presentation", "prose-default") == "structured-on-request":
