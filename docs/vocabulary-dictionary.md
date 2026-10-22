@@ -84,6 +84,17 @@ The values are introduced by Change Set `0058-compatibility-contract`. Their
 precedence and complete contract remain in `COMPATIBILITY.yaml`; this table is
 the vocabulary registry, not a second rule source.
 
+## Operation-support terms
+
+`operation_support` is an independent, operation-specific contract declared
+in `OPERATION-SUPPORT.yaml`. It is not a compatibility state or a translation
+alias. `read` identifies the supported operation; `read_only` constrains its
+effect. `specified`, `validated_synthetic` and `observed_host` describe the
+evidence level for that adapter, not permission or compatibility. A V2 vault
+can remain `migration_required` while `read` has validated synthetic support.
+Actual use additionally requires host/MCP capability, GitHub access,
+authorization and privacy. No `compatible_for_read` value is admitted.
+
 Nominal-citation review is an opt-in check over explicitly supplied new or
 changed files. `scripts/validate_nominal_citations.py` uses placeholders and
 the project operator handle only; it does not retain a third-party name list

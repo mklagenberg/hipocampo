@@ -1,5 +1,10 @@
 # Hipocampo — Migrations
 
+Bounded V2 read support does not perform or waive a V2-to-V3 migration.
+The general compatibility result remains `migration_required` until a
+vault-specific governed conversion and verification complete. Reading a V2
+document never rewrites its frontmatter, manifest, body or repository state.
+
 
 ## V3.1 executable distribution and experimental channel
 
@@ -45,6 +50,11 @@ Each instance declares, in its own `CLAUDE.md`/README, the version or compatibil
 V3 is sovereign over V2.2. Existing V2.x vaults remain readable until an
 explicit migration is approved. This section describes the published V3
 target; it is not an instruction to migrate a real vault.
+
+From a V3 client, such reading is bounded by the exact source-release
+adapter, GitHub MCP, repository permission and privacy checks in
+[legacy read support](docs/legacy-read-support.md). It does not make a V2
+vault generally compatible with V3.
 
 ### Required preconditions
 

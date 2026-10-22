@@ -8,6 +8,8 @@ Agentic second brain methodology: git + markdown + AI rituals. This repository i
 - [BEST-PRACTICES.md](BEST-PRACTICES.md) — best practices for use: day-to-day, privacy/compliance posture, and adoption by teams/new companies.
 - [docs/privacy-and-licensing-boundaries.md](docs/privacy-and-licensing-boundaries.md) — boundaries between methodology licensing, content-vault licensing, privacy, and progressive remediation.
 - [MIGRATIONS.md](MIGRATIONS.md) — migration guide per MAJOR version jump.
+- [docs/legacy-read-support.md](docs/legacy-read-support.md) — bounded V2 read adaptation and its limits; general V2/V3 compatibility is unchanged.
+- [docs/host-installation.md](docs/host-installation.md) — host-specific skill/plugin update and verification gates.
 - [CHANGELOG.md](CHANGELOG.md) — methodology version history.
 - [CONTRIBUTING.md](CONTRIBUTING.md) — how to contribute to this repository: language policy, Decision Records, Change Sets, validation, releases.
 - [ROADMAP.md](ROADMAP.md) — current direction, no date commitment.

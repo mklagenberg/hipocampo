@@ -112,6 +112,16 @@ epistemic types. Their permitted action and precedence are authoritative in
 `COMPATIBILITY.yaml`; the term registry and governance notes are in
 `docs/vocabulary-dictionary.md`.
 
+| Concept | Meaning | Source |
+|---|---|---|
+| General compatibility | Versioned methodology, skill and vault contract as a whole, with no or limited loss of general behavior | `SPEC.md` §2-E; `COMPATIBILITY.yaml` |
+| Operation support | Bounded adaptation for a named operation and source contract; may coexist with general incompatibility | `SPEC.md` §2-E; `OPERATION-SUPPORT.yaml` |
+| Effective operation | Outcome after adapter proof, host/MCP capability, repository permission, actor authority and privacy gates | `SPEC.md` §2-E; `docs/legacy-read-support.md` |
+
+These concepts are distinct. V2 read support never changes a V2 vault's
+`migration_required` general compatibility result under V3. A V3-compatible
+vault may still lack an effective read because its host or access is missing.
+
 ## Known cross-references and name collisions (collected here, not duplicated)
 
 - Legacy `instance.tier` and `AGENTS.md` “Instance type” remain readable only as compatibility aliases; new manifests use `instance.curation_level` and `instance.policy_profile` (`decisions/0052`).

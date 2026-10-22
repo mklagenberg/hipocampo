@@ -135,13 +135,32 @@ acceptance where applicable, and is never automatic synchronization.
 ## 2-E. Compatibility decision gate
 
 Use COMPATIBILITY.yaml and the verified methodology/skill/vault tuple.
-Current package target: methodology 3.0.1, skill 2.0.1, vault range ^3.0.0.
+Current package target: methodology 3.1.0, skill 2.1.0, vault range ^3.0.0.
 V3.0.0 remains the preserved contract baseline.
 Host identity is not part of the tuple. V2 content is diagnostic or migration
 input, not silently compatible. Unknown, inaccessible or integrity-failed
 evidence fails closed. Later V3 minors and patches preserve the raw V3.0.0
 baseline, including through adapters or facades. Publication and authorization
 are independent of compatibility. No automatic skill update or installation.
+
+Compatibility evaluates the versioned methodology/skill/vault contract as a
+whole, with no or limited loss of its general behavior. Operation support is a
+separate, bounded adaptation for a named operation and source contract. It
+does not change the compatibility result or the supported vault range. A
+verified V2 vault therefore remains `migration_required` under V3 even if a
+versioned read-only adapter supports a particular read. Neither compatibility
+nor declared support proves that the current host, GitHub MCP, repository
+permission, actor authorization or privacy policy permits that read.
+
+The authoritative operation-support catalog is [OPERATION-SUPPORT.yaml](OPERATION-SUPPORT.yaml).
+It declares source versions, adapter identity, effects and validation level
+without adding operation-specific states to `COMPATIBILITY.yaml`. The
+[legacy read contract](docs/legacy-read-support.md) defines the bounded V2
+path. A supported V2 read carries a version warning and preserves source
+fields, provenance and privacy limits. V3 Record writes still require governed
+migration and canonical CRUD. Missing source proof, adapter validation or an
+effective MCP read yields a typed unavailable result, not inferred V3
+compatibility or a local-cache bypass.
 
 ## 3. `type` — enum and expansion criterion
 

@@ -23,6 +23,11 @@ unavailable source yields `access_unavailable`; do not infer compatibility.
 An intact V3 tuple is only a compatibility result. It does not grant authority,
 privacy permission or a host capability.
 
+A bounded V2 `read` may be available through the separate
+[legacy read procedure](legacy-read.md) when its exact source contract, adapter,
+GitHub MCP, repository permission and privacy gates are proven. This does not
+change the general `migration_required` result or permit V3 writes.
+
 Do not equate these distinct facts:
 
 - `compatibility` range: contracts the instance says it can support;
