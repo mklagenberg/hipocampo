@@ -37,6 +37,31 @@ different source is not evidence that the vault's data contract is
 incompatible. A new verification claim needs its own exact-source test and
 review before changing durable provenance.
 
+## Legacy manifest identity and optional policy adoption
+
+Some V3.0.0 manifests have no `instance.vault_id` or
+`instance.vault_profile`. Their compatible version range remains valid and
+their prior governed read/write route remains available. If a selected 3.1.0
+implementation uses a direct-target read context requiring a vault ID, read
+the existing `meta/v3-collections.json` at the same authenticated remote HEAD
+as the manifest. Verify its registry schema, entity and stable `vault_id`
+against the requested target and Record boundary. Do not infer an ID from the
+repository URL or trust a caller-supplied mapping. If that verified context
+cannot be assembled, report the new route unavailable and use only a separately
+authorized legacy path; do not claim that the version range failed. This
+identity resolution must be exercised in both the deterministic adapter and
+the semantic procedure before the new route is declared ready for legacy
+vaults.
+
+Using new `personal`/`team` write eligibility or `entity` representative
+grants on a legacy vault is a separate governed adoption. It requires an
+operator-confirmed vault profile, stable ID, matching entity/scope and, for
+an entity write, a current scoped grant and its event history. Neither an old
+`policy_profile` nor the creator's GitHub account proves the new vault profile
+or grants. Adopt only the selected vault through reviewed operational metadata;
+preserve its Records and historical verification. Provider permission and
+canonical CRUD remain separate gates.
+
 ## Operate progressively
 
 - Preserve all Records, Chunks, frontmatter, Collection membership, original

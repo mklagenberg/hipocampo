@@ -25,6 +25,10 @@ in the private management evaluation, not this public Change Set.
   verification, source-age WARNING, host capability and authorization.
 - All four remote manifest blobs pass the canonical compatibility validator
   under the explicit experimental 3.1.0 candidate; blob identity is checked.
+- A later direct-target ingress implementation is checked against legacy
+  manifests and existing Collection registries; inability to assemble a
+  verified vault ID is an operation-level gap, not a reason to rewrite the
+  vault or declare its version range incompatible.
 - No vault Record, manifest, ACL, local cache or installed client is changed
   merely to make the range pass.
 - Repository documentation and Change Set validation pass. External host
