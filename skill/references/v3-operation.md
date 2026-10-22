@@ -28,6 +28,13 @@ A bounded V2 `read` may be available through the separate
 GitHub MCP, repository permission and privacy gates are proven. This does not
 change the general `migration_required` result or permit V3 writes.
 
+When a verified V3 vault source version predates the verified published stable
+release, emit a version-age WARNING with the V3 upgrade path. Keep the
+compatibility result unchanged; age alone is not a vulnerability. Do not use
+an unpublished candidate as the stable reference. The pure
+`scripts/vault_version_notice.py` helper covers this comparison when Python
+is available; apply the same comparison semantically otherwise.
+
 Do not equate these distinct facts:
 
 - `compatibility` range: contracts the instance says it can support;

@@ -14,6 +14,8 @@ No V3 write, automatic migration or manifest rewrite follows from reading.
    release evidence. A range is not an exact source version. Match an exact
    V2.0.0, V2.1.0, V2.1.1 or V2.2.0 entry in `OPERATION-SUPPORT.yaml`. Other
    versions are not yet a supported operation.
+   Separately verify the current immutable published stable release and its
+   resolved tag. An experimental candidate is not this stable reference.
 3. Establish the candidate path and its classification before fetching its
    body. Repository read permission normally permits Hipocampo presentation
    up to proven `internal`; `confidential` and `restricted` require a specific
@@ -26,6 +28,8 @@ No V3 write, automatic migration or manifest rewrite follows from reading.
    Preserve source fields, Unicode, path, SHA and uncertainty. Use the
    deterministic `scripts/v2_legacy_reader.py` only in a trusted environment
    where the prior transport/authorization assertions were actually proved.
+   Pass source-contract and stable-reference verification assertions only
+   after observing their evidence; the parser cannot authenticate them.
    Without Python, perform the same checks semantically via MCP; if any gate
    cannot be met, stop with a typed cause.
 5. Return the smallest permitted result with a visible WARNING: verified V2

@@ -8,6 +8,8 @@ from pathlib import Path, PurePosixPath
 import re
 
 import yaml
+from v3_channel import parse_version
+from vault_version_notice import version_notice
 
 
 class LegacyReadError(ValueError):
@@ -78,6 +80,11 @@ def read_document(data: bytes, context: dict) -> dict:
     if any(not isinstance(context.get(key), str) or not context[key].strip() for key in required):
         raise LegacyReadError("context_incomplete")
     entry = _entry(context["source_version"], context["source_commit"])
+    if context.get("source_contract_verified") is not True:
+        raise LegacyReadError("source_contract_unverified")
+    stable = parse_version(context["stable_reference"])
+    if context.get("stable_reference_verified") is not True or stable is None or stable[1]:
+        raise LegacyReadError("published_stable_unverified")
     path = _selected_path(context["path"])
     if context["expected_head"] != context["observed_head"]:
         raise LegacyReadError("ref_changed")
@@ -96,6 +103,10 @@ def read_document(data: bytes, context: dict) -> dict:
     for field in ("title", "source", "type", "status", "revision", "author"):
         if field not in header or header[field] in (None, ""):
             raise LegacyReadError("legacy_header_incomplete")
+    age_warning = version_notice(entry["source_version"], context["stable_reference"],
+                                 stable_verified=True, source_verified=True)
+    if age_warning is None:
+        raise LegacyReadError("published_stable_not_newer")
     return {
         "status": "read_only",
         "general_compatibility": "migration_required",
@@ -106,8 +117,6 @@ def read_document(data: bytes, context: dict) -> dict:
                          "ref": context["observed_head"], "sha256": sha256(data).hexdigest()},
         "original_frontmatter": deepcopy(header),
         "body": body,
-        "warning": (f"Vault source contract {entry['source_version']} predates stable "
-                    f"{context['stable_reference']}; bounded read only. "
-                    "Governed V2-to-V3 migration is required before V3 writes."),
+        "warning": age_warning["message"] + " Bounded read only; no V3 writes.",
         "mutation": "none",
     }

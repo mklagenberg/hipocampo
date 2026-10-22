@@ -161,6 +161,10 @@ fields, provenance and privacy limits. V3 Record writes still require governed
 migration and canonical CRUD. Missing source proof, adapter validation or an
 effective MCP read yields a typed unavailable result, not inferred V3
 compatibility or a local-cache bypass.
+Compare a proved vault source version with the verified published stable
+version for a separate age WARNING. An older compatible V3 vault gets an
+upgrade notice without being labeled incompatible or unsafe. An unreleased
+candidate is not the stable reference. An equal version gets no age WARNING.
 
 ## 3. `type` — enum and expansion criterion
 

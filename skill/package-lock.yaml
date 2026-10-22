@@ -14,7 +14,7 @@ package:
   - path: references/instantiation.md
     sha256: 189ba631647eae7f82934174a801f621fd507f4eae1b6976e677e030ceecd676
   - path: references/legacy-read.md
-    sha256: 6c05e6ed5a224f2ef733933cad8b9ce48ed14dad0a2627a3b83125ee01c66f98
+    sha256: 9e18032098896692ce345f8c6f7c1c3a047130a29e5115247762c5cfc557456a
   - path: references/invariants.md
     sha256: 31f6194c578dbd6bd50978163ccc2df2dd864027a7cdf1daaef28be3dd153d1f
   - path: references/personalization.md
@@ -24,6 +24,6 @@ package:
   - path: references/runtime.md
     sha256: 34bcdd17ca8ff7d296c4629357963769dd6aa8e90a94bb49d1e05f30ff2def3b
   - path: references/v3-operation.md
-    sha256: 3c08b3ee7727f3b0f1d5bec2ac082b58554053bb2279c342d962f60bff75f5f5
+    sha256: c4c2b9cc75473ce1df6014582f6fa38b7d7352ba1b573083b04e2d5954c89a66
   - path: SKILL.md
     sha256: 75cc804bd6012d4681b03cb2471a667134be953edaac96d52238f85fa72febc3

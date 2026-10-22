@@ -11,6 +11,7 @@ does not prove an end-to-end remote read.
 | Shared case | Semantic instruction | Parser/test result | Disposition |
 |---|---|---|---|
 | Exact V2.0.0, 2.1.0, 2.1.1 or 2.2.0 source contract | Pin and verify the historical contract; keep V2 `migration_required` overall. | Exact catalog version and commit required; four synthetic positive cases. | Aligned for the tested releases; vault source proof remains caller evidence. |
+| Unverified source or published stable reference | Withhold the result and never use a candidate as the published stable reference. | `source_contract_unverified` or `published_stable_unverified`. | Aligned in assertions; evidence remains caller work. |
 | Unknown source or mismatched contract commit | Withhold body and report an unresolved source. | `source_contract_unsupported` or `source_contract_mismatch`. | Aligned. |
 | No MCP read or repository permission | Withhold body; do not use a cache as a silent bypass. | `mcp_read_unavailable` or `repository_access_unavailable` on caller assertions. | Aligned in outcome; real permission evidence remains untested. |
 | Ref changes between discovery and read | Revalidate before presentation. | `ref_changed`. | Aligned for the asserted heads; remote compare-and-recheck remains caller work. |
@@ -31,6 +32,11 @@ gates. A compatible V3 vault with absent MCP read is still operationally
 unavailable. The V3 engine suite and compatibility validator are regression
 checks, not evidence that V2 Search, a real remote V2 vault, or any host was
 exercised.
+The separate `scripts/vault_version_notice.py` comparison covers the old V3
+versus published stable WARNING case, equal stable without a false warning,
+and an experimental candidate that cannot act as the stable reference. Its
+13 synthetic cases do not authenticate release discovery or vault source
+version; the semantic path must supply that evidence.
 
 ## Open coverage
 

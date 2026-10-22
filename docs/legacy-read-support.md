@@ -23,7 +23,9 @@ reported independently.
    claimed.
 3. Confirm the adapter's `validated_synthetic` evidence level, then inspect
    the host/MCP read operation, repository permission, classification and
-   privacy grant separately. A catalog entry is no technical permission.
+   privacy grant separately. Verify the immutable published stable release
+   before using it in a warning; the experimental candidate is separate. A
+   catalog entry is no technical permission.
 
 ## Privacy before body retrieval
 
@@ -72,6 +74,14 @@ needed before V3 writes. An experimental candidate creates a separate notice;
 it does not make a published stable version retroactively old. Never imply a
 specific vulnerability merely from age. Recheck the ref if it changes before
 the body is presented. Keep results isolated by vault and entity.
+
+The pure `scripts/vault_version_notice.py` helper tests the age comparison for
+both V2 and V3. Its caller must first prove the source version and immutable
+published stable reference; the helper's inputs do not authenticate either.
+For a V3 source older than stable, emit a proportional upgrade WARNING while
+keeping the V3 compatibility result separate. When the source equals the
+published stable version, an experimental candidate alone creates no age
+WARNING.
 
 ## Recovery and host proof
 

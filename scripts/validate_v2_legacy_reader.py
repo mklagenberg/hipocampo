@@ -32,6 +32,7 @@ def context(entry: dict, **changes: object) -> dict:
              "repository": "owner/synthetic-vault", "path": "notes/example.md",
              "expected_head": "a" * 40, "observed_head": "a" * 40,
              "pre_retrieval_visibility": "internal", "stable_reference": "3.0.1",
+             "source_contract_verified": True, "stable_reference_verified": True,
              "mcp_read_verified": True, "repository_read_verified": True,
              "specific_grant_verified": False}
     value.update(changes)
@@ -88,6 +89,9 @@ def main() -> int:
         ("repository_access_unavailable", value, context(entry, repository_read_verified=False)),
         ("source_contract_mismatch", value, context(entry, source_commit="0" * 40)),
         ("source_contract_unsupported", value, context(entry, source_version="2.1.2")),
+        ("source_contract_unverified", value, context(entry, source_contract_verified=False)),
+        ("published_stable_unverified", value, context(entry, stable_reference_verified=False)),
+        ("published_stable_unverified", value, context(entry, stable_reference="3.1.0-rc.1")),
         ("ref_changed", value, context(entry, observed_head="b" * 40)),
         ("privacy_class_unknown", value, context(entry, pre_retrieval_visibility="unknown")),
         ("privacy_class_mismatch", value, context(entry, pre_retrieval_visibility="public")),

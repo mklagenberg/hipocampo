@@ -31,6 +31,9 @@ boundary. No real vault, host installation or GitHub ACL is changed here.
 - V2.0.0, V2.1.0, V2.1.1 and V2.2.0 exact-source synthetic documents retain
   original fields, Unicode and line endings; the adapter reports
   `migration_required` general compatibility and a version WARNING.
+- A proved older V3 source gets an age WARNING against the published stable
+  version; equal stable gets none, and an experimental candidate alone cannot
+  make the stable source old.
 - Missing source proof, MCP read, repository read, pre-retrieval class,
   specific high-class grant, stable ref or valid frontmatter denies body
   output with a typed cause. No parser path writes or creates a V3 Record.
