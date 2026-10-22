@@ -10,6 +10,12 @@ compatibility tuple and host loading before adopting this candidate in an
 explicit experimental channel. Existing client installs remain pinned until
 separately updated; this does not migrate a vault or publish a release.
 
+For a V3.0.0 vault declaring `^3.0.0`, follow the
+[V3.0.0 to 3.1.0 vault procedure](docs/v3-to-v3.1-vault-upgrade.md). The
+compatible minor candidate does not require Record or manifest migration.
+Keep historical verification provenance and check each real operation's
+host, GitHub, authority and privacy gates separately.
+
 ## Bounded V2 reads from the current client
 
 Updating the client skill/plugin does not update a vault. A verified V2.0.0,
