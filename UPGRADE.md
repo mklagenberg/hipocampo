@@ -1,5 +1,15 @@
 # Hipocampo — Instance Upgrade Guide
 
+## Skill 2.2.0 candidate
+
+The V3.1.0 methodology candidate now pairs with skill 2.2.0. The skill version
+increased because its bundled instructions and references gained bounded V2
+read support. A change only to methodology files referenced by the skill does
+not itself change the skill version. Verify the 2.2.0 manifest, package lock,
+compatibility tuple and host loading before adopting this candidate in an
+explicit experimental channel. Existing client installs remain pinned until
+separately updated; this does not migrate a vault or publish a release.
+
 ## Bounded V2 reads from the current client
 
 Updating the client skill/plugin does not update a vault. A verified V2.0.0,

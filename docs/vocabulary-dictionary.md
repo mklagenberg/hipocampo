@@ -113,6 +113,14 @@ Before a contribution introduces a canonical term, alias, enum value, schema fie
 
 ## Skill publication declaration
 
+`bundled skill content` means instructions or resources physically distributed
+under `skill/`. Changing that content requires a new independent skill SemVer;
+adding a compatible capability uses at least MINOR. An external methodology
+reference is content elsewhere in this repository that the skill merely
+points to. Changing only that external content does not change the skill's
+version. The package lock verifies exact bytes but cannot replace this version
+rule (`decisions/0122-bundled-skill-version-boundary.md`).
+
 `immutable-release-target` identifies the intended stable package reference;
 `release-target` identifies source identity, not a remote publication event.
 Stable installation verifies immutable published release metadata, resolved

@@ -10,7 +10,7 @@ description: >
 
 # Hipocampo V3 Skill
 
-**Skill package:** `2.1.0`. **Methodology compatibility:**
+**Skill package:** `2.2.0`. **Methodology compatibility:**
 `^3.0.0`. **Execution channel:** stable is the default and requires the exact
 published immutable release, tag-resolved commit and package hashes.
 Explicit experimental execution verifies a pinned source commit/inventory;

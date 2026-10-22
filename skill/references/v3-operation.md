@@ -1,7 +1,7 @@
 # V3 operation and compatibility
 
 This is the skill-side operating guide for the V3.0.0 contract, carried in
-skill package 2.1.0 for the v3.1.0 distribution. An unverified preparation
+skill package 2.2.0 for the v3.1.0 distribution. An unverified preparation
 branch is not a published release. The normative method remains in the
 canonical contracts; this document routes an agent through their gates. It
 does not activate V3 for an existing instance.

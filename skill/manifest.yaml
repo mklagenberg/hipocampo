@@ -1,7 +1,7 @@
 manifest_version: '1.0'
 skill:
   name: hipocampo
-  version: 2.1.0
+  version: 2.2.0
   release_status: immutable-release-target
   core_path: skill/
   source_repository: https://github.com/mklagenberg/hipocampo

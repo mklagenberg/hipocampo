@@ -5,10 +5,10 @@ review_target:
   methodology_baseline: 3.0.0
   package_root: skill
   skill_manifest: manifest.yaml
-  skill_version: 2.1.0
+  skill_version: 2.2.0
   methodology_compatibility: ^3.0.0
   package_lock: package-lock.yaml
-  package_lock_sha256: a55912d612a788aa7503a6393c1973cb6ce78e79f03c0dbc1f86ed4d0de48744
+  package_lock_sha256: 1976f056d16aeaaf6635b4956823adf66003fc768794118549897fee3a42d3f5
 evidence_contract: docs/v3-skill-conformance-gate.md
 receipt_required_for: stable final handoff; experimental execution emits WARNING
 historical_reviews:

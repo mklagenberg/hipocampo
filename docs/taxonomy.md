@@ -117,6 +117,8 @@ epistemic types. Their permitted action and precedence are authoritative in
 | General compatibility | Versioned methodology, skill and vault contract as a whole, with no or limited loss of general behavior | `SPEC.md` §2-E; `COMPATIBILITY.yaml` |
 | Operation support | Bounded adaptation for a named operation and source contract; may coexist with general incompatibility | `SPEC.md` §2-E; `OPERATION-SUPPORT.yaml` |
 | Effective operation | Outcome after adapter proof, host/MCP capability, repository permission, actor authority and privacy gates | `SPEC.md` §2-E; `docs/legacy-read-support.md` |
+| Bundled skill content | Instructions and resources distributed under `skill/`; a content change requires a higher independent skill version | `SPEC.md` §9; `decisions/0122-bundled-skill-version-boundary.md` |
+| External methodology reference | Methodology content outside `skill/` that the skill points to; its change alone does not require a skill version change | `SPEC.md` §9; `decisions/0122-bundled-skill-version-boundary.md` |
 
 These concepts are distinct. V2 read support never changes a V2 vault's
 `migration_required` general compatibility result under V3. A V3-compatible
