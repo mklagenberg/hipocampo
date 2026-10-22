@@ -1,0 +1,22 @@
+# Keep authored text as LF in Git and in working trees on every host.
+* text=auto eol=lf
+
+# Windows command scripts retain LF in Git and use CRLF in working trees.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Protect common binary formats from text conversion and text diffs.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.zip binary
+*.xls binary
+*.xlsx binary
+*.xlsm binary
+*.doc binary
+*.docx binary
+*.ppt binary
+*.pptx binary

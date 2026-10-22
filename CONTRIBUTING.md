@@ -22,6 +22,18 @@ Every `operational` or `normative` change (per `docs/change-management.md`'s own
 
 ## Validation
 
+### Line endings and byte provenance
+
+The repository's `.gitattributes` keeps recognized text at LF in Git and in
+working trees, including Windows checkouts. The only working-tree CRLF
+exception is for `.bat` and `.cmd`; binary and exact-byte package exceptions
+remain explicit. Read [line-ending guidance](docs/line-endings.md) before
+changing attributes or comparing package hashes. Use `git check-attr` and
+`git ls-files --eol` to inspect a checkout, and hash `git show HEAD:<path>` or
+the remote blob when proving published bytes. Do not run repository-wide
+renormalization as part of an unrelated contribution. Existing vaults adopt
+attributes through their own reviewed branches and local preservation rules.
+
 Before opening a PR, run the repository's own structural validator from its root:
 
 ```
