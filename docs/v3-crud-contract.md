@@ -151,6 +151,11 @@ The `entity`, `team`, and `personal` profiles are policy profiles, not
 authority or maturity levels. `instance.entity` and `instance.role` remain
 separate manifest concepts. Profile selection cannot grant write access or
 automatic access to an anchor vault.
+Every knowledge repository governed by Hipocampo is a Vault; `concepts` is
+not a vault profile. The legacy `instance.curation_level` value `vault` does
+not supply this V3 profile. An operation that needs a profile must use the
+declared or separately confirmed V3 value rather than infer it from the
+repository name, curation level or `policy_profile`.
 
 Same-entity sending uses the entity contract but still validates restrictions,
 staleness, integrity, and authority. Cross-entity sending requires destination

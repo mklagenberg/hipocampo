@@ -2,6 +2,11 @@
 
 Agentic second brain methodology: git + markdown + AI rituals. This repository is spec and tooling — it never stores real content from any instance.
 
+Each governed knowledge repository is a **Vault**. V3 classifies its policy
+profile as `entity`, `team` or `personal`; a repository named "concepts" is
+still a vault. See [the taxonomy](docs/taxonomy.md) and
+[the V3 vocabulary](docs/v3-vocabulary-and-aliases.md).
+
 - [SPEC.md](SPEC.md) — normative specification: frontmatter schema, retrieval rules, versioning.
 - [GETTING-STARTED.md](GETTING-STARTED.md) — practical adoption guide.
 - [DISCLAIMER.md](DISCLAIMER.md) — what the methodology is and isn't, recommended and non-recommended scenarios.

@@ -133,6 +133,7 @@ vault may still lack an effective read because its host or access is missing.
 
 | Concept | Values / meaning | Introduced | Source |
 |---|---|---|---|
+| Vault | Every Hipocampo knowledge repository, regardless of name, scope, curation level or access posture; `concepts` is not a repository kind | v2.0.0, generalized by Decision `0041`; V3 profile clarified in Change Set `0140` | `SPEC.md` §2-C, `decisions/0041`, `decisions/0074` |
 | Vault profile | `entity`, `team`, `personal`; policy profile, not authority or maturity | V3.0.0, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
 | Governance role | `Owner`, `Authority`, `Curator`, `User`; orthogonal permissions and accountability | V3.0.0, Change Set `0074` | `decisions/0074`, `docs/v3-crud-contract.md` |
 | `Source` | Provenance origin such as person, conversation, observation, Artifact, Record, vault, or external system | V3.0.0, Change Set `0074` | `decisions/0074`, `docs/v3-contract.md` |

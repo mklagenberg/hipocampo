@@ -1,5 +1,10 @@
 # Hipocampo — Getting Started
 
+**Historical V2.2 guide.** Its `curation_level: content | vault` and earlier
+bootstrap procedure do not define V3 repository kinds. In V3, every knowledge
+repository is a Vault with an `entity`, `team` or `personal` policy profile.
+Use [current getting started](GETTING-STARTED.md) for V3 operation.
+
 Practical guide to adopting the methodology. For the complete normative specification, see [SPEC.md](SPEC.md). For what Hipocampo is not and where it doesn't apply, see [DISCLAIMER.md](DISCLAIMER.md). If you've never used git/GitHub, start with the [fundamentals doc](docs/FUNDAMENTALS.md).
 
 **Haven't set anything up yet, and just want to get started?** Skip straight to the prompt in [`docs/invite-template.md`](docs/invite-template.md) ("Scenario 1 — Starting from zero, no invite") — paste it into Claude or ChatGPT and it walks you through everything below conversationally, including things this document assumes you already have (a GitHub account, a connected AI tool).

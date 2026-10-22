@@ -117,6 +117,18 @@ Read never writes. Capability must be verified for the actual operation.
 
 ## 2-C. Repository-type taxonomy: entity and vault
 
+Every Hipocampo knowledge repository is a **Vault**, regardless of its name,
+subject matter, access posture or curation level. `concepts` is not a
+repository kind or a V3 vault profile; it may name a particular vault or its
+knowledge scope. The V3 vault-profile axis has exactly three values: `entity`,
+`team` and `personal` (`decisions/0074`). The older
+`instance.curation_level: content | vault` and
+`instance.policy_profile: personal | corporate` describe different V2-era
+dimensions. Neither value proves a V3 vault profile. An existing compatible
+manifest without `instance.vault_profile` remains usable for its previously
+governed route; a new profile-dependent operation requires the separately
+confirmed adoption described in `docs/v3-to-v3.1-vault-upgrade.md`.
+
 Every vault belongs to exactly one declared instance.entity. Each entity has
 one private anchor and may have additional private vaults with explicit scope.
 instance.role is anchor or additional; scope_description is required for the

@@ -19,6 +19,10 @@ The [earlier guide](BEST-PRACTICES-V2.md) remains historical reference.
 - Use progressive privacy remediation; adoption does not authorize a full sweep.
 - Keep package/update checks, installation, publication and vault migration as
   separate decisions. A declared release target is not evidence of its existence.
+- Call every governed knowledge repository a Vault. Describe its V3 policy
+  profile as `entity`, `team` or `personal`; describe concepts as content or
+  scope, never as a competing repository kind. Do not infer a profile from a
+  repository name or the older `curation_level: content | vault` field.
 
 See [getting started](GETTING-STARTED.md), [SPEC](SPEC.md),
 [release proof boundaries](docs/v3-release-preparation.md) and

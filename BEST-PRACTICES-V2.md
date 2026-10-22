@@ -1,5 +1,10 @@
 # Hipocampo — Best Practices
 
+**Historical V2.2 guide.** Its older contrast between a general repository
+and a confidential "vault" is retained as versioned context. In V3, every
+Hipocampo knowledge repository is a Vault; see
+[current best practices](BEST-PRACTICES.md) and [the V3 taxonomy](docs/taxonomy.md).
+
 This guide is for those who have already read [Getting Started](GETTING-STARTED.md) and want to use Hipocampo well — not just correctly, but in a way that stands the test of time. It was born from real mistakes made in a migration of hundreds of documents (not from theory) — every recommendation here has already been tested, broken, or learned the hard way by someone before you.
 
 If you want the full normative text, it is in [SPEC.md](SPEC.md). Here it is the "and in practice, what do I do?".
