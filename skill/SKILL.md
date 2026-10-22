@@ -39,6 +39,12 @@ privacy, scope and operation-specific capability checks pass. Treat unknown,
 inaccessible or stale version evidence as a blocker or explicitly partial
 result.
 
+For a **V2 read request**, use the separate bounded
+[legacy read procedure](references/legacy-read.md). General compatibility
+remains `migration_required`; a validated read adapter is operation support,
+not V2/V3 compatibility. Do not route V2 through V3 RecordCrud or use the V3
+compatibility result alone to deny an otherwise proven read-only adaptation.
+
 Keep these questions separate:
 
 1. **Compatibility:** does this skill version support the methodology version,
@@ -115,6 +121,10 @@ The skill package version is independent from the methodology and host-adapter
 versions. Verify a released package against its published release, the tag's
 resolved commit and its package lock. Never install from an unverified branch,
 self-update, or change client-local files without the operator's confirmation.
+For Claude, Copilot/VS Code and Codex/ChatGPT, follow the selected host's
+supported install/update surface and `docs/host-installation.md` in the
+verified distribution. Updating the client never migrates a vault. Record package,
+runtime, GitHub MCP and vault versions separately.
 The stable target is `v3.1.0`; a target declaration is not publication proof.
 For an explicitly requested experimental install, use the pinned snapshot and
 full distribution hashes instead of demanding the future stable release.

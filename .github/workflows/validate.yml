@@ -30,6 +30,10 @@ jobs:
         run: python scripts/validate_v3_release_regressions.py --root .
       - name: Validate cross-surface methodology contracts
         run: python scripts/validate_contracts.py --root .
+      - name: Validate bounded V2 read support
+        run: python scripts/validate_v2_legacy_reader.py
+      - name: Validate V2 and V3 version-age notices
+        run: python scripts/validate_vault_version_notice.py
       - name: Validate V3 skill conformance gate
         run: python scripts/validate_v3_skill_conformance.py --root . --mode workflow
       - name: Validate installed RC execution and final-readiness separation

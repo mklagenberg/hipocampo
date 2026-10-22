@@ -1,0 +1,36 @@
+schema_version: '1.0'
+owner: SPEC.md#2-e-compatibility-decision-gate
+meaning: Bounded operation adapters; never general vault compatibility or access grants.
+entries:
+- operation: read
+  source_version: 2.0.0
+  source_ref: v2.0.0
+  source_commit: 51d899c37ec354a24c2e04521c16e2e9f3eb9fbc
+  adapter: scripts/v2_legacy_reader.py
+  effect: read_only
+  evidence_level: validated_synthetic
+  host_evidence: not_assessed
+- operation: read
+  source_version: 2.1.0
+  source_ref: v2.1.0
+  source_commit: 80ad4d36da9e268bd09c62a79786b31bd5091dc3
+  adapter: scripts/v2_legacy_reader.py
+  effect: read_only
+  evidence_level: validated_synthetic
+  host_evidence: not_assessed
+- operation: read
+  source_version: 2.1.1
+  source_ref: v2.1.1
+  source_commit: ada30f40fd43e12e52e28bfa9f8397531895b54d
+  adapter: scripts/v2_legacy_reader.py
+  effect: read_only
+  evidence_level: validated_synthetic
+  host_evidence: not_assessed
+- operation: read
+  source_version: 2.2.0
+  source_ref: v2.2.0
+  source_commit: 041868717a72c5099e889594e7e8bddebc807b1b
+  adapter: scripts/v2_legacy_reader.py
+  effect: read_only
+  evidence_level: validated_synthetic
+  host_evidence: not_assessed

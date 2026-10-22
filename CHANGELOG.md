@@ -4,6 +4,16 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+### Added
+
+- Separate general compatibility from bounded operation support. Prepare a
+  versioned, read-only V2.0/V2.1/V2.2 adapter with source-specific warnings
+  and independent host/access/privacy gates; V2 remains migration-required
+  for V3 operation as a whole.
+- Compare proved V2/V3 source versions with the published stable reference to
+  warn about older vault contracts without changing compatibility or treating
+  an experimental candidate as a published release.
+
 ## [3.1.0] — 2026-10-16
 
 ### Added

@@ -1,5 +1,21 @@
 # Hipocampo — Instance Upgrade Guide
 
+## Bounded V2 reads from the current client
+
+Updating the client skill/plugin does not update a vault. A verified V2.0.0,
+V2.1.0, V2.1.1 or V2.2.0 source may be read through the separate
+[legacy read contract](docs/legacy-read-support.md) after its adapter,
+GitHub MCP, repository permission and privacy gates pass. This is operation
+support, not general V2/V3 compatibility: a V2 vault remains
+`migration_required` for V3 operation and V3 writes. Emit the version WARNING
+and preserve the old vault unchanged. Other V2 source revisions require
+their own proof and fixtures before support is claimed.
+
+Choose installation/update per Claude, Copilot/VS Code or Codex/ChatGPT using
+the [host procedure](docs/host-installation.md). Verify the effective package
+and runtime in a new session; host loading is not established by local files
+alone. A vault upgrade is a distinct, per-instance action.
+
 
 ## V3.1 executable distribution and experimental channel
 
