@@ -1,0 +1,99 @@
+schema_version: "1.0"
+cases:
+  - id: new-team-confirmed
+    source_state: new_v3
+    profile: team
+    entity: example-entity
+    explicit_selection: true
+    plan_confirmed: true
+    creator_authenticated: true
+    representative_event_capable: true
+    expected: selection_confirmed
+  - id: new-personal-confirmed
+    source_state: new_v3
+    profile: personal
+    entity: personal-owner
+    explicit_selection: true
+    plan_confirmed: true
+    creator_authenticated: true
+    representative_event_capable: true
+    expected: selection_confirmed
+  - id: new-entity-confirmed
+    source_state: new_v3
+    profile: entity
+    entity: example-entity
+    explicit_selection: true
+    plan_confirmed: true
+    creator_authenticated: true
+    representative_event_capable: true
+    expected: selection_confirmed
+  - id: suggested-but-unanswered
+    source_state: new_v3
+    expected: needs_selection
+  - id: team-not-explicitly-selected
+    source_state: new_v3
+    profile: team
+    entity: example-entity
+    expected: needs_selection
+  - id: missing-entity
+    source_state: new_v3
+    profile: team
+    explicit_selection: true
+    expected: needs_entity
+  - id: unconfirmed-plan
+    source_state: new_v3
+    profile: team
+    entity: example-entity
+    explicit_selection: true
+    expected: needs_confirmation
+  - id: interrupted-new-vault
+    source_state: incomplete_v3
+    expected: incomplete_creation
+    warning: INCOMPLETE_CREATION
+  - id: no-creator-proof
+    source_state: new_v3
+    profile: entity
+    entity: example-entity
+    explicit_selection: true
+    plan_confirmed: true
+    representative_event_capable: true
+    expected: creation_capability_blocked
+  - id: no-representative-event-capability
+    source_state: new_v3
+    profile: team
+    entity: example-entity
+    explicit_selection: true
+    plan_confirmed: true
+    creator_authenticated: true
+    expected: creation_capability_blocked
+  - id: legacy-v3-no-profile
+    source_state: existing_v3
+    expected: legacy_route_only
+    warning: PROFILE_UNDECLARED
+  - id: legacy-v3-profile-dependent
+    source_state: existing_v3
+    profile_dependent: true
+    expected: legacy_route_only
+    warning: PROFILE_UNDECLARED
+    blocked_operation: new_profile_dependent_policy
+  - id: existing-declared-team
+    source_state: existing_v3
+    profile: team
+    expected: declared_profile
+  - id: invalid-existing-profile
+    source_state: existing_v3
+    profile: concepts
+    expected: invalid_profile
+  - id: conflicting-existing-profile
+    source_state: existing_v3
+    profile: team
+    conflicting_profile: true
+    expected: conflicting_profile
+  - id: invalid-new-profile
+    source_state: new_v3
+    profile: vault
+    expected: invalid_profile
+  - id: legacy-v2-read
+    source_state: v2_read
+    expected: legacy_read_only
+    warning: VERSION_OUTDATED

@@ -2,7 +2,7 @@
 
 This procedure applies to a vault whose current, authorized remote manifest
 declares `hipocampo.compatibility: ^3.0.0`. Methodology 3.1.0 preserves the
-V3.0.0 Record, Chunk, frontmatter and CRUD baseline; skill 2.2.0 is a separate
+V3.0.0 Record, Chunk, frontmatter and CRUD baseline; skill 2.3.0 is a separate
 client package. The version range covers 3.1.0, so a compatible vault needs
 no Record conversion or manifest rewrite solely to use this candidate.
 
@@ -19,7 +19,7 @@ no Record conversion or manifest rewrite solely to use this candidate.
 3. Verify the independent skill version and package lock. Updating the client
    skill/plugin does not update a vault, and a vault's historical
    `skill.generated_by_version` records scaffold provenance, not the operator's
-   installed skill. Do not replace that field with 2.2.0.
+   installed skill. Do not replace that field with 2.3.0.
 4. Evaluate the actual methodology/skill/vault tuple with
    `COMPATIBILITY.yaml` and `scripts/validate_compatibility.py`, using the
    remote manifest bytes and the selected source channel. A compatible result
@@ -41,7 +41,12 @@ review before changing durable provenance.
 
 Some V3.0.0 manifests have no `instance.vault_id` or
 `instance.vault_profile`. Their compatible version range remains valid and
-their prior governed read/write route remains available. If a selected 3.1.0
+their prior governed read/write route remains available. Emit
+`PROFILE_UNDECLARED` when the profile is absent; do not fill in the new
+scaffold's suggested `team` value. A new or interrupted V3 creation missing
+its confirmed profile is `INCOMPLETE_CREATION`, not this legacy case; reconcile
+the exact approved outputs against the current remote HEAD before continuing.
+If a selected 3.1.0
 implementation uses a direct-target read context requiring a vault ID, read
 the existing `meta/v3-collections.json` at the same authenticated remote HEAD
 as the manifest. Verify its registry schema, entity and stable `vault_id`
@@ -60,7 +65,10 @@ an entity write, a current scoped grant and its event history. Neither an old
 `policy_profile` nor the creator's GitHub account proves the new vault profile
 or grants. Adopt only the selected vault through reviewed operational metadata;
 preserve its Records and historical verification. Provider permission and
-canonical CRUD remain separate gates.
+canonical CRUD remain separate gates. A local extension may be evidence for
+review but does not itself amend the canonical manifest. Use
+`docs/v3-vault-profile-selection.md` for the creation question and the
+separate absence outcomes.
 
 ## Operate progressively
 

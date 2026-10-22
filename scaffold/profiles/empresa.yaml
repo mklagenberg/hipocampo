@@ -1,17 +1,23 @@
 profile:
   id: "empresa"
-  version: "2.0.0"
+  version: "2.1.0"
   purpose: "Generates a Hipocampo content repository whose owner is a company (e.g., hipocampo-company, hipocampo-company-vault)."
 
 methodology:
   compatibility: "^3.0.0"
 
 engine:
-  version: "2.0.0"
+  version: "2.1.0"
   source_repository: "https://github.com/mklagenberg/hipocampo"
   source_commit: "<filled in by the agent at instantiation time, verified immutable release commit>"
 
 inputs:
+  - id: "vault_profile"
+    required: true
+    enum: ["team", "personal", "entity"]
+    suggested_default: "team"
+    requires_explicit_selection: true
+    description: "Ask which V3 Vault policy applies. Explain all three profiles and practical consequences; team is suggested, not silently selected. Confirm the choice in the exact creation plan. Independent from scaffold profile, policy_profile and curation_level."
   - id: "repository_name"
     required: true
     description: "Name of the new repository to be created (e.g., hipocampo-company-vault)."
@@ -73,7 +79,7 @@ outputs:
   - path: "hipocampo.yaml"
     operation: "generate"
     ownership: "managed-structure"
-    note: "Vault manifest; entity/role/scope_description and curation_level are collected inputs, policy_profile is corporate for this profile, and language defaults to 'en' unless overridden by the collected input."
+    note: "Vault manifest; explicitly selected vault_profile, entity/role/scope_description and curation_level are collected inputs, policy_profile is corporate for this profile, and language defaults to 'en' unless overridden by the collected input."
 
 conflicts:
   default: "stop-and-report"

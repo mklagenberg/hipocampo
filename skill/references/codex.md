@@ -6,18 +6,21 @@ methodology/skill/vault compatibility tuple.
 
 ## Local state
 
-Keep only the personal anchor pointer and verified installation metadata in
+Keep only an optional personal anchor pointer and verified installation metadata in
 `hipocampo.local.yaml` client-local state, outside the packaged skill:
 
 ```yaml
 anchor_repository: "owner/private-personal-anchor"
-installed_skill_version: "2.2.0"
+installed_skill_version: "2.3.0"
 installed_package_hash: "sha256:..."
 last_checked: "YYYY-MM-DDThh:mm:ssZ"
 ```
 
 Do not commit this state to a vault or store a repository router, identity
 table, access token, credential or permission claim in it.
+With no anchor pointer, use bounded candidate discovery and revalidate the
+chosen remote target. Do not require a personal Vault for an authorized entity
+read or infer a complete Vault inventory from local hints.
 
 ## Tool boundary
 

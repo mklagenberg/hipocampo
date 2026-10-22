@@ -21,7 +21,7 @@ Full detail of the invariants: `hipocampo/SPEC.md`, section 8.
 
 ## Scope of this repository
 
-<!-- Filled in by the agent during instantiation, from the collected inputs (see hipocampo/scaffold/profiles/). The scope is mandatory and never implicit. The sensitive-data policy is declared once, in hipocampo.yaml's instance.policy_profile. -->
+<!-- Filled in by the agent during instantiation, from the collected inputs (see hipocampo/scaffold/profiles/). The scope is mandatory and never implicit. The explicitly chosen V3 vault profile and the separate sensitive-data policy are declared in hipocampo.yaml as instance.vault_profile and instance.policy_profile. -->
 
 - **What belongs here / what doesn't and where it goes:** `[fill in at instantiation time, before the first real document]` — this is the source that the maintenance rituals (REM, structural audit) consult to decide whether a document belongs in this repository (`hipocampo/SPEC.md`, section 11).
 

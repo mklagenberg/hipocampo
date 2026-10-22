@@ -1,0 +1,45 @@
+change_set:
+  id: 0141-explicit-v3-vault-profile-selection
+  class: normative
+  semver: minor
+  status: proposed
+  backfill: false
+  decisions:
+  - decisions/0124-explicit-v3-vault-profile-selection.md
+impact:
+- artifact: decisions/0124-explicit-v3-vault-profile-selection.md
+  status: updated
+  note: Record the operator-approved selection default and separate legacy behavior.
+- artifact: SPEC.md, docs/v3-vault-profile-selection.md, docs/v3-crud-contract.md, docs/v3-to-v3.1-vault-upgrade.md, UPGRADE.md, CHANGELOG.md
+  status: updated
+  note: Specify new selection, legacy absence and versioned adoption boundaries.
+- artifact: scaffold/README.md, scaffold/profiles/pessoal.yaml, scaffold/profiles/empresa.yaml, scaffold/skeleton/hipocampo.yaml, scaffold/skeleton/AGENTS.md, scaffold/skeleton/POST-INSTANTIATION.md
+  status: updated
+  note: Ask for and generate the confirmed V3 profile in new Vaults.
+- artifact: skill/SKILL.md, skill/references/instantiation.md, skill/references/personalization.md, skill/references/codex.md, skill/references/runtime.md, skill/references/v3-operation.md, skill/manifest.yaml, skill/package-lock.yaml
+  status: updated
+  note: Synchronize semantic bootstrap and independently versioned package.
+- artifact: COMPATIBILITY.yaml, moda.yaml, README.md, GETTING-STARTED.md, docs/taxonomy.md, docs/vocabulary-dictionary.md, docs/step-classification.md, docs/v3-distribution-and-channels.md, docs/v3-skill-conformance-gate.md, docs/v3-skill-conformance-ai-review.yaml
+  status: updated
+  note: Keep current contract, terminology and version tuple aligned.
+- artifact: docs/bootstrap-invitation-procedure.md, docs/getting-started-non-technical.md, docs/bootstrap-invitation-fixtures.yaml
+  status: updated
+  note: Remove obsolete personal-anchor prerequisite from active onboarding.
+- artifact: scripts/vault_profile_selection.py, scripts/validate_vault_profile_selection.py, docs/v3-vault-profile-selection-fixtures.yaml, scripts/validate_bootstrap_invitation.py, scripts/validate_contracts.py
+  status: updated
+  note: Exercise selection and missing-profile outcomes, and lock cross-surface declarations.
+- artifact: real Vaults, Records, ACLs, client installations, historical releases, MIGRATIONS.md, management/CONSTITUTION.md
+  status: not-applicable
+  note: No automatic adoption, content migration, access change or constitutional exception.
+validation:
+  commands:
+  - python scripts/validate_vault_profile_selection.py --root .
+  - python scripts/validate_bootstrap_invitation.py
+  - python scripts/validate_contracts.py --root .
+  - python scripts/validate_skill_package.py --root .
+  - python scripts/validate_skill_version_delta.py --root . --base <base> --head <head>
+  - python scripts/validate_change.py --root . --base <base> --head <head>
+  evidence:
+  - docs/v3-vault-profile-selection-fixtures.yaml
+  - changes/0141-explicit-v3-vault-profile-selection/proposal.md
+  notes: Synthetic cases and cross-surface validators prove declarations and consistency; remote permissions, real CRUD and publication remain separate evidence.

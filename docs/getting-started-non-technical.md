@@ -62,7 +62,7 @@ Either way, this step matters: without it, every new conversation starts from ze
 
 ## What happens next, concretely
 
-Whether the agent created the repository directly or the user created it manually per the fallback above, the rest is the same: there's no template button to click, no separate setup tool to install. The user answers a short round of questions (what to call the repository, whether this is personal or tied to an organization), confirms the plan the agent presents before anything is written (this confirmation step is not optional — it happens before every durable write Hipocampo ever makes, not only this first one), and the agent generates every file the plan described. If the connector's access is too narrow to reach a repository it needs *later* — a different problem from creating one, see the "hidden" link above — the agent says so specifically and states the concrete fix.
+Whether the agent created the repository directly or the user created it manually per the fallback above, the rest is the same: there's no template button to click, no separate setup tool to install. For a new V3 Vault, the agent explains `team`, `personal` and `entity`, suggests `team`, asks which one the user chooses and asks which entity owns it. The user confirms the complete plan before anything is written (this confirmation step is not optional), and the agent generates every file the plan described. If the connector cannot perform a required operation, it reports that exact capability gap instead of treating profile choice as technical permission.
 
 ## Welcoming the user, once the vault is ready
 
@@ -72,7 +72,7 @@ Once Bootstrap actually finishes — the repository exists, its files are genera
 >
 > A few things worth knowing as you start using it: I organize what goes in with structured metadata (frontmatter) so I can find the right document quickly instead of re-reading everything every time; documents age on purpose — some are meant to last, some go stale on a schedule and I'll flag it when they do — instead of silently rotting; and I never write anything without showing you the plan first and getting your go-ahead.
 >
-> The repository we just created is your **personal anchor vault** — your own information domain, or "entity," as Hipocampo calls it. Later, if you're invited into someone else's — a company's, a team's — that becomes a second entity I can read from and write to, kept separate from this one and from any others, never mixed together by default.
+> The repository we just created is a **Vault** for the entity and profile you selected. `team` was suggested, but your explicit choice governs its collaboration policy. Another entity's Vault remains separate. If you started by reading an invited entity Vault, you did not have to create a personal anchor first; create a personal Vault later only if you want an authorized place for personal knowledge.
 >
 > Full depth on any of this, whenever you want it: `SPEC.md` and `GETTING-STARTED.md` in the [hipocampo repository](https://github.com/mklagenberg/hipocampo). Nothing here is required reading right now — you can just start writing.
 
@@ -80,9 +80,9 @@ Adapt the specifics to what was actually just created, and have this in the user
 
 ## Your first vault, and what comes later
 
-This first repository is always the user's own **personal anchor vault** — never a company's or anyone else's, even if what actually brought them to Hipocampo was an invitation to someone else's vault. That's not a formality; nothing else Hipocampo does (finding other vaults later, falling back gracefully when something's unreachable) has anywhere to work from without it (`SPEC.md`, section 2-D).
+The first repository created for a user need not be a personal anchor. An invitation can lead to an authorized, bounded read of an entity Vault without creating one. If the user does create a new V3 Vault, explain `team`, `personal` and `entity`, suggest `team`, ask for the entity separately and require an explicit profile choice and full-plan confirmation before any write (`SPEC.md`, sections 2-C and 12-B).
 
-From there, nothing further needs installing or reconfiguring to gain access to more vaults later — say, being invited into a company's knowledge base. The user accepts the GitHub invite when it comes, tells their agent about it (`docs/invite-template.md`, Scenarios 2/3), and the agent registers it using the same connection and the same saved skill already set up here. The full model behind this — how vaults, entities, and access relate to each other — is real depth a user grows into once they're actually using their first vault, not something to front-load now; when it comes up naturally, point to `SPEC.md` sections 2-C, 2-D, and 12-A rather than trying to compress it into this conversation.
+An invitation or exact address supplies only a candidate Vault. The agent checks the current remote manifest, connector operations, repository permission and privacy before reading; without a personal anchor there is no complete canonical inventory. An optional personal anchor can later register confirmed addresses. Offer personal-Vault creation if personal material needs to be saved; if declined, do not store it in an entity Vault (`SPEC.md`, sections 2-C, 12-A and 12-B).
 
 ## What this section doesn't cover
 

@@ -69,7 +69,7 @@ Semantic evaluation remains distinct from deterministic validation.
 ## Installation and publication channels
 
 Version 3.1.0 adds a callable local runtime and an explicit experimental channel,
-with independent skill 2.2.0, preserving the 3.0.0 data contract. Follow
+with independent skill 2.3.0, preserving the 3.0.0 data contract. Follow
 [runtime installation](docs/v3-runtime-usage.md) and
 [distribution/channel rules](docs/v3-distribution-and-channels.md).
 Stable installation verifies the official immutable published release and hashes.

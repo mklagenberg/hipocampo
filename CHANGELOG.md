@@ -6,6 +6,12 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ### Changed
 
+- Require an explicit `team`, `personal` or `entity` selection for every new
+  V3 Vault, with `team` visibly suggested and the entity asked separately.
+  New scaffold manifests include `instance.vault_profile`; compatible
+  existing manifests without it retain their prior route with a warning.
+  Remove the personal-anchor prerequisite for authorized entity reading and
+  bump the independently versioned skill to 2.3.0 and scaffold to 2.1.0.
 - Document the existing LF repository policy for contributors and generate a
   reviewed `.gitattributes` default for new vaults, with binary and
   byte-preservation exceptions. Existing vaults adopt the guidance separately.

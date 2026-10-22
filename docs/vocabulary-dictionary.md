@@ -45,6 +45,9 @@ operating a V3 instance:
 | `entity` profile | Broad entity-scoped vault policy | `decisions/0074` |
 | `team` profile | Collaborative single-entity vault policy | `decisions/0074` |
 | `personal` profile | User-private vault policy | `decisions/0074` |
+| `instance.vault_profile` | Explicit V3 manifest selector: `team`, `personal` or `entity`; `team` is only the suggested creation choice | `decisions/0124` |
+| `PROFILE_UNDECLARED` | Warning for a compatible existing V3 Vault lacking the profile; no inferred adoption | `decisions/0124` |
+| `INCOMPLETE_CREATION` | New V3 Vault creation stopped before a confirmed profile and complete outputs | `decisions/0124` |
 | `Owner` | Boundary and policy accountability role | `decisions/0074` |
 | `Authority` | Current-knowledge authority for an entity and scope | `decisions/0074` |
 | `Curator` | Processing and reconciliation role | `decisions/0074` |

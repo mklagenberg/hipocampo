@@ -17,6 +17,7 @@ REQUIRED = {
     "SPEC.md": [
         "instance.policy_profile",
         "instance.curation_level",
+        "instance.vault_profile",
         "discovery.registered_repositories",
         "4. Default convention from the scaffold profile",
     ],
@@ -38,6 +39,7 @@ REQUIRED = {
     "scaffold/skeleton/hipocampo.yaml": [
         "policy_profile:",
         "curation_level:",
+        "vault_profile:",
         "registered_repositories:",
     ],
     "scaffold/skeleton/AGENTS.md": [
@@ -103,6 +105,8 @@ def main() -> int:
         text = (root / profile).read_text(encoding="utf-8")
         if 'id: "curation_level"' not in text:
             errors.append(f"{profile}: must declare the curation_level input")
+        if 'id: "vault_profile"' not in text or 'suggested_default: "team"' not in text or 'requires_explicit_selection: true' not in text:
+            errors.append(f"{profile}: must ask and explicitly confirm suggested team profile")
         if 'id: "tier"' in text:
             errors.append(f"{profile}: must not emit the ambiguous tier input")
 

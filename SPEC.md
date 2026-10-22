@@ -129,12 +129,24 @@ manifest without `instance.vault_profile` remains usable for its previously
 governed route; a new profile-dependent operation requires the separately
 confirmed adoption described in `docs/v3-to-v3.1-vault-upgrade.md`.
 
+For every newly created V3 Vault, ask the operator to select exactly one
+`instance.vault_profile`, explaining all three profiles and their practical
+consequences. Present `team` as the suggested default, but never persist that
+suggestion without an explicit selection and confirmation of the exact
+creation plan. Ask for `instance.entity` independently. Record the
+authenticated creator as the initial representative of this new Vault only;
+this does not grant knowledge Authority or GitHub permission. An interrupted
+new creation is incomplete, not a legacy Vault eligible for the missing-field
+exception. See `decisions/0124` and `docs/v3-vault-profile-selection.md`.
+
 Every vault belongs to exactly one declared instance.entity. Each entity has
 one private anchor and may have additional private vaults with explicit scope.
 instance.role is anchor or additional; scope_description is required for the
 latter. instance.policy_profile is personal or corporate; instance.curation_level
 is content or vault. The V3 vault profile (personal/team/entity) is a policy
-dimension and grants no authority, maturity, access or automatic anchor read.
+dimension and grants no Authority, maturity, GitHub permission or automatic
+anchor read. It contributes to methodological write eligibility only after
+the profile is explicitly declared and the other gates pass.
 Discovery addresses are not authorizations.
 
 ## 2-D. Multi-vault and multi-entity design premises
@@ -147,7 +159,7 @@ acceptance where applicable, and is never automatic synchronization.
 ## 2-E. Compatibility decision gate
 
 Use COMPATIBILITY.yaml and the verified methodology/skill/vault tuple.
-Current package target: methodology 3.1.0, skill 2.2.0, vault range ^3.0.0.
+Current package target: methodology 3.1.0, skill 2.3.0, vault range ^3.0.0.
 V3.0.0 remains the preserved contract baseline.
 Host identity is not part of the tuple. V2 content is diagnostic or migration
 input, not silently compatible. Unknown, inaccessible or integrity-failed
@@ -310,19 +322,30 @@ The portable skill stores no user-specific router or permission claim.
 
 ## 12-A. Vault and entity discovery
 
-Start from the operator-confirmed anchor_repository pointer, then authorized
-current manifests and discovery.registered_repositories. Do not enumerate or
-read private bodies merely because a clone/account exists. Confirm each target
-entity, scope, role, tuple and operation-specific authorization independently.
+Start from an operator-confirmed personal anchor pointer when one exists, or
+from an explicit invitation/address, bounded MCP enumeration or temporary
+private project hints when it does not. Those alternatives are candidate
+discovery, never a complete canonical inventory. Revalidate each target's
+current remote manifest, entity, scope, role, tuple and operation-specific
+authorization. Do not enumerate or read private bodies merely because a
+clone/account exists. A personal anchor is not required for an authorized
+entity read. If an anchor exists, its `discovery.registered_repositories`
+contains only confirmed addresses and does not grant access.
 
 ## 12-B. Bootstrap mechanic: instantiation and profile.md
 
-Collect operator-confirmed profile inputs and present the exact creation plan.
+Collect operator-confirmed profile inputs, including the explicit V3 Vault
+profile and separately confirmed entity, and present the exact creation plan.
+Suggest `team` during the interview, explain `personal` and `entity`, and
+require an answer before creation. A suggested default is not an answer.
 Create a private repository only with the required capability and approval.
 Scaffold governs structure and proposal examples; it does not directly persist
 a Record, including profile knowledge. Initial accepted Collections precede
 the first canonical CRUD create. Missing capability produces a blocked plan,
 not a fallback file write. Never overwrite conflicting generated/user files.
+If no personal anchor exists, entity reading may still proceed under the
+ordinary gates. Offer a personal Vault only when the user needs an authorized
+destination for a personal write; declining it leaves that material unpersisted.
 
 ## 13. Cross-repository lifecycle actions: Promote, Depromote, Redbutton
 

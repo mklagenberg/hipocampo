@@ -25,6 +25,7 @@ hipocampo:
 instance:
   repository: "<fill in: URL of this repository>"
   entity: "<fill in: entity identifier, e.g. personal, or a specific company/family name>"
+  vault_profile: "<fill in: explicitly selected team | personal | entity; team is suggested, never assumed>"
   role: "<fill in: anchor | additional>"
   scope_description: "<fill in only when role: additional — what belongs in this vault; omit entirely when role: anchor>"
   policy_profile: "<fill in: personal | corporate — selects the sensitive-data policy>"
@@ -39,8 +40,8 @@ discovery:
 
 scaffold:
   profile: "<fill in: pessoal | empresa>"    # scaffold profile id — literal filename token, not translated (PR #27)
-  profile_version: "2.0.0"
-  engine_version: "2.0.0"
+  profile_version: "2.1.0"
+  engine_version: "2.1.0"
   source_repository: "https://github.com/mklagenberg/hipocampo"
   source_commit: "<fill in: same commit as hipocampo.verified_commit>"
 
