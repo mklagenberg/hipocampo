@@ -12,9 +12,12 @@ rollout, global install or unsupported-host claim is implied.
 See [complete runtime procedure](v3-runtime-usage.md).
 
 
-Run connector preflight before Bootstrap or invitation handling. Establish the
-personal anchor first, obtain explicit confirmation, then read the target
-manifest before registering its address. Registration stores an address and
-declared relationship only; it does not copy content. No write occurs before
+Run connector preflight before Bootstrap or invitation handling. A personal
+anchor is optional: an authorized invitation may lead directly to a bounded
+entity read after the current target manifest and permission are verified.
+If an anchor exists and an address should be registered there, obtain explicit
+confirmation first; registration stores an address and declared relationship
+only and does not copy content. Without an anchor, use bounded candidate
+discovery, never a claimed complete inventory. No write occurs before
 confirmation. Missing capability, inaccessible targets and incompatibility
-block the operation or require a separately authorized manual path.
+block the affected operation or require a separately authorized manual path.

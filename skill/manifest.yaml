@@ -1,11 +1,11 @@
 manifest_version: '1.0'
 skill:
   name: hipocampo
-  version: 2.2.0
+  version: 2.3.0
   release_status: immutable-release-target
   core_path: skill/
   source_repository: https://github.com/mklagenberg/hipocampo
-  candidate_base_commit: 69810b92bda79d1a54457954c3286c1192f119ec
+  candidate_base_commit: de31594c4e3b63ad405ad5f2f5e6856c821695a3
   source_commit: null
   package_lock: skill/package-lock.yaml
   provenance_note: Resolve the selected source to its exact commit and verify the

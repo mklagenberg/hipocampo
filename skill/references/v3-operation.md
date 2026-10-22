@@ -1,7 +1,7 @@
 # V3 operation and compatibility
 
 This is the skill-side operating guide for the V3.0.0 contract, carried in
-skill package 2.2.0 for the v3.1.0 distribution. An unverified preparation
+skill package 2.3.0 for the v3.1.0 distribution. An unverified preparation
 branch is not a published release. The normative method remains in the
 canonical contracts; this document routes an agent through their gates. It
 does not activate V3 for an existing instance.
@@ -47,6 +47,13 @@ released baseline is V2.2, or infer V3 readiness from `compatibility: ^3.0.0`.
 Preserve unknown or conflicting values as unknown or conflicting.
 
 ## 2. Confirm authority, scope and operation capability
+
+An explicitly declared `team` or `personal` Vault profile supplies
+methodological write eligibility for a user with proven access. `entity`
+writing requires a current scoped representative grant. Neither profile nor
+eligibility supplies GitHub permission, MCP operations, privacy clearance or
+canonical CRUD capability. For missing profiles, follow the new-creation or
+compatible-legacy distinction in `docs/v3-vault-profile-selection.md`.
 
 Before reading governed content, identify the actor and role, entity, knowledge
 scope, source vault and explicit non-empty `authorized_vault_ids`. The requested

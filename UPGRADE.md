@@ -1,11 +1,12 @@
 # Hipocampo — Instance Upgrade Guide
 
-## Skill 2.2.0 candidate
+## Skill 2.3.0 candidate
 
-The V3.1.0 methodology candidate now pairs with skill 2.2.0. The skill version
-increased because its bundled instructions and references gained bounded V2
-read support. A change only to methodology files referenced by the skill does
-not itself change the skill version. Verify the 2.2.0 manifest, package lock,
+The V3.1.0 methodology candidate now pairs with skill 2.3.0. The skill version
+increased because its bundled creation and discovery instructions now ask for
+an explicit V3 Vault profile and allow authorized entity reads without a
+personal anchor. A change only to methodology files referenced by the skill
+does not itself change the skill version. Verify the 2.3.0 manifest, package lock,
 compatibility tuple and host loading before adopting this candidate in an
 explicit experimental channel. Existing client installs remain pinned until
 separately updated; this does not migrate a vault or publish a release.
@@ -15,6 +16,11 @@ For a V3.0.0 vault declaring `^3.0.0`, follow the
 compatible minor candidate does not require Record or manifest migration.
 Keep historical verification provenance and check each real operation's
 host, GitHub, authority and privacy gates separately.
+New Vault creation asks for `team`, `personal` or `entity`, with `team`
+suggested but never filled from silence. Existing compatible V3 Vaults lacking
+`instance.vault_profile` retain their previous governed route and receive a
+WARNING; adopting a new profile-dependent policy is a separate, confirmed
+metadata change. See [selection and recovery](docs/v3-vault-profile-selection.md).
 
 ## Bounded V2 reads from the current client
 

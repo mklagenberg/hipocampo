@@ -149,8 +149,14 @@ requires destination acceptance, Owner approval, and minimization.
 
 The `entity`, `team`, and `personal` profiles are policy profiles, not
 authority or maturity levels. `instance.entity` and `instance.role` remain
-separate manifest concepts. Profile selection cannot grant write access or
-automatic access to an anchor vault.
+separate manifest concepts. Profile selection cannot grant technical GitHub
+permission, a CRUD adapter or automatic access to an anchor vault. Under the
+V3 ingress contract, a declared `team` or `personal` profile supplies
+methodological write eligibility to a user with proven access; an `entity`
+write requires a current scoped grant. All writes remain subject to privacy
+and canonical CRUD gates. A missing profile on a compatible existing Vault
+preserves its legacy route without activating new profile-dependent
+eligibility (`decisions/0124`).
 Every knowledge repository governed by Hipocampo is a Vault; `concepts` is
 not a vault profile. The legacy `instance.curation_level` value `vault` does
 not supply this V3 profile. An operation that needs a profile must use the

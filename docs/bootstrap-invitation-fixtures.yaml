@@ -12,3 +12,5 @@ fixtures:
     action: blocked
   - id: no-write-before-confirmation
     action: blocked
+  - id: invited-entity-read-without-personal-anchor
+    action: bounded-read-after-target-and-permission-proof

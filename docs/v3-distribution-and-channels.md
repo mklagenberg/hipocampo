@@ -1,7 +1,7 @@
 # Executable distribution and execution channels
 
 This is the operational publication contract for methodology 3.1.0, preserving
-the raw 3.0.0 data/CRUD baseline. Skill 2.2.0 is versioned independently.
+the raw 3.0.0 data/CRUD baseline. Skill 2.3.0 is versioned independently.
 
 ## Channel decision
 

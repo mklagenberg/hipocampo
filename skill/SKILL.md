@@ -10,7 +10,7 @@ description: >
 
 # Hipocampo V3 Skill
 
-**Skill package:** `2.2.0`. **Methodology compatibility:**
+**Skill package:** `2.3.0`. **Methodology compatibility:**
 `^3.0.0`. **Execution channel:** stable is the default and requires the exact
 published immutable release, tag-resolved commit and package hashes.
 Explicit experimental execution verifies a pinned source commit/inventory;
@@ -60,9 +60,12 @@ A host name or shared Git provider answers none of those questions by itself.
 
 This generic package contains no user-specific vault address or identity
 registry. Read **[personalization](references/personalization.md)** and keep
-only the personal anchor pointer in host-local state. Discover other
+only an optional personal anchor pointer in host-local state. Discover other
 repositories from authorized, current manifests; never store a second router
 or infer authorization from discovery or account access.
+Without an anchor, use bounded candidate discovery and current remote target
+verification; do not require personal-Vault creation for authorized entity
+reading. See the personalization and instantiation procedures.
 
 ## Discover vaults and entities
 

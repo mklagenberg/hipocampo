@@ -37,11 +37,11 @@ These three aren't a strict pipeline (discretionary always before gated, determi
 | Publication — Depromote (§13) | Committing the move | Gated | Invariant 5. |
 | Sequenced-removal — Redbutton (§13) | Identifying a policy violation | Discretionary | Structural audit or operator-identified, per the broadened trigger (`decisions/0028`). |
 | Sequenced-removal — Redbutton (§13) | Executing the tombstone | Gated | "The decision is always explicitly human, never automatic" (§13) — the strictest gate in the methodology, on top of Invariant 5. |
-| Bootstrap — Select (§12-B) | Choosing which repository, for which entity | Discretionary | Fixed choice on a user's first vault; ordinary judgment afterward. |
+| Bootstrap — Select (§12-B) | Choosing the Vault profile, repository and entity | Discretionary | Suggest `team` for new V3 Vaults, explain all choices and obtain an explicit selection; a personal anchor is optional. |
 | Bootstrap — Orient (§12-B) | Conversational walkthrough | Discretionary | Conditional trigger judgment (only first vault, only if the user seems unfamiliar); no durable write. |
 | Bootstrap — Instantiate, skeleton (§12-B) | Running the scaffold, creating the repository and `hipocampo.yaml` | Gated | Invariant 5 — a durable write, same as any instantiation. |
-| Bootstrap — Interview (§12-B) | Conversational capture of `profile.md` fields | Discretionary | Capture method, not a write. |
-| Bootstrap — Interview (§12-B) | Committing `profile.md` | Gated | "The result always passes through the same explicit-confirmation gate" (§12-B). |
+| Bootstrap — Interview (§12-B) | Conversational capture of `profile.md` fields when a personal anchor is chosen | Discretionary | Capture method, not a write; no personal anchor is required for entity reading. |
+| Bootstrap — Interview (§12-B) | Committing `profile.md` when applicable | Gated | "The result always passes through the same explicit-confirmation gate" (§12-B). |
 | Vault and entity discovery (§12-A) | Reading and caching the anchor manifest | Discretionary, ungated | Ephemeral sensory-memory cache — never a durable write, so no gate applies; matches the classification already validated against this real case in the taxonomy revision's planning discussion. |
 | Vault and entity discovery (§12-A) | Registering a newly-discovered or newly-granted vault | Gated | "Per invariant 5, like any other durable write" (§12-A). |
 

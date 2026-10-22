@@ -164,7 +164,7 @@ packages:
     source_kind: "local"
   scaffold:
     role: "vault-instantiation-scaffold"
-    version: "1.0.0"
+    version: "2.1.0"
     source: "scaffold/"
     source_kind: "local"
 

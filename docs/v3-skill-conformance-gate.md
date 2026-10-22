@@ -1,6 +1,6 @@
 # V3 skill and distribution conformance gate
 
-The case suite preserves raw V3.0.0 behavior. Portable skill 2.2.0 remains
+The case suite preserves raw V3.0.0 behavior. Portable skill 2.3.0 remains
 instructions-only; its separately installed runtime has its own executable tests.
 The current routing envelope uses schema 2.0 and declares `external-receipt`;
 it does not freeze a pending human verdict into the operational payload.
