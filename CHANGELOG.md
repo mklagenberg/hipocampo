@@ -4,6 +4,16 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ## [Unreleased]
 
+### Fixed
+
+- Bump the independently versioned skill candidate to 2.2.0 for bundled V2
+  read instructions and references. Add a PR gate that rejects changed skill
+  content without a higher skill version; external methodology references
+  alone do not trigger a skill bump.
+- Clarify V3.0.0 vault adoption of the compatible 3.1.0 candidate: keep the
+  historical verification and data unchanged, validate the actual tuple, and
+  assess host permissions and operations independently.
+
 ### Added
 
 - Separate general compatibility from bounded operation support. Prepare a

@@ -12,7 +12,7 @@ commit or RC tag and verify its source/inventory; no GitHub Release or future
 stable tag is needed. Experimental emits WARNING and allows valid operations.
 Never silently use mutable main as the installed contract.
 
-Methodology 3.1.0, skill 2.1.0 and runtime 1.0.0 have independent identities;
+Methodology 3.1.0, skill 2.2.0 and runtime 1.0.0 have independent identities;
 compatible V3.0.0 data remains supported. See [channel contract](docs/v3-distribution-and-channels.md).
 
 ## 2. Install the full distribution

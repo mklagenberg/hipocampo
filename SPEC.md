@@ -135,7 +135,7 @@ acceptance where applicable, and is never automatic synchronization.
 ## 2-E. Compatibility decision gate
 
 Use COMPATIBILITY.yaml and the verified methodology/skill/vault tuple.
-Current package target: methodology 3.1.0, skill 2.1.0, vault range ^3.0.0.
+Current package target: methodology 3.1.0, skill 2.2.0, vault range ^3.0.0.
 V3.0.0 remains the preserved contract baseline.
 Host identity is not part of the tuple. V2 content is diagnostic or migration
 input, not silently compatible. Unknown, inaccessible or integrity-failed
@@ -251,8 +251,14 @@ manifest and additive local instructions; 3. verified operational skill;
 ## 9. Versioning
 
 SemVer applies to public methodology obligations. Incompatible V2-to-V3
-adoption is MAJOR. Skill and adapter versions are independent. Stable tags and
-GitHub Releases are human actions after accepted frozen evidence and verified
+adoption is MAJOR. Skill and adapter versions are independent.
+Bundled skill instructions and other distributable files under `skill/`
+have their own SemVer: changing their content requires a new skill package
+version, with MINOR for a compatible new skill capability. A methodology
+document outside the skill package may change without a skill version bump
+when the packaged instructions and bytes are unchanged. The package lock
+records bytes; it does not replace the version change. Stable tags and GitHub
+Releases are human actions after accepted frozen evidence and verified
 integration. An optional experimental RC can be only a tag; its candidate
 status produces a WARNING and permits valid canonical engine operations.
 It requires no GitHub Release or future stable publication. Integrity,

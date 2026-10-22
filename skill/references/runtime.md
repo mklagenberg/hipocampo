@@ -1,8 +1,8 @@
 # Runtime and channel procedure
 
 The portable skill is instructions-only. Install the separate canonical CLI
-runtime with its operational documentation and Python dependency. The stable
-target is methodology 3.1.0 / skill 2.1.0; preserve baseline 3.0.0.
+runtime with its operational documentation and Python dependency. The package
+target is methodology 3.1.0 / skill 2.2.0; preserve baseline 3.0.0.
 
 Resolve the official source commit before executing its installation helper.
 Stable requires the published immutable release and exact tag-resolved source.

@@ -53,3 +53,7 @@ jobs:
           fi
       - name: Validate Change Sets against diff
         run: python scripts/validate_change.py --root . --base "${{ steps.change-base.outputs.sha }}" --head "$GITHUB_SHA"
+      - name: Validate skill version against bundled bytes
+        run: python scripts/validate_skill_version_delta.py --root . --base "${{ steps.change-base.outputs.sha }}" --head "$GITHUB_SHA"
+      - name: Validate skill version boundary cases
+        run: python scripts/validate_skill_version_delta_cases.py

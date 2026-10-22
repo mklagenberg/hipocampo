@@ -1,0 +1,40 @@
+change_set:
+  id: 0137-skill-package-version-boundary
+  class: normative
+  semver: patch
+  status: proposed
+  backfill: false
+  decisions:
+  - decisions/0122-bundled-skill-version-boundary.md
+impact:
+- artifact: SPEC.md, COMPATIBILITY.yaml, README.md, GETTING-STARTED.md, CHANGELOG.md, UPGRADE.md
+  status: updated
+  note: State the independent package boundary, correct the skill tuple and explain adoption.
+- artifact: skill/SKILL.md, skill/manifest.yaml, skill/package-lock.yaml, skill/references/codex.md, skill/references/runtime.md, skill/references/v3-operation.md
+  status: updated
+  note: Move the bundled capability to skill 2.2.0 and lock its exact bytes.
+- artifact: docs/taxonomy.md, docs/vocabulary-dictionary.md
+  status: updated
+  note: Distinguish bundled skill content from external methodology references.
+- artifact: docs/v3-distribution-and-channels.md, docs/v3-skill-conformance-gate.md, docs/v3-skill-conformance-ai-review.yaml
+  status: updated
+  note: Synchronize current target and route future review to the new package lock without claiming approval.
+- artifact: scripts/validate_skill_version_delta.py, scripts/validate_skill_version_delta_cases.py, .github/workflows/validate.yml
+  status: updated
+  note: Reject same-version bundled changes while allowing external-document-only changes.
+- artifact: decisions/0122-bundled-skill-version-boundary.md
+  status: updated
+  note: Record the operator's packaging/version distinction.
+- artifact: historical releases, vaults, client installations
+  status: not-applicable
+  note: Preserve published evidence and leave instances and host-local files unchanged.
+validation:
+  commands:
+  - python scripts/validate_skill_version_delta_cases.py
+  - python scripts/validate_skill_version_delta.py --root . --base <base> --head <head>
+  - python scripts/validate_skill_package.py --root .
+  - python scripts/validate_hipocampo.py --root .
+  - python scripts/validate_change.py --root . --base <base> --head <head>
+  evidence:
+  - changes/0137-skill-package-version-boundary/proposal.md
+  notes: The historical PR diff is a deliberate negative control; current CI and exact-payload review remain separate.

@@ -11,7 +11,7 @@ Keep only the personal anchor pointer and verified installation metadata in
 
 ```yaml
 anchor_repository: "owner/private-personal-anchor"
-installed_skill_version: "2.1.0"
+installed_skill_version: "2.2.0"
 installed_package_hash: "sha256:..."
 last_checked: "YYYY-MM-DDThh:mm:ssZ"
 ```
