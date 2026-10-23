@@ -6,6 +6,12 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ### Changed
 
+- Integrate the V3 remote ingress and governed CRUD candidate with current
+  `main`: authenticate each target through GitHub MCP, allow scoped reads of
+  legacy compatible V3 manifests only with same-HEAD registry proof, and
+  enforce profile-specific write eligibility separately from technical
+  permission. Update the independent skill package to 2.4.0 and the scaffold
+  profiles to 2.2.0 for their changed bundled instructions and outputs.
 - Require an explicit `team`, `personal` or `entity` selection for every new
   V3 Vault, with `team` visibly suggested and the entity asked separately.
   New scaffold manifests include `instance.vault_profile`; compatible
@@ -41,6 +47,20 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
   an experimental candidate as a published release.
 
 ## [3.1.0] — 2026-10-16
+
+### Added
+
+- Direct-target remote ingress without a personal-anchor prerequisite;
+  profile-based write eligibility with scoped entity representative grants;
+  and one canonical CRUD contract across Python and non-Python adapters.
+- Diagnostic separation of tool availability, target access, methodological
+  eligibility, technical write capability, execution and durable confirmation.
+
+### Changed
+
+- Candidate release checks validate the pinned candidate package itself and do
+  not depend on a future stable publication. Historical decisions remain intact;
+  only superseded forward-looking requirements are reconciled.
 
 ### Added
 

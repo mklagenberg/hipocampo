@@ -49,7 +49,7 @@ Cadence recommended by the methodology (`hipocampo/SPEC.md`, sections 5-A to 5-C
 
 ## Frontmatter — quick reference
 
-See the full schema in `hipocampo/SPEC.md`, section 2. Use the canonical V3 Record/Chunk/Collection envelope in the verified immutable methodology release. Legacy flat V2 fields alone are not a V3 Record. Every Record write passes through canonical CRUD after semantic and deterministic validation. A non-empty authorized_vault_ids set and actor context are required for governed Read. No direct file edit is a substitute.
+See the full schema in `hipocampo/SPEC.md`, section 2. Use the canonical V3 Record/Chunk/Collection envelope in the verified immutable methodology release. Legacy flat V2 fields alone are not a V3 Record. Every Record write passes through canonical CRUD after semantic and deterministic validation. A verified GitHub MCP read of this vault and authenticated actor allow Hipocampo presentation through `internal` without prior vault registration; `confidential` and `restricted` require separate current clearance. This does not grant write. No direct file edit is a substitute for CRUD.
 
 Every read (READ) validates the frontmatter against the standard and flags any problem — including an expired `ttl`, with a suggestion to revalidate via research when applicable (extended CRUD/frontmatter-first mechanics, `hipocampo/SPEC.md`, section 2-B).
 

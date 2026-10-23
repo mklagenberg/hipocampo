@@ -102,17 +102,37 @@ interruption is a no-write observation, not proof of completed rollback.
 Reusing the original manifest after recovery is blocked by the retained ticket;
 a new attempt requires separately governed reexecution.
 
-The MCP surface is a transport adapter, not a second persistence layer. It may
-expose only the canonical `create`, `read`, `update` and governed `delete`
-operations. A request must carry its actor, reason, expected Record version,
-semantic-review reference when required, and idempotency key. Direct file-write
-tools are outside the V3 contract and must be blocked.
+The GitHub MCP surface is the remote transport, not a second persistence
+layer. The adapter may map its read, blob/tree/commit/ref, branch, review and
+merge operations to the canonical `create`, `read`, `update` and governed
+`delete` contract. A request carries actor, reason, expected Record version,
+semantic-review reference when required and idempotency key. The gateway
+requires an expected remote head and confirms commit/ref plus readback; a
+tool's availability or result for another action is not permission proof.
+Direct file-write tools outside the gateway remain blocked. Python is an
+optional deterministic implementation; without it, the semantic procedure
+must still collect reproducible structural, version, reference and integrity
+proofs before persistence. If the MCP cannot supply a required proof, the
+dependent remote mutation is unavailable.
+
+For each remote mutation, the canonical persistence adapter writes the Record
+and a receipt sidecar in one Git tree/commit under expected-head CAS. The
+sidecar path is `meta/operation-receipts/record-mutations/sha256-<key-hash>.yaml`;
+it binds the request fingerprint, target, source identity and resulting Record
+hash/version without storing the raw idempotency key. A retry reads that
+receipt and the current Record before claiming the prior effect. A reused key
+with changed inputs or a changed Record is a conflict; identical content with
+a different key is a distinct operation. See SPEC section 2-B.1 for the full
+receipt schema and drift behavior. An adapter lacking atomic receipt support
+cannot perform remote mutation.
 
 - **Create:** validate the full Record, active Collection membership, unique
   Chunk IDs, Artifact references, and monotonic restrictions before persistence.
-- **Read:** require an explicit, non-empty authorization context covering the
-  Record's vault; missing or empty authorization fails closed. Read frontmatter
-  first; a Chunk read includes `record_id`, parent
+- **Read:** require a verified authorization context covering the exact vault.
+  Current authenticated GitHub MCP read access can establish that context up
+  to `internal` without a personal anchor or explicit vault registration;
+  higher classifications need separate clearance. Unknown or merely asserted
+  access fails closed. Read frontmatter first; a Chunk read includes `record_id`, parent
   title/context, effective restrictions, and provenance. READ itself does not
   fetch or reconstruct an Artifact and does not write.
 - **Update:** preserve `record_id`, increment `record_version` for governed
@@ -148,7 +168,7 @@ silently synchronizes them. A cross-entity split is delivery-governed: it
 requires destination acceptance, Owner approval, and minimization.
 
 The `entity`, `team`, and `personal` profiles are policy profiles, not
-authority or maturity levels. `instance.entity` and `instance.role` remain
+authority or maturity levels. `instance.vault_id`, `instance.entity` and `instance.role` remain
 separate manifest concepts. Profile selection cannot grant technical GitHub
 permission, a CRUD adapter or automatic access to an anchor vault. Under the
 V3 ingress contract, a declared `team` or `personal` profile supplies
@@ -162,6 +182,12 @@ not a vault profile. The legacy `instance.curation_level` value `vault` does
 not supply this V3 profile. An operation that needs a profile must use the
 declared or separately confirmed V3 value rather than infer it from the
 repository name, curation level or `policy_profile`.
+A new Vault declares an immutable `instance.vault_id`; existing compatible manifests without it retain their previous governed route until separately adopted.
+For an authorized read of such a manifest, the existing `vault_id` in
+`meta/v3-collections.json` may supply read context only when authenticated
+manifest and registry metadata are bound to the same remote HEAD, target,
+account, session and entity. Missing or mismatched proof blocks the affected
+read; recovery never adopts a profile, representative grant or new write path.
 
 Same-entity sending uses the entity contract but still validates restrictions,
 staleness, integrity, and authority. Cross-entity sending requires destination
@@ -185,7 +211,7 @@ resolution, and whether the selection came from an explicit governed split.
 
 `scripts/validate_v3_crud.py` exercises the structural contract with positive
 and negative fixtures. `scripts/validate_v3_crud_use_cases.py` exercises the
-18 governed use cases through the logical MCP adapter, including semantic
+21 governed use cases through the logical MCP adapter, including semantic
 review completeness, deterministic version control, Artifact divergence,
 processed ingress, current-use gates, migration fail-closed behavior,
 fingerprint audit and bypass blocking. These validators do not perform real

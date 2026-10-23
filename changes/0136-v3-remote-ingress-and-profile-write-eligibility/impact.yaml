@@ -1,0 +1,58 @@
+change_set:
+  id: 0136-v3-remote-ingress-and-profile-write-eligibility
+  class: normative
+  semver: minor
+  status: proposed
+  backfill: false
+  decisions:
+  - decisions/0121-v3-remote-ingress-and-profile-write-eligibility.md
+impact:
+- artifact: SPEC.md, decisions/0121-v3-remote-ingress-and-profile-write-eligibility.md
+  status: updated
+  note: Define remote ingress, scoped profile eligibility, grants and adapter-independent CRUD.
+- artifact: docs/v3-crud-contract.md
+  status: updated
+  note: Define the atomic durable idempotency receipt and retry/drift contract.
+- artifact: COMPATIBILITY.yaml, README.md, GETTING-STARTED.md, CHANGELOG.md,
+    UPGRADE.md, MIGRATIONS.md, RELEASE-CHECKLIST.md
+  status: updated
+  note: Align package tuple, adoption guidance and candidate release gates.
+- artifact: docs/taxonomy.md, docs/vocabulary-dictionary.md
+  status: updated
+  note: Register affected concepts and fields or record non-applicability.
+- artifact: scaffold/README.md, scaffold/profiles/empresa.yaml,
+    scaffold/profiles/pessoal.yaml, scaffold/skeleton/AGENTS.md,
+    scaffold/skeleton/POST-INSTANTIATION.md, scaffold/skeleton/hipocampo.yaml,
+    scaffold/skeleton/meta/representative-events.yaml,
+    skill/SKILL.md, skill/manifest.yaml, skill/package-lock.yaml,
+    skill/references/codex.md, skill/references/crud-frontmatter.md,
+    skill/references/instantiation.md, skill/references/personalization.md,
+    skill/references/runtime.md, skill/references/v3-operation.md,
+    docs/access-ingress-fixtures.yaml,
+    docs/v3-quality-gate-fixtures.yaml, scripts/v3_access_runtime.py,
+    scripts/v3_github_mcp_persistence.py, scripts/validate_v3_access_runtime.py,
+    scripts/validate_v3_github_mcp_persistence.py, scripts/validate_v3_quality_gates.py
+  status: updated
+  note: Align portable instructions, generated manifest fields, implementations and deterministic evidence.
+- artifact: docs/MULTI-TOOL-USAGE.md, docs/engines/test-matrix.yaml,
+    docs/v3-crud-contract.md, docs/v3-runtime-usage.md,
+    docs/v3-search-progressive-disclosure-contract.md,
+    docs/v3-search-progressive-disclosure-fixtures.yaml,
+    docs/v3-skill-conformance-ai-review.yaml, docs/v3-skill-conformance-gate.md,
+    scripts/v3_crud_engine.py, scripts/v3_ingress_engine.py,
+    scripts/v3_mcp_crud_adapter.py, scripts/v3_runtime.py,
+    scripts/v3_search_engine.py, scripts/validate_v3_crud_use_cases.py,
+    scripts/validate_v3_engine_suite.py,
+    scripts/validate_v3_search_progressive_disclosure.py,
+    .github/workflows/validate.yml
+  status: updated
+  note: Align existing runtime routes, retroactive scenarios, test matrix, package review and CI gates.
+validation:
+  commands:
+  - python scripts/validate_hipocampo.py --root .
+  - python scripts/validate_contracts.py --root .
+  - python scripts/validate_change.py --root .
+  - python scripts/validate_v3_engine_suite.py --root . --channel experimental
+  - python scripts/validate_v3_quality_gates.py --root .
+  evidence: []
+  notes: Integrated candidate validation; local tests do not prove live hosted CRUD or release publication.

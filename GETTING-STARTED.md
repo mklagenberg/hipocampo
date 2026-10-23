@@ -12,7 +12,7 @@ commit or RC tag and verify its source/inventory; no GitHub Release or future
 stable tag is needed. Experimental emits WARNING and allows valid operations.
 Never silently use mutable main as the installed contract.
 
-Methodology 3.1.0, skill 2.3.0 and runtime 1.0.0 have independent identities;
+Methodology 3.1.0, skill 2.4.0 and runtime 1.0.0 have independent identities;
 compatible V3.0.0 data remains supported. See [channel contract](docs/v3-distribution-and-channels.md).
 
 ## 2. Install the full distribution
@@ -46,9 +46,15 @@ the authenticated OS principal and actor to allowed operations and Record paths.
 Do not infer Owner identity from OS/GitHub/repository ownership. This adapter
 uses local filesystem/repository ACLs; it is not a remote authorization service.
 
-Discovery, optional personal-anchor setup, profile.md when applicable and any new repository creation
-follow [bootstrap](skill/references/instantiation.md) and their explicit
-confirmation/authority gates. They are separate from installing the methodology.
+Discovery can begin with a directly identified target; a personal anchor and
+registered-repository list are optional. Read the target manifest and confirm
+its access before use. `personal` and `team` profiles provide scoped
+methodological eligibility to propose writes, but execution still requires
+GitHub write, the matching MCP operation and canonical CRUD. `entity` writes
+require a current scoped representative grant; GitHub write alone is not
+sufficient. A verified human creator represents only the new vault they create.
+Discovery, optional personal-anchor setup, profile.md when applicable, and repository creation follow [bootstrap](skill/references/instantiation.md)
+and their explicit confirmation/authority gates, separate from methodology installation.
 
 ## 5. Execute and resume
 

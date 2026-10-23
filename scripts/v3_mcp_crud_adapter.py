@@ -21,15 +21,20 @@ class McpCrudAdapter:
 
     ALLOWED_OPERATIONS = {"create", "read", "update", "delete"}
 
-    def __init__(self, crud: RecordCrud):
+    def __init__(self, crud: RecordCrud, *, remote_persistence=None):
         self.crud = crud
+        self.remote_persistence = remote_persistence
 
     def call(self, request: dict) -> dict:
         operation = request.get("operation")
         if operation not in self.ALLOWED_OPERATIONS:
             raise McpCrudError("MCP exposes only canonical CRUD operations")
         try:
-            result = self.crud.apply(deepcopy(request))
+            if self.remote_persistence is not None and operation in {"create", "update", "delete"}:
+                from v3_github_mcp_persistence import GitHubMcpCrudAdapter
+                result = GitHubMcpCrudAdapter(self.crud, self.remote_persistence).call(deepcopy(request))
+            else:
+                result = self.crud.apply(deepcopy(request))
         except (ContractError, TypeError, KeyError) as exc:
             raise McpCrudError(str(exc)) from exc
         result["transport"] = "mcp"

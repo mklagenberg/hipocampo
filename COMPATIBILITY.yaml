@@ -12,7 +12,7 @@ methodology:
   publication_evidence: 'external: verified provider release metadata for stable;
     explicit pinned source for experimental'
 skill:
-  required_version: 2.3.0
+  required_version: 2.4.0
   manifest: skill/manifest.yaml
   package_lock: skill/package-lock.yaml
   package_integrity_required: true

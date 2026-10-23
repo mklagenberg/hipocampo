@@ -1,29 +1,29 @@
 package:
   name: hipocampo
-  version: 2.3.0
+  version: 2.4.0
   hash_algorithm: sha256
   files:
+  - path: SKILL.md
+    sha256: 3ac3dc0ea537d3f450eb6f7775d9b17d7390ac2ee8320f43f6a19dd12c4298ae
   - path: agents/openai.yaml
     sha256: 1688f1df3d6c96cf557d43580e9f4df2fd0bf899401eabe125f633f45cd0776c
   - path: manifest.yaml
-    sha256: dc6d474eff84239ad1a427522516c1ed530e2af4b32366ef2134bc8e228d42f8
+    sha256: 6345c5dd7ac36338ff2ac42b6d3d5a1b7f52c89acc96cc50807bca6832d2827f
   - path: references/codex.md
-    sha256: f29457f0f063c0fb9ddf02a4ae959925557d00a11eef61df31507b09442c306f
+    sha256: cff9fc84f9cd2b7fb6f8654630fbb567f125281f1f01b4b8b937fe560e1e05d5
   - path: references/crud-frontmatter.md
-    sha256: 31a7d078f7f3e0eb078d8eb97378fc10e2ef6de1cb23769f1c1789c797985229
+    sha256: 20e837195dd521b8b4a748aba67808481929402ef694b0a5c0564570974cb4b8
   - path: references/instantiation.md
-    sha256: cde2f26f60140c6df69a046c82ee9cf686a51ca7ce0bf81febdeba0bede965b9
-  - path: references/legacy-read.md
-    sha256: 9e18032098896692ce345f8c6f7c1c3a047130a29e5115247762c5cfc557456a
+    sha256: d9cb597e5225048d7c6f05ec8e7e3a2f83947818bd58215d63873afa72b58277
   - path: references/invariants.md
     sha256: 31f6194c578dbd6bd50978163ccc2df2dd864027a7cdf1daaef28be3dd153d1f
+  - path: references/legacy-read.md
+    sha256: 9e18032098896692ce345f8c6f7c1c3a047130a29e5115247762c5cfc557456a
   - path: references/personalization.md
-    sha256: 4271e3aafd4702c528decb90257a879db6d45bacad94664e5349793322fb4076
+    sha256: eb3d8015a3f665cd0b7115ce01543157df654623e18b31b367a470c3f482c68f
   - path: references/routines.md
     sha256: 9dbad7ea146f4ca2ea26058cb5a5d55931bea4638ce9cb831c582c73f9c6a470
   - path: references/runtime.md
-    sha256: f7b582fc26d75d5da7540723846cc2bc62855ebb5368198379b854a862c8f4ba
+    sha256: b4d1a302004a53608fbc8133bcc1162d7737aa3af3361810954915dc94755082
   - path: references/v3-operation.md
-    sha256: c8a7b55f2cdbabf212877f57b6f89a983ad2edfbf5e054128729afbea98b97ed
-  - path: SKILL.md
-    sha256: a738ef263028740e4b53b2e1b9c5bbac54c4c14f10fad81bbb32de27b2efbef8
+    sha256: 64fad6ec4b95e3dc256e7829cba4a91a5a8468119c93f51d8a00af2b0f643783

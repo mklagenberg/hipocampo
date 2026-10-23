@@ -110,10 +110,56 @@ All Record writes, including normalizers, migration, recovery and transfers,
 pass through canonical RecordCrud. No direct filesystem, GitHub contents or
 MCP transport write is a substitute. Semantic validation precedes deterministic
 validation when required; persistence adapters store only the admitted proposal.
-Read requires actor authorization and a non-empty authorized_vault_ids set
-covering the request. Read frontmatter first, select bounded relevant content,
-include Chunk parent context and preserve inaccessible/stale/conflicting states.
+Daily remote operations use the connected GitHub MCP surface when it can perform
+the requested operation. MCP availability, a listed tool, repository visibility,
+and a successful read are separate observations; none proves authorization or
+capability for another operation. Read requires actor authorization for the
+selected target and scope, established by the target's access boundary and
+current manifest. A global registry, anchor registration, or personal anchor is
+not a prerequisite to read an already identified target. Read frontmatter first,
+select bounded relevant content, include Chunk parent context and preserve
+inaccessible/stale/conflicting states. Present only content permitted by the
+visibility policy; absent a verified classification, withhold the content.
 Read never writes. Capability must be verified for the actual operation.
+
+### Durable mutation receipt
+
+Each remote Git-backed Record mutation persists one idempotency receipt sidecar at
+`meta/operation-receipts/record-mutations/sha256-<hex(SHA-256(raw idempotency key))>.yaml`.
+The raw key is never stored. The Record and sidecar are added or updated in the
+same Git tree and commit under the same expected-head/CAS condition; an adapter
+that cannot persist both atomically must block the mutation. A receipt contains
+`schema_version`, `key_hash`, `request_fingerprint`, `target_vault_id`,
+`record_id`, `physical_path`, `expected_base_head`, `resulting_record_hash`,
+`resulting_record_version`, minimized `actor` and `reason_sha256`,
+`methodology_version`, `source_method_version` and `source_commit`. Methodology
+version is the contract SemVer; source method version and source commit identify
+the verified implementation package. Real persistence requires all three;
+absent identity blocks the write. `source_commit` is never the resulting target
+commit. The fingerprint is SHA-256 over the canonical
+normalized CRUD request (stable JSON key ordering and separators); it excludes
+the idempotency key, while the receipt binds the key hash and target/path/base
+separately. `actor` is a stable account identifier without display name or
+email; `reason_sha256` is a hash of the non-empty reason, so the receipt does
+not persist the rationale, Record prose, Artifact content, or credentials.
+The sidecar contains no resulting commit SHA because it is itself
+committed in that tree; a transport-level receipt may report the resulting ref
+or commit separately.
+
+Before retrying, look up the sidecar by key hash. Compare the request
+fingerprint and bound target/path/source identity fields. If the request
+supplies an expected base HEAD, it must match the receipt's recorded base.
+A matching receipt returns
+the prior operation only after current Record bytes hash to
+`resulting_record_hash` and its version equals `resulting_record_version`. A
+key reuse with a different fingerprint or context is a conflict and must not
+overwrite the receipt. A missing, changed or newer Record is drift: report it,
+do not claim idempotent success, and do not reapply automatically. No sidecar
+for the key means the operation is not confirmed; check the expected head and
+reconcile before attempting persistence. Identical Record content under a
+different idempotency key is a distinct operation and is never deduplicated by
+content. A repeated key hash with the same fingerprint is idempotent only for
+that exact operation and its verified resulting state.
 
 ## 2-C. Repository-type taxonomy: entity and vault
 
@@ -147,6 +193,17 @@ is content or vault. The V3 vault profile (personal/team/entity) is a policy
 dimension and grants no Authority, maturity, GitHub permission or automatic
 anchor read. It contributes to methodological write eligibility only after
 the profile is explicitly declared and the other gates pass.
+
+Every new or explicitly adopted Vault manifest declares an immutable
+`instance.vault_id` independent of repository address. Existing compatible
+manifests without it retain their prior versioned route; no new profile
+eligibility or representative grant is inferred. `personal`/`team` eligibility
+and `entity` representative grants are governed separately in section 12-B.
+For an authorized read, a legacy manifest's missing vault ID may be resolved
+from its authenticated Collection registry only when manifest, registry and
+access proof bind to the same remote HEAD, target, account, session and entity.
+That read-context recovery does not adopt a profile or alter write eligibility;
+unknown or conflicting evidence blocks the affected read.
 Discovery addresses are not authorizations.
 
 ## 2-D. Multi-vault and multi-entity design premises
@@ -159,8 +216,8 @@ acceptance where applicable, and is never automatic synchronization.
 ## 2-E. Compatibility decision gate
 
 Use COMPATIBILITY.yaml and the verified methodology/skill/vault tuple.
-Current package target: methodology 3.1.0, skill 2.3.0, vault range ^3.0.0.
-V3.0.0 remains the preserved contract baseline.
+Current package target: methodology 3.1.0, skill 2.4.0, vault range ^3.0.0.
+V3.0.0 remains the preserved data-contract baseline; skill and methodology versions are independent.
 Host identity is not part of the tuple. V2 content is diagnostic or migration
 input, not silently compatible. Unknown, inaccessible or integrity-failed
 evidence fails closed. Later V3 minors and patches preserve the raw V3.0.0
@@ -274,15 +331,16 @@ manifest and additive local instructions; 3. verified operational skill;
 
 ## 9. Versioning
 
-SemVer applies to public methodology obligations. Incompatible V2-to-V3
-adoption is MAJOR. Skill and adapter versions are independent.
-Bundled skill instructions and other distributable files under `skill/`
-have their own SemVer: changing their content requires a new skill package
-version, with MINOR for a compatible new skill capability. A methodology
-document outside the skill package may change without a skill version bump
-when the packaged instructions and bytes are unchanged. The package lock
-records bytes; it does not replace the version change. Stable tags and GitHub
-Releases are human actions after accepted frozen evidence and verified
+SemVer applies to public methodology obligations using the test in
+[Decision 0023](decisions/0023-operational-criterion-for-semver-scope.md):
+MAJOR when an unchanged previously conforming instance becomes incompatible;
+MINOR for an additive capability that leaves it valid; PATCH for a correction
+that changes neither schema nor behavior. Incompatible V2-to-V3 adoption is
+MAJOR. This release adds optional direct-target ingress, governed profile-based
+write eligibility and an adapter-independent CRUD route; existing V3 Records
+remain compatible, so the unpublished 3.1.0 release target is MINOR relative
+to stable 3.0.0. Skill and adapter versions are independent. Bundled skill instructions and other distributable files under `skill/` have their own SemVer: changing their content requires a new skill package version. A methodology document outside the skill package may change without a skill bump when packaged bytes are unchanged; the package lock does not replace the version change. Stable tags and
+GitHub Releases are human actions after accepted frozen evidence and verified
 integration. An optional experimental RC can be only a tag; its candidate
 status produces a WARNING and permits valid canonical engine operations.
 It requires no GitHub Release or future stable publication. Integrity,
@@ -334,18 +392,52 @@ contains only confirmed addresses and does not grant access.
 
 ## 12-B. Bootstrap mechanic: instantiation and profile.md
 
-Collect operator-confirmed profile inputs, including the explicit V3 Vault
-profile and separately confirmed entity, and present the exact creation plan.
-Suggest `team` during the interview, explain `personal` and `entity`, and
-require an answer before creation. A suggested default is not an answer.
-Create a private repository only with the required capability and approval.
+Collect operator-confirmed inputs, ask separately for entity and an explicit `team`, `personal` or `entity` Vault profile, explain their practical consequences, and present the exact creation plan. Suggest `team` without treating silence as selection. An interrupted new creation is incomplete, not a legacy-Vault exception.
+A personal anchor is optional and is never a precondition for discovering,
+reading, or creating another eligible vault. After confirming the entity and
+creation authorization, bind the human creator to the stable authenticated
+account identifier; that person is the initial representative for the new vault
+only. This does not establish Owner or epistemic Authority and grants no
+authority over any pre-existing entity or vault. Create a private repository
+only with the required capability and approval. The target manifest declares
+this policy as `instance.vault_profile`, separate from
+`instance.policy_profile` (which selects sensitive-data rules). A missing or unknown profile on a legacy
+target does not prevent authorized reading or invalidate its prior governed
+write path, but does not establish new profile-based eligibility; any new
+profile or representative grant requires governed adoption. `personal` and
+`team` profiles confer methodological eligibility to propose Create, Update
+and Archive within their declared scope once read
+access is confirmed; execution still requires GitHub write, the matching MCP
+operation and canonical CRUD. An `entity` profile is read-only absent a current
+scoped grant in the vault manifest's
+`governance.authorized_representatives`, bound to the stable authenticated
+account identifier, `instance.vault_id`, entity, action set, scope,
+`valid_from` and `valid_until`. A null `valid_until` means no scheduled
+expiry; a revocation event still ends the grant. `actions` uses `create`,
+`update`, `archive` and,
+where separately authorized, `manage_representatives`. GitHub write alone is
+insufficient. Only a current grant carrying `manage_representatives` may
+delegate or revoke. Append grant, delegation and revocation events to
+`meta/representative-events.yaml`; recheck current state before each dependent
+write. Each event records `event_id`, `event_type`, `actor_account_id`,
+`subject_account_id`, `vault_id`, `entity`, `actions`, `scope`, `occurred_at`,
+`commit_ref` and `basis`. `event_type` is `granted`, `delegated` or `revoked`.
+`commit_ref` identifies the observed pre-mutation HEAD; it is null only for
+the initial grant in the first repository commit, whose create receipt and
+readback bind the event to the resulting commit.
+The initial grant event is mandatory on new vault creation after account
+binding. No grant conveys epistemic Authority or applies to another vault.
+Existing manifests remain readable; an entity write requires a verifiable
+grant or a separately authorized adoption that establishes one.
 Scaffold governs structure and proposal examples; it does not directly persist
 a Record, including profile knowledge. Initial accepted Collections precede
-the first canonical CRUD create. Missing capability produces a blocked plan,
-not a fallback file write. Never overwrite conflicting generated/user files.
-If no personal anchor exists, entity reading may still proceed under the
-ordinary gates. Offer a personal Vault only when the user needs an authorized
-destination for a personal write; declining it leaves that material unpersisted.
+the first canonical CRUD create. Every adapter, including remote MCP paths with
+or without Python, must enforce the same CRUD contract: current-state read,
+semantic review where required, deterministic schema/reference/version checks,
+expected-head or CAS protection, idempotency, persistence, durable receipt and
+readback. An unavailable check blocks only the operation that depends on it;
+there is no direct-file fallback. Never overwrite conflicting generated/user
+files.
 
 ## 13. Cross-repository lifecycle actions: Promote, Depromote, Redbutton
 

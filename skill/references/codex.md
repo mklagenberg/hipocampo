@@ -6,31 +6,35 @@ methodology/skill/vault compatibility tuple.
 
 ## Local state
 
-Keep only an optional personal anchor pointer and verified installation metadata in
+Keep an optional personal anchor pointer and verified installation metadata in
 `hipocampo.local.yaml` client-local state, outside the packaged skill:
 
 ```yaml
-anchor_repository: "owner/private-personal-anchor"
-installed_skill_version: "2.3.0"
+anchor_repository: "owner/private-personal-anchor" # omit when none exists
+installed_skill_version: "2.4.0"
 installed_package_hash: "sha256:..."
 last_checked: "YYYY-MM-DDThh:mm:ssZ"
 ```
 
 Do not commit this state to a vault or store a repository router, identity
-table, access token, credential or permission claim in it.
-With no anchor pointer, use bounded candidate discovery and revalidate the
-chosen remote target. Do not require a personal Vault for an authorized entity
-read or infer a complete Vault inventory from local hints.
+table, access token, credential or permission claim in it. Without an anchor,
+start from an explicit address or invitation and revalidate the candidate via
+GitHub MCP. Project-local private hints are optional and never canonical.
+Do not require a personal Vault for an authorized entity read or infer a
+complete Vault inventory from local hints.
 
 ## Tool boundary
 
-Before an operation, check whether the available Codex or MCP surface can
-invoke the canonical V3 read/CRUD operation with actor, reason, vault scope,
-expected version and idempotency context as required. A direct filesystem,
-GitHub contents or shell write is not a V3 CRUD adapter. If the canonical
-operation is unavailable, block the durable operation and report the missing
-capability. A repository view or UI state does not prove remote authority or
-publication.
+Before an operation, diagnose the available GitHub MCP functions, authenticated
+account, target permission and methodological eligibility separately. For a
+remote vault, use GitHub MCP transport inside canonical V3 read/CRUD, with
+actor, reason, vault scope, expected version, idempotency and confirmed
+readback as required. With Python, the compatible engine can enforce
+deterministic checks. Without Python, follow the same CRUD sequence with
+reproducible MCP evidence; a raw GitHub contents or shell write outside that
+gateway is not governed CRUD. Missing capability blocks the dependent action,
+not independent read or orientation. A repository view or UI state does not
+prove remote write authority or publication.
 
 ## Version and package updates
 

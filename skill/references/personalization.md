@@ -1,42 +1,49 @@
-# Local personalization for V3
+# Local personalization and vault discovery for V3
 
-The portable skill contains no user-specific identity, vault router or
-repository list. An optional personal anchor pointer may be stored beside
-the installed skill and outside any vault.
+The portable skill contains no user-specific identity, repository router or
+permission list. A personal anchor is optional. An existing host-local
+`anchor_repository` pointer remains a useful discovery path, but is not a
+prerequisite for joining or reading an entity vault. Store it beside the
+installed skill and outside any vault.
 
 ```yaml
-anchor_repository: "owner/private-personal-anchor"
+anchor_repository: "owner/private-personal-anchor" # optional
 ```
-
-When present, this pointer identifies where discovery starts; it does not grant access or
-replace the target vault's manifest. Do not add other vault addresses,
-entities, roles, scopes, credentials or authorization claims to local state.
 
 ## Session discovery
 
-1. Read the optional local `anchor_repository` pointer.
-2. Establish actor authorization and a non-empty allowed vault scope for the
-   anchor before a governed Read.
-3. Read the anchor manifest through a separately authorized metadata-read capability; verify
-   entity, role, scope, V3 compatibility declaration and provenance.
-4. Read discovery.registered_repositories and only registered target manifests needed for the requested operation,
-   each under its own explicit authorization and scope.
-5. Keep discovered addresses in session context only. Never infer authority,
-   identity or registration from account access or matching repository names.
+1. If the anchor is configured and readable, use its
+   `discovery.registered_repositories` addresses as candidates. If it is
+   configured but unavailable, report that
+   state rather than pretending that it does not exist.
+2. An explicit invitation or repository address can start discovery directly.
+   If the GitHub MCP offers repository listing, use it only to suggest
+   candidates; absence from a partial list proves nothing.
+3. A project may hold a private, Git-ignored temporary file of minimum
+   candidate addresses and verification dates. A versioned project instruction
+   may explain how to resume discovery but must not contain private addresses
+   or rights by default. The file is a hint for the current session, not a
+   canonical or synchronized inventory; revalidate every candidate remotely.
+   If no private storage is available, keep the address in session only.
+4. Confirm the authenticated account, exact remote manifest, entity, role,
+   profile, compatibility and operation-specific GitHub MCP access before a
+   governed read. Neither a candidate address nor a remembered permission
+   constitutes authorization.
 
-If the pointer is absent, use an invitation, exact requested address, bounded
-MCP enumeration or temporary private project hints as candidate discovery.
-Revalidate the selected target on its current authenticated remote HEAD and
-check access independently. This is not a complete canonical inventory and
-does not require creating a personal Vault for an authorized entity read.
-If the pointer resolves to an unavailable or invalid source, report that exact
-condition. Do not replace it by guessing, create a new anchor automatically,
-or treat unavailability as absence. Offer optional personal-Vault creation
-only when personal knowledge needs a lawful persistence destination.
+A person with verified read access may consult an entity anchor up to
+`internal` without a personal vault. They remain unable to write an `entity`
+vault through Hipocampo without a current scoped grant. When a personal
+Record needs a destination, offer an optional personal vault. If the person
+declines, do not persist the content in the entity vault, local hint, inbox or
+log; explain that it was disregarded for recording. Do not claim that the
+conversation itself was erased.
 
 ## Registering an invited repository
 
-An invitation is candidate discovery, not authorization. Review the target manifest and scope
-through the separately authorized metadata-read path, present them to the operator and wait for
-explicit confirmation. Registration is an operational manifest/registry change in the personal anchor. Use the separately authorized structure capability with exact target, current manifest fingerprint, privacy checks, validation and review. RecordCrud persists Records, not operational manifests. If a supported metadata capability is absent, stop registration with a concrete plan; never bypass Record CRUD for knowledge or infer write permission. Add only the confirmed repository address;
-never copy identity, entity, role, scope or permissions into the anchor.
+Registration in an existing personal anchor is optional, not a gate to reading
+the invited vault. If requested, verify the target through the GitHub MCP,
+present its scope and use the separately authorized operational metadata path
+for the exact anchor change. RecordCrud persists Records, not manifests. If
+that metadata capability is absent, leave registration pending while the
+independently authorized read can proceed. Never store identity, roles or
+permission claims in a local router.

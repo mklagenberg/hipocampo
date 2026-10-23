@@ -179,3 +179,15 @@ structured diagnostic severity and never a replacement for operation failure.
 `release-target` declares source identity; final readiness is assessed before
 publication and provider metadata confirms publication afterward. These are
 operational values, not new Record maturity, authority or epistemic states.
+
+## V3.1.0 remote ingress and profile eligibility
+
+| Concept | Values / meaning | Introduced | Source |
+|---|---|---|---|
+| Direct-target ingress | A user may identify a repository without anchor registration; target manifest and access remain required | 3.1.0 target, Change Set `0136` | `SPEC.md` §12-A; Decision `0121` |
+| Profile write eligibility | `personal`/`team` eligible to propose scoped Create/Update/Archive; `entity` requires a current scoped grant | 3.1.0 target, Change Set `0136` | `SPEC.md` §12-B; Decision `0121` |
+| `governance.authorized_representatives` | Current-state grants bound to account, stable vault ID, entity, `create`/`update`/`archive`/`manage_representatives` actions, scope and validity | 3.1.0 target, Change Set `0136` | `SPEC.md` §12-B; Decision `0121` |
+| `instance.vault_id` | Immutable stable identifier for a vault, independent of repository address | 3.1.0 target, Change Set `0136` | `SPEC.md` §2-C; Decision `0121` |
+| `instance.vault_profile` | `personal`, `team` or `entity` policy profile; distinct from sensitive-data `instance.policy_profile` | 3.1.0 target, Change Set `0136` | `SPEC.md` §2-C/§12-B; Decision `0121` |
+| Representative event | Append-only grant, delegation or revocation entry in `meta/representative-events.yaml` | 3.1.0 target, Change Set `0136` | `SPEC.md` §12-B; Decision `0121` |
+| CRUD route parity | Python and non-Python adapters enforce the same canonical checks, receipt and readback | 3.1.0 target, Change Set `0136` | `SPEC.md` §12-B; Decision `0121` |

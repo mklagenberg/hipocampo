@@ -10,10 +10,11 @@ The engine locates potentially relevant Records or Chunks and determines the
 maximum content that an already authorized flow may disclose. It does not
 decide knowledge truth, create authority, grant access, or mutate a Record.
 
-Search is local and read-only in the first implementation gate. Sanitized
-fixtures are the only test material in this Change Set; the four real vault
-caches remain outside its scope. MCP and host integration require a later
-capability and authorization gate.
+The original implementation gate was local and read-only. Current remote-vault
+operation requires an independently verified GitHub MCP read context for the
+exact target. Sanitized fixtures do not prove a private host's permissions,
+filtering behavior or remote operation. The four real vault caches remain
+outside this contract's validation scope.
 
 ## Request envelope
 
@@ -25,12 +26,24 @@ intent: "didactic description of the retrieval need"
 query: "bounded search terms"
 entity: "entity-id"
 vault_scope: ["vault-id"]
-authorized_vault_ids: ["vault-id"]
+authorized_vault_ids: ["vault-id"] # legacy explicit authorization path
 knowledge_scope: "bounded-scope"
 requested_disclosure: "L0 | L1 | L2 | L3 | L4"
 explicit_expansion_authorization: false
 presentation: "prose-default | structured-on-request"
 ```
+
+For a current GitHub MCP path, a `verified_read_contexts` entry may replace
+the explicit `authorized_vault_ids` list for the matching repository/vault.
+It binds the authenticated account, exact repository, vault ID, entity,
+observed read operation and time. The host rechecks the proof before content
+disclosure, including after a Search-to-Read transition. It is not minted
+from requester-provided fields. This permits presentation through `internal`
+without anchor registration. `confidential` and `restricted` need separate
+clearance; the filter applies before title/snippet, ranking and expansion.
+If the host receives a whole higher-classification file before it can filter
+safely, that read mode is unavailable. Direct GitHub access outside the
+method's presentation flow remains controlled by the provider, not this rule.
 
 The request must identify the entity, vault and knowledge scope. Missing,
 ambiguous or inaccessible boundaries produce a blocked or partial result; the

@@ -1,12 +1,14 @@
 # Hipocampo — Instance Upgrade Guide
 
-## Skill 2.3.0 candidate
+## Skill 2.4.0 candidate
 
-The V3.1.0 methodology candidate now pairs with skill 2.3.0. The skill version
-increased because its bundled creation and discovery instructions now ask for
-an explicit V3 Vault profile and allow authorized entity reads without a
-personal anchor. A change only to methodology files referenced by the skill
-does not itself change the skill version. Verify the 2.3.0 manifest, package lock,
+The V3.1.0 methodology candidate now pairs with skill 2.4.0. The skill version
+increased because its bundled instructions now ask for an explicit V3 Vault
+profile, allow authorized entity reads without a personal anchor, and route
+remote ingress and CRUD through verified GitHub MCP capability. Scaffold
+profiles move to 2.2.0 for their changed creation contract. A change only to
+methodology files referenced by the skill
+does not itself change the skill version. Verify the 2.4.0 manifest, package lock,
 compatibility tuple and host loading before adopting this candidate in an
 explicit experimental channel. Existing client installs remain pinned until
 separately updated; this does not migrate a vault or publish a release.
@@ -37,6 +39,22 @@ Choose installation/update per Claude, Copilot/VS Code or Codex/ChatGPT using
 the [host procedure](docs/host-installation.md). Verify the effective package
 and runtime in a new session; host loading is not established by local files
 alone. A vault upgrade is a distinct, per-instance action.
+
+## V3.1.0 release target
+
+This MINOR update preserves the V3.0.0 Record data contract. A personal anchor
+and registered-repository list are optional; operators may identify a target
+directly and verify its current manifest and access. `personal` and `team`
+profiles grant scoped methodological eligibility to propose Create, Update and
+Archive, while execution still needs GitHub write, the matching MCP operation
+and canonical CRUD. `entity` writes require a current, scoped representative
+grant; technical GitHub write alone does not qualify. The human creator of a
+new vault is representative only for that vault. Existing vaults remain
+readable and keep their prior versioned authorization and CRUD path until an
+operator chooses governed adoption. Adoption is needed to declare a profile or
+add representative grants; it is not required to preserve prior valid writes.
+See
+[Decision 0121](decisions/0121-v3-remote-ingress-and-profile-write-eligibility.md).
 
 
 ## V3.1 executable distribution and experimental channel

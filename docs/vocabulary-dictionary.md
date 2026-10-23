@@ -141,3 +141,18 @@ structured diagnostic severity and never a replacement for operation failure.
 `release-target` declares source identity; final readiness is assessed before
 publication and provider metadata confirms publication afterward. These are
 operational values, not new Record maturity, authority or epistemic states.
+
+## V3.1.0 remote ingress and write eligibility
+
+These terms govern operations, not persisted Record epistemic types:
+
+| Term | Meaning | Governing decision |
+|---|---|---|
+| `personal` / `team` write eligibility | Methodological permission to propose scoped Create, Update and Archive after target read access is confirmed; execution still needs technical capability and canonical CRUD | `0121` |
+| `entity` representative grant | Current scoped authorization for the stable authenticated account; never inferred from GitHub write permission | `0121` |
+| `governance.authorized_representatives` | Current-state grant collection; each grant binds stable account and vault IDs, entity, bounded actions, scope and validity | `0121` |
+| `meta/representative-events.yaml` | Append-only record with event ID/type, actor/subject account IDs, vault ID, entity, actions, scope, time, commit reference and basis | `0121` |
+| Direct-target ingress | Discovery of an identified repository without requiring a personal anchor or registration hint | `0121` |
+
+The complete operational rules remain in SPEC section 12; this dictionary does
+not grant access or authorize a mutation.

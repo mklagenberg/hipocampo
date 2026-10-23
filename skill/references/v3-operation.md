@@ -1,7 +1,7 @@
 # V3 operation and compatibility
 
 This is the skill-side operating guide for the V3.0.0 contract, carried in
-skill package 2.3.0 for the v3.1.0 distribution. An unverified preparation
+skill package 2.4.0 for the v3.1.0 distribution. An unverified preparation
 branch is not a published release. The normative method remains in the
 canonical contracts; this document routes an agent through their gates. It
 does not activate V3 for an existing instance.
@@ -48,25 +48,37 @@ Preserve unknown or conflicting values as unknown or conflicting.
 
 ## 2. Confirm authority, scope and operation capability
 
-An explicitly declared `team` or `personal` Vault profile supplies
-methodological write eligibility for a user with proven access. `entity`
-writing requires a current scoped representative grant. Neither profile nor
-eligibility supplies GitHub permission, MCP operations, privacy clearance or
-canonical CRUD capability. For missing profiles, follow the new-creation or
-compatible-legacy distinction in `docs/v3-vault-profile-selection.md`.
+For first use, a new vault/entity or a changed account/host/package, diagnose
+the exact repository and requested operation. Record five separate outcomes:
+method policy, GitHub MCP capability, provider permission, attempted call and
+confirmed effect. Record account, source, ref, time and limits. `unknown` is
+neither permission nor denial; an advertised tool or a successful manifest
+read does not prove Search, Record Read, write, PR or merge. Do not issue a
+test write merely to probe permissions.
 
-Before reading governed content, identify the actor and role, entity, knowledge
-scope, source vault and explicit non-empty `authorized_vault_ids`. The requested
-vault must be covered. Missing, empty, ambiguous or mismatched authorization
-blocks the read. Resolve each entity and vault independently; do not widen
-scope from shared access, matching labels, account membership or a Git remote.
+For a governed read, identify the authenticated actor, exact entity, vault
+and scope. A successful GitHub MCP read of that vault establishes a verified
+read context for Hipocampo presentation through `internal`, even if the actor
+has no personal anchor or entry in `authorized_vault_ids`. An asserted vault
+list, guessed login, invitation or cached clone alone does not. Classifications
+above `internal` require the vault's separate clearance proof. Apply the
+filter before titles, summaries, search snippets, Chunks, Artifacts or links
+are presented. If a connector exposes high-classification content before
+safe filtering can occur, mark that read mode unavailable.
 
-Check tool capability for the requested operation separately from version
-compatibility. Use a host adapter only as a transport to the canonical method.
-If the host cannot supply the required authorization context or invoke the
-canonical CRUD boundary, mark that operation unavailable and stop. Do not
-fall back to direct repository/file writes or claim that a connector test
-proves remote authorization.
+For writes, separate profile eligibility from GitHub write permission and
+MCP capability. `personal` and `team` permit an actor with verified vault
+access to propose a CRUD write. `entity` requires a current scoped grant from
+a valid representative; GitHub write alone is insufficient. Every proposal
+still needs the canonical CRUD checks. GitHub access outside Hipocampo is
+outside this presentation policy; do not change provider ACLs by inference.
+For a missing Vault profile, use the new-creation versus compatible-legacy distinction in `docs/v3-vault-profile-selection.md`; do not infer the profile from another field.
+For an authorized read of a compatible legacy manifest without `vault_id`,
+resolve the identifier from its Collection registry only when the authenticated
+manifest, registry and access proof are verified against the same remote HEAD,
+target, account, session and entity. Emit a legacy-field WARNING. This does
+not activate profile-based writing or create a grant; missing proof blocks the
+affected read.
 
 ## 3. Progressive-disclosure read
 
@@ -75,11 +87,11 @@ transport. If the environment cannot enforce the requested vault authorization
 and disclosure level through those boundaries, stop and report that capability
 gap. Do not simulate a governed read by scanning vault files directly.
 
-1. **Bound the request.** Establish the exact actor, entity, target vaults,
-   knowledge scope, intent and non-empty `authorized_vault_ids`. Verify the
-   compatibility tuple and privacy/visibility constraints before content is
-   disclosed. Exclude candidates outside the authorized entity, vault and
-   scope before relevance ranking.
+1. **Bound the request.** Establish the exact authenticated actor, entity,
+   target vaults, knowledge scope and intent. Verify GitHub MCP read access to
+   each target independently, plus compatibility and privacy constraints,
+   before content is disclosed. Exclude candidates outside the verified
+   entity, vault and scope before relevance ranking.
 2. **Search at the minimum level.** Submit a bounded Search request. Treat the
    requested disclosure as an upper bound; relevance, recency or a matching
    term never increases it. Start with safe metadata (`L1`) when it can answer
@@ -154,6 +166,21 @@ immutability, state-transition, idempotency and atomicity validation. Both
 stages are required when governed knowledge changes. Neither stage replaces
 the other. CRUD alone persists; a semantic reviewer, engine, MCP transport or
 host file API never writes directly.
+
+For a remote vault, use GitHub MCP for the current ref/read, governed write,
+commit/ref confirmation, review and merge steps that the operation requires.
+When compatible Python is available, its engine may perform the reproducible
+checks. Without Python, the agent follows this same CRUD sequence and records
+equivalent reproducible evidence from the MCP for each required invariant;
+semantic judgment alone does not prove a hash, version or expected head.
+Prepare the complete payload, verify the latest ref immediately before the
+write, commit the Record and key-hashed idempotency receipt sidecar atomically
+under expected-head CAS, and confirm the resulting ref and readback. On retry,
+reconcile the receipt and current Record before claiming a previous effect;
+content equality alone is not idempotency proof. If a required proof or
+transport operation is unavailable,
+do not declare the write complete. A local cache is a separately authorized
+large-work path; a proto-vault has no remote truth yet.
 
 - **Create:** validate the complete Record, active Collection, unique child
   Chunk IDs, Artifact references and monotonic restrictions.

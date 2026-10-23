@@ -204,6 +204,8 @@ def main() -> int:
     second = mcp.call(retry)
     if first != second or len([event for event in crud.events if event["record_id"] == "rec-idempotent"]) != 1:
         errors.append("UC-CRUD-17 MCP retry was not idempotent")
+    reused_key = request(base_record("rec-idempotent-different"), key="same-create")
+    expect_error(lambda: mcp.call(reused_key), "UC-CRUD-17 idempotency key reuse with different payload", errors, McpCrudError)
     expect_error(lambda: mcp.call({"operation": "write-file", "path": "records/rec-001.md"}), "UC-CRUD-18 MCP bypass", errors, McpCrudError)
 
     normalize_source = (root / "scripts/normalize_frontmatter_queue.py").read_text(encoding="utf-8")

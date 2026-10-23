@@ -1,0 +1,17 @@
+# Generated on new-vault creation after authenticated human identity and
+# confirmed entity/vault scope are established. This initial event is bound
+# to the first commit by the creation receipt and readback. Later events
+# append with the observed pre-mutation HEAD in commit_ref.
+schema_version: "1.0"
+events:
+  - event_id: "<generate unique stable event ID>"
+    event_type: granted
+    actor_account_id: "<stable authenticated human creator account ID>"
+    subject_account_id: "<same stable account ID>"
+    vault_id: "<same immutable value as instance.vault_id>"
+    entity: "<same confirmed value as instance.entity>"
+    actions: [create, update, archive, manage_representatives]
+    scope: "<scope of this new vault only>"
+    occurred_at: "<grant timestamp in ISO 8601>"
+    commit_ref: null
+    basis: "<reference to explicit creation authorization>"

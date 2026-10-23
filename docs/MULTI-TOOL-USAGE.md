@@ -4,25 +4,48 @@ Central reference — see `hipocampo/decisions/0002` for why this content lives 
 
 ## The common principle
 
-Hipocampo isn't coupled to any specific AI tool. What any tool needs, to operate an instance, is read/write access to the repository via the **GitHub MCP** (or an equivalent git integration mechanism). Once that connection exists, the same principles apply across any tool: read the frontmatter first (SPEC.md section 2-B), respect the invariants (section 8), never write without an explicit request, and follow the personalized Hipocampo skill (`hipocampo/skill/SKILL.md`) as the source of operational instruction.
+Hipocampo isn't coupled to any specific AI tool. For a remote vault, daily
+operations use the **GitHub MCP** as transport inside the governed method.
+Diagnose available operations and repository permission per host and target;
+connector presence alone proves neither. A local cache is for separately
+authorized substantial work, and a proto-vault has no remote yet. Follow the
+verified Hipocampo skill and the target vault's instructions.
 
 What changes between tools is only **how** each one connects to GitHub — not what to do once connected.
 
 ## Homologation status
 
-The principle above is platform-agnostic by design: any AI environment with access to git, GitHub, and a GitHub MCP (or equivalent git-integration mechanism) can operate an already-set-up instance, whether or not it's listed below. What varies is *homologation* — whether this repository's onboarding materials (`docs/getting-started-non-technical.md`, `docs/invite-template.md`) have actually been written and checked against a given tool's current connector and skill-persistence mechanics. Claude (including Cowork) and ChatGPT remain homologated for a first-timer's chat-first walkthrough. Codex has a declared operational adapter in `skill/agents/openai.yaml`, but its full onboarding walkthrough remains intentionally unhomologated. Every tool below should still work for operating an instance that's already up and running — homologation is specifically about the onboarding walkthrough, not about whether a tool can run Hipocampo at all.
+The contract is platform-independent, but each host/connector combination is
+supported only to the extent its observed GitHub MCP functions and target
+permission allow. The examples below are orientation, not current capability
+or permission evidence. Run the skill's diagnostic on first use, each new
+vault/entity and after changing account, connector or package. Python is an
+optional deterministic route; a host without Python may operate through the
+semantic procedure only when all required structural proofs remain available.
 
 ## Specifics by tool
 
 **Claude (Cowork, Claude Code, Claude via API/Desktop)** — connects to GitHub via Settings → Connectors (add/connect the GitHub connector, authorize through GitHub); like ChatGPT, a connected connector must still be turned on per conversation. Once connected, the Hipocampo skill can be saved persistently via Claude's native Skills feature (or `save_skill` in Cowork specifically) and applies automatically across future sessions from then on. Repository creation specifically depends on which Claude surface is in use — Cowork and Claude Code can create repositories directly; the standard Claude.ai/Desktop connector currently cannot. See `docs/getting-started-non-technical.md` for the manual fallback.
 
-**ChatGPT** — connects to GitHub via Settings → Connectors (Connect, then authorize through GitHub); the connector must still be turned on per chat from the connectors dropdown near the message box. As of this writing the standard connector is read-only — it can't write file changes or create repositories, only read and analyze; `docs/getting-started-non-technical.md` covers the resulting manual fallback for the first repository. Since ChatGPT has no native "skill" concept and Custom Instructions has a character limit too small for the full skill content, the practical approach is a short Custom Instruction pointing at the live `skill/SKILL.md`/`AGENTS.md` URLs rather than an embedded copy — see `docs/getting-started-non-technical.md` for the exact wording. A dedicated "GPT" is a workable alternative but scopes the setup to that one GPT rather than every chat.
+**ChatGPT** — check the GitHub connector or MCP available in the active chat.
+Its exposed operations and permissions can differ by surface and change over
+time. Run the operation-level diagnostic before promising repository creation,
+read or write. Keep skill installation/loading separate from connector access;
+neither proves the other.
 
 **Gemini** — connects via Gemini extensions/tools with GitHub access, or via Gemini CLI/API when the GitHub MCP is available in the environment.
 
-**GitHub Copilot** — already runs inside GitHub/the IDE itself, with native access to the repository it's operating on — it doesn't need an external MCP to reach the host it already lives on. The skill's instruction can be kept as a Copilot custom instruction file (e.g., `.github/copilot-instructions.md`) in addition to the `CLAUDE.md` already used by other tools.
+**GitHub Copilot** — determine whether the active host exposes the GitHub MCP
+operations required for the exact remote vault action. Repository or IDE
+presence by itself is not a governed read/write receipt. The skill's
+instruction may be kept in a supported host instruction file, but must not
+bypass the MCP and CRUD gates.
 
-**Codex** — use the packaged adapter (`skill/agents/openai.yaml`) and keep the single `anchor_repository` pointer in the adapter's private `hipocampo.local.yaml`, never in a vault or in the packaged skill source. The adapter uses GitHub-aware tools for remote operations and treats repository declarations as authoritative over local state.
+**Codex** — use the packaged adapter (`skill/agents/openai.yaml`). A private
+`anchor_repository` pointer is optional; when absent, start from an explicit
+invitation/address and confirm it remotely. The adapter maps GitHub MCP
+operations to the governed path and treats repository declarations as
+authoritative over local hints.
 
 **Antigravity** (and other IDEs/agents with configurable MCP) — same principle as the tools above: connect the GitHub MCP, load the personalized Hipocampo skill instruction, operate normally.
 
