@@ -1,0 +1,31 @@
+change_set:
+  id: 0142-windows-synthetic-preflight-cleanup
+  class: operational
+  semver: none
+  status: proposed
+  backfill: false
+  decisions:
+  - decisions/0099-v3-migration-fixture-gate.md
+  - decisions/0120-executable-distribution-and-experimental-channel.md
+impact:
+- artifact: scripts/validate_v3_coverage_gap_scenarios.py
+  status: updated
+  note: Bound retries to Windows sharing violations in synthetic Git fixture cleanup and exercise transient, persistent and unrelated errors.
+- artifact: docs/v3-distribution-and-channels.md, CHANGELOG.md
+  status: updated
+  note: Correct the skill version reference and record the operational preflight fix.
+- artifact: SPEC.md, COMPATIBILITY.yaml, skill/, scaffold/, UPGRADE.md, MIGRATIONS.md, real Vaults
+  status: reviewed
+  note: No methodological, instance, skill, scaffold, migration or vault contract changes.
+validation:
+  commands:
+  - python scripts/validate_v3_coverage_gap_scenarios.py --root .
+  - python scripts/validate_v3_preview_runtime.py --root . --engine-context
+  - python scripts/v3_preflight.py --root . --channel experimental
+  - python scripts/validate_hipocampo.py --root .
+  - python scripts/validate_skill_docs.py --root .
+  - python scripts/validate_skill_package.py --root .
+  - python scripts/validate_contracts.py --root .
+  - python scripts/validate_change.py --root .
+  evidence: []
+  notes: Synthetic-only validation; final review receipt, host evidence and publication remain separate.
