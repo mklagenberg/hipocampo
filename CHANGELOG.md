@@ -24,6 +24,9 @@ Version history of the methodology itself. Follows [SemVer](https://semver.org/l
 
 ### Fixed
 
+- Retry a transient Windows sharing violation only while removing a synthetic
+  migration test repository. Persistent cleanup errors still block the
+  experimental preflight; synchronize its guide with skill 2.4.0.
 - Clarify that every Hipocampo knowledge repository is a Vault and that V3
   vault profiles are only `entity`, `team` or `personal`. Mark V2 wording as
   historical and assert that `concepts`, `content` and `vault` are not V3

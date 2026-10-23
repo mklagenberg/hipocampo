@@ -15,7 +15,9 @@ from pathlib import Path
 import shutil
 import stat
 import subprocess
+import time
 from typing import Callable
+from unittest.mock import patch
 import uuid
 
 import yaml
@@ -336,7 +338,7 @@ def test_migration_interruption(case: dict, root: Path) -> list[str]:
                 print(f"    synthetic Git baseline={main_sha}; partial={partial_sha}; main unchanged; no merge")
         finally:
             if repo.exists():
-                shutil.rmtree(repo, onerror=_remove_readonly)
+                _remove_synthetic_repo(repo)
     except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
         errors.append(f"synthetic Git branch isolation check failed: {exc}")
     return errors
@@ -344,9 +346,83 @@ def test_migration_interruption(case: dict, root: Path) -> list[str]:
 
 def _remove_readonly(function, path, exc_info) -> None:
     """Git object files can be read-only on Windows; clean only our temp repo."""
-    del exc_info
+    if getattr(exc_info[1], "winerror", None) in (32, 33):
+        raise exc_info[1]
     os.chmod(path, stat.S_IWRITE)
     function(path)
+
+
+def _remove_synthetic_repo(repo: Path) -> None:
+    """Allow a brief Windows handle release; never ignore a persistent error."""
+    for attempt in range(7):
+        try:
+            shutil.rmtree(repo, onerror=_remove_readonly)
+            return
+        except OSError as exc:
+            if getattr(exc, "winerror", None) not in (32, 33) or attempt == 6:
+                raise
+            time.sleep(min(0.05 * (2 ** attempt), 0.5))
+
+
+def validate_cleanup_retry() -> list[str]:
+    """Exercise recovery and fail-closed behavior without timing a real lock."""
+    errors: list[str] = []
+    sharing = PermissionError(13, "synthetic sharing violation", "fixture")
+    sharing.winerror = 32
+    calls = 0
+
+    def transient(*_args, **_kwargs) -> None:
+        nonlocal calls
+        calls += 1
+        if calls < 3:
+            raise sharing
+
+    with patch.object(shutil, "rmtree", side_effect=transient), patch.object(time, "sleep") as sleep:
+        _remove_synthetic_repo(Path("synthetic-fixture"))
+    if calls != 3 or sleep.call_count != 2:
+        errors.append("transient synthetic cleanup sharing violation was not retried")
+
+    calls = 0
+
+    def persistent(*_args, **_kwargs) -> None:
+        nonlocal calls
+        calls += 1
+        raise sharing
+
+    with patch.object(shutil, "rmtree", side_effect=persistent), patch.object(time, "sleep") as sleep:
+        try:
+            _remove_synthetic_repo(Path("synthetic-fixture"))
+        except OSError as exc:
+            if exc is not sharing:
+                errors.append("persistent cleanup raised a different error")
+        else:
+            errors.append("persistent sharing violation was ignored")
+    if calls != 7 or sleep.call_count != 6:
+        errors.append("persistent sharing violation exceeded its retry bound")
+
+    unrelated = PermissionError(13, "unrelated cleanup error", "fixture")
+    with patch.object(shutil, "rmtree", side_effect=unrelated), patch.object(time, "sleep") as sleep:
+        try:
+            _remove_synthetic_repo(Path("synthetic-fixture"))
+        except OSError as exc:
+            if exc is not unrelated:
+                errors.append("unrelated cleanup raised a different error")
+        else:
+            errors.append("unrelated cleanup error was ignored")
+    if sleep.call_count:
+        errors.append("unrelated cleanup error was retried")
+
+    with patch.object(os, "chmod") as chmod:
+        try:
+            _remove_readonly(lambda _path: None, "fixture", (None, sharing, None))
+        except OSError as exc:
+            if exc is not sharing:
+                errors.append("sharing violation changed in readonly handler")
+        else:
+            errors.append("readonly handler ignored a sharing violation")
+    if chmod.called:
+        errors.append("readonly handler changed permissions on a sharing violation")
+    return errors
 
 
 def _git_object_exists(repo: Path, object_name: str, env: dict[str, str]) -> bool:
@@ -566,6 +642,7 @@ def main() -> int:
     args = parser.parse_args()
     root = Path(args.root).resolve()
     errors, executed, semantic_count, human_confirmation, scenario_results = run(root)
+    errors.extend(validate_cleanup_retry())
     for case_id, passed in scenario_results:
         print(f"  [{'PASS' if passed else 'FAIL'}] {case_id}")
     if errors:
